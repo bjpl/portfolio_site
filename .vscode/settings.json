@@ -1,0 +1,56 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.rulers": [80, 120],
+  "editor.wordWrap": "on",
+  "editor.linkedEditing": true,
+  "editor.bracketPairColorization.enabled": true,
+  
+  "files.associations": {
+    "*.html": "html",
+    "*.scss": "scss",
+    "*.ts": "typescript",
+    "*.md": "markdown"
+  },
+  
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/public": false,
+    "**/resources": true,
+    "**/.hugo_build.lock": true
+  },
+  
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "stylelint.vscode-stylelint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+    "editor.wordWrap": "on"
+  },
+  "[powershell]": {
+    "editor.defaultFormatter": "ms-vscode.powershell"
+  },
+  
+  "eslint.validate": ["javascript", "typescript"],
+  "stylelint.validate": ["css", "scss"],
+  
+  "powershell.codeFormatting.preset": "Stroustrup",
+  "powershell.integratedConsole.showOnStartup": false,
+  
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true
+}

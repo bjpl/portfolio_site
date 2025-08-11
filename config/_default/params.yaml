@@ -1,0 +1,46 @@
+# Site Metadata
+author: Your Name
+email: your.email@example.com
+description: Creator working at the intersection of technology and art
+keywords: [creative, technology, art, design, development]
+images: [/media/og-image.jpg]
+
+# Design System
+design:
+  theme: auto
+  experimental: true
+  motion: true
+  noise: true
+  blur: true
+  
+# Features
+features:
+  search: true
+  translation: true
+  analytics: false
+  comments: false
+  newsletter: false
+  
+# Performance
+performance:
+  lazyLoad: true
+  preconnect: 
+    - https://fonts.googleapis.com
+    - https://cdn.jsdelivr.net
+  prefetch: true
+  modulePreload: true
+  critical: true
+  
+# SEO
+seo:
+  jsonLD: true
+  openGraph: true
+  twitterCard: summary_large_image
+  twitterHandle: "@yourhandle"
+  
+# Social
+social:
+  github: https://github.com/yourusername
+  twitter: https://twitter.com/yourusername
+  linkedin: https://linkedin.com/in/yourusername
+  email: mailto:your.email@example.com

@@ -1,0 +1,19 @@
+en:
+  weight: 1
+  languageName: English
+  languageCode: en-US
+  contentDir: content
+  params:
+    locale: en_US
+    dateFormat: Jan 2, 2006
+    description: Creator working at the intersection of technology and art
+    
+es:
+  weight: 2
+  languageName: Español
+  languageCode: es-ES
+  contentDir: content/es
+  params:
+    locale: es_ES
+    dateFormat: 2 de January, 2006
+    description: Creador trabajando en la intersección de tecnología y arte

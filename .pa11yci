@@ -1,0 +1,21 @@
+{
+  "defaults": {
+    "standard": "WCAG2AAA",
+    "timeout": 10000,
+    "wait": 1000,
+    "chromeLaunchConfig": {
+      "args": ["--no-sandbox"]
+    }
+  },
+  "urls": [
+    "http://localhost:1313/",
+    "http://localhost:1313/make/",
+    "http://localhost:1313/learn/",
+    "http://localhost:1313/think/",
+    "http://localhost:1313/meet/"
+  ],
+  "viewport": {
+    "width": 1280,
+    "height": 1024
+  }
+}

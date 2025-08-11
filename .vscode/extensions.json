@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "budparr.language-hugo-vscode",
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-typescript-next",
+    "ms-vscode.powershell",
+    "eamodio.gitlens",
+    "ritwickdey.liveserver",
+    "streetsidesoftware.code-spell-checker",
+    "gruntfuggly.todo-tree"
+  ]
+}

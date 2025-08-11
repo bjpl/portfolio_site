@@ -1,0 +1,54 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Hugo: Serve",
+      "type": "shell",
+      "command": "hugo",
+      "args": ["server", "--navigateToChanged", "--bind", "0.0.0.0"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^([^\\s].*)\\((\\d+,\\d+)\\):\\s+(error|warning)\\s+(.*)$",
+          "file": 1,
+          "location": 2,
+          "severity": 3,
+          "message": 4
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^Watching for changes",
+          "endsPattern": "^Press Ctrl\\+C to stop"
+        }
+      }
+    },
+    {
+      "label": "NPM: Dev",
+      "type": "npm",
+      "script": "dev",
+      "isBackground": true,
+      "problemMatcher": "$tsc"
+    },
+    {
+      "label": "NPM: Build",
+      "type": "npm",
+      "script": "build",
+      "group": "build",
+      "problemMatcher": "$tsc"
+    },
+    {
+      "label": "Create New Post",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "$title = Read-Host 'Enter post title'; $slug = $title.ToLower() -replace ' ', '-'; hugo new \"make/words/$slug.md\""
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

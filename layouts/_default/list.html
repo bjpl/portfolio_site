@@ -1,0 +1,14 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+{{ if .Description }}<p>{{ .Description }}</p>{{ end }}
+
+{{ range .Pages }}
+<div class="content-card">
+    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+    <p>{{ .Description | default .Summary }}</p>
+    <time>{{ .Date.Format "January 2, 2006" }}</time>
+</div>
+{{ else }}
+<p>No content in this section yet.</p>
+{{ end }}
+{{ end }}

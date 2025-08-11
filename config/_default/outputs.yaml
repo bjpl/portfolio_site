@@ -1,0 +1,20 @@
+home:
+  - HTML
+  - RSS
+  - JSON
+
+section:
+  - HTML
+  - RSS
+  - JSON
+
+page:
+  - HTML
+
+taxonomy:
+  - HTML
+  - RSS
+
+term:
+  - HTML
+  - RSS

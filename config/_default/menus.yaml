@@ -1,0 +1,31 @@
+main:
+  - identifier: make
+    name: make
+    url: /make/
+    weight: 10
+    
+  - identifier: learn
+    name: learn
+    url: /learn/
+    weight: 20
+    
+  - identifier: think
+    name: think
+    url: /think/
+    weight: 30
+    
+  - identifier: meet
+    name: meet
+    url: /meet/
+    weight: 40
+
+footer:
+  - identifier: colophon
+    name: Colophon
+    url: /colophon/
+    weight: 10
+    
+  - identifier: feed
+    name: RSS
+    url: /index.xml
+    weight: 20

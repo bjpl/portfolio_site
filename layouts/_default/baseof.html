@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
+    <meta name="description" content="{{ .Description | default .Site.Params.description }}">
+    <style>
+        body { font-family: system-ui; max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        nav { margin-bottom: 2rem; }
+        nav a { margin-right: 1rem; }
+        .content-card { border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">Home</a>
+            {{ range .Site.Menus.main }}
+            <a href="{{ .URL }}">{{ .Name }}</a>
+            {{ end }}
+        </nav>
+    </header>
+    
+    <main>
+        {{- block "main" . }}{{- end }}
+    </main>
+    
+    <footer>
+        <p>&copy; {{ now.Year }} {{ .Site.Title }}</p>
+    </footer>
+</body>
+</html>

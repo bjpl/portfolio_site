@@ -1,0 +1,51 @@
+baseURL: https://yoursite.com
+title: Your Name
+titleCaseStyle: none
+timeout: 30s
+enableGitInfo: true
+enableRobotsTXT: true
+
+# Clean URLs
+uglyURLs: false
+canonifyURLs: false
+relativeURLs: false
+
+# Language
+defaultContentLanguage: en
+defaultContentLanguageInSubdir: false
+
+# Performance
+disableKinds: []
+disableLiveReload: false
+enableEmoji: false
+
+# Build
+buildDrafts: false
+buildExpired: false
+buildFuture: false
+
+# Output
+disableHugoGeneratorInject: true
+
+# Taxonomies
+taxonomies:
+  tag: tags
+  series: series
+  format: formats
+
+# Permalinks
+permalinks:
+  make: /:section/:slug/
+  learn: /:section/:slug/
+  think: /:section/:slug/
+  meet: /:section/:slug/
+
+# Module
+module:
+  mounts:
+    - source: src/assets
+      target: assets
+    - source: src/styles
+      target: assets/styles
+    - source: static
+      target: static
