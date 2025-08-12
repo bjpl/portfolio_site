@@ -1,8 +1,8 @@
 ---
 title: Meet
-description: About and contact
+description: About me and my work
 menu: main
 weight: 40
 ---
 
-About me and my work.
+Get to know me and what I do.

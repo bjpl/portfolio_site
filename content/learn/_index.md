@@ -1,8 +1,8 @@
 ---
 title: Learn
-description: Tools and discoveries
+description: Knowledge and discoveries
 menu: main
 weight: 20
 ---
 
-Knowledge and tools.
+Tools, techniques, and things I've learned.

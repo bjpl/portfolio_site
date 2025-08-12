@@ -1,0 +1,39 @@
+<header class="site-header">
+    <div class="container">
+        <div class="site-header__inner">
+            <a href="{{ "/" | relLangURL }}" class="site-header__logo">
+                {{ site.Title }}
+            </a>
+            
+            <nav class="site-nav" aria-label="Main navigation">
+                <ul>
+                    {{ range site.Menus.main }}
+                    <li>
+                        <a href="{{ .URL | relLangURL }}" 
+                           {{ if $.IsMenuCurrent "main" . }}aria-current="page"{{ end }}>
+                            {{ .Name }}
+                        </a>
+                    </li>
+                    {{ end }}
+                </ul>
+            </nav>
+            
+            <div class="site-header__actions">
+                {{/* Language Switcher */}}
+                {{ if .IsTranslated }}
+                <select class="lang-switch" onchange="window.location.href=this.value">
+                    <option value="{{ .Permalink }}" selected>{{ .Language.LanguageName }}</option>
+                    {{ range .Translations }}
+                    <option value="{{ .Permalink }}">{{ .Language.LanguageName }}</option>
+                    {{ end }}
+                </select>
+                {{ end }}
+                
+                {{/* Theme Toggle */}}
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    🌓
+                </button>
+            </div>
+        </div>
+    </div>
+</header>

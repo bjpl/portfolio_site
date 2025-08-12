@@ -1,22 +1,7 @@
 {{ define "main" }}
-<article>
-    <header>
-        <h1>{{ .Title }}</h1>
-        <time>{{ .Date.Format "January 2, 2006" }}</time>
-    </header>
-    
-    <div>
-        {{ .Content }}
-    </div>
-    
-    {{ if .Params.tags }}
-    <footer>
-        <p>Tags: 
-        {{ range .Params.tags }}
-            <a href="/tags/{{ . | urlize }}/">{{ . }}</a>
-        {{ end }}
-        </p>
-    </footer>
-    {{ end }}
+<article class="container">
+    <h1>{{ .Title }}</h1>
+    <time>{{ .Date.Format "January 2, 2006" }}</time>
+    <div>{{ .Content }}</div>
 </article>
 {{ end }}

@@ -1,0 +1,16 @@
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; {{ now.Year }} {{ site.Params.author }}</p>
+        <nav class="footer-nav">
+            {{ with site.Params.social.github }}
+            <a href="{{ . }}" target="_blank" rel="noopener">GitHub</a>
+            {{ end }}
+            {{ with site.Params.social.twitter }}
+            <a href="{{ . }}" target="_blank" rel="noopener">Twitter</a>
+            {{ end }}
+            {{ with site.Params.social.linkedin }}
+            <a href="{{ . }}" target="_blank" rel="noopener">LinkedIn</a>
+            {{ end }}
+        </nav>
+    </div>
+</footer>

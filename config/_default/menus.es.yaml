@@ -1,0 +1,13 @@
+main:
+  - name: Hacer
+    url: /es/hacer/
+    weight: 10
+  - name: Aprender
+    url: /es/aprender/
+    weight: 20
+  - name: Pensar
+    url: /es/pensar/
+    weight: 30
+  - name: Conocer
+    url: /es/conocer/
+    weight: 40

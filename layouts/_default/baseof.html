@@ -1,33 +1,53 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.Language.Lang }}">
+<html lang="{{ site.Language.Lang }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
-    <meta name="description" content="{{ .Description | default .Site.Params.description }}">
-    <style>
-        body { font-family: system-ui; max-width: 1200px; margin: 0 auto; padding: 2rem; }
-        nav { margin-bottom: 2rem; }
-        nav a { margin-right: 1rem; }
-        .content-card { border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; }
-    </style>
+    <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}</title>
+    <meta name="description" content="{{ .Description | default site.Params.description }}">
+    <link rel="stylesheet" href="/css/main.css">
+    <script>
+        // Theme setup
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/">Home</a>
-            {{ range .Site.Menus.main }}
-            <a href="{{ .URL }}">{{ .Name }}</a>
-            {{ end }}
-        </nav>
+    <header class="site-header">
+        <div class="container">
+            <div class="site-header__inner">
+                <a href="/" class="site-header__logo">{{ site.Title }}</a>
+                <nav class="site-nav">
+                    <ul>
+                        {{ range site.Menus.main }}
+                        <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+                        {{ end }}
+                    </ul>
+                </nav>
+                <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+            </div>
+        </div>
     </header>
     
     <main>
         {{- block "main" . }}{{- end }}
     </main>
     
-    <footer>
-        <p>&copy; {{ now.Year }} {{ .Site.Title }}</p>
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; {{ now.Year }} {{ site.Params.author }}</p>
+        </div>
     </footer>
+    
+    <script>
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        }
+    </script>
 </body>
 </html>

@@ -1,15 +1,19 @@
 {{ define "main" }}
-<h1>{{ .Site.Title }}</h1>
-<p>{{ .Site.Params.description }}</p>
-
-<h2>Recent Content</h2>
-{{ range first 10 .Site.RegularPages }}
-<div class="content-card">
-    <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-    <p>{{ .Description | default .Summary }}</p>
-    <time>{{ .Date.Format "January 2, 2006" }}</time>
+<div class="container">
+    <section class="home-hero">
+        <h1>{{ site.Title }}</h1>
+        <p>{{ site.Params.description }}</p>
+    </section>
+    
+    <section>
+        <h2>Explore</h2>
+        <div class="section-grid">
+            {{ range site.Menus.main }}
+            <a href="{{ .URL }}" class="section-card">
+                <h3>{{ .Name }}</h3>
+            </a>
+            {{ end }}
+        </div>
+    </section>
 </div>
-{{ else }}
-<p>No content yet. Create your first post!</p>
-{{ end }}
 {{ end }}

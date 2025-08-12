@@ -1,8 +1,8 @@
 ---
 title: Think
-description: Ideas and positions
+description: Ideas and reflections
 menu: main
 weight: 30
 ---
 
-Thoughts and reflections.
+Thoughts, opinions, and perspectives.

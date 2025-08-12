@@ -5,4 +5,4 @@ menu: main
 weight: 10
 ---
 
-Things I've created.
+Things I create and build.
