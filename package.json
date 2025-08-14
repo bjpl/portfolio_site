@@ -45,7 +45,7 @@
     "concurrently": "^9.2.0",
     "critical": "^7.2.1",
     "dotenv": "^16.6.1",
-    "glob": "^10.4.5",
+    "glob": "^11.0.3",
     "gray-matter": "^4.0.3",
     "happy-dom": "^18.0.1",
     "imagemin": "^9.0.1",
