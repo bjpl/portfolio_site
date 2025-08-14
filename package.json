@@ -41,7 +41,7 @@
     "@vitest/ui": "^3.2.4",
     "axe-core": "^4.10.3",
     "chalk": "^5.5.0",
-    "commander": "^11.1.0",
+    "commander": "^14.0.0",
     "concurrently": "^9.2.0",
     "critical": "^7.2.1",
     "dotenv": "^16.6.1",
