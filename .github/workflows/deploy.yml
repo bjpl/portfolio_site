@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: recursive
           fetch-depth: 0
@@ -98,7 +98,7 @@ jobs:
         hugo-env: [production, staging]
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: recursive
           fetch-depth: 0
@@ -186,7 +186,7 @@ jobs:
     if: github.event.inputs.skip_tests != 'true'
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
@@ -253,7 +253,7 @@ jobs:
     needs: build
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🔍 Run Trivy security scan
         uses: aquasecurity/trivy-action@master
@@ -283,7 +283,7 @@ jobs:
       url: ${{ steps.deploy.outputs.url }}
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥 Download build artifacts
         uses: actions/download-artifact@v4
@@ -329,7 +329,7 @@ jobs:
       url: ${{ steps.deploy.outputs.deploy-url }}
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥 Download build artifacts
         uses: actions/download-artifact@v4
@@ -393,7 +393,7 @@ jobs:
     if: github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]')
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -518,7 +518,7 @@ jobs:
       url: ${{ steps.deploy.outputs.url }}
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥 Download build artifacts
         uses: actions/download-artifact@v4
