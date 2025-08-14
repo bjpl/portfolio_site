@@ -1,20 +1,29 @@
-import { defineConfig } from 'vite';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { defineConfig } from 'vite';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   build: {
-    outDir: 'assets/dist',
+    outDir: 'static/dist',
     assetsDir: '',
     manifest: true,
+    emptyOutDir: true,
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'src/scripts/main.ts'),
         styles: path.resolve(__dirname, 'src/styles/main.scss')
       },
       output: {
-        entryFileNames: '[name].[hash].js',
-        chunkFileNames: '[name].[hash].js',
-        assetFileNames: '[name].[hash].[ext]'
+        entryFileNames: 'js/[name].[hash].js',
+        chunkFileNames: 'js/[name].[hash].js',
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name.endsWith('.css')) {
+            return 'css/[name].[hash][extname]';
+          }
+          return 'assets/[name].[hash][extname]';
+        }
       }
     },
     watch: {
@@ -31,6 +40,15 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')
+    }
+  },
+  server: {
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:1313',
+        changeOrigin: true
+      }
     }
   }
 });

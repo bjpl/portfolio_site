@@ -1,0 +1,805 @@
+// src/styles/utilities/_no-js.scss
+
+/**
+ * No-JS Styles
+ * Styles that ensure the site works without JavaScript
+ * Progressive enhancement baseline styles
+ */
+
+// Default state assumes no JavaScript
+.no-js {
+  // Show all content by default
+  .lazy,
+  [data-src],
+  [data-lazy] {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  // Hide JavaScript-only elements
+  .js-only {
+    display: none !important;
+  }
+
+  // Show no-js fallbacks
+  .no-js-fallback {
+    display: block !important;
+  }
+
+  // Navigation - show all items
+  .site-nav {
+    &__menu {
+      display: block !important;
+      position: static !important;
+      transform: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      max-height: none !important;
+    }
+
+    &__toggle {
+      display: none !important;
+    }
+  }
+
+  // Search - use native form
+  .search {
+    &-overlay {
+      display: none !important;
+    }
+
+    &-form-fallback {
+      display: block !important;
+    }
+
+    &-button {
+      display: none !important;
+    }
+  }
+
+  // Theme toggle - hide (use system preference)
+  .theme-toggle {
+    display: none !important;
+  }
+
+  // Modals - show inline
+  .modal {
+    position: static !important;
+    display: block !important;
+    background: transparent !important;
+    
+    &-overlay {
+      display: none !important;
+    }
+    
+    &-content {
+      max-width: 100% !important;
+      margin: 0 !important;
+    }
+  }
+
+  // Tabs - show all content
+  .tabs {
+    &__nav {
+      display: none !important;
+    }
+    
+    &__panel {
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      
+      &:not(:first-child) {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--color-border);
+      }
+    }
+  }
+
+  // Accordions - expand all
+  .accordion {
+    &__button {
+      cursor: default !important;
+      
+      &::after {
+        display: none !important;
+      }
+    }
+    
+    &__content {
+      display: block !important;
+      max-height: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+  }
+
+  // Carousels - show all items
+  .carousel {
+    &__track {
+      display: block !important;
+      transform: none !important;
+    }
+    
+    &__item {
+      display: block !important;
+      margin-bottom: 2rem;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    
+    &__controls {
+      display: none !important;
+    }
+  }
+
+  // Lazy loading - show all images immediately
+  img[data-src] {
+    content: attr(data-src);
+  }
+
+  // Smooth scroll - disable
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  // Animations - disable
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  // Forms - show basic validation messages
+  .field-error {
+    display: none;
+  }
+  
+  input:invalid,
+  textarea:invalid,
+  select:invalid {
+    border-color: var(--color-error, #dc3545);
+  }
+  
+  input:valid,
+  textarea:valid,
+  select:valid {
+    border-color: var(--color-success, #28a745);
+  }
+
+  // Tooltips - show as static text
+  .tooltip {
+    &__trigger {
+      &::after {
+        content: " (" attr(aria-label) ")";
+        font-size: 0.875em;
+        opacity: 0.7;
+      }
+    }
+    
+    &__content {
+      display: none !important;
+    }
+  }
+
+  // Progress indicators - show static state
+  .progress {
+    &-bar {
+      transition: none !important;
+    }
+  }
+
+  // Copy buttons - hide
+  .copy-button {
+    display: none !important;
+  }
+
+  // Infinite scroll - show pagination
+  .infinite-scroll {
+    &__trigger {
+      display: none !important;
+    }
+    
+    &__pagination {
+      display: block !important;
+    }
+  }
+
+  // Video players - use native controls
+  .video-player {
+    &__custom-controls {
+      display: none !important;
+    }
+    
+    video {
+      controls: true;
+    }
+  }
+
+  // Back to top button - hide
+  .scroll-to-top {
+    display: none !important;
+  }
+}
+
+// JavaScript enabled states
+.js {
+  // Hide no-js fallbacks
+  .no-js-fallback {
+    display: none !important;
+  }
+
+  // Show JS-enhanced features
+  .js-only {
+    display: block;
+  }
+
+  // Enable animations
+  .animate {
+    animation-duration: var(--animation-duration, 0.3s);
+    transition-duration: var(--transition-duration, 0.3s);
+  }
+}
+
+// Reduced motion preferences
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+// Print styles
+@media print {
+  // Show all content
+  .lazy,
+  [data-src],
+  .accordion__content,
+  .tabs__panel,
+  .modal {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  // Hide interactive elements
+  .theme-toggle,
+  .search-button,
+  .scroll-to-top,
+  .carousel__controls,
+  .tabs__nav,
+  .modal-close,
+  .copy-button,
+  button,
+  .no-print {
+    display: none !important;
+  }
+
+  // Expand collapsed content
+  details {
+    open: true;
+  }
+
+  // Show link URLs
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.875em;
+    opacity: 0.7;
+  }
+
+  // Prevent page breaks in wrong places
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+
+  img, figure {
+    page-break-inside: avoid;
+  }
+}
+
+// Feature detection classes
+.no-grid {
+  // Fallback to flexbox
+  .grid {
+    display: flex !important;
+    flex-wrap: wrap;
+    
+    > * {
+      flex: 1 1 300px;
+      margin: 0.5rem;
+    }
+  }
+}
+
+.no-webp {
+  // Use JPEG/PNG fallbacks
+  .webp-bg {
+    background-image: var(--fallback-bg) !important;
+  }
+}
+
+.no-intersectionobserver {
+  // Load all lazy content immediately
+  .lazy {
+    opacity: 1 !important;
+  }
+}
+
+.touch {
+ // Larger touch targets
+ button,
+ a,
+ input,
+ select,
+ textarea {
+   min-height: 44px;
+   min-width: 44px;
+ }
+
+ // Remove hover effects on touch devices
+ .hover-effect {
+   &:hover {
+     transform: none !important;
+     box-shadow: none !important;
+   }
+ }
+
+ // Show touch-specific UI
+ .touch-only {
+   display: block !important;
+ }
+
+ .no-touch-only {
+   display: none !important;
+ }
+}
+
+.no-touch {
+ // Hide touch-specific UI
+ .touch-only {
+   display: none !important;
+ }
+
+ // Enable hover effects
+ .hover-effect {
+   transition: all 0.3s ease;
+   
+   &:hover {
+     transform: translateY(-2px);
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   }
+ }
+}
+
+// Slow connection optimizations
+.slow-connection {
+ // Disable animations
+ *,
+ *::before,
+ *::after {
+   animation: none !important;
+   transition: none !important;
+ }
+
+ // Use lower quality images
+ img {
+   filter: contrast(1.1);
+   image-rendering: -webkit-optimize-contrast;
+   image-rendering: crisp-edges;
+ }
+
+ // Hide decorative elements
+ .decorative,
+ .background-video,
+ .parallax {
+   display: none !important;
+ }
+}
+
+// Viewport-based utilities
+.viewport-xs {
+ // Mobile portrait styles
+ .hide-xs {
+   display: none !important;
+ }
+
+ .show-xs {
+   display: block !important;
+ }
+}
+
+.viewport-sm {
+ // Mobile landscape styles
+ .hide-sm {
+   display: none !important;
+ }
+
+ .show-sm {
+   display: block !important;
+ }
+}
+
+.viewport-md {
+ // Tablet styles
+ .hide-md {
+   display: none !important;
+ }
+
+ .show-md {
+   display: block !important;
+ }
+}
+
+.viewport-lg {
+ // Desktop styles
+ .hide-lg {
+   display: none !important;
+ }
+
+ .show-lg {
+   display: block !important;
+ }
+}
+
+.viewport-xl {
+ // Large desktop styles
+ .hide-xl {
+   display: none !important;
+ }
+
+ .show-xl {
+   display: block !important;
+ }
+}
+
+// Orientation utilities
+.portrait {
+ .landscape-only {
+   display: none !important;
+ }
+}
+
+.landscape {
+ .portrait-only {
+   display: none !important;
+ }
+}
+
+// Focus visible polyfill
+.focus-visible {
+ outline: 2px solid var(--color-primary);
+ outline-offset: 2px;
+}
+
+:focus:not(.focus-visible) {
+ outline: none;
+}
+
+// Screen reader only content
+.sr-only,
+.visually-hidden {
+ position: absolute !important;
+ width: 1px !important;
+ height: 1px !important;
+ padding: 0 !important;
+ margin: -1px !important;
+ overflow: hidden !important;
+ clip: rect(0, 0, 0, 0) !important;
+ white-space: nowrap !important;
+ border: 0 !important;
+}
+
+.sr-only-focusable:focus {
+ position: static !important;
+ width: auto !important;
+ height: auto !important;
+ overflow: visible !important;
+ clip: auto !important;
+ white-space: normal !important;
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+ * {
+   border-width: 2px !important;
+ }
+
+ button,
+ input,
+ select,
+ textarea {
+   border: 2px solid currentColor !important;
+ }
+
+ a {
+   text-decoration: underline !important;
+ }
+}
+
+// Forced colors mode (Windows High Contrast)
+@media (forced-colors: active) {
+ .decorative {
+   forced-color-adjust: none;
+ }
+}
+
+// Progressive enhancement utilities
+.enhance-motion {
+ @media (prefers-reduced-motion: no-preference) {
+   animation: var(--animation);
+   transition: var(--transition);
+ }
+}
+
+.enhance-transparency {
+ @supports (backdrop-filter: blur(10px)) {
+   backdrop-filter: blur(10px);
+   background-color: rgba(var(--color-bg-rgb), 0.8);
+ }
+}
+
+.enhance-grid {
+ @supports (display: grid) {
+   display: grid;
+   grid-template-columns: var(--grid-columns);
+   gap: var(--grid-gap);
+ }
+}
+
+.enhance-sticky {
+ @supports (position: sticky) {
+   position: sticky;
+   top: var(--sticky-offset, 0);
+ }
+}
+
+.enhance-aspect-ratio {
+ @supports (aspect-ratio: 16 / 9) {
+   aspect-ratio: var(--aspect-ratio, 16 / 9);
+   height: auto;
+ }
+}
+
+.enhance-scroll-snap {
+ @supports (scroll-snap-type: x mandatory) {
+   scroll-snap-type: x mandatory;
+   
+   > * {
+     scroll-snap-align: start;
+   }
+ }
+}
+
+.enhance-subgrid {
+ @supports (grid-template-columns: subgrid) {
+   grid-template-columns: subgrid;
+ }
+}
+
+.enhance-container-queries {
+ @supports (container-type: inline-size) {
+   container-type: inline-size;
+ }
+}
+
+// Loading states
+.loading {
+ position: relative;
+ pointer-events: none;
+ 
+ &::after {
+   content: '';
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   width: 20px;
+   height: 20px;
+   margin: -10px 0 0 -10px;
+   border: 2px solid var(--color-primary);
+   border-top-color: transparent;
+   border-radius: 50%;
+   animation: spin 0.6s linear infinite;
+ }
+}
+
+@keyframes spin {
+ to {
+   transform: rotate(360deg);
+ }
+}
+
+// Error states
+.error {
+ border-color: var(--color-error, #dc3545) !important;
+ 
+ &-message {
+   color: var(--color-error, #dc3545);
+   font-size: 0.875rem;
+   margin-top: 0.25rem;
+ }
+}
+
+// Success states
+.success {
+ border-color: var(--color-success, #28a745) !important;
+ 
+ &-message {
+   color: var(--color-success, #28a745);
+   font-size: 0.875rem;
+   margin-top: 0.25rem;
+ }
+}
+
+// Skeleton loading
+.skeleton {
+ background: linear-gradient(
+   90deg,
+   var(--color-border) 25%,
+   var(--color-surface) 50%,
+   var(--color-border) 75%
+ );
+ background-size: 200% 100%;
+ animation: skeleton 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton {
+ 0% {
+   background-position: 200% 0;
+ }
+ 100% {
+   background-position: -200% 0;
+ }
+}
+
+// Placeholder styles for lazy loading
+.lazy-placeholder {
+ position: relative;
+ background: var(--color-surface);
+ 
+ &::before {
+   content: '';
+   display: block;
+   padding-top: var(--aspect-ratio-padding, 56.25%); // 16:9 default
+ }
+ 
+ .lazy-spinner {
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   width: 40px;
+   height: 40px;
+   
+   &::after {
+     content: '';
+     display: block;
+     width: 100%;
+     height: 100%;
+     border: 3px solid var(--color-border);
+     border-top-color: var(--color-primary);
+     border-radius: 50%;
+     animation: spin 0.8s linear infinite;
+   }
+ }
+}
+
+// Lazy loading states
+.lazy-loading {
+ opacity: 0;
+ transition: opacity 0.3s;
+}
+
+.lazy-loaded {
+ opacity: 1;
+ animation: fadeIn 0.3s;
+}
+
+.lazy-error {
+ position: relative;
+ 
+ &::after {
+   content: '⚠️ Failed to load';
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   background: rgba(0, 0, 0, 0.8);
+   color: white;
+   padding: 0.5rem 1rem;
+   border-radius: 0.25rem;
+   font-size: 0.875rem;
+ }
+}
+
+@keyframes fadeIn {
+ from {
+   opacity: 0;
+   transform: translateY(10px);
+ }
+ to {
+   opacity: 1;
+   transform: translateY(0);
+ }
+}
+
+// Utility classes for progressive enhancement
+.pe-none { pointer-events: none; }
+.pe-auto { pointer-events: auto; }
+.user-select-none { user-select: none; }
+.user-select-text { user-select: text; }
+.user-select-all { user-select: all; }
+
+// Aspect ratio boxes (fallback)
+.aspect-ratio {
+ position: relative;
+ 
+ &::before {
+   content: '';
+   display: block;
+   padding-top: var(--aspect-ratio-padding, 100%);
+ }
+ 
+ > * {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+ }
+ 
+ &--16-9::before { padding-top: 56.25%; }
+ &--4-3::before { padding-top: 75%; }
+ &--1-1::before { padding-top: 100%; }
+ &--21-9::before { padding-top: 42.86%; }
+}
+
+// Modern CSS feature detection
+@supports (display: flex) {
+ .supports-flex { display: flex; }
+}
+
+@supports (display: grid) {
+ .supports-grid { display: grid; }
+}
+
+@supports (position: sticky) {
+ .supports-sticky { position: sticky; }
+}
+
+@supports (backdrop-filter: blur(10px)) {
+ .supports-backdrop-filter { backdrop-filter: blur(10px); }
+}
+
+@supports (gap: 1rem) {
+ .supports-gap { gap: 1rem; }
+}
+
+@supports (aspect-ratio: 1) {
+ .supports-aspect-ratio { aspect-ratio: var(--ratio, 1); }
+}
+
+@supports (container-type: inline-size) {
+ .supports-container-queries { container-type: inline-size; }
+}
+
+// Safe area insets for mobile devices
+.safe-area-inset {
+ padding-top: env(safe-area-inset-top);
+ padding-right: env(safe-area-inset-right);
+ padding-bottom: env(safe-area-inset-bottom);
+ padding-left: env(safe-area-inset-left);
+}

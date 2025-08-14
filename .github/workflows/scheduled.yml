@@ -1,0 +1,71 @@
+# .github/workflows/scheduled.yml
+# Scheduled maintenance tasks
+
+name: Scheduled Tasks
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-dependencies:
+    name: Update Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Update dependencies
+        run: |
+          npm update
+          npm audit fix
+
+      - name: 🔍 Check for updates
+        run: npm outdated || true
+
+      - name: 📝 Create PR if changes
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: 'chore: update dependencies'
+          title: 'Automated dependency updates'
+          body: 'This PR contains automated dependency updates.'
+          branch: automated-dependency-updates
+
+  check-links:
+    name: Check Broken Links
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔗 Check links
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: --verbose --no-progress './content/**/*.md'
+          fail: false
+
+      - name: 📊 Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: link-check-results
+          path: lychee-out.md
+
+  optimize-images:
+    name: Optimize Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🖼️ Optimize images
+        uses: calibreapp/image-actions@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          compressOnly: true

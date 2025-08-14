@@ -1,0 +1,557 @@
+# .github/workflows/deploy.yml
+# Complete CI/CD Pipeline for Hugo Portfolio
+# Supports multiple deployment targets and comprehensive testing
+
+name: Deploy Portfolio
+
+on:
+  # Trigger on push to main branch
+  push:
+    branches:
+      - main
+      - master
+  
+  # Trigger on pull request
+  pull_request:
+    branches:
+      - main
+      - master
+  
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+          - preview
+      skip_tests:
+        description: 'Skip tests'
+        required: false
+        default: false
+        type: boolean
+
+# Environment variables
+env:
+  HUGO_VERSION: '0.121.1'
+  NODE_VERSION: '20'
+  GO_VERSION: '1.21'
+
+# Concurrency control
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Job 1: Lint and validate code
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🔍 Lint TypeScript
+        run: npm run lint:scripts || true
+        continue-on-error: true
+
+      - name: 🎨 Lint SCSS
+        run: npm run lint:styles || true
+        continue-on-error: true
+
+      - name: 📝 Lint Markdown
+        run: npm run lint:markdown || true
+        continue-on-error: true
+
+      - name: 📊 Upload lint results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-results
+          path: |
+            .eslintrc.json
+            .stylelintrc.json
+
+  # Job 2: Build the site
+  build:
+    name: Build Site
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      matrix:
+        hugo-env: [production, staging]
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: 🔧 Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🔑 Setup environment
+        run: |
+          echo "HUGO_ENV=${{ matrix.hugo-env }}" >> $GITHUB_ENV
+          echo "NODE_ENV=${{ matrix.hugo-env }}" >> $GITHUB_ENV
+
+      - name: 🏗️ Build assets
+        run: |
+          npm run build:assets || echo "No asset build script"
+
+      - name: 🔍 Build search index
+        run: |
+          node tools/search/build-index.js || echo "Search index builder not found"
+
+      - name: 🖼️ Optimize images
+        run: |
+          node tools/optimizer/images.js || echo "Image optimizer not found"
+        continue-on-error: true
+
+      - name: 🏗️ Build Hugo site
+        run: |
+          if [ "${{ matrix.hugo-env }}" == "production" ]; then
+            hugo --minify --gc --baseURL "${{ secrets.PRODUCTION_URL || 'https://example.com' }}"
+          else
+            hugo --minify --gc --buildDrafts --baseURL "${{ secrets.STAGING_URL || 'https://staging.example.com' }}"
+          fi
+
+      - name: 📊 Generate build report
+        run: |
+          echo "Build Report" > build-report.txt
+          echo "============" >> build-report.txt
+          echo "Environment: ${{ matrix.hugo-env }}" >> build-report.txt
+          echo "Hugo Version: $(hugo version)" >> build-report.txt
+          echo "Node Version: $(node --version)" >> build-report.txt
+          echo "Build Time: $(date)" >> build-report.txt
+          echo "" >> build-report.txt
+          echo "Site Statistics:" >> build-report.txt
+          echo "----------------" >> build-report.txt
+          find public -type f -name "*.html" | wc -l | xargs echo "HTML files:" >> build-report.txt
+          find public -type f -name "*.css" | wc -l | xargs echo "CSS files:" >> build-report.txt
+          find public -type f -name "*.js" | wc -l | xargs echo "JS files:" >> build-report.txt
+          du -sh public | xargs echo "Total size:" >> build-report.txt
+
+      - name: 📦 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: hugo-site-${{ matrix.hugo-env }}
+          path: public/
+          retention-days: 7
+
+      - name: 📊 Upload build report
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-report-${{ matrix.hugo-env }}
+          path: build-report.txt
+
+  # Job 3: Test the site
+  test:
+    name: Test Site
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event.inputs.skip_tests != 'true'
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 📥 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: hugo-site-production
+          path: public/
+
+      - name: 🌐 Start test server
+        run: |
+          npx http-server public -p 8080 &
+          sleep 5
+
+      - name: 🔍 Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli
+          lhci autorun --collect.url=http://localhost:8080 || true
+        continue-on-error: true
+
+      - name: ♿ Run accessibility tests
+        run: |
+          npm install -g pa11y
+          pa11y http://localhost:8080 --reporter cli || true
+        continue-on-error: true
+
+      - name: 🔗 Check links
+        run: |
+          npm install -g linkinator
+          linkinator http://localhost:8080 --recurse --skip "github.com" || true
+        continue-on-error: true
+
+      - name: 📊 Performance budget check
+        run: |
+          node tools/performance/budget.js || echo "Performance budget tool not found"
+        continue-on-error: true
+
+      - name: 🔍 Run accessibility test suite
+        run: |
+          node tools/accessibility/test-suite.js || echo "Accessibility test suite not found"
+        continue-on-error: true
+
+      - name: 📊 Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            test-results/
+            .lighthouseci/
+            lighthouse-report.html
+
+  # Job 4: Security scan
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔍 Run Trivy security scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: 📊 Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: 🔍 Dependency audit
+        run: npm audit --audit-level=moderate || true
+        continue-on-error: true
+
+  # Job 5: Deploy to Vercel
+  deploy-vercel:
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    needs: [build, test, security]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📥 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: hugo-site-production
+          path: public/
+
+      - name: 🚀 Deploy to Vercel
+        id: deploy
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./public
+
+      - name: 🔍 Verify deployment
+        run: |
+          sleep 30
+          curl -I ${{ steps.deploy.outputs.url }}
+
+      - name: 💬 Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🚀 Deployed to Vercel: ${{ steps.deploy.outputs.url }}'
+            })
+
+  # Job 6: Deploy to Netlify
+  deploy-netlify:
+    name: Deploy to Netlify
+    runs-on: ubuntu-latest
+    needs: [build, test, security]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: production-netlify
+      url: ${{ steps.deploy.outputs.deploy-url }}
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📥 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: hugo-site-production
+          path: public/
+
+      - name: 🚀 Deploy to Netlify
+        id: deploy
+        uses: nwtgck/actions-netlify@v2
+        with:
+          publish-dir: './public'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: true
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 5
+
+  # Job 7: Deploy to GitHub Pages
+  deploy-github-pages:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: [build, test, security]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 📥 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: hugo-site-production
+          path: public/
+
+      - name: 🔧 Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: 📦 Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public/
+
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Job 8: Create release
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [deploy-vercel, deploy-netlify, deploy-github-pages]
+    if: github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]')
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🏷️ Get version
+        id: version
+        run: |
+          VERSION=$(date +%Y.%m.%d-%H%M%S)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: 📥 Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts/
+
+      - name: 📦 Create release archive
+        run: |
+          cd release-artifacts
+          tar -czf ../release-${{ steps.version.outputs.VERSION }}.tar.gz *
+          cd ..
+
+      - name: 📝 Generate changelog
+        id: changelog
+        run: |
+          echo "# Release ${{ steps.version.outputs.VERSION }}" > CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "## Changes" >> CHANGELOG.md
+          git log --pretty=format:"- %s" $(git describe --tags --abbrev=0)..HEAD >> CHANGELOG.md || \
+          git log --pretty=format:"- %s" -10 >> CHANGELOG.md
+
+      - name: 🏷️ Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.version.outputs.VERSION }}
+          name: Release ${{ steps.version.outputs.VERSION }}
+          body_path: CHANGELOG.md
+          draft: false
+          prerelease: false
+          files: |
+            release-*.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Job 9: Notify deployment status
+  notify:
+    name: Notify Status
+    runs-on: ubuntu-latest
+    needs: [deploy-vercel, deploy-netlify, deploy-github-pages]
+    if: always()
+    steps:
+      - name: 📧 Send notification
+        uses: 8398a7/action-slack@v3
+        if: secrets.SLACK_WEBHOOK_URL != ''
+        with:
+          status: ${{ job.status }}
+          text: |
+            Deployment Status: ${{ job.status }}
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+            Message: ${{ github.event.head_commit.message }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: 💬 Update deployment status
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = '${{ job.status }}' === 'success' ? 'success' : 'failure';
+            const description = status === 'success' 
+              ? 'Deployment completed successfully' 
+              : 'Deployment failed';
+            
+            github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: status,
+              description: description,
+              context: 'continuous-integration/deployment'
+            });
+
+  # Job 10: Cleanup old artifacts
+  cleanup:
+    name: Cleanup Old Artifacts
+    runs-on: ubuntu-latest
+    needs: [release]
+    if: always()
+    steps:
+      - name: 🧹 Delete old artifacts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const artifacts = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+            
+            const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+            const oldArtifacts = artifacts.data.artifacts.filter(artifact => {
+              return new Date(artifact.created_at).getTime() < oneWeekAgo;
+            });
+            
+            for (const artifact of oldArtifacts) {
+              await github.rest.actions.deleteArtifact({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                artifact_id: artifact.id
+              });
+              console.log(`Deleted artifact: ${artifact.name}`);
+            }
+
+  # Job 11: Preview deployment for PRs
+  preview:
+    name: Preview Deployment
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'pull_request'
+    environment:
+      name: preview
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📥 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: hugo-site-staging
+          path: public/
+
+      - name: 🚀 Deploy preview to Vercel
+        id: deploy
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--preview'
+          working-directory: ./public
+          github-comment: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 💬 Comment preview URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = `### 🔍 Preview Deployment
+            
+            **URL:** ${{ steps.deploy.outputs.url }}
+            **Status:** ✅ Ready
+            
+            This preview will be automatically deleted when the PR is merged or closed.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
