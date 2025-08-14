@@ -1,21 +1,36 @@
 {
-  "name": "portfolio-professional",
-  "version": "2.0.0",
-  "type": "module",
+  "name": "hugo-portfolio-site",
+  "version": "1.0.0",
+  "description": "Hugo Portfolio with Management Tools",
+  "main": "unified-server.js",
   "scripts": {
-    "dev": "hugo server --navigateToChanged --bind 0.0.0.0 --buildDrafts --disableFastRender",
-    "build": "hugo --minify --gc",
-    "build:search": "hugo list all --format json > public/search-index.json",
-    "translate": "node tools/translator/cli.js",
-    "translate:batch": "node tools/translator/cli.js batch -l es",
-    "new:post": "hugo new content/make/words/new-post.md",
-    "new:project": "hugo new content/learn/built/new-project.md",
-    "perf:check": "node tools/performance/budget.js",
-    "build:check": "npm run build && npm run perf:check"
+    "server": "node unified-server.js",
+    "server:dev": "nodemon unified-server.js",
+    "hugo": "hugo server -D",
+    "dev": "concurrently \"npm run server:dev\" \"npm run hugo\"",
+    "build": "hugo --minify",
+    "dashboard": "node server.js",
+    "review": "node review-server.js",
+    "bulk": "node bulk-upload-server.js",
+    "all": "concurrently \"npm run server\" \"npm run hugo\""
   },
+  "keywords": [
+    "hugo",
+    "cms",
+    "portfolio"
+  ],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.20.9",
-    "fuse.js": "^7.1.0"
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "fuse.js": "^7.1.0",
+    "multer": "^2.0.2",
+    "pdf-parse": "^1.1.1",
+    "sharp": "^0.34.3",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "@11ty/eleventy-img": "^6.0.4",
@@ -27,6 +42,7 @@
     "axe-core": "^4.10.3",
     "chalk": "^5.5.0",
     "commander": "^11.1.0",
+    "concurrently": "^9.2.0",
     "critical": "^7.2.1",
     "dotenv": "^16.6.1",
     "glob": "^10.4.5",
@@ -36,6 +52,7 @@
     "imagemin-webp": "^8.0.0",
     "intersection-observer": "^0.12.2",
     "mini-css-extract-plugin": "^2.9.4",
+    "nodemon": "^3.1.10",
     "ora": "^8.2.0",
     "pa11y": "^9.0.0",
     "puppeteer": "^24.16.1",

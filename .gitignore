@@ -49,3 +49,7 @@ static/cache/
 # Testing
 coverage/
 .nyc_output/
+# Content Management Tools
+static/tools/temp/
+static/tools/uploads/
+static/tools/*.log

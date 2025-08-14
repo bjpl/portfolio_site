@@ -2,6 +2,9 @@
 <article class="container">
     <h1>{{ .Title }}</h1>
     <time>{{ .Date.Format "January 2, 2006" }}</time>
+    {{ with .Params.featuredImage }}
+    <img src="{{ . }}" alt="{{ $.Title }}" style="max-width: 100%; height: auto; margin: 20px 0;">
+    {{ end }}
     <div>{{ .Content }}</div>
 </article>
 {{ end }}

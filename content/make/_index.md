@@ -1,8 +1,4 @@
 ---
-title: Make
-description: Creative works and experiments
-menu: main
-weight: 10
+title: "Make"
+description: "Creative works and projects"
 ---
-
-Things I create and build.
