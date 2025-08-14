@@ -1,0 +1,17 @@
+{{ $id := .Get "id" | default (.Get 0) }}
+{{ $height := .Get "height" | default "400" }}
+{{ $theme := .Get "theme" | default "dark" }}
+{{ $defaultTab := .Get "default-tab" | default "result" }}
+<div class="codepen-wrapper">
+  <iframe 
+    height="{{ $height }}" 
+    style="width: 100%;" 
+    scrolling="no" 
+    title="CodePen Embed" 
+    src="https://codepen.io/pen/embed/{{ $id }}?height={{ $height }}&theme-id={{ $theme }}&default-tab={{ $defaultTab }}" 
+    frameborder="no" 
+    loading="lazy" 
+    allowtransparency="true" 
+    allowfullscreen="true">
+  </iframe>
+</div>
