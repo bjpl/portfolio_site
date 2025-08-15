@@ -1,0 +1,19 @@
+{
+  "name": "hugo-backend",
+  "version": "1.0.0",
+  "description": "Backend for Hugo Management Tools",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "csv-parse": "^6.1.0",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "multer": "^2.0.2",
+    "ws": "^8.18.3"
+  }
+}

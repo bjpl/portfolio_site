@@ -1,0 +1,3111 @@
+"Path","Name","Content"
+"static\tools\index.html","index.html",""
+"static\tools\bulk-upload\index.html","index.html","<!DOCTYPE html>
+<html lang=""en"">
+
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>Unified Bulk Content Upload System - Hugo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --gray: #6b7280;
+            --light: #f3f4f6;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+            /* Content type colors */
+            --color-image: #10b981;
+            --color-video: #ef4444;
+            --color-youtube: #ff0000;
+            --color-linkedin: #0077b5;
+            --color-instagram: #e4405f;
+            --color-pdf: #dc2626;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .content-types {
+            padding: 1.5rem;
+        }
+
+        .content-type-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .content-type-btn {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            margin-bottom: 0.5rem;
+            border: 2px solid transparent;
+            background: var(--white);
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: left;
+        }
+
+        .content-type-btn:hover {
+            background: var(--light);
+            transform: translateX(5px);
+        }
+
+        .content-type-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .content-type-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-type-badge {
+            margin-left: auto;
+            padding: 0.125rem 0.5rem;
+            background: var(--light);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .content-type-btn.active .content-type-badge {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .main-header {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .main-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .workflow-container {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        /* Workflow Steps */
+        .workflow-steps {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .workflow-step {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .workflow-step.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .workflow-step.completed {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .workflow-step.active .step-number,
+        .workflow-step.completed .step-number {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .step-subtitle {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        /* Content Panels */
+        .content-panels {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .panel {
+            background: var(--white);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--light);
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            background: var(--white);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Destination Manager */
+        .destination-manager {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .destination-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .destination-tab {
+            padding: 0.5rem 1rem;
+            background: var(--white);
+            border: 2px solid transparent;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .destination-tab:hover {
+            background: var(--gray);
+            color: var(--white);
+        }
+
+        .destination-tab.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .destination-path {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .path-segment {
+            padding: 0.375rem 0.75rem;
+            background: var(--white);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .path-separator {
+            color: var(--gray);
+        }
+
+        /* Drop Zone */
+        .drop-zone {
+            border: 3px dashed var(--gray);
+            border-radius: 1rem;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s;
+            background: var(--light);
+            cursor: pointer;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .drop-zone.active {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .drop-zone-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        .drop-zone-text {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .drop-zone-subtext {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        /* Content List */
+        .content-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 2px solid var(--light);
+            border-radius: 0.75rem;
+            padding: 1rem;
+        }
+
+        .content-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .content-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .content-item-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .content-item-icon.image {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-image);
+        }
+
+        .content-item-icon.video {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--color-video);
+        }
+
+        .content-item-icon.youtube {
+            background: rgba(255, 0, 0, 0.1);
+            color: var(--color-youtube);
+        }
+
+        .content-item-icon.linkedin {
+            background: rgba(0, 119, 181, 0.1);
+            color: var(--color-linkedin);
+        }
+
+        .content-item-icon.instagram {
+            background: rgba(228, 64, 95, 0.1);
+            color: var(--color-instagram);
+        }
+
+        .content-item-icon.pdf {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--color-pdf);
+        }
+
+        .content-item-info {
+            flex: 1;
+        }
+
+        .content-item-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .content-item-meta {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .content-item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--gray);
+            color: var(--white);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--gray);
+            color: var(--gray);
+        }
+
+        .btn-outline:hover {
+            background: var(--gray);
+            color: var(--white);
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-icon {
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+        }
+
+        /* Output Panel */
+        .output-panel {
+            background: #1a1a2e;
+            color: #eee;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--light);
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray);
+            transition: all 0.3s;
+            margin-bottom: -2px;
+        }
+
+        .tab:hover {
+            color: var(--dark);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Processing Options */
+        .processing-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-card {
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .option-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .option-card.selected {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .option-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .option-description {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 0.375rem;
+            border: none;
+            background: var(--light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 2000;
+        }
+
+        .toast {
+            padding: 1rem 1.5rem;
+            background: var(--success);
+            color: var(--white);
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 1rem;
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        .toast.warning {
+            background: var(--warning);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .app-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .content-panels {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .workflow-steps {
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class=""app-container"">
+        <!-- Sidebar -->
+        <aside class=""sidebar"">
+            <div class=""sidebar-header"">
+                <h1>
+                    <svg width=""24"" height=""24"" fill=""currentColor"" viewBox=""0 0 24 24"">
+                        <path
+                            d=""M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"" />
+                    </svg>
+                    Bulk Upload Hub
+                </h1>
+                <p class=""sidebar-subtitle"">Unified content management for Hugo</p>
+            </div>
+
+            <div class=""content-types"">
+                <div class=""content-type-title"">Media Content</div>
+                <button class=""content-type-btn active"" data-type=""image"" onclick=""switchContentType('image')"">
+                    <span class=""content-type-icon"">🖼️</span>
+                    <span>Images</span>
+                    <span class=""content-type-badge"">0</span>
+                </button>
+                <button class=""content-type-btn"" data-type=""video"" onclick=""switchContentType('video')"">
+                    <span class=""content-type-icon"">🎬</span>
+                    <span>Videos</span>
+                    <span class=""content-type-badge"">0</span>
+                </button>
+                <button class=""content-type-btn"" data-type=""youtube"" onclick=""switchContentType('youtube')"">
+                    <span class=""content-type-icon"">📺</span>
+                    <span>YouTube</span>
+                    <span class=""content-type-badge"">0</span>
+                </button>
+                <button class=""content-type-btn"" data-type=""pdf"" onclick=""switchContentType('pdf')"">
+                    <span class=""content-type-icon"">📄</span>
+                    <span>PDFs</span>
+                    <span class=""content-type-badge"">0</span>
+                </button>
+
+                <div class=""content-type-title"" style=""margin-top: 1.5rem;"">Social Media</div>
+                <button class=""content-type-btn"" data-type=""linkedin"" onclick=""switchContentType('linkedin')"">
+                    <span class=""content-type-icon"">💼</span>
+                    <span>LinkedIn</span>
+                    <span class=""content-type-badge"">0</span>
+                </button>
+                <button class=""content-type-btn"" data-type=""instagram"" onclick=""switchContentType('instagram')"">
+                    <span class=""content-type-icon"">📸</span>
+                    <span>Instagram</span>
+                    <span class=""content-type-badge"">0</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class=""main-content"">
+            <div class=""main-header"">
+                <h2 class=""main-title"" id=""contentTypeTitle"">Image Bulk Upload</h2>
+                <div class=""header-actions"">
+                    <button class=""btn btn-outline btn-sm"" onclick=""showHelp()"">
+                        <svg width=""16"" height=""16"" fill=""currentColor"" viewBox=""0 0 24 24"">
+                            <path
+                                d=""M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"" />
+                        </svg>
+                        Help
+                    </button>
+                    <button class=""btn btn-primary"" onclick=""processContent()"">
+                        Process All
+                    </button>
+                </div>
+            </div>
+
+            <div class=""workflow-container"">
+                <!-- Workflow Steps -->
+                <div class=""workflow-steps"">
+                    <div class=""workflow-step active"" id=""step1"">
+                        <div class=""step-number"">1</div>
+                        <div class=""step-info"">
+                            <div class=""step-title"">Select Content</div>
+                            <div class=""step-subtitle"">Choose files or input data</div>
+                        </div>
+                    </div>
+                    <div class=""workflow-step"" id=""step2"">
+                        <div class=""step-number"">2</div>
+                        <div class=""step-info"">
+                            <div class=""step-title"">Configure</div>
+                            <div class=""step-subtitle"">Set destinations & options</div>
+                        </div>
+                    </div>
+                    <div class=""workflow-step"" id=""step3"">
+                        <div class=""step-number"">3</div>
+                        <div class=""step-info"">
+                            <div class=""step-title"">Process</div>
+                            <div class=""step-subtitle"">Generate Hugo content</div>
+                        </div>
+                    </div>
+                    <div class=""workflow-step"" id=""step4"">
+                        <div class=""step-number"">4</div>
+                        <div class=""step-info"">
+                            <div class=""step-title"">Export</div>
+                            <div class=""step-subtitle"">Download or copy files</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Panels -->
+                <div class=""content-panels"">
+                    <!-- Input Panel -->
+                    <div class=""panel"">
+                        <div class=""panel-header"">
+                            <h3 class=""panel-title"">
+                                <svg width=""20"" height=""20"" fill=""currentColor"" viewBox=""0 0 24 24"">
+                                    <path d=""M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"" />
+                                </svg>
+                                Content Input
+                            </h3>
+                            <div class=""panel-actions"">
+                                <button class=""btn btn-sm btn-outline"" onclick=""clearInput()"">Clear</button>
+                            </div>
+                        </div>
+
+                        <!-- Destination Manager -->
+                        <div class=""destination-manager"">
+                            <label class=""form-label"">Destination Path</label>
+                            <div class=""destination-tabs"">
+                                <button class=""destination-tab active""
+                                    onclick=""setDestinationType('existing')"">Existing</button>
+                                <button class=""destination-tab"" onclick=""setDestinationType('new')"">Create New</button>
+                                <button class=""destination-tab""
+                                    onclick=""setDestinationType('multiple')"">Multiple</button>
+                            </div>
+                            <div class=""destination-path"">
+                                <select class=""path-segment"" id=""sectionSelect"">
+                                    <option value=""learn"">learn</option>
+                                    <option value=""make"">make</option>
+                                    <option value=""meet"">meet</option>
+                                    <option value=""think"">think</option>
+                                </select>
+                                <span class=""path-separator"">/</span>
+                                <select class=""path-segment"" id=""subsectionSelect"">
+                                    <option value=""built"">built</option>
+                                    <option value=""found"">found</option>
+                                    <option value=""strategies"">strategies</option>
+                                </select>
+                                <span class=""path-separator"">/</span>
+                                <input type=""text"" class=""path-segment"" id=""customPath"" placeholder=""custom-folder""
+                                    style=""flex: 1;"">
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Input Area -->
+                        <div id=""inputArea"">
+                            <!-- Content type specific inputs will be loaded here -->
+                        </div>
+
+                        <!-- Stats -->
+                        <div class=""stats-grid"">
+                            <div class=""stat-card"">
+                                <div class=""stat-value"" id=""itemCount"">0</div>
+                                <div class=""stat-label"">Items</div>
+                            </div>
+                            <div class=""stat-card"">
+                                <div class=""stat-value"" id=""sizeCount"">0</div>
+                                <div class=""stat-label"">Total Size</div>
+                            </div>
+                            <div class=""stat-card"">
+                                <div class=""stat-value"" id=""validCount"">0</div>
+                                <div class=""stat-label"">Valid</div>
+                            </div>
+                            <div class=""stat-card"">
+                                <div class=""stat-value"" id=""errorCount"">0</div>
+                                <div class=""stat-label"">Errors</div>
+                            </div>
+                        </div>
+
+                        <!-- Content List -->
+                        <div class=""content-list"" id=""contentList"" style=""display: none;"">
+                            <!-- Dynamic content items will appear here -->
+                        </div>
+                    </div>
+
+                    <!-- Output Panel -->
+                    <div class=""panel"">
+                        <div class=""panel-header"">
+                            <h3 class=""panel-title"">
+                                <svg width=""20"" height=""20"" fill=""currentColor"" viewBox=""0 0 24 24"">
+                                    <path
+                                        d=""M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"" />
+                                </svg>
+                                Generated Output
+                            </h3>
+                            <div class=""panel-actions"">
+                                <button class=""btn btn-sm btn-success"" onclick=""copyToClipboard()"">Copy</button>
+                                <button class=""btn btn-sm btn-primary"" onclick=""downloadAll()"">Download</button>
+                            </div>
+                        </div>
+
+                        <!-- Processing Options -->
+                        <div class=""tabs"">
+                            <button class=""tab active"" onclick=""switchOutputTab('content')"">Content</button>
+                            <button class=""tab"" onclick=""switchOutputTab('commands')"">Commands</button>
+                            <button class=""tab"" onclick=""switchOutputTab('preview')"">Preview</button>
+                        </div>
+
+                        <div id=""outputContent"">
+                            <div class=""form-group"">
+                                <label class=""form-label"">Output Format</label>
+                                <div class=""processing-options"">
+                                    <div class=""option-card selected"" onclick=""selectOutputFormat('hugo')"">
+                                        <div class=""option-title"">Hugo Content</div>
+                                        <div class=""option-description"">Complete .md files</div>
+                                    </div>
+                                    <div class=""option-card"" onclick=""selectOutputFormat('batch')"">
+                                        <div class=""option-title"">Batch Script</div>
+                                        <div class=""option-description"">PowerShell commands</div>
+                                    </div>
+                                    <div class=""option-card"" onclick=""selectOutputFormat('json')"">
+                                        <div class=""option-title"">JSON Data</div>
+                                        <div class=""option-description"">Structured data</div>
+                                    </div>
+                                    <div class=""option-card"" onclick=""selectOutputFormat('csv')"">
+                                        <div class=""option-title"">CSV Export</div>
+                                        <div class=""option-description"">Spreadsheet format</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class=""form-group"">
+                                <label class=""form-label"">Generated Output</label>
+                                <div class=""output-panel"" id=""outputPanel"">
+                                    Your generated content will appear here...
+
+                                    Select content and click ""Process All"" to begin.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div class=""toast-container"" id=""toastContainer""></div>
+
+    <!-- Help Modal -->
+    <div class=""modal"" id=""helpModal"">
+        <div class=""modal-content"">
+            <div class=""modal-header"">
+                <h3 class=""modal-title"">How to Use</h3>
+                <button class=""modal-close"" onclick=""closeModal('helpModal')"">✕</button>
+            </div>
+            <div class=""modal-body"">
+                <h4>Quick Start Guide</h4>
+                <ol>
+                    <li>Select content type from the sidebar</li>
+                    <li>Choose or create destination folders</li>
+                    <li>Add your content (files, URLs, or text)</li>
+                    <li>Configure processing options</li>
+                    <li>Click ""Process All"" to generate Hugo content</li>
+                    <li>Copy or download the generated files</li>
+                </ol>
+
+                <h4>Supported Content Types</h4>
+                <ul>
+                    <li><strong>Images:</strong> JPEG, PNG, GIF, WebP</li>
+                    <li><strong>Videos:</strong> MP4, WebM, AVI</li>
+                    <li><strong>YouTube:</strong> URLs, IDs, Playlists</li>
+                    <li><strong>PDFs:</strong> Document files</li>
+                    <li><strong>LinkedIn:</strong> Post exports, CSV</li>
+                    <li><strong>Instagram:</strong> Posts, Stories, Reels</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state management
+        const appState = {
+            currentType: 'image',
+            items: [],
+            destinations: [],
+            outputFormat: 'hugo',
+            currentStep: 1,
+            processing: false
+        };
+
+        // Content type configurations
+        const contentTypes = {
+            image: {
+                title: 'Image Bulk Upload',
+                icon: '🖼️',
+                color: '#10b981',
+                extensions: ['.jpg', '.jpeg', '.png', '.gif', '.webp'],
+                inputHTML: `
+                    <div class=""drop-zone"" onclick=""document.getElementById('fileInput').click()"" ondrop=""handleDrop(event)"" ondragover=""handleDragOver(event)"">
+                        <div class=""drop-zone-icon"">📁</div>
+                        <div class=""drop-zone-text"">Drop images here or click to browse</div>
+                        <div class=""drop-zone-subtext"">Supports JPEG, PNG, GIF, WebP</div>
+                        <input type=""file"" id=""fileInput"" multiple accept=""image/*"" style=""display: none;"" onchange=""handleFileSelect(event)"">
+                    </div>
+                `
+            },
+            video: {
+                title: 'Video Bulk Upload',
+                icon: '🎬',
+                color: '#ef4444',
+                extensions: ['.mp4', '.webm', '.avi', '.mov'],
+                inputHTML: `
+                    <div class=""drop-zone"" onclick=""document.getElementById('fileInput').click()"" ondrop=""handleDrop(event)"" ondragover=""handleDragOver(event)"">
+                        <div class=""drop-zone-icon"">🎬</div>
+                        <div class=""drop-zone-text"">Drop videos here or click to browse</div>
+                        <div class=""drop-zone-subtext"">Supports MP4, WebM, AVI, MOV</div>
+                        <input type=""file"" id=""fileInput"" multiple accept=""video/*"" style=""display: none;"" onchange=""handleFileSelect(event)"">
+                    </div>
+                `
+            },
+            youtube: {
+                title: 'YouTube Bulk Upload',
+                icon: '📺',
+                color: '#ff0000',
+                inputHTML: `
+                    <div class=""form-group"">
+                        <label class=""form-label"">YouTube URLs or IDs</label>
+                        <textarea class=""form-textarea"" id=""youtubeInput"" placeholder=""Enter YouTube URLs or video IDs (one per line)
+
+https://www.youtube.com/watch?v=dQw4w9WgXcQ
+https://youtu.be/dQw4w9WgXcQ
+dQw4w9WgXcQ""></textarea>
+                    </div>
+                    <button class=""btn btn-primary"" onclick=""processYouTubeVideos()"">Add Videos</button>
+                `
+            },
+            pdf: {
+                title: 'PDF Bulk Upload',
+                icon: '📄',
+                color: '#dc2626',
+                extensions: ['.pdf'],
+                inputHTML: `
+                    <div class=""drop-zone"" onclick=""document.getElementById('fileInput').click()"" ondrop=""handleDrop(event)"" ondragover=""handleDragOver(event)"">
+                        <div class=""drop-zone-icon"">📄</div>
+                        <div class=""drop-zone-text"">Drop PDF files here or click to browse</div>
+                        <div class=""drop-zone-subtext"">Supports PDF documents</div>
+                        <input type=""file"" id=""fileInput"" multiple accept="".pdf"" style=""display: none;"" onchange=""handleFileSelect(event)"">
+                    </div>
+                `
+            },
+            linkedin: {
+                title: 'LinkedIn Post Upload',
+                icon: '💼',
+                color: '#0077b5',
+                inputHTML: `
+                    <div class=""form-group"">
+                        <label class=""form-label"">LinkedIn Posts</label>
+                        <textarea class=""form-textarea"" id=""linkedinInput"" placeholder=""Paste your LinkedIn posts here...
+
+Use === to separate multiple posts:
+
+First post content...
+===
+Second post content...""></textarea>
+                    </div>
+                    <button class=""btn btn-primary"" onclick=""processLinkedInPosts()"">Process Posts</button>
+                `
+            },
+            instagram: {
+                title: 'Instagram Post Upload',
+                icon: '📸',
+                color: '#e4405f',
+                inputHTML: `
+                    <div class=""form-group"">
+                        <label class=""form-label"">Instagram Post Data</label>
+                        <select class=""form-select"" onchange=""switchInstagramInput(this.value)"">
+                            <option value=""manual"">Manual Entry</option>
+                            <option value=""export"">JSON Export</option>
+                            <option value=""api"">API Import</option>
+                        </select>
+                    </div>
+                    <div id=""instagramInputArea"">
+                        <div class=""form-group"">
+                            <textarea class=""form-textarea"" id=""instagramInput"" placeholder=""Caption text...
+
+#hashtag1 #hashtag2""></textarea>
+                        </div>
+                        <button class=""btn btn-primary"" onclick=""processInstagramPosts()"">Add Post</button>
+                    </div>
+                `
+            }
+        };
+
+        // Initialize application
+        function init() {
+            updateContentTypeUI();
+            updateWorkflowStep(1);
+            updateSectionOptions();
+        }
+
+        // Switch content type
+        function switchContentType(type) {
+            appState.currentType = type;
+            appState.items = [];
+            updateContentTypeUI();
+            updateStats();
+        }
+
+        // Update UI for selected content type
+        function updateContentTypeUI() {
+            const config = contentTypes[appState.currentType];
+
+            // Update sidebar
+            document.querySelectorAll('.content-type-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.type === appState.currentType);
+            });
+
+            // Update header
+            document.getElementById('contentTypeTitle').textContent = config.title;
+
+            // Update input area
+            document.getElementById('inputArea').innerHTML = config.inputHTML;
+
+            // Clear output
+            document.getElementById('outputPanel').textContent = 'Your generated content will appear here...\n\nSelect content and click ""Process All"" to begin.';
+        }
+
+        // Update section options based on content type
+        function updateSectionOptions() {
+            const sectionSelect = document.getElementById('sectionSelect');
+            const subsectionSelect = document.getElementById('subsectionSelect');
+
+            // Update subsections based on selected section
+            sectionSelect.addEventListener('change', () => {
+                const section = sectionSelect.value;
+                const subsections = {
+                    learn: ['built', 'found', 'strategies'],
+                    make: ['sounds', 'visuals', 'words'],
+                    meet: ['me', 'work'],
+                    think: ['links', 'positions']
+                };
+
+                subsectionSelect.innerHTML = subsections[section].map(sub =>
+                    `<option value=""${sub}"">${sub}</option>`
+                ).join('');
+            });
+        }
+
+        // File handling
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            processFiles(files);
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const files = Array.from(event.dataTransfer.files);
+            processFiles(files);
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.currentTarget.classList.add('active');
+        }
+
+        function processFiles(files) {
+            const config = contentTypes[appState.currentType];
+
+            files.forEach(file => {
+                const ext = '.' + file.name.split('.').pop().toLowerCase();
+                if (config.extensions && config.extensions.includes(ext)) {
+                    appState.items.push({
+                        type: appState.currentType,
+                        name: file.name,
+                        size: formatFileSize(file.size),
+                        file: file,
+                        status: 'valid'
+                    });
+                }
+            });
+
+            updateStats();
+            displayContentList();
+            updateWorkflowStep(2);
+        }
+
+        // YouTube processing
+        function processYouTubeVideos() {
+            const input = document.getElementById('youtubeInput').value.trim();
+            const lines = input.split('\n').filter(line => line.trim());
+
+            lines.forEach(line => {
+                const videoId = extractYouTubeId(line);
+                if (videoId) {
+                    appState.items.push({
+                        type: 'youtube',
+                        name: `YouTube Video - ${videoId}`,
+                        videoId: videoId,
+                        url: `https://www.youtube.com/watch?v=${videoId}`,
+                        status: 'valid'
+                    });
+                }
+            });
+
+            updateStats();
+            displayContentList();
+            updateWorkflowStep(2);
+        }
+
+        function extractYouTubeId(input) {
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+                /^([a-zA-Z0-9_-]{11})$/
+            ];
+
+            for (let pattern of patterns) {
+                const match = input.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        // LinkedIn processing
+        function processLinkedInPosts() {
+            const input = document.getElementById('linkedinInput').value.trim();
+            const posts = input.split('===').filter(post => post.trim());
+
+            posts.forEach((post, index) => {
+                appState.items.push({
+                    type: 'linkedin',
+                    name: `LinkedIn Post ${index + 1}`,
+                    content: post.trim(),
+                    hashtags: extractHashtags(post),
+                    status: 'valid'
+                });
+            });
+
+            updateStats();
+            displayContentList();
+            updateWorkflowStep(2);
+        }
+
+        // Instagram processing
+        function processInstagramPosts() {
+            const input = document.getElementById('instagramInput').value.trim();
+
+            if (input) {
+                appState.items.push({
+                    type: 'instagram',
+                    name: `Instagram Post ${appState.items.length + 1}`,
+                    caption: input,
+                    hashtags: extractHashtags(input),
+                    status: 'valid'
+                });
+
+                document.getElementById('instagramInput').value = '';
+                updateStats();
+                displayContentList();
+                updateWorkflowStep(2);
+            }
+        }
+
+        function extractHashtags(text) {
+            const hashtags = text.match(/#\w+/g) || [];
+            return [...new Set(hashtags)];
+        }
+
+        // Display content list
+        function displayContentList() {
+            const contentList = document.getElementById('contentList');
+
+            if (appState.items.length === 0) {
+                contentList.style.display = 'none';
+                return;
+            }
+
+            contentList.style.display = 'block';
+            contentList.innerHTML = appState.items.map((item, index) => `
+                <div class=""content-item"">
+                    <div class=""content-item-icon ${item.type}"">${contentTypes[item.type].icon}</div>
+                    <div class=""content-item-info"">
+                        <div class=""content-item-title"">${item.name}</div>
+                        <div class=""content-item-meta"">${item.size || item.videoId || item.hashtags?.join(' ') || ''}</div>
+                    </div>
+                    <div class=""content-item-actions"">
+                        <button class=""btn btn-sm btn-danger"" onclick=""removeItem(${index})"">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Remove item
+        function removeItem(index) {
+            appState.items.splice(index, 1);
+            updateStats();
+            displayContentList();
+        }
+
+        // Update statistics
+        function updateStats() {
+            document.getElementById('itemCount').textContent = appState.items.length;
+            document.getElementById('validCount').textContent = appState.items.filter(i => i.status === 'valid').length;
+            document.getElementById('errorCount').textContent = appState.items.filter(i => i.status === 'error').length;
+
+            // Update sidebar badges
+            document.querySelectorAll('.content-type-btn').forEach(btn => {
+                const type = btn.dataset.type;
+                const count = appState.items.filter(i => i.type === type).length;
+                btn.querySelector('.content-type-badge').textContent = count;
+            });
+
+            // Update size for files
+            const totalSize = appState.items
+                .filter(i => i.file)
+                .reduce((sum, i) => sum + (i.file?.size || 0), 0);
+            document.getElementById('sizeCount').textContent = formatFileSize(totalSize);
+        }
+
+        // Process all content
+        function processContent() {
+            if (appState.items.length === 0) {
+                showToast('No content to process', 'warning');
+                return;
+            }
+
+            updateWorkflowStep(3);
+            generateOutput();
+            updateWorkflowStep(4);
+            showToast(`Successfully processed ${appState.items.length} items!`, 'success');
+        }
+
+        // Generate output based on format
+        function generateOutput() {
+            const section = document.getElementById('sectionSelect').value;
+            const subsection = document.getElementById('subsectionSelect').value;
+            const customPath = document.getElementById('customPath').value;
+
+            let output = '';
+
+            switch (appState.outputFormat) {
+                case 'hugo':
+                    output = generateHugoContent(section, subsection, customPath);
+                    break;
+                case 'batch':
+                    output = generateBatchCommands(section, subsection, customPath);
+                    break;
+                case 'json':
+                    output = generateJSON();
+                    break;
+                case 'csv':
+                    output = generateCSV();
+                    break;
+            }
+
+            document.getElementById('outputPanel').textContent = output;
+        }
+
+        // Generate Hugo content
+        function generateHugoContent(section, subsection, customPath) {
+            const date = new Date().toISOString();
+            const path = customPath ? `${section}/${subsection}/${customPath}` : `${section}/${subsection}`;
+
+            let content = `# Hugo Content Generation\n\n`;
+            content += `## Path: content/${path}/\n\n`;
+
+            appState.items.forEach((item, index) => {
+                const slug = item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                content += `### File: ${slug}.md\n\n`;
+                content += `\`\`\`markdown\n`;
+                content += `---\n`;
+                content += `title: ""${item.name}""\n`;
+                content += `date: ${date}\n`;
+                content += `draft: false\n`;
+                content += `type: ""${item.type}""\n`;
+
+                if (item.type === 'youtube') {
+                    content += `videoId: ""${item.videoId}""\n`;
+                    content += `videoUrl: ""${item.url}""\n`;
+                } else if (item.hashtags) {
+                    content += `tags: [${item.hashtags.map(h => `""${h.replace('#', '')}""`).join(', ')}]\n`;
+                }
+
+                content += `---\n\n`;
+
+                if (item.type === 'youtube') {
+                    content += `{{< youtube ${item.videoId} >}}\n`;
+                } else if (item.type === 'image') {
+                    content += `![${item.name}](/images/${slug})\n`;
+                } else if (item.content) {
+                    content += item.content + '\n';
+                }
+
+                content += `\`\`\`\n\n`;
+            });
+
+            return content;
+        }
+
+        // Generate batch commands
+        function generateBatchCommands(section, subsection, customPath) {
+            const path = customPath ? `${section}/${subsection}/${customPath}` : `${section}/${subsection}`;
+
+            let commands = `# PowerShell Batch Commands\n\n`;
+            commands += `# Create directory structure\n`;
+            commands += `New-Item -ItemType Directory -Path ""content/${path}"" -Force\n\n`;
+
+            appState.items.forEach(item => {
+                const slug = item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                commands += `hugo new ${path}/${slug}.md\n`;
+            });
+
+            commands += `\n# Start Hugo server\n`;
+            commands += `hugo server -D --navigateToChanged\n`;
+
+            return commands;
+        }
+
+        // Generate JSON
+        function generateJSON() {
+            return JSON.stringify({
+                metadata: {
+                    generated: new Date().toISOString(),
+                    itemCount: appState.items.length,
+                    contentType: appState.currentType
+                },
+                items: appState.items
+            }, null, 2);
+        }
+
+        // Generate CSV
+        function generateCSV() {
+            let csv = 'Name,Type,Path,Status\n';
+            appState.items.forEach(item => {
+                csv += `""${item.name}"",""${item.type}"",""${item.path || ''}"",""${item.status}""\n`;
+            });
+            return csv;
+        }
+
+        // Utility functions
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        function updateWorkflowStep(step) {
+            appState.currentStep = step;
+            document.querySelectorAll('.workflow-step').forEach((el, index) => {
+                if (index < step - 1) {
+                    el.classList.add('completed');
+                    el.classList.remove('active');
+                } else if (index === step - 1) {
+                    el.classList.add('active');
+                    el.classList.remove('completed');
+                } else {
+                    el.classList.remove('active', 'completed');
+                }
+            });
+        }
+
+        function selectOutputFormat(format) {
+            appState.outputFormat = format;
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            generateOutput();
+        }
+
+        function setDestinationType(type) {
+            document.querySelectorAll('.destination-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        function switchOutputTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById('outputPanel').textContent;
+            navigator.clipboard.writeText(output).then(() => {
+                showToast('Copied to clipboard!', 'success');
+            });
+        }
+
+        function downloadAll() {
+            const output = document.getElementById('outputPanel').textContent;
+            const blob = new Blob([output], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `hugo-content-${Date.now()}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Download started!', 'success');
+        }
+
+        function clearInput() {
+            appState.items = [];
+            updateStats();
+            displayContentList();
+            updateWorkflowStep(1);
+
+            // Clear input fields
+            const inputs = ['youtubeInput', 'linkedinInput', 'instagramInput'];
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+        }
+
+        function showHelp() {
+            document.getElementById('helpModal').classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast show ${type}`;
+            toast.innerHTML = `
+                <svg width=""20"" height=""20"" fill=""currentColor"" viewBox=""0 0 24 24"">
+                    <path d=""M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z""/>
+                </svg>
+                ${message}
+            `;
+
+            document.getElementById('toastContainer').appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>"
+"static\tools\content-review\index.html","index.html","<!DOCTYPE html>
+<html lang=""en"">
+
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>Content Review & Revision Tool - Hugo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #5b21b6;
+            --primary-dark: #4c1d95;
+            --secondary: #2563eb;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --info: #0891b2;
+            --dark: #111827;
+            --gray: #6b7280;
+            --light: #f3f4f6;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+            /* Status colors */
+            --status-draft: #fbbf24;
+            --status-review: #3b82f6;
+            --status-approved: #10b981;
+            --status-published: #8b5cf6;
+            --status-archived: #6b7280;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #5b21b6 0%, #1e40af 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .app-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            height: 100vh;
+            gap: 1px;
+            background: var(--gray);
+        }
+
+        /* Left Panel - Content Browser */
+        .content-browser {
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .browser-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+        }
+
+        .browser-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .browser-subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            padding: 1rem;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.625rem;
+            border: 2px solid var(--light);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(91, 33, 182, 0.1);
+        }
+
+        .filter-section {
+            padding: 1rem;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .filter-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .filter-chip {
+            padding: 0.375rem 0.75rem;
+            background: var(--light);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .filter-chip:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary-dark);
+        }
+
+        .content-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .content-item {
+            padding: 1rem;
+            background: var(--white);
+            border: 2px solid var(--light);
+            border-radius: 0.75rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .content-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .content-item.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary-dark);
+        }
+
+        .content-item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-item-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .content-item-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-draft {
+            background: var(--status-draft);
+            color: var(--white);
+        }
+
+        .status-review {
+            background: var(--status-review);
+            color: var(--white);
+        }
+
+        .status-approved {
+            background: var(--status-approved);
+            color: var(--white);
+        }
+
+        .status-published {
+            background: var(--status-published);
+            color: var(--white);
+        }
+
+        .status-archived {
+            background: var(--status-archived);
+            color: var(--white);
+        }
+
+        .content-item-meta {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .content-item.active .content-item-meta {
+            opacity: 0.9;
+        }
+
+        .content-item-path {
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            font-family: 'Courier New', monospace;
+            opacity: 0.6;
+        }
+
+        /* Center Panel - Editor */
+        .editor-panel {
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .editor-toolbar {
+            padding: 1rem 1.5rem;
+            background: var(--light);
+            border-bottom: 2px solid var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toolbar-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toolbar-btn {
+            padding: 0.5rem 0.75rem;
+            background: var(--white);
+            border: 1px solid var(--gray);
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.875rem;
+        }
+
+        .toolbar-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .toolbar-btn.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .toolbar-separator {
+            width: 1px;
+            height: 24px;
+            background: var(--gray);
+            margin: 0 0.5rem;
+        }
+
+        .editor-tabs {
+            display: flex;
+            background: var(--light);
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .editor-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray);
+            transition: all 0.3s;
+        }
+
+        .editor-tab:hover {
+            color: var(--dark);
+            background: var(--white);
+        }
+
+        .editor-tab.active {
+            color: var(--primary);
+            background: var(--white);
+            border-bottom-color: var(--primary);
+        }
+
+        .editor-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .editor-section {
+            margin-bottom: 2rem;
+        }
+
+        .editor-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .editor-input,
+        .editor-textarea,
+        .editor-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--light);
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            background: var(--white);
+        }
+
+        .editor-input:focus,
+        .editor-textarea:focus,
+        .editor-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(91, 33, 182, 0.1);
+        }
+
+        .editor-textarea {
+            min-height: 200px;
+            resize: vertical;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .markdown-editor {
+            border: 2px solid var(--light);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .markdown-toolbar {
+            padding: 0.5rem;
+            background: var(--light);
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .markdown-btn {
+            padding: 0.375rem 0.5rem;
+            background: var(--white);
+            border: 1px solid var(--gray);
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+
+        .markdown-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .markdown-textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 1rem;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+        }
+
+        .preview-content {
+            padding: 1rem;
+            min-height: 400px;
+            background: var(--white);
+            border: 2px solid var(--light);
+            border-radius: 0.5rem;
+        }
+
+        .diff-viewer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+        }
+
+        .diff-line {
+            padding: 0.25rem 0.5rem;
+            margin: 0.125rem 0;
+        }
+
+        .diff-add {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .diff-remove {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .diff-context {
+            color: #9ca3af;
+        }
+
+        /* Right Panel - Revision History */
+        .revision-panel {
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .revision-header {
+            padding: 1.5rem;
+            background: var(--light);
+            border-bottom: 2px solid var(--light);
+        }
+
+        .revision-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .revision-subtitle {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .revision-stats {
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .revision-stat {
+            text-align: center;
+        }
+
+        .revision-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .revision-stat-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+        }
+
+        .revision-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .revision-item {
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .revision-item:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateX(-5px);
+        }
+
+        .revision-item.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .revision-number {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            opacity: 0.7;
+        }
+
+        .revision-date {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .revision-author {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .revision-changes {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .revision-actions {
+            margin-top: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .revision-btn {
+            padding: 0.25rem 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .revision-item:not(:hover) .revision-btn {
+            background: var(--white);
+            border-color: var(--gray);
+            color: var(--dark);
+        }
+
+        .revision-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Quality Check Panel */
+        .quality-panel {
+            background: var(--light);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .quality-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .quality-title {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .quality-score {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--success);
+        }
+
+        .quality-checks {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .quality-check {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--white);
+            border-radius: 0.5rem;
+        }
+
+        .quality-check-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .quality-check-icon.pass {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .quality-check-icon.warning {
+            background: var(--warning);
+            color: var(--white);
+        }
+
+        .quality-check-icon.fail {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .quality-check-text {
+            flex: 1;
+            font-size: 0.875rem;
+        }
+
+        .quality-check-action {
+            padding: 0.25rem 0.5rem;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quality-check-action:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Comments Section */
+        .comments-section {
+            background: var(--light);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .comments-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .comments-title {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .comment-count {
+            padding: 0.25rem 0.5rem;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .comment-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .comment-item {
+            padding: 1rem;
+            background: var(--white);
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .comment-date {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .comment-text {
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--white);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            background: var(--white);
+            resize: none;
+        }
+
+        /* Action Buttons */
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--gray);
+            color: var(--white);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--white);
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        /* Floating Action Bar */
+        .action-bar {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark);
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .action-bar-text {
+            color: var(--white);
+            font-size: 0.875rem;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background: var(--success);
+            color: var(--white);
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .app-layout {
+                grid-template-columns: 250px 1fr 300px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .app-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+
+            .content-browser,
+            .revision-panel {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class=""app-layout"">
+        <!-- Left Panel - Content Browser -->
+        <aside class=""content-browser"">
+            <div class=""browser-header"">
+                <h1 class=""browser-title"">
+                    <svg width=""20"" height=""20"" fill=""currentColor"" viewBox=""0 0 24 24"">
+                        <path
+                            d=""M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"" />
+                    </svg>
+                    Content Review
+                </h1>
+                <p class=""browser-subtitle"">132 items • 5 pending review</p>
+            </div>
+
+            <div class=""search-box"">
+                <input type=""text"" class=""search-input"" placeholder=""Search content..."" id=""searchInput"">
+            </div>
+
+            <div class=""filter-section"">
+                <div class=""filter-title"">Status</div>
+                <div class=""filter-chips"">
+                    <div class=""filter-chip"" onclick=""filterByStatus('draft')"">Draft (23)</div>
+                    <div class=""filter-chip active"" onclick=""filterByStatus('review')"">Review (5)</div>
+                    <div class=""filter-chip"" onclick=""filterByStatus('approved')"">Approved (12)</div>
+                    <div class=""filter-chip"" onclick=""filterByStatus('published')"">Published (89)</div>
+                    <div class=""filter-chip"" onclick=""filterByStatus('archived')"">Archived (3)</div>
+                </div>
+            </div>
+
+            <div class=""filter-section"">
+                <div class=""filter-title"">Section</div>
+                <div class=""filter-chips"">
+                    <div class=""filter-chip"" onclick=""filterBySection('learn')"">Learn</div>
+                    <div class=""filter-chip"" onclick=""filterBySection('make')"">Make</div>
+                    <div class=""filter-chip"" onclick=""filterBySection('meet')"">Meet</div>
+                    <div class=""filter-chip"" onclick=""filterBySection('think')"">Think</div>
+                </div>
+            </div>
+
+            <div class=""content-list"" id=""contentList"">
+                <!-- Sample content items -->
+                <div class=""content-item active"" onclick=""loadContent(1)"">
+                    <div class=""content-item-header"">
+                        <span class=""content-item-title"">React Hooks Deep Dive</span>
+                        <span class=""content-item-status status-review"">Review</span>
+                    </div>
+                    <div class=""content-item-meta"">Modified 2 hours ago • 1,234 words</div>
+                    <div class=""content-item-path"">learn/built/react-hooks-deep-dive.md</div>
+                </div>
+
+                <div class=""content-item"" onclick=""loadContent(2)"">
+                    <div class=""content-item-header"">
+                        <span class=""content-item-title"">Portfolio Redesign Case Study</span>
+                        <span class=""content-item-status status-draft"">Draft</span>
+                    </div>
+                    <div class=""content-item-meta"">Modified yesterday • 892 words</div>
+                    <div class=""content-item-path"">meet/work/portfolio-redesign.md</div>
+                </div>
+
+                <div class=""content-item"" onclick=""loadContent(3)"">
+                    <div class=""content-item-header"">
+                        <span class=""content-item-title"">Sustainable Web Design</span>
+                        <span class=""content-item-status status-approved"">Approved</span>
+                    </div>
+                    <div class=""content-item-meta"">Modified 3 days ago • 2,156 words</div>
+                    <div class=""content-item-path"">think/positions/sustainable-web.md</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center Panel - Editor -->
+        <main class=""editor-panel"">
+            <div class=""editor-toolbar"">
+                <div class=""toolbar-section"">
+                    <button class=""toolbar-btn"" onclick=""saveContent()"">
+                        <svg width=""16"" height=""16"" fill=""currentColor"" viewBox=""0 0 24 24"">
+                            <path
+                                d=""M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm2 16H5V5h11.17L19 7.83V19zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"" />
+                        </svg>
+                        Save
+                    </button>
+                    <button class=""toolbar-btn"" onclick=""createRevision()"">
+                        <svg width=""16"" height=""16"" fill=""currentColor"" viewBox=""0 0 24 24"">
+                            <path
+                                d=""M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"" />
+                        </svg>
+                        Create Revision
+                    </button>
+                    <div class=""toolbar-separator""></div>
+                    <button class=""toolbar-btn"" onclick=""runQualityCheck()"">
+                        <svg width=""16"" height=""16"" fill=""currentColor"" viewBox=""0 0 24 24"">
+                            <path d=""M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"" />
+                        </svg>
+                        Quality Check
+                    </button>
+                    <button class=""toolbar-btn"" onclick=""compareVersions()"">
+                        <svg width=""16"" height=""16"" fill=""currentColor"" viewBox=""0 0 24 24"">
+                            <path d=""M9.01 14H2v2h7.01v3L13 15l-3.99-4v3zm5.98-1v-3H22V8h-7.01V5L11 9l3.99 4z"" />
+                        </svg>
+                        Compare
+                    </button>
+                </div>
+                <div class=""toolbar-section"">
+                    <select class=""editor-select"" style=""width: auto;"" onchange=""changeStatus(this.value)"">
+                        <option value=""draft"">Draft</option>
+                        <option value=""review"" selected>In Review</option>
+                        <option value=""approved"">Approved</option>
+                        <option value=""published"">Published</option>
+                        <option value=""archived"">Archived</option>
+                    </select>
+                    <button class=""btn btn-success btn-sm"" onclick=""approveContent()"">Approve</button>
+                    <button class=""btn btn-primary btn-sm"" onclick=""publishContent()"">Publish</button>
+                </div>
+            </div>
+
+            <div class=""editor-tabs"">
+                <button class=""editor-tab active"" onclick=""switchTab('edit')"">Edit</button>
+                <button class=""editor-tab"" onclick=""switchTab('preview')"">Preview</button>
+                <button class=""editor-tab"" onclick=""switchTab('diff')"">Changes</button>
+                <button class=""editor-tab"" onclick=""switchTab('metadata')"">Metadata</button>
+            </div>
+
+            <div class=""editor-content"" id=""editTab"">
+                <div class=""editor-section"">
+                    <label class=""editor-label"">Title</label>
+                    <input type=""text"" class=""editor-input"" id=""titleInput"" value=""React Hooks Deep Dive"">
+                </div>
+
+                <div class=""editor-section"">
+                    <label class=""editor-label"">Front Matter</label>
+                    <textarea class=""editor-textarea"" id=""frontMatterInput"">---
+title: ""React Hooks Deep Dive""
+date: 2024-01-15T10:00:00Z
+lastmod: 2024-01-15T14:30:00Z
+draft: false
+description: ""A comprehensive guide to React Hooks""
+tags: [""react"", ""hooks"", ""javascript"", ""tutorial""]
+categories: [""development""]
+type: ""built""
+difficulty: ""intermediate""
+timeToComplete: ""45 minutes""
+---</textarea>
+                </div>
+
+                <div class=""editor-section"">
+                    <label class=""editor-label"">Content</label>
+                    <div class=""markdown-editor"">
+                        <div class=""markdown-toolbar"">
+                            <button class=""markdown-btn"" onclick=""insertMarkdown('**', '**')"">B</button>
+                            <button class=""markdown-btn"" onclick=""insertMarkdown('*', '*')"">I</button>
+                            <button class=""markdown-btn"" onclick=""insertMarkdown('## ')"">H2</button>
+                            <button class=""markdown-btn"" onclick=""insertMarkdown('### ')"">H3</button>
+                            <button class=""markdown-btn"" onclick=""insertMarkdown('[', '](url)')"">Link</button>
+                            <button class=""markdown-btn"" onclick=""insertMarkdown('![', '](url)')"">Image</button>
+                            <button class=""markdown-btn"" onclick=""insertMarkdown('```\n', '\n```')"">Code</button>
+                            <button class=""markdown-btn"" onclick=""insertMarkdown('- ')"">List</button>
+                            <button class=""markdown-btn"" onclick=""insertMarkdown('> ')"">Quote</button>
+                        </div>
+                        <textarea class=""markdown-textarea"" id=""contentInput"">## Introduction
+
+React Hooks revolutionized how we write React components by allowing us to use state and other React features without writing a class. In this deep dive, we'll explore the most important hooks and learn how to create custom hooks for our applications.
+
+## Understanding useState
+
+The `useState` hook is the most fundamental hook in React. It allows functional components to have state:
+
+```javascript
+const [count, setCount] = useState(0);
+```
+
+### Key Concepts
+
+1. **State Preservation**: React preserves state between re-renders
+2. **Batching**: Multiple state updates are batched for performance
+3. **Functional Updates**: Use functions for updates that depend on previous state
+
+## The useEffect Hook
+
+`useEffect` lets you perform side effects in functional components:
+
+```javascript
+useEffect(() => {
+  // Effect logic here
+  return () => {
+    // Cleanup logic here
+  };
+}, [dependencies]);
+```
+
+### Common Patterns
+
+- Data fetching
+- Setting up subscriptions
+- Manually changing the DOM
+- Timers
+
+## Custom Hooks
+
+Creating custom hooks allows you to extract component logic into reusable functions...</textarea>
+                    </div>
+                </div>
+
+                <!-- Quality Check Panel -->
+                <div class=""quality-panel"">
+                    <div class=""quality-header"">
+                        <span class=""quality-title"">Content Quality Score</span>
+                        <span class=""quality-score"">85/100</span>
+                    </div>
+                    <div class=""quality-checks"">
+                        <div class=""quality-check"">
+                            <span class=""quality-check-icon pass"">✓</span>
+                            <span class=""quality-check-text"">SEO meta description present</span>
+                        </div>
+                        <div class=""quality-check"">
+                            <span class=""quality-check-icon pass"">✓</span>
+                            <span class=""quality-check-text"">Appropriate word count (1,234 words)</span>
+                        </div>
+                        <div class=""quality-check"">
+                            <span class=""quality-check-icon warning"">!</span>
+                            <span class=""quality-check-text"">Missing alt text for 2 images</span>
+                            <button class=""quality-check-action"" onclick=""fixIssue('alt-text')"">Fix</button>
+                        </div>
+                        <div class=""quality-check"">
+                            <span class=""quality-check-icon pass"">✓</span>
+                            <span class=""quality-check-text"">Valid front matter</span>
+                        </div>
+                        <div class=""quality-check"">
+                            <span class=""quality-check-icon warning"">!</span>
+                            <span class=""quality-check-text"">3 broken internal links detected</span>
+                            <button class=""quality-check-action"" onclick=""fixIssue('links')"">Fix</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comments Section -->
+                <div class=""comments-section"">
+                    <div class=""comments-header"">
+                        <span class=""comments-title"">Review Comments</span>
+                        <span class=""comment-count"">3</span>
+                    </div>
+                    <div class=""comment-list"">
+                        <div class=""comment-item"">
+                            <div class=""comment-header"">
+                                <span class=""comment-author"">Sarah Chen</span>
+                                <span class=""comment-date"">2 hours ago</span>
+                            </div>
+                            <div class=""comment-text"">Great content! Could you add more examples for the custom hooks
+                                section?</div>
+                        </div>
+                        <div class=""comment-item"">
+                            <div class=""comment-header"">
+                                <span class=""comment-author"">Mike Johnson</span>
+                                <span class=""comment-date"">1 hour ago</span>
+                            </div>
+                            <div class=""comment-text"">The useEffect explanation is perfect. Consider adding a note about
+                                cleanup functions.</div>
+                        </div>
+                    </div>
+                    <textarea class=""comment-input"" placeholder=""Add a comment..."" rows=""3""></textarea>
+                    <button class=""btn btn-primary btn-sm"" style=""margin-top: 0.5rem;"">Post Comment</button>
+                </div>
+            </div>
+
+            <div class=""editor-content"" id=""previewTab"" style=""display: none;"">
+                <div class=""preview-content"">
+                    <!-- Rendered markdown preview will appear here -->
+                </div>
+            </div>
+
+            <div class=""editor-content"" id=""diffTab"" style=""display: none;"">
+                <div class=""diff-viewer"">
+                    <div class=""diff-context"">@@ -1,10 +1,12 @@</div>
+                    <div class=""diff-context"">## Introduction</div>
+                    <div class=""diff-context""></div>
+                    <div class=""diff-remove"">- React Hooks changed how we write React components.</div>
+                    <div class=""diff-add"">+ React Hooks revolutionized how we write React components by allowing us to
+                        use state and other React features without writing a class.</div>
+                    <div class=""diff-context""></div>
+                    <div class=""diff-add"">+ In this deep dive, we'll explore the most important hooks and learn how to
+                        create custom hooks for our applications.</div>
+                    <div class=""diff-context""></div>
+                    <div class=""diff-context"">## Understanding useState</div>
+                </div>
+            </div>
+
+            <div class=""editor-content"" id=""metadataTab"" style=""display: none;"">
+                <div class=""editor-section"">
+                    <label class=""editor-label"">Section</label>
+                    <select class=""editor-select"">
+                        <option value=""learn/built"" selected>learn/built</option>
+                        <option value=""learn/found"">learn/found</option>
+                        <option value=""learn/strategies"">learn/strategies</option>
+                        <option value=""make/sounds"">make/sounds</option>
+                        <option value=""make/visuals"">make/visuals</option>
+                        <option value=""make/words"">make/words</option>
+                    </select>
+                </div>
+
+                <div class=""editor-section"">
+                    <label class=""editor-label"">Tags</label>
+                    <input type=""text"" class=""editor-input"" value=""react, hooks, javascript, tutorial"">
+                </div>
+
+                <div class=""editor-section"">
+                    <label class=""editor-label"">Categories</label>
+                    <input type=""text"" class=""editor-input"" value=""development"">
+                </div>
+
+                <div class=""editor-section"">
+                    <label class=""editor-label"">Author</label>
+                    <input type=""text"" class=""editor-input"" value=""Content Team"">
+                </div>
+
+                <div class=""editor-section"">
+                    <label class=""editor-label"">Reading Time</label>
+                    <input type=""text"" class=""editor-input"" value=""6 minutes"" readonly>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Panel - Revision History -->
+        <aside class=""revision-panel"">
+            <div class=""revision-header"">
+                <h2 class=""revision-title"">Revision History</h2>
+                <p class=""revision-subtitle"">12 total revisions</p>
+            </div>
+
+            <div class=""revision-stats"">
+                <div class=""revision-stat"">
+                    <div class=""revision-stat-value"">12</div>
+                    <div class=""revision-stat-label"">Revisions</div>
+                </div>
+                <div class=""revision-stat"">
+                    <div class=""revision-stat-value"">3</div>
+                    <div class=""revision-stat-label"">Authors</div>
+                </div>
+                <div class=""revision-stat"">
+                    <div class=""revision-stat-value"">7d</div>
+                    <div class=""revision-stat-label"">Age</div>
+                </div>
+                <div class=""revision-stat"">
+                    <div class=""revision-stat-value"">+428</div>
+                    <div class=""revision-stat-label"">Net Changes</div>
+                </div>
+            </div>
+
+            <div class=""revision-list"">
+                <div class=""revision-item active"">
+                    <div class=""revision-number"">v12 (Current)</div>
+                    <div class=""revision-date"">2 hours ago</div>
+                    <div class=""revision-author"">Sarah Chen</div>
+                    <div class=""revision-changes"">+45 lines, -12 lines</div>
+                    <div class=""revision-actions"">
+                        <button class=""revision-btn"" onclick=""viewRevision(12)"">View</button>
+                        <button class=""revision-btn"" onclick=""compareRevision(12)"">Compare</button>
+                    </div>
+                </div>
+
+                <div class=""revision-item"">
+                    <div class=""revision-number"">v11</div>
+                    <div class=""revision-date"">Yesterday at 3:45 PM</div>
+                    <div class=""revision-author"">Mike Johnson</div>
+                    <div class=""revision-changes"">+23 lines, -8 lines</div>
+                    <div class=""revision-actions"">
+                        <button class=""revision-btn"" onclick=""viewRevision(11)"">View</button>
+                        <button class=""revision-btn"" onclick=""compareRevision(11)"">Compare</button>
+                        <button class=""revision-btn"" onclick=""restoreRevision(11)"">Restore</button>
+                    </div>
+                </div>
+
+                <div class=""revision-item"">
+                    <div class=""revision-number"">v10</div>
+                    <div class=""revision-date"">3 days ago</div>
+                    <div class=""revision-author"">Content Team</div>
+                    <div class=""revision-changes"">+156 lines, -23 lines</div>
+                    <div class=""revision-actions"">
+                        <button class=""revision-btn"" onclick=""viewRevision(10)"">View</button>
+                        <button class=""revision-btn"" onclick=""compareRevision(10)"">Compare</button>
+                        <button class=""revision-btn"" onclick=""restoreRevision(10)"">Restore</button>
+                    </div>
+                </div>
+
+                <div class=""revision-item"">
+                    <div class=""revision-number"">v9</div>
+                    <div class=""revision-date"">5 days ago</div>
+                    <div class=""revision-author"">Sarah Chen</div>
+                    <div class=""revision-changes"">+89 lines, -34 lines</div>
+                    <div class=""revision-actions"">
+                        <button class=""revision-btn"" onclick=""viewRevision(9)"">View</button>
+                        <button class=""revision-btn"" onclick=""compareRevision(9)"">Compare</button>
+                        <button class=""revision-btn"" onclick=""restoreRevision(9)"">Restore</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Floating Action Bar -->
+    <div class=""action-bar"" id=""actionBar"" style=""display: none;"">
+        <span class=""action-bar-text"">Unsaved changes</span>
+        <button class=""btn btn-sm btn-primary"" onclick=""saveContent()"">Save</button>
+        <button class=""btn btn-sm btn-secondary"" onclick=""discardChanges()"">Discard</button>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class=""toast"" id=""toast""></div>
+
+    <script>
+        // Global state
+        let currentContent = null;
+        let originalContent = null;
+        let unsavedChanges = false;
+        let currentTab = 'edit';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadContent(1);
+            setupAutoSave();
+            trackChanges();
+        });
+
+        // Content loading
+        function loadContent(id) {
+            // Simulate loading content
+            document.querySelectorAll('.content-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Reset editor
+            originalContent = document.getElementById('contentInput').value;
+            unsavedChanges = false;
+            updateActionBar();
+
+            showToast('Content loaded successfully');
+        }
+
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.editor-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            document.querySelectorAll('.editor-content').forEach(c => {
+                c.style.display = 'none';
+            });
+
+            event.currentTarget.classList.add('active');
+            document.getElementById(tab + 'Tab').style.display = 'block';
+            currentTab = tab;
+
+            if (tab === 'preview') {
+                renderPreview();
+            }
+        }
+
+        // Track changes
+        function trackChanges() {
+            const inputs = ['titleInput', 'frontMatterInput', 'contentInput'];
+            inputs.forEach(id => {
+                document.getElementById(id).addEventListener('input', () => {
+                    unsavedChanges = true;
+                    updateActionBar();
+                });
+            });
+        }
+
+        // Update action bar
+        function updateActionBar() {
+            const actionBar = document.getElementById('actionBar');
+            actionBar.style.display = unsavedChanges ? 'flex' : 'none';
+        }
+
+        // Save content
+        function saveContent() {
+            // Simulate saving
+            originalContent = document.getElementById('contentInput').value;
+            unsavedChanges = false;
+            updateActionBar();
+            showToast('Content saved successfully', 'success');
+        }
+
+        // Create revision
+        function createRevision() {
+            if (unsavedChanges) {
+                if (!confirm('You have unsaved changes. Create revision anyway?')) {
+                    return;
+                }
+            }
+
+            showToast('Revision created successfully', 'success');
+            // Refresh revision list
+        }
+
+        // Quality check
+        function runQualityCheck() {
+            showToast('Running quality checks...', 'info');
+            setTimeout(() => {
+                showToast('Quality check complete: Score 85/100', 'success');
+            }, 2000);
+        }
+
+        // Compare versions
+        function compareVersions() {
+            switchTab('diff');
+        }
+
+        // Approve content
+        function approveContent() {
+            showToast('Content approved', 'success');
+            // Update status
+        }
+
+        // Publish content
+        function publishContent() {
+            if (!confirm('Are you sure you want to publish this content?')) {
+                return;
+            }
+            showToast('Content published successfully', 'success');
+            // Update status
+        }
+
+        // Filter functions
+        function filterByStatus(status) {
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            // Apply filter logic
+        }
+
+        function filterBySection(section) {
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            // Apply filter logic
+        }
+
+        // Revision functions
+        function viewRevision(version) {
+            showToast(`Viewing revision v${version}`);
+        }
+
+        function compareRevision(version) {
+            showToast(`Comparing with revision v${version}`);
+            switchTab('diff');
+        }
+
+        function restoreRevision(version) {
+            if (confirm(`Restore revision v${version}? Current changes will be lost.`)) {
+                showToast(`Restored revision v${version}`, 'success');
+            }
+        }
+
+        // Markdown helpers
+        function insertMarkdown(before, after = '') {
+            const textarea = document.getElementById('contentInput');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const selected = text.substring(start, end);
+
+            textarea.value = text.substring(0, start) + before + selected + after + text.substring(end);
+            textarea.focus();
+            textarea.setSelectionRange(start + before.length, start + before.length + selected.length);
+        }
+
+        // Render preview
+        function renderPreview() {
+            const content = document.getElementById('contentInput').value;
+            // Simple markdown to HTML conversion (in production, use a proper markdown parser)
+            let html = content
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                .replace(/\*\*(.+)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+)\*/g, '<em>$1</em>')
+                .replace(/```(.+?)```/gs, '<pre><code>$1</code></pre>')
+                .replace(/`(.+?)`/g, '<code>$1</code>')
+                .replace(/\n/g, '<br>');
+
+            document.querySelector('.preview-content').innerHTML = html;
+        }
+
+        // Fix issues
+        function fixIssue(type) {
+            showToast(`Fixing ${type} issues...`, 'info');
+            setTimeout(() => {
+                showToast(`${type} issues fixed`, 'success');
+            }, 1500);
+        }
+
+        // Auto-save
+        function setupAutoSave() {
+            setInterval(() => {
+                if (unsavedChanges) {
+                    // Auto-save logic
+                    console.log('Auto-saving...');
+                }
+            }, 30000); // Every 30 seconds
+        }
+
+        // Discard changes
+        function discardChanges() {
+            if (confirm('Discard all unsaved changes?')) {
+                document.getElementById('contentInput').value = originalContent;
+                unsavedChanges = false;
+                updateActionBar();
+                showToast('Changes discarded');
+            }
+        }
+
+        // Change status
+        function changeStatus(status) {
+            showToast(`Status changed to: ${status}`, 'info');
+        }
+
+        // Search
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            // Implement search logic
+        });
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast show';
+
+            if (type === 'error') {
+                toast.style.background = 'var(--danger)';
+            } else if (type === 'warning') {
+                toast.style.background = 'var(--warning)';
+            } else if (type === 'info') {
+                toast.style.background = 'var(--info)';
+            } else {
+                toast.style.background = 'var(--success)';
+            }
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>"

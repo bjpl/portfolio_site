@@ -1,16 +1,140 @@
 const express = require('express');
+
 const router = express.Router();
+const HugoService = require('../services/hugoService');
 
-router.post('/images', (req, res) => {
-    res.json({ status: 'success', files: [] });
+const fs = require('fs').promises;
+const path = require('path');
+
+const csv = require('csv-parse/sync');
+
+const hugoService = new HugoService();
+
+// Process bulk content creation
+router.post('/create', async (req, res) => {
+  const { items, format } = req.body;
+  const results = [];
+
+  try {
+    for (const item of items) {
+      const result = await hugoService.createContent(item.section, item.subsection, item.title, item.language || 'en');
+      results.push({
+        ...item,
+        ...result,
+      });
+    }
+
+    res.json({ success: true, results });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-router.post('/youtube', (req, res) => {
-    res.json({ status: 'success', files: [] });
+// Process CSV upload for bulk creation
+router.post('/csv', async (req, res) => {
+  const { csvData } = req.body;
+
+  try {
+    const records = csv.parse(csvData, {
+      columns: true,
+      skip_empty_lines: true,
+    });
+
+    const results = [];
+    for (const record of records) {
+      const result = await hugoService.createContent(
+        record.section,
+        record.subsection,
+        record.title,
+        record.language || 'en'
+      );
+      results.push({
+        ...record,
+        ...result,
+      });
+    }
+
+    res.json({ success: true, results });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-router.post('/generate', (req, res) => {
-    res.json({ status: 'success', output: 'Generated content...' });
+// Create content from template
+router.post('/template', async (req, res) => {
+  const { template, items } = req.body;
+  const results = [];
+
+  try {
+    for (const item of items) {
+      // Create content file
+      const result = await hugoService.createContent(item.section, item.subsection, item.title, item.language || 'en');
+
+      if (result.success && template) {
+        // Update with template content
+        const filePath = path.join(hugoService.projectRoot, 'content', result.path);
+        const content = await fs.readFile(filePath, 'utf8');
+
+        // Replace template variables
+        let updatedContent = content;
+        Object.keys(item).forEach(key => {
+          updatedContent = updatedContent.replace(new RegExp(`{{\\s*${key}\\s*}}`, 'g'), item[key]);
+        });
+
+        await fs.writeFile(filePath, updatedContent);
+      }
+
+      results.push({
+        ...item,
+        ...result,
+      });
+    }
+
+    res.json({ success: true, results });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get bulk operation templates
+router.get('/templates', async (req, res) => {
+  const templates = [
+    {
+      name: 'Tutorial Series',
+      fields: ['section', 'subsection', 'title', 'part', 'totalParts'],
+      example: {
+        section: 'learn',
+        subsection: 'built',
+        title: 'React Tutorial Part {part}',
+        part: 1,
+        totalParts: 5,
+      },
+    },
+    {
+      name: 'Portfolio Projects',
+      fields: ['section', 'subsection', 'title', 'client', 'technology'],
+      example: {
+        section: 'meet',
+        subsection: 'work',
+        title: '{client} - {technology} Project',
+        client: 'ClientName',
+        technology: 'React',
+      },
+    },
+    {
+      name: 'Blog Posts',
+      fields: ['section', 'subsection', 'title', 'category', 'tags'],
+      example: {
+        section: 'think',
+        subsection: 'positions',
+        title: 'Thoughts on {category}',
+        category: 'Web Development',
+        tags: 'web,development,opinion',
+      },
+    },
+  ];
+
+  res.json({ templates });
 });
 
 module.exports = router;

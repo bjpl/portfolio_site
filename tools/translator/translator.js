@@ -1,9 +1,9 @@
-import Anthropic from '@anthropic-ai/sdk';
-import fs from 'fs/promises';
-import path from 'path';
-import matter from 'gray-matter';
+const Anthropic = require('@anthropic-ai/sdk');
+const fs = require('fs/promises');
+const path = require('path');
+const matter = require('gray-matter');
 
-export class Translator {
+class Translator {
   constructor(apiKey) {
     if (!apiKey) {
       throw new Error('ANTHROPIC_API_KEY is required');
@@ -142,3 +142,5 @@ export class Translator {
     return locales[code] || code;
   }
 }
+
+module.exports = { Translator };

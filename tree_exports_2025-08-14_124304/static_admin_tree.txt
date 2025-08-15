@@ -1,0 +1,15 @@
+Folder PATH listing for volume Windows
+Volume serial number is 6688-BF20
+C:\USERS\BRAND\DEVELOPMENT\PROJECT_WORKSPACE\PORTFOLIO_SITE\STATIC\ADMIN
+    api-client.js
+    bulk-upload.html
+    bulk-upload.txt
+    dashboard.html
+    file-manager.html
+    index.html
+    nav-test.html
+    review.html
+    test-connection.html
+    
+No subfolders exist 
+

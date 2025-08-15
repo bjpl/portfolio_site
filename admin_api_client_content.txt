@@ -1,0 +1,138 @@
+// api-client.js - Unified API client for all Hugo management tools
+const API_BASE = 'http://localhost:3000/api';
+const WS_URL = 'ws://localhost:3001';
+
+class HugoManagementAPI {
+    constructor() {
+        this.ws = null;
+        this.initWebSocket();
+    }
+
+    initWebSocket() {
+        try {
+            this.ws = new WebSocket(WS_URL);
+            
+            this.ws.onopen = () => {
+                console.log('Connected to WebSocket server');
+            };
+            
+            this.ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                this.handleRealtimeUpdate(data);
+            };
+            
+            this.ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+            
+            this.ws.onclose = () => {
+                console.log('WebSocket disconnected. Reconnecting in 5s...');
+                setTimeout(() => this.initWebSocket(), 5000);
+            };
+        } catch (error) {
+            console.log('WebSocket not available');
+        }
+    }
+
+    handleRealtimeUpdate(data) {
+        window.dispatchEvent(new CustomEvent('hugo-update', { detail: data }));
+    }
+
+    async createContent(data) {
+        return this.post('/dashboard/create', data);
+    }
+
+    async startServer() {
+        return this.post('/dashboard/server/start');
+    }
+
+    async stopServer() {
+        return this.post('/dashboard/server/stop');
+    }
+
+    async buildSite() {
+        return this.post('/dashboard/build');
+    }
+
+    async getSiteStats() {
+        return this.get('/dashboard/stats');
+    }
+
+    async getContentList(filters = {}) {
+        const query = new URLSearchParams(filters).toString();
+        return this.get(`/review/content${query ? '?' + query : ''}`);
+    }
+
+    async getContent(id) {
+        return this.get(`/review/content/${id}`);
+    }
+
+    async saveContent(id, data) {
+        return this.post(`/review/content/${id}/save`, data);
+    }
+
+    async checkQuality(data) {
+        return this.post('/review/quality', data);
+    }
+
+    async uploadImages(files, metadata) {
+        const formData = new FormData();
+        files.forEach(file => formData.append('images', file));
+        Object.keys(metadata).forEach(key => formData.append(key, metadata[key]));
+        return this.postFormData('/bulk/images', formData);
+    }
+
+    async processYouTube(data) {
+        return this.post('/bulk/youtube', data);
+    }
+
+    async generateBulkContent(data) {
+        return this.post('/bulk/generate', data);
+    }
+
+    async get(endpoint) {
+        try {
+            const response = await fetch(`${API_BASE}${endpoint}`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            console.error('GET request failed:', error);
+            throw error;
+        }
+    }
+
+    async post(endpoint, data = {}) {
+        try {
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            console.error('POST request failed:', error);
+            throw error;
+        }
+    }
+
+    async postFormData(endpoint, formData) {
+        try {
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                method: 'POST',
+                body: formData
+            });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            console.error('POST FormData failed:', error);
+            throw error;
+        }
+    }
+}
+
+// Initialize API client
+const hugoAPI = new HugoManagementAPI();
+window.hugoAPI = hugoAPI;

@@ -33,19 +33,20 @@
         if (typeof hugoAPI !== 'undefined') {
             addResult('API client loaded successfully', true);
             
-            // Test API connection
-            fetch('http://localhost:3000/api/health')
+            // Test API connection with correct port
+            fetch('http://localhost:3333/api/health')
                 .then(response => response.json())
                 .then(data => {
                     statusDiv.className = 'status connected';
                     statusDiv.innerHTML = '🟢 Connected to Backend API<br>Server Status: ' + data.status;
-                    addResult('Backend server is running', true);
-                    addResult('Hugo server: ' + (data.hugoServer || 'stopped'), true);
+                    addResult('Backend server is running on port 3333', true);
+                    addResult('WebSocket available', true);
                 })
                 .catch(error => {
                     statusDiv.className = 'status simulated';
-                    statusDiv.innerHTML = '🟡 API client loaded but backend not running<br>Run: npm run dev';
+                    statusDiv.innerHTML = '🟡 API client loaded but backend not running<br>Run: cd backend && node src/server.js';
                     addResult('Backend server not running - tools will use simulated mode', false);
+                    addResult('To start backend: cd backend && node src/server.js', false);
                 });
         } else {
             statusDiv.className = 'status disconnected';

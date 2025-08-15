@@ -1,8 +1,11 @@
 ---
-title: Meet
-description: About me and my work
-menu: main
-weight: 40
+title: "Meet"
+date: 2024-01-15
+draft: false
+description: "Meet section of the portfolio"
 ---
 
-Get to know me and what I do.
+# Meet
+
+## Sections
+

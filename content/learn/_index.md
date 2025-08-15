@@ -1,8 +1,11 @@
 ---
-title: Learn
-description: Knowledge and discoveries
-menu: main
-weight: 20
+title: "Learn"
+date: 2024-01-15
+draft: false
+description: "Learn section of the portfolio"
 ---
 
-Tools, techniques, and things I've learned.
+# Learn
+
+## Sections
+

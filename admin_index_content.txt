@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hugo Developer Tools</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .back-link {
+            color: white;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+        .back-link:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .tools-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .content-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .section-title {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tool-card, .content-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: block;
+        }
+        .tool-card:hover, .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .content-card {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .tool-icon, .content-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .content-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0;
+        }
+        .tool-title, .content-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #5b21b6;
+        }
+        .content-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+        .tool-description, .content-description {
+            color: #666;
+            line-height: 1.5;
+        }
+        .content-description {
+            font-size: 0.9rem;
+        }
+        .content-info {
+            flex: 1;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #10b981;
+            color: white;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            margin-top: 1rem;
+        }
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .tools-section {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .tools-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to Site</a>
+        
+        <h1>🚀 Hugo Developer Tools</h1>
+        
+        <div class="main-grid">
+            <!-- Tools Section -->
+            <div>
+                <div class="tools-section">
+                    <a href="dashboard.html" class="tool-card">
+                        <div class="tool-icon">📊</div>
+                        <div class="tool-title">Dashboard</div>
+                        <div class="tool-description">
+                            Content creation dashboard with statistics and quick actions for managing your Hugo site.
+                        </div>
+                        <span class="status-badge">Active</span>
+                    </a>
+                    
+                    <a href="review.html" class="tool-card">
+                        <div class="tool-icon">📝</div>
+                        <div class="tool-title">Review Tool</div>
+                        <div class="tool-description">
+                            Content review and revision system with quality checks and collaboration features.
+                        </div>
+                        <span class="status-badge">Active</span>
+                    </a>
+                    
+                    <a href="bulk-upload.html" class="tool-card">
+                        <div class="tool-icon">📤</div>
+                        <div class="tool-title">Bulk Upload</div>
+                        <div class="tool-description">
+                            Bulk content upload system for images, videos, PDFs, and social media content.
+                        </div>
+                        <span class="status-badge">Active</span>
+                    </a>
+                    
+                    <a href="test-connection.html" class="tool-card">
+                        <div class="tool-icon">🔧</div>
+                        <div class="tool-title">Connection Test</div>
+                        <div class="tool-description">
+                            Test API connection and verify all systems are running correctly.
+                        </div>
+                        <span class="status-badge">Connected</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Content Sections -->
+            <div>
+                <h2 class="section-title">📚 Content Sections</h2>
+                <div class="content-section">
+                    <a href="/learn/" class="content-card" style="background: #f0f9ff;">
+                        <div class="content-icon">📖</div>
+                        <div class="content-info">
+                            <div class="content-title">Learn</div>
+                            <div class="content-description">Built projects, found resources, learning strategies</div>
+                        </div>
+                    </a>
+                    
+                    <a href="/make/" class="content-card" style="background: #fef3c7;">
+                        <div class="content-icon">🎨</div>
+                        <div class="content-info">
+                            <div class="content-title">Make</div>
+                            <div class="content-description">Creative works: sounds, visuals, words</div>
+                        </div>
+                    </a>
+                    
+                    <a href="/meet/" class="content-card" style="background: #ede9fe;">
+                        <div class="content-icon">👤</div>
+                        <div class="content-info">
+                            <div class="content-title">Meet</div>
+                            <div class="content-description">About me and my work</div>
+                        </div>
+                    </a>
+                    
+                    <a href="/think/" class="content-card" style="background: #fce7f3;">
+                        <div class="content-icon">💭</div>
+                        <div class="content-info">
+                            <div class="content-title">Think</div>
+                            <div class="content-description">Blog posts, links, positions</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Links Section -->
+        <div style="background: rgba(255,255,255,0.1); border-radius: 1rem; padding: 2rem; margin-top: 3rem;">
+            <h2 style="color: white; margin-bottom: 1rem;">⚡ Quick Links</h2>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="/sitemap/" style="color: white; text-decoration: none; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); border-radius: 0.5rem; transition: all 0.3s;">Site Map</a>
+                <a href="/tools/" style="color: white; text-decoration: none; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); border-radius: 0.5rem; transition: all 0.3s;">Tools List</a>
+                <a href="http://localhost:3000/api/health" target="_blank" style="color: white; text-decoration: none; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); border-radius: 0.5rem; transition: all 0.3s;">API Status</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

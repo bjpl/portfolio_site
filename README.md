@@ -1,101 +1,374 @@
-# Hugo Portfolio - Professional Creative Portfolio
+# Portfolio Site - Full-Stack Creative Portfolio Platform
 
-A modern, performant, and accessible portfolio built with Hugo, TypeScript, and Claude AI.
+A production-ready portfolio platform built with Hugo static site generator and Node.js/Express backend, featuring comprehensive authentication, content management, and real-time capabilities.
 
-## Features
+## 🚀 Features
 
-- 🚀 **Performance First** - Lighthouse score 95+
-- ♿ **WCAG AAA Accessible** - Full keyboard navigation
-- 🌐 **Multi-language** - Claude AI powered translations
-- 🎨 **Design System** - Token-based theming
-- 📱 **Fully Responsive** - Mobile-first design
-- 🔍 **SEO Optimized** - Schema.org, Open Graph
-- 🌙 **Dark Mode** - Auto-detect system preference
-- ⚡ **Fast Search** - Client-side search index
-- 📊 **Analytics Ready** - Privacy-friendly tracking
-- 🔒 **Security First** - CSP headers, HTTPS only
+### Core Architecture
+- **Four-Pillar Content Structure**: Learn, Make, Meet, Think sections
+- **Hugo Static Site Generator**: Fast, SEO-optimized static content
+- **Node.js/Express Backend**: RESTful API with WebSocket support
+- **PostgreSQL Database**: Structured data with Sequelize ORM
+- **Redis Caching**: High-performance caching with memory fallback
+- **Docker Containerization**: Production-ready deployment
 
-## Quick Start
+### Security & Authentication
+- **JWT Authentication**: Access & refresh token system
+- **Role-Based Access Control**: Admin, Editor, Author, Viewer roles
+- **Session Management**: Secure session tracking with device fingerprinting
+- **Input Validation**: Express-validator with XSS protection
+- **Rate Limiting**: Multi-level rate limiting (auth, API, general)
+- **Security Headers**: Helmet.js, CSP, CORS configuration
+- **Password Security**: Bcrypt hashing with configurable rounds
 
-```powershell
-# 1. Clone repository
-git clone https://github.com/yourusername/portfolio.git
-cd portfolio
+### Backend Features
+- **Structured Logging**: Winston with daily rotation
+- **Email Service**: Nodemailer with templates
+- **File Upload**: Multer with security checks
+- **WebSocket**: Real-time updates with authentication
+- **Graceful Shutdown**: Proper resource cleanup
+- **Health Checks**: Monitoring endpoints
+- **Audit Logging**: Security event tracking
 
-# 2. Install dependencies
+### Content Management
+- **Portfolio Projects**: Featured projects with technology stacks
+- **Skills & Experience**: Professional background management
+- **Testimonials**: Client feedback system
+- **Blog/Content**: Markdown-based content with frontmatter
+- **Media Management**: Image upload and optimization
+- **Contact Forms**: Spam protection with honeypot
+
+### DevOps & Infrastructure
+- **Docker Multi-Stage Build**: Optimized production images
+- **Nginx Reverse Proxy**: Load balancing and caching
+- **Database Migrations**: PostgreSQL schema management
+- **Backup Service**: Automated database backups
+- **Environment Configuration**: Comprehensive .env management
+
+## 📦 Installation
+
+### Prerequisites
+- Node.js 18+ and npm
+- PostgreSQL 15+
+- Redis 7+
+- Docker & Docker Compose (optional)
+- Hugo 0.111.3+ (for static site)
+
+### Quick Start
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/yourusername/portfolio-site.git
+cd portfolio-site
+```
+
+2. **Set up environment variables**
+```bash
+cp .env.example .env
+# Edit .env with your configuration
+```
+
+3. **Install dependencies**
+```bash
+# Backend dependencies
+cd backend
 npm install
 
-# 3. Start development server
-.\dev.ps1 -OpenBrowser
-
-# 4. Build for production
-.\build.ps1
-
-# 5. Deploy
-.\deploy.ps1 -Target vercel
+# Root dependencies (if any)
+cd ..
+npm install
 ```
 
-## Project Structure
+4. **Set up the database**
+```bash
+# Using Docker
+docker-compose up -d postgres redis
 
-```
-portfolio/
-├── content/         # Markdown content
-├── layouts/         # Hugo templates
-├── src/            # Source files (TS/SCSS)
-├── static/         # Static assets
-├── config/         # Hugo configuration
-└── tools/          # Build tools & translators
+# Or manually create database and run migrations
+psql -U postgres -c "CREATE DATABASE portfolio_db;"
+psql -U postgres -d portfolio_db -f scripts/init-db.sql
 ```
 
-## Development
+5. **Start development server**
+```bash
+# Backend API
+cd backend
+npm run dev
 
-### Create New Content
-
-```powershell
-# Create new post
-.\new-content.ps1 -Type post -Title "My New Post" -OpenInVSCode
-
-# Create new project
-.\new-content.ps1 -Type project -Title "Cool Project"
+# Hugo development (in another terminal)
+hugo server -D
 ```
 
-### Translation
+## 🐳 Docker Deployment
 
-```powershell
-# Translate single file
-node tools/translator/cli.js translate content/make/words/post.md -l es
+### Development with Docker Compose
+```bash
+# Start all services
+docker-compose up -d
 
-# Batch translate
-node tools/translator/cli.js batch -l es
+# View logs
+docker-compose logs -f app
+
+# Stop services
+docker-compose down
 ```
 
-## Configuration
+### Production Deployment
+```bash
+# Build production image
+docker build -t portfolio-app .
+
+# Run with production profile
+docker-compose --profile production up -d
+```
+
+## 🏗️ Project Structure
+
+```
+portfolio-site/
+├── backend/                 # Node.js backend
+│   ├── src/
+│   │   ├── config/         # Configuration management
+│   │   ├── middleware/     # Express middleware
+│   │   ├── models/         # Sequelize models
+│   │   ├── routes/         # API routes
+│   │   ├── services/       # Business logic
+│   │   ├── utils/          # Utilities
+│   │   └── server.js       # Main server file
+│   └── package.json
+├── content/                # Hugo content (markdown)
+│   ├── learn/             # Learning resources
+│   ├── make/              # Portfolio projects
+│   ├── meet/              # About/contact
+│   └── think/             # Blog/thoughts
+├── static/                # Static assets
+│   └── admin/            # Admin dashboard
+├── nginx/                 # Nginx configuration
+│   ├── nginx.conf
+│   └── sites/
+├── scripts/              # Database & utility scripts
+│   └── init-db.sql      # Database initialization
+├── docker-compose.yml    # Docker orchestration
+├── Dockerfile           # Multi-stage build
+└── .env.example        # Environment template
+```
+
+## 🔧 Configuration
 
 ### Environment Variables
 
-Copy `.env.example` to `.env` and configure:
+Key environment variables in `.env`:
 
 ```env
-ANTHROPIC_API_KEY=your-api-key
-VERCEL_TOKEN=your-vercel-token
+# Server Configuration
+NODE_ENV=production
+PORT=3333
+HOST=localhost
+
+# Security
+JWT_SECRET=your-super-secret-jwt-key
+JWT_EXPIRES_IN=15m
+REFRESH_TOKEN_EXPIRES_IN=7d
+BCRYPT_ROUNDS=10
+
+# Database
+DB_TYPE=postgres
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=portfolio_db
+DB_USER=portfolio_user
+DB_PASSWORD=secure_password
+
+# Redis Cache
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=redis_password
+
+# Email Service
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+EMAIL_FROM="Portfolio <noreply@portfolio.com>"
+
+# File Upload
+MAX_FILE_SIZE=10485760
+ALLOWED_FILE_TYPES=image/jpeg,image/png,image/gif,application/pdf
 ```
 
-### Site Configuration
+## 🔐 API Documentation
 
-Edit `config/_default/params.yaml`:
+### Authentication Endpoints
 
-```yaml
-author: Your Name
-email: your.email@example.com
-social:
-  github: https://github.com/yourusername
-  twitter: https://twitter.com/yourusername
+```http
+POST   /api/auth/register     # User registration
+POST   /api/auth/login        # User login
+POST   /api/auth/logout       # User logout
+POST   /api/auth/refresh      # Refresh access token
+POST   /api/auth/forgot       # Request password reset
+POST   /api/auth/reset        # Reset password
+GET    /api/auth/verify/:token # Verify email
 ```
 
-## License
+### Portfolio Endpoints
 
-MIT License
+```http
+GET    /api/portfolio/projects          # List projects
+GET    /api/portfolio/projects/featured # Featured projects
+GET    /api/portfolio/projects/:slug    # Get project
+POST   /api/portfolio/projects          # Create project (auth)
+PUT    /api/portfolio/projects/:id      # Update project (auth)
+DELETE /api/portfolio/projects/:id      # Delete project (auth)
+
+GET    /api/portfolio/skills            # List skills
+GET    /api/portfolio/experience        # List experiences
+GET    /api/portfolio/testimonials      # List testimonials
+POST   /api/portfolio/contact           # Submit contact form
+```
+
+### Content Management Endpoints
+
+```http
+GET    /api/content/learn              # Learning content
+GET    /api/content/make               # Portfolio content
+GET    /api/content/meet               # About content
+GET    /api/content/think              # Blog content
+GET    /api/content/search             # Search all content
+GET    /api/content/tags               # Get all tags
+GET    /api/content/related/:id        # Related content
+```
+
+### Admin Endpoints
+
+```http
+GET    /api/admin/dashboard/stats      # Dashboard statistics
+GET    /api/admin/users                # List users (admin)
+POST   /api/admin/users                # Create user (admin)
+PUT    /api/admin/users/:id            # Update user (admin)
+DELETE /api/admin/users/:id            # Delete user (admin)
+GET    /api/admin/analytics            # View analytics (admin)
+```
+
+## 🧪 Testing
+
+```bash
+# Run unit tests
+npm test
+
+# Run integration tests
+npm run test:integration
+
+# Run with coverage
+npm run test:coverage
+
+# Run specific test file
+npm test -- --grep "Auth Service"
+```
+
+## 📊 Monitoring
+
+### Health Checks
+
+```bash
+# API health
+curl http://localhost:3333/api/health
+
+# Nginx health
+curl http://localhost/health
+
+# Database health
+docker-compose exec postgres pg_isready
+```
+
+### Logging
+
+Logs are stored in:
+- `logs/error.log` - Error logs
+- `logs/combined.log` - All logs
+- `logs/audit.log` - Security audit logs
+- `logs/access.log` - HTTP access logs
+
+## 🚀 Deployment
+
+### Production Checklist
+
+- [ ] Set strong JWT_SECRET
+- [ ] Configure production database
+- [ ] Set up SSL certificates
+- [ ] Configure email service
+- [ ] Set up monitoring (Sentry)
+- [ ] Configure backup strategy
+- [ ] Set up CI/CD pipeline
+- [ ] Configure CDN for static assets
+- [ ] Set up rate limiting
+- [ ] Review security headers
+
+### Nginx Production Config
+
+Uncomment HTTPS section in `nginx/sites/portfolio.conf` and add SSL certificates.
+
+### Database Backup
+
+Automated backups run daily via Docker Compose backup service:
+
+```bash
+# Enable backup service
+docker-compose --profile backup up -d
+
+# Manual backup
+docker-compose exec postgres pg_dump -U portfolio_user portfolio_db > backup.sql
+```
+
+## 🔒 Security
+
+### Security Features
+- JWT with refresh tokens
+- Rate limiting per endpoint
+- Input validation & sanitization
+- XSS protection
+- SQL injection prevention
+- CSRF protection
+- Secure session management
+- Audit logging
+- Content Security Policy
+- HTTPS enforcement
+
+### Security Best Practices
+1. Regularly update dependencies
+2. Use environment variables for secrets
+3. Enable HTTPS in production
+4. Implement IP whitelisting for admin
+5. Regular security audits
+6. Monitor failed login attempts
+7. Implement 2FA for admin accounts
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Hugo static site generator
+- Express.js framework
+- PostgreSQL database
+- Redis cache
+- Docker containerization
+- All open source contributors
+
+## 📧 Contact
+
+For questions or support, please contact:
+- Email: admin@portfolio.local
+- GitHub Issues: [Create an issue](https://github.com/yourusername/portfolio-site/issues)
 
 ---
 
-Made with ❤️ using Hugo, PowerShell, and VSCode on Windows
+Built with ❤️ using modern web technologies

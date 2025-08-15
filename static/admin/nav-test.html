@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hugo Tools Navigation</title>
+    <style>
+        .tools-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .tools-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        .tools-nav-brand {
+            color: white;
+            font-weight: bold;
+            font-size: 1.25rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tools-nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+        .tools-nav-link {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .tools-nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        .tools-nav-link.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        .tools-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .site-sections {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .site-section-link {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+        .site-section-link:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+        body {
+            padding-top: 50px; /* Make room for fixed nav */
+        }
+    </style>
+</head>
+<body>
+    <nav class="tools-nav">
+        <div class="tools-nav-left">
+            <a href="/" class="tools-nav-brand">
+                <span>🏠</span>
+                Portfolio Site
+            </a>
+            <div class="tools-nav-links">
+                <a href="/admin/dashboard.html" class="tools-nav-link">Dashboard</a>
+                <a href="/admin/review.html" class="tools-nav-link">Review</a>
+                <a href="/admin/bulk-upload.html" class="tools-nav-link">Bulk Upload</a>
+                <a href="/admin/" class="tools-nav-link">Tools Hub</a>
+            </div>
+        </div>
+        <div class="tools-nav-right">
+            <div class="site-sections">
+                <a href="/learn/" class="site-section-link">Learn</a>
+                <a href="/make/" class="site-section-link">Make</a>
+                <a href="/meet/" class="site-section-link">Meet</a>
+                <a href="/think/" class="site-section-link">Think</a>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>

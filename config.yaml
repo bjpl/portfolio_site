@@ -1,0 +1,26 @@
+baseURL: "http://localhost:1313/"
+languageCode: "en-us"
+title: "Portfolio"
+theme: "your-theme-name"
+
+menu:
+  main:
+    - name: "Make"
+      url: "/make/"
+      weight: 10
+    - name: "Learn"
+      url: "/learn/"
+      weight: 20
+    - name: "Think"
+      url: "/think/"
+      weight: 30
+    - name: "Meet"
+      url: "/meet/"
+      weight: 40
+    - name: "Content Management Tools"
+      url: "/tools/"
+      weight: 50
+
+params:
+  description: "My Portfolio Site"
+  author: "Your Name"
