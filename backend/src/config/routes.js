@@ -8,11 +8,13 @@ module.exports = {
   public: {
     // Portfolio content - publicly accessible
     portfolio: [
+      'GET /api/portfolio/profile', // Portfolio owner's profile
       'GET /api/portfolio/projects',
       'GET /api/portfolio/projects/featured',
       'GET /api/portfolio/projects/:slug',
       'GET /api/portfolio/skills',
       'GET /api/portfolio/experience',
+      'GET /api/portfolio/education',
       'GET /api/portfolio/testimonials',
       'POST /api/portfolio/contact', // Contact form is public
     ],
@@ -48,7 +50,7 @@ module.exports = {
     assets: ['GET /api/media/:id', 'GET /api/assets/*', 'GET /uploads/*', 'GET /images/*'],
 
     // Health and status endpoints
-    system: ['GET /api/health', 'GET /api/status', 'GET /api/version'],
+    system: ['GET /api/health', 'GET /api/status', 'GET /api/public/status', 'GET /api/version'],
 
     // Authentication endpoints (must be public for login)
     auth: [

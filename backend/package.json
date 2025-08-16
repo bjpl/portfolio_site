@@ -5,7 +5,9 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
+    "start:simple": "node src/server-simple.js",
     "dev": "nodemon src/server.js",
+    "dev:simple": "nodemon src/server-simple.js",
     "test": "jest --config jest.config.js",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -24,6 +26,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.20.0",
     "@sentry/node": "^7.86.0",
+    "@sentry/profiling-node": "^10.5.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^2.2.0",
     "compression": "^1.7.4",
@@ -38,6 +41,7 @@
     "express-validator": "^7.0.1",
     "gray-matter": "^4.0.3",
     "helmet": "^7.1.0",
+    "ioredis": "^5.7.0",
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
@@ -49,6 +53,7 @@
     "redis": "^4.6.11",
     "sequelize": "^6.35.2",
     "sharp": "^0.33.1",
+    "uuid": "^11.1.0",
     "winston": "^3.11.0",
     "winston-daily-rotate-file": "^4.7.1",
     "ws": "^8.18.3",
@@ -57,7 +62,7 @@
   "devDependencies": {
     "@babel/core": "^7.28.3",
     "@babel/preset-env": "^7.28.3",
-    "@types/jest": "^29.5.11",
+    "@types/jest": "^29.5.14",
     "babel-jest": "^30.0.5",
     "eslint": "^8.55.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -69,7 +74,7 @@
     "prettier": "^3.6.2",
     "sequelize-cli": "^6.6.2",
     "sqlite3": "^5.1.7",
-    "supertest": "^6.3.3",
+    "supertest": "^6.3.4",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },

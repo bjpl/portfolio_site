@@ -1,19 +1,789 @@
 {{ define "main" }}
-<div class="container">
-    <section class="home-hero">
-        <h1>{{ site.Title }}</h1>
-        <p>{{ site.Params.description }}</p>
-    </section>
-    
-    <section>
-        <h2>Explore</h2>
-        <div class="section-grid">
-            {{ range site.Menus.main }}
-            <a href="{{ .URL }}" class="section-card">
-                <h3>{{ .Name }}</h3>
-            </a>
+<div class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                {{ if eq .Language.Lang "es" }}
+                <span class="gradient-text">Portafolio Creativo</span>
+                <span class="subtitle">Desarrollador Full-Stack y Diseñador</span>
+                {{ else }}
+                <span class="gradient-text">Creative Portfolio</span>
+                <span class="subtitle">Full-Stack Developer & Designer</span>
+                {{ end }}
+            </h1>
+            <p class="hero-description">
+                {{ if eq .Language.Lang "es" }}
+                Construyendo experiencias digitales hermosas, eficientes y centradas en el usuario con tecnologías web modernas.
+                {{ else }}
+                Building beautiful, performant, and user-centric digital experiences with modern web technologies.
+                {{ end }}
+            </p>
+            <div class="hero-actions">
+                {{ if eq .Language.Lang "es" }}
+                <a href="/es/hacer/" class="btn btn-primary">Ver Portafolio</a>
+                <a href="/es/conocer/" class="btn btn-outline">Conectar</a>
+                {{ else }}
+                <a href="/make/" class="btn btn-primary">View Portfolio</a>
+                <a href="/meet/" class="btn btn-outline">Get in Touch</a>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="features-section">
+    <div class="container">
+        <h2 class="section-title">{{ if eq .Language.Lang "es" }}Lo Que Hago{{ else }}What I Do{{ end }}</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>{{ if eq .Language.Lang "es" }}Diseño{{ else }}Design{{ end }}</h3>
+                <p>{{ if eq .Language.Lang "es" }}Creando interfaces intuitivas y experiencias visuales atractivas{{ else }}Creating intuitive user interfaces and engaging visual experiences{{ end }}</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💻</div>
+                <h3>{{ if eq .Language.Lang "es" }}Desarrollo{{ else }}Development{{ end }}</h3>
+                <p>{{ if eq .Language.Lang "es" }}Construyendo aplicaciones web escalables con frameworks modernos{{ else }}Building scalable web applications with modern frameworks{{ end }}</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>{{ if eq .Language.Lang "es" }}Rendimiento{{ else }}Performance{{ end }}</h3>
+                <p>{{ if eq .Language.Lang "es" }}Optimizando para velocidad, SEO y experiencia de usuario excepcional{{ else }}Optimizing for speed, SEO, and exceptional user experience{{ end }}</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3>DevOps</h3>
+                <p>{{ if eq .Language.Lang "es" }}Implementando pipelines CI/CD e infraestructura en la nube{{ else }}Implementing CI/CD pipelines and cloud infrastructure{{ end }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="portfolio-preview">
+    <div class="container">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-grid" id="featured-projects">
+            <!-- Projects will be loaded via API -->
+            <div class="project-skeleton">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+            <div class="project-skeleton">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+            <div class="project-skeleton">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+        </div>
+        <div class="section-footer">
+            {{ if eq .Language.Lang "es" }}
+            <a href="/es/hacer/" class="btn btn-secondary">Ver Todos los Proyectos</a>
+            {{ else }}
+            <a href="/make/" class="btn btn-secondary">View All Projects</a>
             {{ end }}
         </div>
-    </section>
-</div>
+    </div>
+</section>
+
+<section class="skills-section">
+    <div class="container">
+        <h2 class="section-title">Tech Stack</h2>
+        <div class="skills-grid" id="skills-list">
+            <!-- Skills will be loaded via API -->
+            <div class="skill-skeleton"></div>
+            <div class="skill-skeleton"></div>
+            <div class="skill-skeleton"></div>
+            <div class="skill-skeleton"></div>
+        </div>
+    </div>
+</section>
+
+<section class="contact-section">
+    <div class="container">
+        <h2 class="section-title">Let's Work Together</h2>
+        <p class="section-description">Have a project in mind? I'd love to hear about it.</p>
+        <form id="contact-form" class="contact-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" placeholder="Your Email" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" id="subject" name="subject" placeholder="Subject" required>
+            </div>
+            <div class="form-group">
+                <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+            <div id="contact-status" class="form-status"></div>
+        </form>
+    </div>
+</section>
+
+<script>
+// API Base URL
+const API_BASE = 'http://localhost:3333/api';
+
+// Load featured projects
+async function loadFeaturedProjects() {
+    try {
+        const response = await fetch(`${API_BASE}/portfolio/projects?featured=true&limit=3`);
+        
+        // Handle 401 errors gracefully
+        if (response.status === 401) {
+            console.info('Portfolio API requires authentication, showing demo content');
+            loadDemoProjects();
+            return;
+        }
+        
+        const data = await response.json();
+        
+        const container = document.getElementById('featured-projects');
+        
+        if (data.projects && data.projects.length > 0) {
+            container.innerHTML = data.projects.map(project => `
+                <div class="project-card">
+                    <div class="project-image">
+                        ${project.image ? 
+                            `<img src="${project.image}" alt="${project.title}">` : 
+                            `<div class="placeholder-image">🎨</div>`
+                        }
+                    </div>
+                    <div class="project-content">
+                        <h3>${project.title}</h3>
+                        <p>${project.description || 'No description available'}</p>
+                        <div class="project-tech">
+                            ${project.technologies ? project.technologies.slice(0, 3).map(tech => 
+                                `<span class="tech-tag">${tech}</span>`
+                            ).join('') : ''}
+                        </div>
+                        <a href="/make/${project.slug}/" class="project-link">View Project →</a>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            loadDemoProjects();
+        }
+    } catch (error) {
+        console.error('Error loading projects:', error);
+        loadDemoProjects();
+    }
+}
+
+// Load demo projects when API is unavailable
+function loadDemoProjects() {
+    const container = document.getElementById('featured-projects');
+    container.innerHTML = `
+        <div class="project-card">
+            <div class="project-image">
+                <div class="placeholder-image">🎵</div>
+            </div>
+            <div class="project-content">
+                <h3>Audio Portfolio</h3>
+                <p>Explore my collection of audio projects, soundscapes, and musical compositions.</p>
+                <div class="project-tech">
+                    <span class="tech-tag">Audio</span>
+                    <span class="tech-tag">Sound Design</span>
+                    <span class="tech-tag">Music</span>
+                </div>
+                <a href="/make/sounds/" class="project-link">View Audio Work →</a>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="project-image">
+                <div class="placeholder-image">🎨</div>
+            </div>
+            <div class="project-content">
+                <h3>Visual Design</h3>
+                <p>Browse through my visual design work, graphics, and creative projects.</p>
+                <div class="project-tech">
+                    <span class="tech-tag">Design</span>
+                    <span class="tech-tag">Graphics</span>
+                    <span class="tech-tag">Visual Arts</span>
+                </div>
+                <a href="/make/visuals/" class="project-link">View Design Work →</a>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="project-image">
+                <div class="placeholder-image">✍️</div>
+            </div>
+            <div class="project-content">
+                <h3>Writing Portfolio</h3>
+                <p>Read my articles, blog posts, and written content across various topics.</p>
+                <div class="project-tech">
+                    <span class="tech-tag">Writing</span>
+                    <span class="tech-tag">Content</span>
+                    <span class="tech-tag">Articles</span>
+                </div>
+                <a href="/make/words/" class="project-link">View Writing →</a>
+            </div>
+        </div>
+    `;
+}
+
+// Load skills
+async function loadSkills() {
+    try {
+        const response = await fetch(`${API_BASE}/portfolio/skills`);
+        
+        // Handle 401 errors gracefully
+        if (response.status === 401) {
+            console.info('Skills API requires authentication, showing demo content');
+            loadDemoSkills();
+            return;
+        }
+        
+        const data = await response.json();
+        
+        const container = document.getElementById('skills-list');
+        
+        if (data.skills && data.skills.length > 0) {
+            // Group skills by category
+            const grouped = data.skills.reduce((acc, skill) => {
+                const category = skill.category || 'Other';
+                if (!acc[category]) acc[category] = [];
+                acc[category].push(skill);
+                return acc;
+            }, {});
+            
+            container.innerHTML = Object.entries(grouped).map(([category, skills]) => `
+                <div class="skill-category">
+                    <h4>${category}</h4>
+                    <div class="skill-tags">
+                        ${skills.map(skill => `
+                            <div class="skill-tag">
+                                <span class="skill-name">${skill.name}</span>
+                                ${skill.level ? `
+                                    <div class="skill-level">
+                                        <div class="skill-progress" style="width: ${skill.level}%"></div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            loadDemoSkills();
+        }
+    } catch (error) {
+        console.error('Error loading skills:', error);
+        loadDemoSkills();
+    }
+}
+
+// Load demo skills when API is unavailable
+function loadDemoSkills() {
+    const container = document.getElementById('skills-list');
+    container.innerHTML = `
+        <div class="skill-category">
+            <h4>Frontend Development</h4>
+            <div class="skill-tags">
+                <div class="skill-tag"><span class="skill-name">HTML/CSS</span></div>
+                <div class="skill-tag"><span class="skill-name">JavaScript</span></div>
+                <div class="skill-tag"><span class="skill-name">React</span></div>
+                <div class="skill-tag"><span class="skill-name">Vue.js</span></div>
+            </div>
+        </div>
+        <div class="skill-category">
+            <h4>Backend Development</h4>
+            <div class="skill-tags">
+                <div class="skill-tag"><span class="skill-name">Node.js</span></div>
+                <div class="skill-tag"><span class="skill-name">Express</span></div>
+                <div class="skill-tag"><span class="skill-name">MongoDB</span></div>
+                <div class="skill-tag"><span class="skill-name">PostgreSQL</span></div>
+            </div>
+        </div>
+        <div class="skill-category">
+            <h4>Design & Audio</h4>
+            <div class="skill-tags">
+                <div class="skill-tag"><span class="skill-name">Adobe Creative Suite</span></div>
+                <div class="skill-tag"><span class="skill-name">Figma</span></div>
+                <div class="skill-tag"><span class="skill-name">Audio Production</span></div>
+                <div class="skill-tag"><span class="skill-name">Sound Design</span></div>
+            </div>
+        </div>
+        <div class="skill-category">
+            <h4>DevOps & Tools</h4>
+            <div class="skill-tags">
+                <div class="skill-tag"><span class="skill-name">Docker</span></div>
+                <div class="skill-tag"><span class="skill-name">Git</span></div>
+                <div class="skill-tag"><span class="skill-name">CI/CD</span></div>
+                <div class="skill-tag"><span class="skill-name">AWS</span></div>
+            </div>
+        </div>
+    `;
+}
+
+// Handle contact form submission
+document.getElementById('contact-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+    };
+    
+    const statusDiv = document.getElementById('contact-status');
+    statusDiv.innerHTML = '<p class="loading">Sending message...</p>';
+    
+    try {
+        const response = await fetch(`${API_BASE}/portfolio/contact`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            statusDiv.innerHTML = '<p class="success">Message sent successfully! I\'ll get back to you soon.</p>';
+            document.getElementById('contact-form').reset();
+        } else {
+            throw new Error(data.error || 'Failed to send message');
+        }
+    } catch (error) {
+        statusDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+    }
+});
+
+// Load data on page load
+document.addEventListener('DOMContentLoaded', () => {
+    loadFeaturedProjects();
+    loadSkills();
+});
+</script>
+
+<style>
+/* Hero Section */
+.hero-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.hero-content {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    animation: slideUp 0.8s ease;
+}
+
+.gradient-text {
+    background: linear-gradient(to right, #ffffff, #e0e0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: block;
+}
+
+.subtitle {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin-top: 0.5rem;
+    opacity: 0.9;
+}
+
+.hero-description {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background: white;
+    color: #667eea;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.btn-outline {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.btn-outline:hover {
+    background: white;
+    color: #667eea;
+}
+
+.btn-secondary {
+    background: #667eea;
+    color: white;
+}
+
+/* Sections */
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.section-description {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 3rem;
+}
+
+/* Features */
+.features-section {
+    padding: 80px 0;
+    background: #f8f9fa;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+/* Portfolio Preview */
+.portfolio-preview {
+    padding: 80px 0;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.project-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+.project-image {
+    height: 200px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.placeholder-image {
+    font-size: 3rem;
+    color: white;
+}
+
+.project-content {
+    padding: 1.5rem;
+}
+
+.project-tech {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.tech-tag {
+    background: #f0f0f0;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.project-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Skills */
+.skills-section {
+    padding: 80px 0;
+    background: #f8f9fa;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.skill-category h4 {
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.skill-tag {
+    background: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.skill-level {
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    margin-top: 4px;
+    overflow: hidden;
+}
+
+.skill-progress {
+    height: 100%;
+    background: #667eea;
+    transition: width 1s ease;
+}
+
+/* Contact Form */
+.contact-section {
+    padding: 80px 0;
+}
+
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.form-status {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.form-status .success {
+    color: #48bb78;
+}
+
+.form-status .error {
+    color: #f56565;
+}
+
+.form-status .loading {
+    color: #667eea;
+}
+
+/* Admin Tools */
+.admin-tools {
+    padding: 80px 0;
+    background: #f8f9fa;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.tool-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    color: #667eea;
+}
+
+.tool-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Skeleton Loading */
+.project-skeleton,
+.skill-skeleton {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.skeleton-image {
+    height: 200px;
+    background: #e0e0e0;
+    border-radius: 8px 8px 0 0;
+}
+
+.skeleton-text {
+    height: 20px;
+    background: #e0e0e0;
+    margin: 1rem;
+    border-radius: 4px;
+}
+
+.skeleton-text.short {
+    width: 60%;
+}
+
+.skill-skeleton {
+    height: 40px;
+    background: #e0e0e0;
+    border-radius: 20px;
+}
+
+/* Animations */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+    }
+    
+    .features-grid,
+    .projects-grid,
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 {{ end }}

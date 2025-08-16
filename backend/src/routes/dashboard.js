@@ -19,6 +19,19 @@ router.get('/stats', async (req, res) => {
       timestamp: new Date(),
     });
   } catch (error) {
+    console.error('Dashboard stats error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get recent content
+router.get('/recent', async (req, res) => {
+  try {
+    const { limit = 5 } = req.query;
+    const recentContent = await hugoService.getRecentContent(parseInt(limit));
+    res.json(recentContent);
+  } catch (error) {
+    console.error('Recent content error:', error);
     res.status(500).json({ error: error.message });
   }
 });

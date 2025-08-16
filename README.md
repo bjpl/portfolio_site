@@ -1,6 +1,6 @@
-# Portfolio Site - Full-Stack Creative Portfolio Platform
+# Portfolio Site
 
-A production-ready portfolio platform built with Hugo static site generator and Node.js/Express backend, featuring comprehensive authentication, content management, and real-time capabilities.
+A modern, multilingual portfolio website built with Hugo and Node.js, featuring a complete content management system.
 
 ## 🚀 Features
 
@@ -8,8 +8,8 @@ A production-ready portfolio platform built with Hugo static site generator and 
 - **Four-Pillar Content Structure**: Learn, Make, Meet, Think sections
 - **Hugo Static Site Generator**: Fast, SEO-optimized static content
 - **Node.js/Express Backend**: RESTful API with WebSocket support
-- **PostgreSQL Database**: Structured data with Sequelize ORM
-- **Redis Caching**: High-performance caching with memory fallback
+- **SQLite Database**: Lightweight, file-based database with Sequelize ORM (PostgreSQL ready for production)
+- **Redis Caching**: Optional high-performance caching with in-memory fallback
 - **Docker Containerization**: Production-ready deployment
 
 ### Security & Authentication
@@ -41,7 +41,7 @@ A production-ready portfolio platform built with Hugo static site generator and 
 ### DevOps & Infrastructure
 - **Docker Multi-Stage Build**: Optimized production images
 - **Nginx Reverse Proxy**: Load balancing and caching
-- **Database Migrations**: PostgreSQL schema management
+- **Database Migrations**: Sequelize auto-sync for SQLite
 - **Backup Service**: Automated database backups
 - **Environment Configuration**: Comprehensive .env management
 
@@ -49,7 +49,7 @@ A production-ready portfolio platform built with Hugo static site generator and 
 
 ### Prerequisites
 - Node.js 18+ and npm
-- PostgreSQL 15+
+- SQLite 3.35+ (included with most systems)
 - Redis 7+
 - Docker & Docker Compose (optional)
 - Hugo 0.111.3+ (for static site)
@@ -81,12 +81,11 @@ npm install
 
 4. **Set up the database**
 ```bash
-# Using Docker
-docker-compose up -d postgres redis
+# SQLite database will be created automatically when backend starts
+# No manual setup required - database file is created at backend/portfolio_db.sqlite
 
-# Or manually create database and run migrations
-psql -U postgres -c "CREATE DATABASE portfolio_db;"
-psql -U postgres -d portfolio_db -f scripts/init-db.sql
+# Optional: Redis for caching (not required for development)
+docker-compose up -d redis
 ```
 
 5. **Start development server**
@@ -172,12 +171,12 @@ REFRESH_TOKEN_EXPIRES_IN=7d
 BCRYPT_ROUNDS=10
 
 # Database
-DB_TYPE=postgres
+DB_TYPE=sqlite
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=portfolio_db
+DB_NAME=portfolio_db.sqlite
 DB_USER=portfolio_user
-DB_PASSWORD=secure_password
+DB_PASSWORD=changeme
 
 # Redis Cache
 REDIS_HOST=localhost
@@ -276,8 +275,8 @@ curl http://localhost:3333/api/health
 # Nginx health
 curl http://localhost/health
 
-# Database health
-docker-compose exec postgres pg_isready
+# Database health (check if SQLite file exists)
+ls -la backend/portfolio_db.sqlite
 ```
 
 ### Logging
@@ -293,7 +292,7 @@ Logs are stored in:
 ### Production Checklist
 
 - [ ] Set strong JWT_SECRET
-- [ ] Configure production database
+- [ ] Configure production database (consider PostgreSQL for production)
 - [ ] Set up SSL certificates
 - [ ] Configure email service
 - [ ] Set up monitoring (Sentry)
@@ -316,7 +315,7 @@ Automated backups run daily via Docker Compose backup service:
 docker-compose --profile backup up -d
 
 # Manual backup
-docker-compose exec postgres pg_dump -U portfolio_user portfolio_db > backup.sql
+cp backend/portfolio_db.sqlite backup_$(date +%Y%m%d_%H%M%S).sqlite
 ```
 
 ## 🔒 Security
@@ -358,7 +357,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Hugo static site generator
 - Express.js framework
-- PostgreSQL database
+- SQLite database
 - Redis cache
 - Docker containerization
 - All open source contributors

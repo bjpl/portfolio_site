@@ -75,20 +75,169 @@ class HugoService {
   async getContentStats() {
     const stats = {
       total: 0,
-      bySection: {},
+      bySection: {
+        learn: 0,
+        make: 0,
+        meet: 0,
+        think: 0
+      },
       byLanguage: { en: 0, es: 0 },
       drafts: 0,
       published: 0,
+      recentlyUpdated: []
     };
 
-    const enFiles = await this.listContent('', 'en');
-    const esFiles = await this.listContent('', 'es');
+    try {
+      // Get all content files
+      const allFiles = await this.walkDir(this.contentPath);
+      const contentFiles = allFiles.filter(f => f.endsWith('.md') && !f.includes('_index.md'));
 
-    stats.byLanguage.en = enFiles.length;
-    stats.byLanguage.es = esFiles.length;
-    stats.total = enFiles.length + esFiles.length;
+      stats.total = contentFiles.length;
+
+      // Analyze each file
+      for (const filePath of contentFiles) {
+        try {
+          const relativePath = path.relative(this.contentPath, filePath);
+          const fileStats = await fs.stat(filePath);
+          const content = await fs.readFile(filePath, 'utf8');
+          
+          // Parse frontmatter
+          const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+          let frontmatter = {};
+          if (frontmatterMatch) {
+            try {
+              frontmatter = this.parseFrontmatter(frontmatterMatch[1]);
+            } catch (e) {
+              // Skip invalid frontmatter
+            }
+          }
+
+          // Determine language
+          const isSpanish = relativePath.startsWith('es/');
+          if (isSpanish) {
+            stats.byLanguage.es++;
+          } else {
+            stats.byLanguage.en++;
+          }
+
+          // Determine section
+          const pathParts = relativePath.split('/');
+          const section = isSpanish ? pathParts[1] : pathParts[0];
+          if (stats.bySection.hasOwnProperty(section)) {
+            stats.bySection[section]++;
+          }
+
+          // Check if draft
+          if (frontmatter.draft === true || frontmatter.draft === 'true') {
+            stats.drafts++;
+          } else {
+            stats.published++;
+          }
+
+          // Add to recently updated if modified in last 7 days
+          const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+          if (fileStats.mtime > sevenDaysAgo) {
+            stats.recentlyUpdated.push({
+              path: relativePath,
+              title: frontmatter.title || path.basename(filePath, '.md'),
+              modified: fileStats.mtime,
+              section: section
+            });
+          }
+
+        } catch (fileError) {
+          console.error(`Error processing file ${filePath}:`, fileError);
+        }
+      }
+
+      // Sort recently updated by modification time
+      stats.recentlyUpdated.sort((a, b) => new Date(b.modified) - new Date(a.modified));
+      stats.recentlyUpdated = stats.recentlyUpdated.slice(0, 10); // Keep only 10 most recent
+
+    } catch (error) {
+      console.error('Error getting content stats:', error);
+    }
 
     return stats;
+  }
+
+  parseFrontmatter(yamlContent) {
+    const frontmatter = {};
+    const lines = yamlContent.split('\n');
+    
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed && !trimmed.startsWith('#')) {
+        const colonIndex = trimmed.indexOf(':');
+        if (colonIndex > 0) {
+          const key = trimmed.substring(0, colonIndex).trim();
+          let value = trimmed.substring(colonIndex + 1).trim();
+          
+          // Remove quotes
+          if ((value.startsWith('"') && value.endsWith('"')) || 
+              (value.startsWith("'") && value.endsWith("'"))) {
+            value = value.slice(1, -1);
+          }
+          
+          // Parse boolean
+          if (value === 'true') value = true;
+          if (value === 'false') value = false;
+          
+          frontmatter[key] = value;
+        }
+      }
+    }
+    
+    return frontmatter;
+  }
+
+  async getRecentContent(limit = 5) {
+    try {
+      const allFiles = await this.walkDir(this.contentPath);
+      const contentFiles = allFiles.filter(f => f.endsWith('.md') && !f.includes('_index.md'));
+      
+      const recentFiles = [];
+      
+      for (const filePath of contentFiles) {
+        try {
+          const fileStats = await fs.stat(filePath);
+          const relativePath = path.relative(this.contentPath, filePath);
+          const content = await fs.readFile(filePath, 'utf8');
+          
+          // Parse frontmatter for title
+          const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+          let title = path.basename(filePath, '.md');
+          if (frontmatterMatch) {
+            const frontmatter = this.parseFrontmatter(frontmatterMatch[1]);
+            title = frontmatter.title || title;
+          }
+          
+          const pathParts = relativePath.split('/');
+          const isSpanish = relativePath.startsWith('es/');
+          const section = isSpanish ? pathParts[1] : pathParts[0];
+          
+          recentFiles.push({
+            id: path.basename(filePath, '.md'),
+            title: title,
+            section: section,
+            language: isSpanish ? 'es' : 'en',
+            date: fileStats.mtime,
+            path: relativePath
+          });
+        } catch (fileError) {
+          console.error(`Error processing file ${filePath}:`, fileError);
+        }
+      }
+      
+      // Sort by modification time and return most recent
+      return recentFiles
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, limit);
+        
+    } catch (error) {
+      console.error('Error getting recent content:', error);
+      return [];
+    }
   }
 
   slugify(text) {

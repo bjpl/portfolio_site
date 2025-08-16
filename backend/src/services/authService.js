@@ -431,6 +431,35 @@ class AuthService {
 
     return { message: 'User reactivated' };
   }
+
+  /**
+   * Admin: Reset user password
+   */
+  async adminResetPassword(userId, newPassword) {
+    const bcrypt = require('bcrypt');
+    
+    const user = await User.findByPk(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    
+    // Update user's password and clear any lockout
+    await user.update({
+      password: hashedPassword,
+      loginAttempts: 0,
+      lockoutUntil: null,
+      // Optionally force password change on next login
+      mustChangePassword: true
+    });
+
+    // Logout all sessions for security
+    await this.logoutAll(userId);
+
+    return { message: 'Password reset successfully' };
+  }
 }
 
 module.exports = new AuthService();

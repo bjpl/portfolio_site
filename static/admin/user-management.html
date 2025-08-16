@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Hugo Dev</title>
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="auth.js"></script>
+    <script src="admin-nav.js"></script>
+    <script src="toast.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>🚀 Hugo Dev</h1>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">User Management</p>
+        
+        <nav class="sidebar-nav">
+            <!-- Dashboard Overview -->
+            <div class="nav-section">
+                <h4>Dashboard</h4>
+                <ul>
+                    <li><a href="dashboard.html">📊 Overview</a></li>
+                </ul>
+            </div>
+
+            <!-- Content Management -->
+            <div class="nav-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="content-editor.html">✏️ Content Editor</a></li>
+                    <li><a href="pages.html">📄 Pages</a></li>
+                    <li><a href="blog-posts.html">📝 Blog Posts</a></li>
+                    <li><a href="portfolio-items.html">🎨 Portfolio Items</a></li>
+                </ul>
+            </div>
+
+            <!-- Media & Assets -->
+            <div class="nav-section">
+                <h4>Media</h4>
+                <ul>
+                    <li><a href="file-manager.html">🖼️ File Manager</a></li>
+                    <li><a href="bulk-upload.html">📦 Bulk Upload</a></li>
+                    <li><a href="image-optimizer.html">🖼️ Image Optimizer</a></li>
+                </ul>
+            </div>
+
+            <!-- Development Tools -->
+            <div class="nav-section">
+                <h4>Development</h4>
+                <ul>
+                    <li><a href="review.html">✅ Review Tool</a></li>
+                    <li><a href="build-deploy.html">⚡ Build & Deploy</a></li>
+                    <li><a href="api-explorer.html">🔌 API Explorer</a></li>
+                    <li><a href="logs.html">📋 Logs</a></li>
+                </ul>
+            </div>
+
+            <!-- Site Management -->
+            <div class="nav-section">
+                <h4>Settings</h4>
+                <ul>
+                    <li><a href="site-settings.html">⚙️ Site Settings</a></li>
+                    <li><a href="user-management.html" class="active">👥 Users</a></li>
+                    <li><a href="analytics.html">📈 Analytics</a></li>
+                    <li><a href="backup.html">💾 Backup</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- User Profile & System Status -->
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">👤</div>
+                <div class="user-info">
+                    <div class="user-name" id="user-name">Admin User</div>
+                    <div class="user-role" id="user-role">Administrator</div>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()" title="Logout">
+                    🚪
+                </button>
+            </div>
+            <div class="quick-actions">
+                <button class="quick-action-btn" onclick="window.open('http://localhost:64422', '_blank')" title="View Site">
+                    🌐
+                </button>
+                <button class="quick-action-btn" onclick="location.reload()" title="Refresh">
+                    🔄
+                </button>
+                <button class="quick-action-btn" onclick="toggleTheme()" title="Toggle Theme">
+                    🌓
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <h2>User Management</h2>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="createUser()">👤 Add User</button>
+                <button class="btn btn-secondary" onclick="refreshUsers()">🔄 Refresh</button>
+            </div>
+        </div>
+        
+        <!-- User Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <div class="value" id="total-users">3</div>
+                <div class="description">Registered accounts</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Users</h3>
+                <div class="value" id="active-users">2</div>
+                <div class="description">Last 30 days</div>
+            </div>
+            <div class="stat-card">
+                <h3>Administrators</h3>
+                <div class="value" id="admin-count">1</div>
+                <div class="description">Admin privileges</div>
+            </div>
+            <div class="stat-card">
+                <h3>Last Login</h3>
+                <div class="value" id="last-login">2 min ago</div>
+                <div class="description">Most recent</div>
+            </div>
+        </div>
+        
+        <!-- User List -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+            <h3 style="margin-bottom: 20px;">User Accounts</h3>
+            
+            <div class="content-list">
+                <div class="content-item">
+                    <div class="content-info">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="user-avatar" style="width: 40px; height: 40px; font-size: 16px;">👤</div>
+                            <div>
+                                <h4>admin</h4>
+                                <p>admin@example.com • Administrator • Last login: 2 min ago</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-actions">
+                        <span class="badge badge-success">Active</span>
+                        <button class="btn btn-sm">Edit</button>
+                        <button class="btn btn-sm btn-danger">Disable</button>
+                    </div>
+                </div>
+                
+                <div class="content-item">
+                    <div class="content-info">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="user-avatar" style="width: 40px; height: 40px; font-size: 16px; background: var(--secondary);">👤</div>
+                            <div>
+                                <h4>editor</h4>
+                                <p>editor@example.com • Editor • Last login: 2 days ago</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-actions">
+                        <span class="badge badge-success">Active</span>
+                        <button class="btn btn-sm">Edit</button>
+                        <button class="btn btn-sm btn-danger">Disable</button>
+                    </div>
+                </div>
+                
+                <div class="content-item">
+                    <div class="content-info">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="user-avatar" style="width: 40px; height: 40px; font-size: 16px; background: var(--text-muted);">👤</div>
+                            <div>
+                                <h4>author</h4>
+                                <p>author@example.com • Author • Last login: 1 week ago</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-actions">
+                        <span style="color: var(--text-muted); font-size: 12px;">Inactive</span>
+                        <button class="btn btn-sm">Edit</button>
+                        <button class="btn btn-sm btn-secondary">Enable</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Role Management -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+            <h3 style="margin-bottom: 20px;">Role Management</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div class="stat-card">
+                    <h4>👑 Administrator</h4>
+                    <div style="margin: 10px 0;">
+                        <span class="badge badge-primary">Full Access</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 15px;">Complete system access and user management</p>
+                    <ul style="font-size: 12px; color: var(--text-muted); list-style: none; padding: 0;">
+                        <li>✅ User management</li>
+                        <li>✅ System settings</li>
+                        <li>✅ Content management</li>
+                        <li>✅ Deploy & build</li>
+                    </ul>
+                </div>
+                
+                <div class="stat-card">
+                    <h4>✏️ Editor</h4>
+                    <div style="margin: 10px 0;">
+                        <span class="badge badge-secondary">Content Access</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 15px;">Content creation and editing privileges</p>
+                    <ul style="font-size: 12px; color: var(--text-muted); list-style: none; padding: 0;">
+                        <li>❌ User management</li>
+                        <li>❌ System settings</li>
+                        <li>✅ Content management</li>
+                        <li>✅ Media upload</li>
+                    </ul>
+                </div>
+                
+                <div class="stat-card">
+                    <h4>📝 Author</h4>
+                    <div style="margin: 10px 0;">
+                        <span class="badge">Limited Access</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 15px;">Basic content creation only</p>
+                    <ul style="font-size: 12px; color: var(--text-muted); list-style: none; padding: 0;">
+                        <li>❌ User management</li>
+                        <li>❌ System settings</li>
+                        <li>✅ Create content</li>
+                        <li>❌ Publish content</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px;">
+            <h3 style="margin-bottom: 20px;">Recent User Activity</h3>
+            
+            <div class="content-list">
+                <div class="content-item">
+                    <div class="content-info">
+                        <h4>Admin Login</h4>
+                        <p>admin logged in from 127.0.0.1 • 2 minutes ago</p>
+                    </div>
+                    <div class="content-actions">
+                        <span class="badge badge-success">Login</span>
+                    </div>
+                </div>
+                
+                <div class="content-item">
+                    <div class="content-info">
+                        <h4>Content Updated</h4>
+                        <p>editor modified "Portfolio Project" • 1 hour ago</p>
+                    </div>
+                    <div class="content-actions">
+                        <span class="badge">Edit</span>
+                    </div>
+                </div>
+                
+                <div class="content-item">
+                    <div class="content-info">
+                        <h4>Failed Login Attempt</h4>
+                        <p>Failed login for author@example.com • 3 hours ago</p>
+                    </div>
+                    <div class="content-actions">
+                        <span style="color: var(--danger); font-size: 12px;">Failed</span>
+                    </div>
+                </div>
+                
+                <div class="content-item">
+                    <div class="content-info">
+                        <h4>Password Changed</h4>
+                        <p>editor changed their password • 1 day ago</p>
+                    </div>
+                    <div class="content-actions">
+                        <span class="badge">Security</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function createUser() {
+            alert('Create user functionality coming soon!');
+        }
+        
+        function refreshUsers() {
+            location.reload();
+        }
+        
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminUser');
+                window.location.href = 'login.html';
+            }
+        }
+        
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+        }
+    </script>
+</body>
+</html>

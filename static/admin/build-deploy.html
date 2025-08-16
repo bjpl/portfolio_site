@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build & Deploy - Hugo Dev</title>
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="auth.js"></script>
+    <script src="admin-nav.js"></script>
+    <script src="toast.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>🚀 Hugo Dev</h1>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">Build & Deploy</p>
+        
+        <nav class="sidebar-nav">
+            <!-- Dashboard Overview -->
+            <div class="nav-section">
+                <h4>Dashboard</h4>
+                <ul>
+                    <li><a href="dashboard.html">📊 Overview</a></li>
+                </ul>
+            </div>
+
+            <!-- Content Management -->
+            <div class="nav-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="content-editor.html">✏️ Content Editor</a></li>
+                    <li><a href="pages.html">📄 Pages</a></li>
+                    <li><a href="blog-posts.html">📝 Blog Posts</a></li>
+                    <li><a href="portfolio-items.html">🎨 Portfolio Items</a></li>
+                </ul>
+            </div>
+
+            <!-- Media & Assets -->
+            <div class="nav-section">
+                <h4>Media</h4>
+                <ul>
+                    <li><a href="file-manager.html">🖼️ File Manager</a></li>
+                    <li><a href="bulk-upload.html">📦 Bulk Upload</a></li>
+                    <li><a href="image-optimizer.html">🖼️ Image Optimizer</a></li>
+                </ul>
+            </div>
+
+            <!-- Development Tools -->
+            <div class="nav-section">
+                <h4>Development</h4>
+                <ul>
+                    <li><a href="review.html">✅ Review Tool</a></li>
+                    <li><a href="build-deploy.html" class="active">⚡ Build & Deploy</a></li>
+                    <li><a href="api-explorer.html">🔌 API Explorer</a></li>
+                    <li><a href="logs.html">📋 Logs</a></li>
+                </ul>
+            </div>
+
+            <!-- Site Management -->
+            <div class="nav-section">
+                <h4>Settings</h4>
+                <ul>
+                    <li><a href="site-settings.html">⚙️ Site Settings</a></li>
+                    <li><a href="user-management.html">👥 Users</a></li>
+                    <li><a href="analytics.html">📈 Analytics</a></li>
+                    <li><a href="backup.html">💾 Backup</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- User Profile & System Status -->
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">👤</div>
+                <div class="user-info">
+                    <div class="user-name" id="user-name">Admin User</div>
+                    <div class="user-role" id="user-role">Administrator</div>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()" title="Logout">
+                    🚪
+                </button>
+            </div>
+            <div class="quick-actions">
+                <button class="quick-action-btn" onclick="window.open('http://localhost:64422', '_blank')" title="View Site">
+                    🌐
+                </button>
+                <button class="quick-action-btn" onclick="location.reload()" title="Refresh">
+                    🔄
+                </button>
+                <button class="quick-action-btn" onclick="toggleTheme()" title="Toggle Theme">
+                    🌓
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <h2>Build & Deploy</h2>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="buildSite()">🔨 Build Site</button>
+                <button class="btn btn-secondary" onclick="deployToProduction()">🚀 Deploy</button>
+            </div>
+        </div>
+        
+        <!-- Status Section -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Build Status</h3>
+                <div class="value" style="color: var(--success);">✅ Success</div>
+                <div class="description">Last build: 2 hours ago</div>
+            </div>
+            <div class="stat-card">
+                <h3>Deploy Status</h3>
+                <div class="value" style="color: var(--success);">🟢 Live</div>
+                <div class="description">Production updated</div>
+            </div>
+            <div class="stat-card">
+                <h3>Build Time</h3>
+                <div class="value">1.2s</div>
+                <div class="description">Average build time</div>
+            </div>
+            <div class="stat-card">
+                <h3>Site Size</h3>
+                <div class="value">2.4MB</div>
+                <div class="description">Total output size</div>
+            </div>
+        </div>
+        
+        <!-- Build Options -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+            <h3 style="margin-bottom: 20px;">Build Configuration</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Environment</label>
+                    <select class="form-control">
+                        <option value="development">Development</option>
+                        <option value="staging">Staging</option>
+                        <option value="production" selected>Production</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Hugo Version</label>
+                    <select class="form-control">
+                        <option value="latest" selected>Latest (v0.120.4)</option>
+                        <option value="extended">Extended (v0.120.4)</option>
+                        <option value="0.119.0">v0.119.0</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" checked> Minify CSS and JavaScript
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+                    <input type="checkbox" checked> Optimize images
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+                    <input type="checkbox"> Include draft content
+                </label>
+            </div>
+        </div>
+        
+        <!-- Build History -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+            <h3 style="margin-bottom: 20px;">Build History</h3>
+            <div class="content-list">
+                <div class="content-item">
+                    <div class="content-info">
+                        <h4>Build #247</h4>
+                        <p>Production • Success • 2 hours ago • 1.1s</p>
+                    </div>
+                    <div class="content-actions">
+                        <button class="btn btn-sm">View Logs</button>
+                        <button class="btn btn-sm btn-secondary">Deploy</button>
+                    </div>
+                </div>
+                <div class="content-item">
+                    <div class="content-info">
+                        <h4>Build #246</h4>
+                        <p>Staging • Success • 1 day ago • 0.9s</p>
+                    </div>
+                    <div class="content-actions">
+                        <button class="btn btn-sm">View Logs</button>
+                        <button class="btn btn-sm btn-secondary">Deploy</button>
+                    </div>
+                </div>
+                <div class="content-item">
+                    <div class="content-info">
+                        <h4>Build #245</h4>
+                        <p>Production • Failed • 2 days ago • Error</p>
+                    </div>
+                    <div class="content-actions">
+                        <button class="btn btn-sm btn-danger">View Error</button>
+                        <button class="btn btn-sm">Retry</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Deployment Targets -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px;">
+            <h3 style="margin-bottom: 20px;">Deployment Targets</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div class="stat-card">
+                    <h4>🌐 Netlify</h4>
+                    <div style="margin: 10px 0;">
+                        <span class="badge badge-success">Connected</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 14px;">Auto-deploy on push</p>
+                    <button class="btn btn-sm btn-primary" style="margin-top: 10px;">Deploy Now</button>
+                </div>
+                
+                <div class="stat-card">
+                    <h4>📡 Vercel</h4>
+                    <div style="margin: 10px 0;">
+                        <span style="color: var(--text-muted); font-size: 12px;">Not configured</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 14px;">Connect your account</p>
+                    <button class="btn btn-sm" style="margin-top: 10px;">Configure</button>
+                </div>
+                
+                <div class="stat-card">
+                    <h4>🔧 GitHub Pages</h4>
+                    <div style="margin: 10px 0;">
+                        <span class="badge badge-success">Active</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 14px;">GitHub Actions workflow</p>
+                    <button class="btn btn-sm btn-primary" style="margin-top: 10px;">View Workflow</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function buildSite() {
+            alert('Build site functionality coming soon!');
+        }
+        
+        function deployToProduction() {
+            alert('Deploy to production functionality coming soon!');
+        }
+        
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminUser');
+                window.location.href = 'login.html';
+            }
+        }
+        
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+        }
+    </script>
+</body>
+</html>

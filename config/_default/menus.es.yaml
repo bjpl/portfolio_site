@@ -1,13 +1,13 @@
 main:
-  - name: Hacer
-    url: /es/hacer/
+  - name: Crear
+    url: /es/make/
     weight: 10
   - name: Aprender
-    url: /es/aprender/
+    url: /es/learn/
     weight: 20
   - name: Pensar
-    url: /es/pensar/
+    url: /es/think/
     weight: 30
   - name: Conocer
-    url: /es/conocer/
+    url: /es/meet/
     weight: 40

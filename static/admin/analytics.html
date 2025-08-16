@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Hugo Dev</title>
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="auth.js"></script>
+    <script src="admin-nav.js"></script>
+    <script src="toast.js"></script>
+    <script src="analytics.js"></script>
+    <style>
+        .chart-container {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>🚀 Hugo Dev</h1>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">Site Analytics</p>
+        
+        <nav class="sidebar-nav">
+            <!-- Dashboard Overview -->
+            <div class="nav-section">
+                <h4>Dashboard</h4>
+                <ul>
+                    <li><a href="dashboard.html">📊 Overview</a></li>
+                </ul>
+            </div>
+
+            <!-- Content Management -->
+            <div class="nav-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="content-editor.html">✏️ Content Editor</a></li>
+                    <li><a href="pages.html">📄 Pages</a></li>
+                    <li><a href="blog-posts.html">📝 Blog Posts</a></li>
+                    <li><a href="portfolio-items.html">🎨 Portfolio Items</a></li>
+                </ul>
+            </div>
+
+            <!-- Media & Assets -->
+            <div class="nav-section">
+                <h4>Media</h4>
+                <ul>
+                    <li><a href="file-manager.html">🖼️ File Manager</a></li>
+                    <li><a href="bulk-upload.html">📦 Bulk Upload</a></li>
+                    <li><a href="image-optimizer.html">🖼️ Image Optimizer</a></li>
+                </ul>
+            </div>
+
+            <!-- Development Tools -->
+            <div class="nav-section">
+                <h4>Development</h4>
+                <ul>
+                    <li><a href="review.html">✅ Review Tool</a></li>
+                    <li><a href="build-deploy.html">⚡ Build & Deploy</a></li>
+                    <li><a href="api-explorer.html">🔌 API Explorer</a></li>
+                    <li><a href="logs.html">📋 Logs</a></li>
+                </ul>
+            </div>
+
+            <!-- Site Management -->
+            <div class="nav-section">
+                <h4>Settings</h4>
+                <ul>
+                    <li><a href="site-settings.html">⚙️ Site Settings</a></li>
+                    <li><a href="user-management.html">👥 Users</a></li>
+                    <li><a href="analytics.html" class="active">📈 Analytics</a></li>
+                    <li><a href="backup.html">💾 Backup</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- User Profile & System Status -->
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">👤</div>
+                <div class="user-info">
+                    <div class="user-name" id="user-name">Admin User</div>
+                    <div class="user-role" id="user-role">Administrator</div>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()" title="Logout">
+                    🚪
+                </button>
+            </div>
+            <div class="quick-actions">
+                <button class="quick-action-btn" onclick="window.open('http://localhost:64422', '_blank')" title="View Site">
+                    🌐
+                </button>
+                <button class="quick-action-btn" onclick="location.reload()" title="Refresh">
+                    🔄
+                </button>
+                <button class="quick-action-btn" onclick="toggleTheme()" title="Toggle Theme">
+                    🌓
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <h2>Site Analytics</h2>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="exportData()">📊 Export Data</button>
+                <button class="btn btn-secondary" onclick="refreshAnalytics()">🔄 Refresh</button>
+            </div>
+        </div>
+        
+        <!-- Analytics Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Visitors</h3>
+                <div class="value" id="total-visitors">2,847</div>
+                <div class="description">+12% from last month</div>
+            </div>
+            <div class="stat-card">
+                <h3>Page Views</h3>
+                <div class="value" id="page-views">8,291</div>
+                <div class="description">+8% from last month</div>
+            </div>
+            <div class="stat-card">
+                <h3>Bounce Rate</h3>
+                <div class="value" id="bounce-rate">34.2%</div>
+                <div class="description">-5% from last month</div>
+            </div>
+            <div class="stat-card">
+                <h3>Avg. Session</h3>
+                <div class="value" id="avg-session">2:45</div>
+                <div class="description">+15% from last month</div>
+            </div>
+        </div>
+        
+        <!-- Time Range Selector -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3>Analytics Dashboard</h3>
+                <div style="display: flex; gap: 10px;">
+                    <select class="form-control" id="time-range" style="width: 150px;">
+                        <option value="7d">Last 7 days</option>
+                        <option value="30d" selected>Last 30 days</option>
+                        <option value="90d">Last 90 days</option>
+                        <option value="1y">Last year</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts Row -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 30px;">
+            <!-- Visitors Chart -->
+            <div style="background: var(--bg-light); padding: 20px; border-radius: 12px;">
+                <h3 style="margin-bottom: 20px;">Visitors Over Time</h3>
+                <div class="chart-container">
+                    📈 Interactive visitor chart would be implemented here
+                    <br>(Chart.js or similar library)
+                </div>
+            </div>
+            
+            <!-- Traffic Sources -->
+            <div style="background: var(--bg-light); padding: 20px; border-radius: 12px;">
+                <h3 style="margin-bottom: 20px;">Traffic Sources</h3>
+                <div class="chart-container">
+                    🥧 Traffic sources pie chart
+                    <br>(Direct, Organic, Social, etc.)
+                </div>
+            </div>
+        </div>
+        
+        <!-- Detailed Analytics -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            <!-- Top Pages -->
+            <div id="pages-container" style="background: var(--bg-light); padding: 20px; border-radius: 12px;">
+                <h3 style="margin-bottom: 20px;">Top Pages</h3>
+                <div class="content-list">
+                    <div class="content-item">
+                        <div class="content-info">
+                            <h4>/</h4>
+                            <p>Homepage • 1,247 views • 45% of traffic</p>
+                        </div>
+                        <div class="content-actions">
+                            <span class="badge badge-success">📈 +12%</span>
+                        </div>
+                    </div>
+                    <div class="content-item">
+                        <div class="content-info">
+                            <h4>/make/</h4>
+                            <p>Portfolio • 892 views • 31% of traffic</p>
+                        </div>
+                        <div class="content-actions">
+                            <span class="badge badge-success">📈 +8%</span>
+                        </div>
+                    </div>
+                    <div class="content-item">
+                        <div class="content-info">
+                            <h4>/learn/</h4>
+                            <p>Blog • 456 views • 16% of traffic</p>
+                        </div>
+                        <div class="content-actions">
+                            <span class="badge">📊 +2%</span>
+                        </div>
+                    </div>
+                    <div class="content-item">
+                        <div class="content-info">
+                            <h4>/meet/</h4>
+                            <p>About • 234 views • 8% of traffic</p>
+                        </div>
+                        <div class="content-actions">
+                            <span style="color: var(--danger); font-size: 12px;">📉 -3%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Geographic Data -->
+            <div data-section="geography" style="background: var(--bg-light); padding: 20px; border-radius: 12px;">
+                <h3 style="margin-bottom: 20px;">Geographic Data</h3>
+                <div class="content-list">
+                    <div class="content-item">
+                        <div class="content-info">
+                            <h4>🇺🇸 United States</h4>
+                            <p>1,423 visitors • 50% of traffic</p>
+                        </div>
+                        <div class="content-actions">
+                            <span class="badge badge-primary">50%</span>
+                        </div>
+                    </div>
+                    <div class="content-item">
+                        <div class="content-info">
+                            <h4>🇬🇧 United Kingdom</h4>
+                            <p>341 visitors • 12% of traffic</p>
+                        </div>
+                        <div class="content-actions">
+                            <span class="badge">12%</span>
+                        </div>
+                    </div>
+                    <div class="content-item">
+                        <div class="content-info">
+                            <h4>🇩🇪 Germany</h4>
+                            <p>298 visitors • 10% of traffic</p>
+                        </div>
+                        <div class="content-actions">
+                            <span class="badge">10%</span>
+                        </div>
+                    </div>
+                    <div class="content-item">
+                        <div class="content-info">
+                            <h4>🇨🇦 Canada</h4>
+                            <p>227 visitors • 8% of traffic</p>
+                        </div>
+                        <div class="content-actions">
+                            <span class="badge">8%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Device & Browser Stats -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-top: 30px;">
+            <!-- Device Types -->
+            <div style="background: var(--bg-light); padding: 20px; border-radius: 12px;">
+                <h3 style="margin-bottom: 20px;">Device Types</h3>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>🖥️ Desktop</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 100px; height: 8px; background: var(--bg-dark); border-radius: 4px; overflow: hidden;">
+                                <div style="width: 65%; height: 100%; background: var(--primary);"></div>
+                            </div>
+                            <span style="font-size: 14px;">65%</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>📱 Mobile</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 100px; height: 8px; background: var(--bg-dark); border-radius: 4px; overflow: hidden;">
+                                <div style="width: 28%; height: 100%; background: var(--secondary);"></div>
+                            </div>
+                            <span style="font-size: 14px;">28%</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>📱 Tablet</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 100px; height: 8px; background: var(--bg-dark); border-radius: 4px; overflow: hidden;">
+                                <div style="width: 7%; height: 100%; background: var(--warning);"></div>
+                            </div>
+                            <span style="font-size: 14px;">7%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Browsers -->
+            <div style="background: var(--bg-light); padding: 20px; border-radius: 12px;">
+                <h3 style="margin-bottom: 20px;">Browsers</h3>
+                <div data-stats="browsers" style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Chrome</span>
+                        <span style="font-size: 14px;">58%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Firefox</span>
+                        <span style="font-size: 14px;">22%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Safari</span>
+                        <span style="font-size: 14px;">15%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Edge</span>
+                        <span style="font-size: 14px;">5%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Referrers -->
+            <div style="background: var(--bg-light); padding: 20px; border-radius: 12px;">
+                <h3 style="margin-bottom: 20px;">Top Referrers</h3>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Direct</span>
+                        <span style="font-size: 14px;">45%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Google</span>
+                        <span style="font-size: 14px;">32%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>GitHub</span>
+                        <span style="font-size: 14px;">12%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>LinkedIn</span>
+                        <span style="font-size: 14px;">11%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function exportData() {
+            alert('Export analytics data functionality coming soon!');
+        }
+        
+        function refreshAnalytics() {
+            location.reload();
+        }
+        
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminUser');
+                window.location.href = 'login.html';
+            }
+        }
+        
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+        }
+    </script>
+</body>
+</html>

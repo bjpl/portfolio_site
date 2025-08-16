@@ -1,9 +1,7 @@
 ---
 title: "Content Management Tools"
 date: 2024-01-15
-draft: false
-menu: main
-weight: 100
+draft: true
 ---
 
 Access our content management tools:

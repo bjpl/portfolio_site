@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Portfolio Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary: #764ba2;
+            --success: #48bb78;
+            --danger: #f56565;
+            --text: #2d3748;
+            --text-muted: #718096;
+            --bg: #f7fafc;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            max-width: 400px;
+            width: 100%;
+            animation: slideUp 0.5s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            color: var(--text);
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .logo p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: var(--text);
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .alert-danger {
+            background: #fed7d7;
+            color: #9b2c2c;
+            border: 1px solid #fc8181;
+        }
+        
+        .alert-success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+        
+        .form-footer {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .form-footer p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .remember-me input {
+            margin-right: 8px;
+        }
+        
+        .remember-me label {
+            color: var(--text);
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>🚀 Admin Dashboard</h1>
+            <p>Portfolio Content Management</p>
+        </div>
+        
+        <div id="alertBox" class="alert"></div>
+        
+        <form id="loginForm" onsubmit="return handleLogin(event)" method="post" action="javascript:void(0);">
+            <div class="form-group">
+                <label for="username">Username or Email</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    class="form-control" 
+                    placeholder="Enter your username or email"
+                    required 
+                    autofocus
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="form-control" 
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+            
+            <div class="remember-me">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">Remember me</label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" id="loginBtn">
+                <span id="btnText">Sign In</span>
+                <span id="btnLoader" style="display: none;" class="loading"></span>
+            </button>
+        </form>
+        
+        <div class="form-footer">
+            <p>Default credentials: admin / password123</p>
+        </div>
+    </div>
+    
+    <script>
+        // Check if already logged in
+        const token = localStorage.getItem('adminToken');
+        if (token) {
+            // Verify token is still valid
+            fetch('http://localhost:3333/api/auth/me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Token is valid, redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                } else {
+                    // Token is invalid, remove it
+                    localStorage.removeItem('adminToken');
+                    localStorage.removeItem('adminUser');
+                }
+            })
+            .catch(() => {
+                // Error checking token, remove it
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminUser');
+            });
+        }
+        
+        function showAlert(message, type = 'danger') {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.className = `alert alert-${type}`;
+            alertBox.textContent = message;
+            alertBox.style.display = 'block';
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    alertBox.style.display = 'none';
+                }, 3000);
+            }
+        }
+        
+        function setLoading(isLoading) {
+            const loginBtn = document.getElementById('loginBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+            
+            loginBtn.disabled = isLoading;
+            btnText.style.display = isLoading ? 'none' : 'inline';
+            btnLoader.style.display = isLoading ? 'inline-block' : 'none';
+        }
+        
+        async function handleLogin(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            
+            setLoading(true);
+            
+            try {
+                const response = await fetch('http://localhost:3335/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        emailOrUsername: username,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Store token and user info
+                    localStorage.setItem('adminToken', data.accessToken);
+                    localStorage.setItem('adminUser', JSON.stringify(data.user));
+                    
+                    if (remember) {
+                        localStorage.setItem('adminRefreshToken', data.refreshToken);
+                    }
+                    
+                    console.log('Login successful, token stored:', data.accessToken.substring(0, 20) + '...');
+                    showAlert('Login successful! Redirecting...', 'success');
+                    
+                    // Redirect to dashboard or requested page
+                    const urlParams = new URLSearchParams(window.location.search);
+                    let redirect = urlParams.get('redirect') || 'dashboard.html';
+                    
+                    // Ensure we don't redirect to API endpoints
+                    if (redirect.includes('/api/') || redirect.endsWith('.json')) {
+                        redirect = 'dashboard.html';
+                    }
+                    
+                    // Ensure it's a relative path for security
+                    if (redirect.startsWith('http://') || redirect.startsWith('https://')) {
+                        redirect = 'dashboard.html';
+                    }
+                    
+                    setTimeout(() => {
+                        window.location.href = redirect;
+                    }, 1000);
+                } else {
+                    showAlert(data.error || 'Invalid credentials. Please try again.');
+                    setLoading(false);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showAlert('Unable to connect to server. Please ensure the backend is running.');
+                setLoading(false);
+            }
+            
+            return false; // Prevent form submission
+        }
+        
+        // Add enter key support and auto-fill for development
+        document.addEventListener('DOMContentLoaded', () => {
+            // Ensure form submission is handled correctly
+            const loginForm = document.getElementById('loginForm');
+            loginForm.addEventListener('submit', handleLogin);
+            
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        const form = document.getElementById('loginForm');
+                        if (form.checkValidity()) {
+                            handleLogin(e);
+                        }
+                    }
+                });
+            });
+            
+            // Auto-fill for development (can be removed in production)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('autofill') === 'true') {
+                document.getElementById('username').value = 'admin';
+                document.getElementById('password').value = 'password123';
+            }
+        });
+    </script>
+</body>
+</html>

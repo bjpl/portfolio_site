@@ -1,7 +1,19 @@
 baseURL: "http://localhost:1313/"
-languageCode: "en-us"
+defaultContentLanguage: "en"
 title: "Portfolio"
 theme: "your-theme-name"
+
+languages:
+  en:
+    languageName: "English"
+    languageCode: "en-US"
+    weight: 1
+    title: "Portfolio"
+  es:
+    languageName: "Español"
+    languageCode: "es-ES"
+    weight: 2
+    title: "Portafolio"
 
 menu:
   main:
@@ -17,9 +29,6 @@ menu:
     - name: "Meet"
       url: "/meet/"
       weight: 40
-    - name: "Content Management Tools"
-      url: "/tools/"
-      weight: 50
 
 params:
   description: "My Portfolio Site"

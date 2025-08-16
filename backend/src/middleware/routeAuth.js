@@ -116,27 +116,66 @@ const devToolsAuth = (req, res, next) => {
  * Admin panel access control
  */
 const adminPanelAuth = (req, res, next) => {
-  if (!req.user) {
-    // Redirect to login page for admin panel
-    if (req.path.startsWith('/admin') || req.path.startsWith('/dashboard')) {
-      return res.redirect(`/login?redirect=${encodeURIComponent(req.originalUrl)}`);
+  // Allow access to login page and auth resources without authentication
+  const allowedPaths = [
+    '/login.html',
+    '/auth.js', 
+    '/styles.css',
+    '/dashboard.html',
+    '/dashboard.js',
+    '/admin-nav.js',
+    '/toast.js',
+    '/design-system.css',
+    '/file-manager.html',
+    '/review.html',
+    '/bulk-upload.html',
+    // Content Management pages
+    '/content-editor.html',
+    '/pages.html',
+    '/blog-posts.html',
+    '/portfolio-items.html',
+    // Media & Assets pages
+    '/image-optimizer.html',
+    // Development Tools pages
+    '/build-deploy.html',
+    '/api-explorer.html',
+    '/logs.html',
+    // Settings pages
+    '/site-settings.html',
+    '/user-management.html',
+    '/analytics.html',
+    '/backup.html'
+  ];
+  
+  if (allowedPaths.includes(req.path)) {
+    return next();
+  }
+
+  // Try to authenticate the user
+  authenticate(req, res, (err) => {
+    if (err || !req.user) {
+      // Redirect to login page for HTML requests
+      if (!req.xhr && !req.headers.accept?.includes('application/json')) {
+        return res.redirect('/admin/login.html');
+      }
+      
+      // Return JSON error for API requests
+      return res.status(401).json({
+        error: 'Authentication required',
+        message: 'Please log in to access the admin panel',
+      });
     }
 
-    return res.status(401).json({
-      error: 'Authentication required',
-      message: 'Please log in to access the admin panel',
-    });
-  }
+    // Check admin or editor role for admin panel
+    if (process.env.NODE_ENV === 'production' && !['admin', 'editor'].includes(req.user.role)) {
+      return res.status(403).json({
+        error: 'Access denied',
+        message: 'You do not have permission to access the admin panel',
+      });
+    }
 
-  // Check admin or editor role for admin panel
-  if (!['admin', 'editor'].includes(req.user.role)) {
-    return res.status(403).json({
-      error: 'Access denied',
-      message: 'You do not have permission to access the admin panel',
-    });
-  }
-
-  next();
+    next();
+  });
 };
 
 /**

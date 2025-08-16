@@ -34,6 +34,7 @@ Desktop.ini
 .env
 .env.local
 .env.*.local
+.env.production
 
 # Build
 /dist/
@@ -46,6 +47,11 @@ Desktop.ini
 .temp/
 static/cache/
 
+# Temporary files
+*.tmp.*
+*.tmp
+.tmp/
+
 # Testing
 coverage/
 .nyc_output/
@@ -53,3 +59,24 @@ coverage/
 static/tools/temp/
 static/tools/uploads/
 static/tools/*.log
+
+# Backend specific
+backend/node_modules/
+backend/*.sqlite
+backend/*.sqlite-journal
+backend/.env
+backend/data/contacts/
+backend/data/backups/
+backend/uploads/temp/
+
+# Logs directory
+logs/
+
+# Test files
+test-*.json
+
+# Claude settings
+.claude/settings.local.json
+
+# Temporary
+nul

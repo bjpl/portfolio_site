@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logs - Hugo Dev</title>
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="auth.js"></script>
+    <script src="admin-nav.js"></script>
+    <script src="toast.js"></script>
+    <style>
+        .log-entry {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .log-level {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            display: inline-block;
+            min-width: 60px;
+            text-align: center;
+        }
+        .level-info { background: var(--primary); }
+        .level-warn { background: var(--warning); }
+        .level-error { background: var(--danger); }
+        .level-debug { background: var(--text-muted); }
+        .log-viewer {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>🚀 Hugo Dev</h1>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">System Logs</p>
+        
+        <nav class="sidebar-nav">
+            <!-- Dashboard Overview -->
+            <div class="nav-section">
+                <h4>Dashboard</h4>
+                <ul>
+                    <li><a href="dashboard.html">📊 Overview</a></li>
+                </ul>
+            </div>
+
+            <!-- Content Management -->
+            <div class="nav-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="content-editor.html">✏️ Content Editor</a></li>
+                    <li><a href="pages.html">📄 Pages</a></li>
+                    <li><a href="blog-posts.html">📝 Blog Posts</a></li>
+                    <li><a href="portfolio-items.html">🎨 Portfolio Items</a></li>
+                </ul>
+            </div>
+
+            <!-- Media & Assets -->
+            <div class="nav-section">
+                <h4>Media</h4>
+                <ul>
+                    <li><a href="file-manager.html">🖼️ File Manager</a></li>
+                    <li><a href="bulk-upload.html">📦 Bulk Upload</a></li>
+                    <li><a href="image-optimizer.html">🖼️ Image Optimizer</a></li>
+                </ul>
+            </div>
+
+            <!-- Development Tools -->
+            <div class="nav-section">
+                <h4>Development</h4>
+                <ul>
+                    <li><a href="review.html">✅ Review Tool</a></li>
+                    <li><a href="build-deploy.html">⚡ Build & Deploy</a></li>
+                    <li><a href="api-explorer.html">🔌 API Explorer</a></li>
+                    <li><a href="logs.html" class="active">📋 Logs</a></li>
+                </ul>
+            </div>
+
+            <!-- Site Management -->
+            <div class="nav-section">
+                <h4>Settings</h4>
+                <ul>
+                    <li><a href="site-settings.html">⚙️ Site Settings</a></li>
+                    <li><a href="user-management.html">👥 Users</a></li>
+                    <li><a href="analytics.html">📈 Analytics</a></li>
+                    <li><a href="backup.html">💾 Backup</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- User Profile & System Status -->
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">👤</div>
+                <div class="user-info">
+                    <div class="user-name" id="user-name">Admin User</div>
+                    <div class="user-role" id="user-role">Administrator</div>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()" title="Logout">
+                    🚪
+                </button>
+            </div>
+            <div class="quick-actions">
+                <button class="quick-action-btn" onclick="window.open('http://localhost:64422', '_blank')" title="View Site">
+                    🌐
+                </button>
+                <button class="quick-action-btn" onclick="location.reload()" title="Refresh">
+                    🔄
+                </button>
+                <button class="quick-action-btn" onclick="toggleTheme()" title="Toggle Theme">
+                    🌓
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <h2>System Logs</h2>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="refreshLogs()">🔄 Refresh</button>
+                <button class="btn btn-secondary" onclick="clearLogs()">🗑️ Clear</button>
+                <button class="btn btn-secondary" onclick="downloadLogs()">📥 Download</button>
+            </div>
+        </div>
+        
+        <!-- Log Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Entries</h3>
+                <div class="value" id="total-logs">1,247</div>
+                <div class="description">Last 24 hours</div>
+            </div>
+            <div class="stat-card">
+                <h3>Errors</h3>
+                <div class="value" style="color: var(--danger);" id="error-count">3</div>
+                <div class="description">Needs attention</div>
+            </div>
+            <div class="stat-card">
+                <h3>Warnings</h3>
+                <div class="value" style="color: var(--warning);" id="warning-count">12</div>
+                <div class="description">Minor issues</div>
+            </div>
+            <div class="stat-card">
+                <h3>Last Updated</h3>
+                <div class="value" id="last-update">2 min ago</div>
+                <div class="description">Real-time</div>
+            </div>
+        </div>
+        
+        <!-- Log Filters -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+            <h3 style="margin-bottom: 20px;">Log Filters</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px;">
+                <div>
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Log Level</label>
+                    <select class="form-control" id="log-level">
+                        <option value="all">All Levels</option>
+                        <option value="error">Error</option>
+                        <option value="warn">Warning</option>
+                        <option value="info">Info</option>
+                        <option value="debug">Debug</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Time Range</label>
+                    <select class="form-control" id="time-range">
+                        <option value="1h">Last Hour</option>
+                        <option value="24h" selected>Last 24 Hours</option>
+                        <option value="7d">Last 7 Days</option>
+                        <option value="30d">Last 30 Days</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Component</label>
+                    <select class="form-control" id="component">
+                        <option value="all">All Components</option>
+                        <option value="api">API Server</option>
+                        <option value="auth">Authentication</option>
+                        <option value="build">Build System</option>
+                        <option value="db">Database</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Search</label>
+                    <input type="text" class="form-control" id="log-search" placeholder="Search logs...">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Live Log Viewer -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>Live Log Stream</h3>
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" id="auto-scroll" checked> Auto-scroll
+                </label>
+            </div>
+            <div class="log-viewer" id="live-logs">
+2025-08-16 01:41:42 [INFO] Server started on port 3333
+2025-08-16 01:41:43 [INFO] Database connection established
+2025-08-16 01:41:45 [WARN] Redis connection failed, using fallback
+2025-08-16 01:41:50 [INFO] User admin logged in from 127.0.0.1
+2025-08-16 01:42:15 [INFO] API request: GET /api/dashboard/stats
+2025-08-16 01:42:20 [DEBUG] Cache miss for portfolio data
+2025-08-16 01:42:21 [INFO] Portfolio data fetched from database
+2025-08-16 01:42:35 [WARN] Slow query detected: SELECT * FROM projects (1.2s)
+2025-08-16 01:42:40 [INFO] Admin panel accessed: /admin/dashboard.html
+2025-08-16 01:43:00 [ERROR] Failed to send email notification: Connection timeout
+            </div>
+        </div>
+        
+        <!-- Recent Log Entries -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px;">
+            <h3 style="margin-bottom: 20px;">Recent Log Entries</h3>
+            
+            <div class="log-entry">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div>
+                        <span class="log-level level-error">ERROR</span>
+                        <span style="margin-left: 10px; color: var(--text-muted);">2025-08-16 01:43:00</span>
+                    </div>
+                    <span style="font-size: 12px; color: var(--text-muted);">src/email/service.js:45</span>
+                </div>
+                <div>Failed to send email notification: Connection timeout</div>
+            </div>
+            
+            <div class="log-entry">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div>
+                        <span class="log-level level-warn">WARN</span>
+                        <span style="margin-left: 10px; color: var(--text-muted);">2025-08-16 01:42:35</span>
+                    </div>
+                    <span style="font-size: 12px; color: var(--text-muted);">src/db/query.js:128</span>
+                </div>
+                <div>Slow query detected: SELECT * FROM projects (1.2s)</div>
+            </div>
+            
+            <div class="log-entry">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div>
+                        <span class="log-level level-info">INFO</span>
+                        <span style="margin-left: 10px; color: var(--text-muted);">2025-08-16 01:42:40</span>
+                    </div>
+                    <span style="font-size: 12px; color: var(--text-muted);">src/middleware/auth.js:67</span>
+                </div>
+                <div>Admin panel accessed: /admin/dashboard.html</div>
+            </div>
+            
+            <div class="log-entry">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div>
+                        <span class="log-level level-info">INFO</span>
+                        <span style="margin-left: 10px; color: var(--text-muted);">2025-08-16 01:41:50</span>
+                    </div>
+                    <span style="font-size: 12px; color: var(--text-muted);">src/auth/controller.js:234</span>
+                </div>
+                <div>User admin logged in from 127.0.0.1</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function refreshLogs() {
+            location.reload();
+        }
+        
+        function clearLogs() {
+            if (confirm('Are you sure you want to clear all logs?')) {
+                alert('Clear logs functionality coming soon!');
+            }
+        }
+        
+        function downloadLogs() {
+            alert('Download logs functionality coming soon!');
+        }
+        
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminUser');
+                window.location.href = 'login.html';
+            }
+        }
+        
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+        }
+        
+        // Simulate live log updates
+        setInterval(() => {
+            const logViewer = document.getElementById('live-logs');
+            const autoScroll = document.getElementById('auto-scroll').checked;
+            
+            if (Math.random() > 0.7) { // 30% chance of new log
+                const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
+                const levels = ['INFO', 'WARN', 'ERROR', 'DEBUG'];
+                const level = levels[Math.floor(Math.random() * levels.length)];
+                const messages = [
+                    'API request processed successfully',
+                    'Database query completed',
+                    'Cache updated',
+                    'User session validated',
+                    'File upload completed'
+                ];
+                const message = messages[Math.floor(Math.random() * messages.length)];
+                
+                logViewer.textContent += `\n${timestamp} [${level}] ${message}`;
+                
+                if (autoScroll) {
+                    logViewer.scrollTop = logViewer.scrollHeight;
+                }
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+{{ define "main" }}
+<div class="error-page">
+    <div class="container">
+        <div class="error-content">
+            <h1 class="error-code">404</h1>
+            <h2 class="error-message">Page Not Found</h2>
+            <p class="error-description">
+                Oops! The page you're looking for doesn't exist. 
+                It might have been moved or deleted.
+            </p>
+            
+            <div class="error-actions">
+                <a href="/" class="btn btn-primary">Go Home</a>
+                <button onclick="history.back()" class="btn btn-secondary">Go Back</button>
+            </div>
+            
+            <div class="helpful-links">
+                <h3>Helpful Links</h3>
+                <div class="links-grid">
+                    <a href="/learn" class="link-card">
+                        <span class="link-icon">📚</span>
+                        <span>Learn</span>
+                    </a>
+                    <a href="/make" class="link-card">
+                        <span class="link-icon">🎨</span>
+                        <span>Portfolio</span>
+                    </a>
+                    <a href="/meet" class="link-card">
+                        <span class="link-icon">👋</span>
+                        <span>About</span>
+                    </a>
+                    <a href="/think" class="link-card">
+                        <span class="link-icon">💭</span>
+                        <span>Blog</span>
+                    </a>
+                    <a href="/admin" class="link-card admin">
+                        <span class="link-icon">⚙️</span>
+                        <span>Admin</span>
+                    </a>
+                    <a href="/" class="link-card">
+                        <span class="link-icon">🏠</span>
+                        <span>Home</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="search-suggestion">
+                <p>Looking for something specific? Try these:</p>
+                <ul>
+                    <li>Check the URL for typos</li>
+                    <li>Use the navigation menu above</li>
+                    <li>Visit our <a href="/">homepage</a></li>
+                    <li>Access the <a href="/admin">admin panel</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.error-page {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0;
+}
+
+.error-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.error-code {
+    font-size: 8rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+    line-height: 1;
+}
+
+.error-message {
+    font-size: 2rem;
+    margin: 1rem 0;
+    color: var(--color-text);
+}
+
+.error-description {
+    font-size: 1.1rem;
+    color: var(--color-text);
+    opacity: 0.8;
+    margin-bottom: 2rem;
+}
+
+.error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.error-actions .btn {
+    padding: 0.75rem 2rem;
+}
+
+.helpful-links {
+    margin: 3rem 0;
+}
+
+.helpful-links h3 {
+    margin-bottom: 1.5rem;
+    color: var(--color-text);
+}
+
+.links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.link-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--color-bg);
+    border: 2px solid var(--color-border);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: all 0.3s ease;
+}
+
+.link-card:hover {
+    transform: translateY(-5px);
+    border-color: #667eea;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+}
+
+.link-card.admin {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    border-color: #667eea;
+}
+
+.link-icon {
+    font-size: 2rem;
+}
+
+.search-suggestion {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 12px;
+    text-align: left;
+}
+
+.search-suggestion p {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.search-suggestion ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.search-suggestion li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.search-suggestion li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #667eea;
+}
+
+.search-suggestion a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.search-suggestion a:hover {
+    text-decoration: underline;
+}
+
+/* Button styles */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.btn-secondary:hover {
+    background: #667eea;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .error-code {
+        font-size: 5rem;
+    }
+    
+    .error-message {
+        font-size: 1.5rem;
+    }
+    
+    .error-actions {
+        flex-direction: column;
+    }
+    
+    .links-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+</style>
+{{ end }}

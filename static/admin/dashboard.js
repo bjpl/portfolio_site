@@ -1,15 +1,19 @@
 // Admin Dashboard JavaScript
-const API_BASE = 'http://localhost:3333/api';
+const API_BASE = 'http://localhost:3335/api';
 let ws = null;
-let authToken = localStorage.getItem('auth_token');
 
-// API Helper class
+// API Helper class - now uses auth from auth.js
 class API {
   static async request(endpoint, options = {}) {
+    // Use auth manager from auth.js if available
+    if (window.auth && window.auth.isAuthenticated()) {
+      return window.auth.makeAuthenticatedRequest(`${API_BASE}${endpoint}`, options);
+    }
+    
+    // Fallback to basic request
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
       },
       ...options,
     };
@@ -55,16 +59,18 @@ class AdminDashboard {
   }
 
   async init() {
+    loadThemePreference(); // Load theme before anything else
     this.checkAuthentication();
     this.initEventListeners();
     this.initWebSocket();
     await this.loadDashboardData();
     this.startPeriodicUpdates();
+    loadUserProfile(); // Load user profile data into sidebar
   }
 
   checkAuthentication() {
-    if (!authToken) {
-      this.showLoginForm();
+    if (!window.auth || !window.auth.isAuthenticated()) {
+      window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname);
       return false;
     }
     return true;
@@ -101,61 +107,56 @@ class AdminDashboard {
   }
 
   async handleLogin(form) {
-    const formData = new FormData(form);
-    const credentials = {
-      email: formData.get('email'),
-      password: formData.get('password'),
-    };
-
-    try {
-      const response = await fetch(`${API_BASE}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        authToken = data.accessToken;
-        localStorage.setItem('auth_token', authToken);
-        localStorage.setItem('refresh_token', data.refreshToken);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        
-        document.querySelector('.modal').remove();
-        await this.loadDashboardData();
-        this.showNotification('Logged in successfully!', 'success');
-      } else {
-        this.showNotification(data.error || 'Login failed', 'error');
-      }
-    } catch (error) {
-      this.showNotification('Login error: ' + error.message, 'error');
-    }
+    // This method is deprecated - auth.js handles authentication
+    // Redirect to login page
+    window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname);
   }
 
   handleUnauthorized() {
-    authToken = null;
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user');
-    this.showLoginForm();
+    if (window.auth) {
+      window.auth.clearAuth();
+      window.auth.redirectToLogin();
+    } else {
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminUser');
+      localStorage.removeItem('adminRefreshToken');
+      window.location.href = 'login.html';
+    }
   }
 
   showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-      notification.classList.add('show');
-    }, 100);
-    
-    setTimeout(() => {
-      notification.classList.remove('show');
-      setTimeout(() => notification.remove(), 300);
-    }, 3000);
+    // Use Toast notification if available, fallback to old system
+    if (window.Toast) {
+      switch(type) {
+        case 'success':
+          Toast.success(message);
+          break;
+        case 'error':
+          Toast.error(message);
+          break;
+        case 'warning':
+          Toast.warning(message);
+          break;
+        default:
+          Toast.info(message);
+      }
+    } else {
+      // Fallback to old notification system
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 100);
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
   }
 
   initEventListeners() {
@@ -180,8 +181,6 @@ class AdminDashboard {
   }
 
   async loadDashboardData() {
-    if (!authToken) return;
-
     try {
       await Promise.all([
         this.loadStats(),
@@ -205,29 +204,52 @@ class AdminDashboard {
   }
 
   updateStatsDisplay(stats) {
-    const updates = [
-      ['total-content', stats.totalContent || 0],
-      ['drafts-count', stats.draftsCount || 0],
-      ['published-count', stats.publishedCount || 0],
-      ['media-count', stats.mediaCount || 0],
+    if (!stats) return;
+
+    // Update content stats
+    const contentUpdates = [
+      ['total-content', stats.content?.total || 0],
+      ['drafts-count', stats.content?.drafts || 0],
+      ['published-count', stats.content?.published || 0],
+      ['total-files', stats.storage?.total?.count || 0],
     ];
 
-    updates.forEach(([id, value]) => {
+    contentUpdates.forEach(([id, value]) => {
       const element = document.getElementById(id);
       if (element) {
         element.textContent = value;
       }
     });
+
+    // Update storage size display
+    const storageSizeElement = document.getElementById('storage-size');
+    if (storageSizeElement && stats.storage?.total?.size) {
+      storageSizeElement.textContent = this.formatBytes(stats.storage.total.size);
+    }
+  }
+
+  formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+    
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
   async loadRecentContent() {
     try {
-      const content = await API.get('/content/recent');
+      const content = await API.get('/dashboard/recent');
       if (content) {
         this.displayRecentContent(content);
       }
     } catch (error) {
       console.error('Failed to load recent content:', error);
+      // Show placeholder content if API fails
+      this.displayRecentContent([]);
     }
   }
 
@@ -235,11 +257,26 @@ class AdminDashboard {
     const container = document.getElementById('recent-content-list');
     if (!container) return;
 
+    if (!content || content.length === 0) {
+      container.innerHTML = `
+        <div class="content-item">
+          <div class="content-info">
+            <h4>No recent content</h4>
+            <p>Create your first content to see it here</p>
+          </div>
+          <div class="content-actions">
+            <button class="btn btn-sm btn-primary" onclick="adminDashboard.createContent()">Create Content</button>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
     container.innerHTML = content.map(item => `
       <div class="content-item">
         <div class="content-info">
           <h4>${item.title}</h4>
-          <p>${item.section} • ${new Date(item.date).toLocaleDateString()}</p>
+          <p>${item.section} • ${item.language.toUpperCase()} • ${new Date(item.date).toLocaleDateString()}</p>
         </div>
         <div class="content-actions">
           <button class="btn btn-sm" onclick="adminDashboard.editContent('${item.id}')">Edit</button>
@@ -315,9 +352,49 @@ class AdminDashboard {
   }
 
   // Content management methods
+  async createContent() {
+    // Get form data
+    const form = document.getElementById('create-content-form');
+    if (!form) {
+      this.showNotification('Content creation form not found', 'error');
+      return;
+    }
+
+    const formData = new FormData(form);
+    const data = {
+      section: formData.get('section'),
+      subsection: formData.get('subsection'),
+      title: formData.get('title'),
+      language: formData.get('language') || 'en'
+    };
+
+    // Validate required fields
+    if (!data.section || !data.subsection || !data.title) {
+      this.showNotification('Please fill in all required fields', 'error');
+      return;
+    }
+
+    try {
+      this.showNotification('Creating content...', 'info');
+      const result = await API.post('/dashboard/content', data);
+      
+      if (result && result.success) {
+        this.showNotification('Content created successfully!', 'success');
+        form.reset();
+        await this.loadRecentContent();
+        await this.loadStats();
+      } else {
+        this.showNotification('Failed to create content: ' + (result?.error || 'Unknown error'), 'error');
+      }
+    } catch (error) {
+      this.showNotification('Failed to create content: ' + error.message, 'error');
+    }
+  }
+
   async editContent(contentId) {
     // Implementation for content editing
     console.log('Edit content:', contentId);
+    this.showNotification('Content editing will be implemented in the content editor', 'info');
   }
 
   async deleteContent(contentId) {
@@ -326,9 +403,49 @@ class AdminDashboard {
         await API.delete(`/content/${contentId}`);
         this.showNotification('Content deleted successfully', 'success');
         await this.loadRecentContent();
+        await this.loadStats();
       } catch (error) {
         this.showNotification('Failed to delete content: ' + error.message, 'error');
       }
+    }
+  }
+
+  async uploadFiles() {
+    const input = document.getElementById('file-upload');
+    if (!input || !input.files || input.files.length === 0) {
+      this.showNotification('Please select files to upload', 'warning');
+      return;
+    }
+
+    const formData = new FormData();
+    for (let i = 0; i < input.files.length; i++) {
+      formData.append('files', input.files[i]);
+    }
+
+    try {
+      this.showNotification('Uploading files...', 'info');
+      
+      // Use direct fetch for file upload to handle FormData properly
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`${API_BASE}/dashboard/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        this.showNotification(`Successfully uploaded ${result.files.length} file(s)!`, 'success');
+        input.value = '';
+        await this.loadStats(); // Refresh storage stats
+      } else {
+        this.showNotification('Upload failed: ' + (result.error || 'Unknown error'), 'error');
+      }
+    } catch (error) {
+      this.showNotification('Upload failed: ' + error.message, 'error');
     }
   }
 }
@@ -738,6 +855,63 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(loadDashboardStats, 30000);
 });
 
+// Global functions for dashboard HTML
+function handleLogout() {
+  if (confirm('Are you sure you want to logout?')) {
+    adminDashboard.logout();
+  }
+}
+
+function toggleTheme() {
+  // Simple theme toggle functionality
+  const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  
+  if (newTheme === 'light') {
+    document.body.classList.add('light-theme');
+  } else {
+    document.body.classList.remove('light-theme');
+  }
+  
+  // Store preference
+  localStorage.setItem('theme', newTheme);
+  
+  // Show notification
+  adminDashboard.showNotification(`Switched to ${newTheme} theme`, 'info');
+}
+
+// Load user profile data
+function loadUserProfile() {
+  try {
+    const userStr = localStorage.getItem('adminUser');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      
+      // Update user name and role in sidebar
+      const userNameEl = document.getElementById('user-name');
+      const userRoleEl = document.getElementById('user-role');
+      
+      if (userNameEl) {
+        userNameEl.textContent = user.username || user.email || 'Admin User';
+      }
+      
+      if (userRoleEl) {
+        userRoleEl.textContent = user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Administrator';
+      }
+    }
+  } catch (error) {
+    console.error('Failed to load user profile:', error);
+  }
+}
+
+// Load theme preference
+function loadThemePreference() {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-theme');
+  }
+}
+
 // Export functions for use in HTML
 window.adminDashboard = {
   createContent,
@@ -747,3 +921,7 @@ window.adminDashboard = {
   refreshContentList,
   refreshFileList
 };
+
+// Export global functions
+window.handleLogout = handleLogout;
+window.toggleTheme = toggleTheme;

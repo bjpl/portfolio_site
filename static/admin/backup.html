@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backup - Hugo Dev</title>
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="auth.js"></script>
+    <script src="admin-nav.js"></script>
+    <script src="toast.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>🚀 Hugo Dev</h1>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">Backup & Restore</p>
+        
+        <nav class="sidebar-nav">
+            <!-- Dashboard Overview -->
+            <div class="nav-section">
+                <h4>Dashboard</h4>
+                <ul>
+                    <li><a href="dashboard.html">📊 Overview</a></li>
+                </ul>
+            </div>
+
+            <!-- Content Management -->
+            <div class="nav-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="content-editor.html">✏️ Content Editor</a></li>
+                    <li><a href="pages.html">📄 Pages</a></li>
+                    <li><a href="blog-posts.html">📝 Blog Posts</a></li>
+                    <li><a href="portfolio-items.html">🎨 Portfolio Items</a></li>
+                </ul>
+            </div>
+
+            <!-- Media & Assets -->
+            <div class="nav-section">
+                <h4>Media</h4>
+                <ul>
+                    <li><a href="file-manager.html">🖼️ File Manager</a></li>
+                    <li><a href="bulk-upload.html">📦 Bulk Upload</a></li>
+                    <li><a href="image-optimizer.html">🖼️ Image Optimizer</a></li>
+                </ul>
+            </div>
+
+            <!-- Development Tools -->
+            <div class="nav-section">
+                <h4>Development</h4>
+                <ul>
+                    <li><a href="review.html">✅ Review Tool</a></li>
+                    <li><a href="build-deploy.html">⚡ Build & Deploy</a></li>
+                    <li><a href="api-explorer.html">🔌 API Explorer</a></li>
+                    <li><a href="logs.html">📋 Logs</a></li>
+                </ul>
+            </div>
+
+            <!-- Site Management -->
+            <div class="nav-section">
+                <h4>Settings</h4>
+                <ul>
+                    <li><a href="site-settings.html">⚙️ Site Settings</a></li>
+                    <li><a href="user-management.html">👥 Users</a></li>
+                    <li><a href="analytics.html">📈 Analytics</a></li>
+                    <li><a href="backup.html" class="active">💾 Backup</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- User Profile & System Status -->
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">👤</div>
+                <div class="user-info">
+                    <div class="user-name" id="user-name">Admin User</div>
+                    <div class="user-role" id="user-role">Administrator</div>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()" title="Logout">
+                    🚪
+                </button>
+            </div>
+            <div class="quick-actions">
+                <button class="quick-action-btn" onclick="window.open('http://localhost:64422', '_blank')" title="View Site">
+                    🌐
+                </button>
+                <button class="quick-action-btn" onclick="location.reload()" title="Refresh">
+                    🔄
+                </button>
+                <button class="quick-action-btn" onclick="toggleTheme()" title="Toggle Theme">
+                    🌓
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <h2>Backup & Restore</h2>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="createBackup()">💾 Create Backup</button>
+                <button class="btn btn-secondary" onclick="refreshBackups()">🔄 Refresh</button>
+            </div>
+        </div>
+        
+        <!-- Backup Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Backups</h3>
+                <div class="value" id="total-backups">12</div>
+                <div class="description">All time backups</div>
+            </div>
+            <div class="stat-card">
+                <h3>Last Backup</h3>
+                <div class="value" id="last-backup">2 hours ago</div>
+                <div class="description">Auto-scheduled</div>
+            </div>
+            <div class="stat-card">
+                <h3>Storage Used</h3>
+                <div class="value" id="storage-used">1.2GB</div>
+                <div class="description">For all backups</div>
+            </div>
+            <div class="stat-card">
+                <h3>Next Auto Backup</h3>
+                <div class="value" id="next-backup">22 hours</div>
+                <div class="description">Scheduled</div>
+            </div>
+        </div>
+        
+        <!-- Backup Configuration -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+            <h3 style="margin-bottom: 20px;">Backup Configuration</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Backup Frequency</label>
+                    <select class="form-control">
+                        <option value="manual">Manual Only</option>
+                        <option value="daily" selected>Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Retention Period</label>
+                    <select class="form-control">
+                        <option value="7">Keep 7 days</option>
+                        <option value="30" selected>Keep 30 days</option>
+                        <option value="90">Keep 90 days</option>
+                        <option value="365">Keep 1 year</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Backup Time</label>
+                    <input type="time" class="form-control" value="02:00">
+                </div>
+                <div class="form-group">
+                    <label>Backup Location</label>
+                    <select class="form-control">
+                        <option value="local" selected>Local Storage</option>
+                        <option value="s3">Amazon S3</option>
+                        <option value="gcs">Google Cloud</option>
+                        <option value="dropbox">Dropbox</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <h4 style="margin-bottom: 15px;">What to Backup</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <input type="checkbox" checked> Content files (Markdown)
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <input type="checkbox" checked> Database
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <input type="checkbox" checked> Configuration files
+                        </label>
+                    </div>
+                    <div>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <input type="checkbox"> Media files (Images/Videos)
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <input type="checkbox"> Theme files
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <input type="checkbox"> User uploads
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <button class="btn btn-primary" onclick="saveBackupSettings()">💾 Save Settings</button>
+            </div>
+        </div>
+        
+        <!-- Create Manual Backup -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+            <h3 style="margin-bottom: 20px;">Create Manual Backup</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                <div class="form-group">
+                    <label>Backup Name</label>
+                    <input type="text" class="form-control" placeholder="Manual backup - Aug 16, 2025" id="backup-name">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" class="form-control" placeholder="Optional description" id="backup-description">
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="createManualBackup()">💾 Create Backup Now</button>
+        </div>
+        
+        <!-- Backup History -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+            <h3 style="margin-bottom: 20px;">Backup History</h3>
+            <div class="content-list">
+                <div class="content-item">
+                    <div class="content-info">
+                        <h4>Auto Backup - 2025-08-16 02:00</h4>
+                        <p>Automated daily backup • 24.5 MB • 2 hours ago</p>
+                    </div>
+                    <div class="content-actions">
+                        <span class="badge badge-success">✅ Complete</span>
+                        <button class="btn btn-sm">Download</button>
+                        <button class="btn btn-sm btn-secondary">Restore</button>
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </div>
+                </div>
+                
+                <div class="content-item">
+                    <div class="content-info">
+                        <h4>Manual Backup - Pre-deployment</h4>
+                        <p>Manual backup before major update • 22.1 MB • 1 day ago</p>
+                    </div>
+                    <div class="content-actions">
+                        <span class="badge badge-success">✅ Complete</span>
+                        <button class="btn btn-sm">Download</button>
+                        <button class="btn btn-sm btn-secondary">Restore</button>
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </div>
+                </div>
+                
+                <div class="content-item">
+                    <div class="content-info">
+                        <h4>Auto Backup - 2025-08-15 02:00</h4>
+                        <p>Automated daily backup • 23.8 MB • 1 day ago</p>
+                    </div>
+                    <div class="content-actions">
+                        <span class="badge badge-success">✅ Complete</span>
+                        <button class="btn btn-sm">Download</button>
+                        <button class="btn btn-sm btn-secondary">Restore</button>
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </div>
+                </div>
+                
+                <div class="content-item">
+                    <div class="content-info">
+                        <h4>Auto Backup - 2025-08-14 02:00</h4>
+                        <p>Automated daily backup • Failed • 2 days ago</p>
+                    </div>
+                    <div class="content-actions">
+                        <span style="color: var(--danger); font-size: 12px;">❌ Failed</span>
+                        <button class="btn btn-sm btn-danger">View Error</button>
+                        <button class="btn btn-sm">Retry</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Restore Options -->
+        <div style="background: var(--bg-light); padding: 20px; border-radius: 12px;">
+            <h3 style="margin-bottom: 20px;">Restore from Backup</h3>
+            <div class="upload-area" onclick="document.getElementById('backup-upload').click()">
+                <p>📁 Click to select backup file or drag and drop</p>
+                <p style="font-size: 14px; color: var(--text-muted); margin-top: 10px;">Supports .zip, .tar.gz backup files</p>
+                <input type="file" id="backup-upload" accept=".zip,.tar.gz" style="display: none;" onchange="handleBackupUpload()">
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: var(--bg-card); border-radius: 8px; border-left: 4px solid var(--warning);">
+                <h4 style="color: var(--warning); margin-bottom: 10px;">⚠️ Important</h4>
+                <p style="color: var(--text-muted); font-size: 14px;">
+                    Restoring from a backup will overwrite all current data. This action cannot be undone. 
+                    Consider creating a backup of your current state before proceeding.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function createBackup() {
+            alert('Create backup functionality coming soon!');
+        }
+        
+        function createManualBackup() {
+            const name = document.getElementById('backup-name').value || 'Manual backup - ' + new Date().toLocaleDateString();
+            const description = document.getElementById('backup-description').value;
+            alert(`Creating manual backup: ${name}\nDescription: ${description || 'None'}`);
+        }
+        
+        function saveBackupSettings() {
+            alert('Save backup settings functionality coming soon!');
+        }
+        
+        function handleBackupUpload() {
+            alert('Backup upload and restore functionality coming soon!');
+        }
+        
+        function refreshBackups() {
+            location.reload();
+        }
+        
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminUser');
+                window.location.href = 'login.html';
+            }
+        }
+        
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+        }
+    </script>
+</body>
+</html>

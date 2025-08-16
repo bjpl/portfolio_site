@@ -15,31 +15,13 @@
     </script>
 </head>
 <body>
-    <header class="site-header">
-        <div class="container">
-            <div class="site-header__inner">
-                <a href="/" class="site-header__logo">{{ site.Title }}</a>
-                <nav class="site-nav">
-                    <ul>
-                        {{ range site.Menus.main }}
-                        <li><a href="{{ .URL }}">{{ .Name }}</a></li>
-                        {{ end }}
-                    </ul>
-                </nav>
-                <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
-            </div>
-        </div>
-    </header>
+    {{ partial "header.html" . }}
     
     <main>
         {{- block "main" . }}{{- end }}
     </main>
     
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; {{ now.Year }} {{ site.Params.author }}</p>
-        </div>
-    </footer>
+    {{ partial "footer.html" . }}
     
     <script>
         function toggleTheme() {
@@ -47,6 +29,66 @@
             const next = current === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', next);
             localStorage.setItem('theme', next);
+        }
+
+        function switchLanguage(targetLang) {
+            const currentPath = window.location.pathname;
+            const currentLang = '{{ .Language.Lang }}';
+            
+            // URL mapping for different sections
+            const urlMappings = {
+                'en': {
+                    '/': '/',
+                    '/make/': '/make/',
+                    '/learn/': '/learn/',
+                    '/think/': '/think/',
+                    '/meet/': '/meet/',
+                    '/admin': '/admin'
+                },
+                'es': {
+                    '/': '/es/',
+                    '/make/': '/es/hacer/',
+                    '/learn/': '/es/aprender/',
+                    '/think/': '/es/pensar/',
+                    '/meet/': '/es/conocer/',
+                    '/admin': '/admin'
+                }
+            };
+
+            let targetPath = currentPath;
+            
+            // If switching from English to Spanish
+            if (currentLang === 'en' && targetLang === 'es') {
+                targetPath = urlMappings.es[currentPath] || '/es/';
+            }
+            // If switching from Spanish to English
+            else if (currentLang === 'es' && targetLang === 'en') {
+                // Remove /es prefix and map Spanish sections to English
+                if (currentPath.startsWith('/es/')) {
+                    const pathWithoutLang = currentPath.replace('/es', '');
+                    const sectionMappings = {
+                        '/hacer/': '/make/',
+                        '/aprender/': '/learn/',
+                        '/pensar/': '/think/',
+                        '/conocer/': '/meet/'
+                    };
+                    
+                    for (const [spanish, english] of Object.entries(sectionMappings)) {
+                        if (pathWithoutLang.startsWith(spanish)) {
+                            targetPath = pathWithoutLang.replace(spanish, english);
+                            break;
+                        }
+                    }
+                    
+                    if (pathWithoutLang === '/' || pathWithoutLang === '') {
+                        targetPath = '/';
+                    }
+                } else {
+                    targetPath = '/';
+                }
+            }
+            
+            window.location.href = targetPath;
         }
     </script>
 </body>

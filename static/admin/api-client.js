@@ -1,11 +1,14 @@
 // api-client.js - Unified API client for all Hugo management tools
-const API_BASE = 'http://localhost:3333/api';  // Fixed port to 3333
-const WS_URL = 'ws://localhost:3333';          // WebSocket on same port
+const API_BASE = 'http://localhost:3335/api';  // Fixed port to 3335
+const WS_URL = 'ws://localhost:3335';          // WebSocket on same port
 
 class HugoManagementAPI {
     constructor() {
         this.ws = null;
-        this.initWebSocket();
+        // Only init WebSocket if authenticated
+        if (window.auth && window.auth.isAuthenticated()) {
+            this.initWebSocket();
+        }
     }
 
     initWebSocket() {
@@ -98,9 +101,16 @@ class HugoManagementAPI {
         return this.get('/health');
     }
 
-    // Base HTTP methods
+    // Base HTTP methods - now with authentication
     async get(endpoint) {
         try {
+            // Use auth manager if available
+            if (window.auth && window.auth.isAuthenticated()) {
+                const response = await window.auth.makeAuthenticatedRequest(`${API_BASE}${endpoint}`);
+                return await response.json();
+            }
+            
+            // Fallback to unauthenticated request
             const response = await fetch(`${API_BASE}${endpoint}`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             return await response.json();
@@ -113,6 +123,17 @@ class HugoManagementAPI {
 
     async post(endpoint, data = {}) {
         try {
+            // Use auth manager if available
+            if (window.auth && window.auth.isAuthenticated()) {
+                const response = await window.auth.makeAuthenticatedRequest(`${API_BASE}${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                return await response.json();
+            }
+            
+            // Fallback to unauthenticated request
             const response = await fetch(`${API_BASE}${endpoint}`, {
                 method: 'POST',
                 headers: {

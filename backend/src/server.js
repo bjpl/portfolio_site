@@ -16,6 +16,9 @@ const config = require('./config');
 // Logger
 const logger = require('./utils/logger');
 
+// Monitoring
+const monitoring = require('./config/monitoring');
+
 // Swagger documentation
 const { swaggerSetup } = require('./utils/swagger');
 
@@ -33,8 +36,17 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+// Initialize monitoring (Sentry)
+monitoring.initialize(app);
+
 // Apply security middleware
 applySecurity(app);
+
+// Sentry request handler (must be first)
+if (monitoring.initialized) {
+  app.use(monitoring.requestHandler());
+  app.use(monitoring.tracingHandler());
+}
 
 // CORS - use public CORS for public routes
 app.use(publicCors);
@@ -65,23 +77,29 @@ app.use('/tools', devToolsAuth, express.static(path.join(__dirname, '../../stati
 // Setup API documentation
 swaggerSetup(app);
 
-// Apply automatic authentication based on route
-app.use('/api', autoAuth);
-
 // Import routes
+const analyticsRoutes = require('./routes/analytics');
 const authRoutes = require('./routes/auth');
 const bulkRoutes = require('./routes/bulk');
 const contentRoutes = require('./routes/content');
 const dashboardRoutes = require('./routes/dashboard');
 const devRoutes = require('./routes/dev');
+const healthRoutes = require('./routes/health');
 const portfolioRoutes = require('./routes/portfolio');
 const publicRoutes = require('./routes/public');
 const reviewRoutes = require('./routes/review');
 const translateRoutes = require('./routes/translate');
+const usersRoutes = require('./routes/users');
 const versioningRoutes = require('./routes/versioning');
+
+// Health check routes (no auth required - must be before autoAuth)
+app.use('/api', healthRoutes);
 
 // Public API Routes (no auth required)
 app.use('/api/public', publicRoutes);
+
+// Apply automatic authentication for protected routes
+app.use('/api', autoAuth);
 
 // Mixed routes (public + protected based on endpoint)
 app.use('/api/auth', authRoutes);
@@ -90,9 +108,11 @@ app.use('/api/content', contentRoutes);
 app.use('/api/translate', translateRoutes);
 
 // Protected API Routes (auth required via autoAuth)
+app.use('/api/analytics', analyticsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/bulk', bulkRoutes);
 app.use('/api/review', reviewRoutes);
+app.use('/api/users', usersRoutes);
 app.use('/api/versions', versioningRoutes);
 
 // Development routes (admin only in production)
@@ -183,43 +203,6 @@ function broadcastToChannel(channel, data) {
   });
 }
 
-// Health check endpoint with detailed status
-app.get('/api/health', async (req, res) => {
-  const healthStatus = {
-    status: 'healthy',
-    timestamp: new Date(),
-    uptime: process.uptime(),
-    memory: process.memoryUsage(),
-    services: {
-      database: 'checking',
-      redis: 'checking',
-      websocket: wss.clients.size > 0 ? 'active' : 'idle',
-    },
-  };
-
-  // Check database connection
-  try {
-    await sequelize.authenticate();
-    healthStatus.services.database = 'connected';
-  } catch (error) {
-    healthStatus.services.database = 'disconnected';
-    healthStatus.status = 'degraded';
-  }
-
-  // Check Redis connection if configured
-  if (config.redis.host) {
-    try {
-      const redis = require('./services/cache');
-      await redis.ping();
-      healthStatus.services.redis = 'connected';
-    } catch (error) {
-      healthStatus.services.redis = 'disconnected';
-    }
-  }
-
-  res.json(healthStatus);
-});
-
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
@@ -231,6 +214,11 @@ app.use((req, res) => {
 
 // Error logging middleware
 app.use(logger.errorLogger);
+
+// Sentry error handler (must be before any other error middleware)
+if (monitoring.initialized) {
+  app.use(monitoring.errorHandler());
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {

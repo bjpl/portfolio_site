@@ -6,7 +6,24 @@
       "Bash(docker-compose up:*)",
       "Bash(npx eslint:*)",
       "Bash(npm install:*)",
-      "Bash(npm start)"
+      "Bash(npm start)",
+      "Bash(curl:*)",
+      "Bash(sqlite3:*)",
+      "Bash(node:*)",
+      "Bash(taskkill:*)",
+      "Bash(powershell:*)",
+      "Bash(timeout:*)",
+      "Bash(hugo server:*)",
+      "Bash(rm:*)",
+      "Bash(touch:*)",
+      "Bash(grep:*)",
+      "Bash(tasklist)",
+      "Bash(cmd /c:*)",
+      "Bash(PORT=3334 npm start)",
+      "Bash(PORT=3335 npm start)",
+      "Bash(hugo:*)",
+      "Bash(PORT=3335 npm run start:simple)",
+      "Bash(git add:*)"
     ],
     "defaultMode": "acceptEdits"
   }
