@@ -2,6 +2,10 @@
 
 A modern, multilingual portfolio website built with Hugo and Node.js, featuring a complete content management system.
 
+## 🚀 Quick Deploy
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/bjpl/portfolio_site)
+
 ## 🚀 Features
 
 ### Core Architecture
