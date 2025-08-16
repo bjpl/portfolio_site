@@ -23,7 +23,10 @@
       "Bash(PORT=3335 npm start)",
       "Bash(hugo:*)",
       "Bash(PORT=3335 npm run start:simple)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)",
+      "Bash(git push:*)"
     ],
     "defaultMode": "acceptEdits"
   }
