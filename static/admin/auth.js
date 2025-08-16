@@ -3,8 +3,11 @@
  * Include this script in all admin pages to ensure authentication
  */
 
+// Detect if we're in production (Netlify) or local development
+const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+
 const AUTH_CONFIG = {
-    API_BASE: 'http://localhost:3335/api',
+    API_BASE: isProduction ? '/.netlify/functions' : 'http://localhost:3335/api',
     TOKEN_KEY: 'adminToken',
     USER_KEY: 'adminUser',
     REFRESH_TOKEN_KEY: 'adminRefreshToken'

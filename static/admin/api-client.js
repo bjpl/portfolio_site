@@ -1,6 +1,8 @@
 // api-client.js - Unified API client for all Hugo management tools
-const API_BASE = 'http://localhost:3335/api';  // Fixed port to 3335
-const WS_URL = 'ws://localhost:3335';          // WebSocket on same port
+// Detect if we're in production (Netlify) or local development
+const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+const API_BASE = isProduction ? '/.netlify/functions' : 'http://localhost:3335/api';
+const WS_URL = isProduction ? null : 'ws://localhost:3335';  // No WebSocket in production
 
 class HugoManagementAPI {
     constructor() {
@@ -12,6 +14,12 @@ class HugoManagementAPI {
     }
 
     initWebSocket() {
+        // Skip WebSocket in production (Netlify)
+        if (!WS_URL) {
+            console.log('WebSocket not available in production mode');
+            return;
+        }
+        
         try {
             this.ws = new WebSocket(WS_URL);
             
