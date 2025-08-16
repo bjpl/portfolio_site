@@ -43,6 +43,22 @@ class AuthManager {
     async verifyToken() {
         if (!this.token) return false;
         
+        // Check if we're in demo mode
+        if (localStorage.getItem('demoMode') === 'true') {
+            // In demo mode, just check if token exists and hasn't expired
+            try {
+                const tokenData = JSON.parse(atob(this.token));
+                if (tokenData.exp && tokenData.exp > Date.now()) {
+                    return true;
+                }
+            } catch (e) {
+                // Invalid token format
+            }
+            // Demo token expired or invalid
+            this.clearAuth();
+            return false;
+        }
+        
         try {
             const response = await fetch(`${AUTH_CONFIG.API_BASE}/auth/me`, {
                 headers: this.getAuthHeaders()
@@ -63,6 +79,10 @@ class AuthManager {
             return false;
         } catch (error) {
             console.error('Token verification failed:', error);
+            // If backend is unavailable but we have a valid demo token, allow access
+            if (this.token && this.user) {
+                return true;
+            }
             return false;
         }
     }

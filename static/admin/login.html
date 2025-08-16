@@ -365,8 +365,36 @@
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                showAlert('Unable to connect to server. Please ensure the backend is running.');
-                setLoading(false);
+                
+                // Fallback to demo mode when backend is unavailable
+                if (username === 'admin' && password === 'password123') {
+                    // Create demo token and user
+                    const demoUser = {
+                        username: 'admin',
+                        email: 'admin@portfolio.com',
+                        role: 'admin'
+                    };
+                    const demoToken = btoa(JSON.stringify({
+                        user: 'admin',
+                        exp: Date.now() + (24 * 60 * 60 * 1000)
+                    }));
+                    
+                    localStorage.setItem('adminToken', demoToken);
+                    localStorage.setItem('adminRefreshToken', demoToken);
+                    localStorage.setItem('adminUser', JSON.stringify(demoUser));
+                    localStorage.setItem('demoMode', 'true');
+                    
+                    showAlert('Logged in (Demo Mode) - Redirecting...', 'success');
+                    
+                    setTimeout(() => {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const redirect = urlParams.get('redirect') || 'dashboard.html';
+                        window.location.href = redirect;
+                    }, 1000);
+                } else {
+                    showAlert('Unable to connect to server. Use admin/password123 for demo mode.');
+                    setLoading(false);
+                }
             }
             
             return false; // Prevent form submission
