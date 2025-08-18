@@ -53,7 +53,9 @@
       "Bash(start chrome http://localhost:3334/admin/portfolio.html)",
       "Bash(start chrome http://localhost:1313/portfolio/)",
       "Bash(start chrome:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "WebFetch(domain:vocal-pony-24e3de.netlify.app)",
+      "WebFetch(domain:app.netlify.com)"
     ],
     "defaultMode": "acceptEdits"
   }
