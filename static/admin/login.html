@@ -196,6 +196,8 @@
     </style>
 </head>
 <body>
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
     <div class="login-container">
         <div class="logo">
             <h1>🚀 Admin Dashboard</h1>
@@ -242,37 +244,20 @@
         </form>
         
         <div class="form-footer">
-            <p>Default credentials: admin / password123</p>
+            <p>Enter your admin credentials to access the dashboard</p>
         </div>
     </div>
     
+    
+    <!-- Load unified scripts -->
+    <script src="js/toast.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script src="js/api-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/logger.js"></script>
+    <script src="js/modal-dialog.js"></script>
+    
     <script>
-        // Check if already logged in
-        const token = localStorage.getItem('adminToken');
-        if (token) {
-            // Verify token is still valid
-            fetch('http://localhost:3333/api/auth/me', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Token is valid, redirect to dashboard
-                    window.location.href = 'dashboard.html';
-                } else {
-                    // Token is invalid, remove it
-                    localStorage.removeItem('adminToken');
-                    localStorage.removeItem('adminUser');
-                }
-            })
-            .catch(() => {
-                // Error checking token, remove it
-                localStorage.removeItem('adminToken');
-                localStorage.removeItem('adminUser');
-            });
-        }
-        
         function showAlert(message, type = 'danger') {
             const alertBox = document.getElementById('alertBox');
             alertBox.className = `alert alert-${type}`;
@@ -296,6 +281,7 @@
             btnLoader.style.display = isLoading ? 'inline-block' : 'none';
         }
         
+        // Unified login handler
         async function handleLogin(event) {
             if (event) {
                 event.preventDefault();
@@ -306,18 +292,18 @@
             const password = document.getElementById('password').value;
             const remember = document.getElementById('remember').checked;
             
+            if (!username || !password) {
+                showAlert('Please enter username and password');
+                return false;
+            }
+            
             setLoading(true);
             
             try {
-                // Detect if we're in production (Netlify) or local development
-                const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
-                const API_BASE = isProduction ? '/.netlify/functions' : 'http://localhost:3335/api';
-                
-                const response = await fetch(`${API_BASE}/auth/login`, {
+                // Try backend first if available
+                const response = await fetch('http://localhost:3001/api/auth/login', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         emailOrUsername: username,
                         password: password
@@ -326,99 +312,50 @@
                 
                 const data = await response.json();
                 
-                if (response.ok && data.success) {
-                    // Store token and user info (handle both token formats)
+                if (response.ok && (data.token || data.accessToken)) {
                     const token = data.token || data.accessToken;
-                    const refreshToken = data.refreshToken || token;
                     
-                    localStorage.setItem('adminToken', token);
-                    localStorage.setItem('adminRefreshToken', refreshToken);
-                    localStorage.setItem('adminUser', JSON.stringify(data.user));
-                    
-                    if (remember) {
-                        localStorage.setItem('adminRefreshToken', data.refreshToken);
+                    // Use AuthManager to set token
+                    if (window.AuthManager) {
+                        AuthManager.setToken(token);
+                    } else {
+                        localStorage.setItem('token', token);
                     }
                     
-                    console.log('Login successful, token stored:', data.accessToken.substring(0, 20) + '...');
+                    if (remember && data.refreshToken) {
+                        localStorage.setItem('refreshToken', data.refreshToken);
+                    }
+                    
                     showAlert('Login successful! Redirecting...', 'success');
                     
-                    // Redirect to dashboard or requested page
+                    // Redirect to dashboard
                     const urlParams = new URLSearchParams(window.location.search);
-                    let redirect = urlParams.get('redirect') || 'dashboard.html';
-                    
-                    // Ensure we don't redirect to API endpoints
-                    if (redirect.includes('/api/') || redirect.endsWith('.json')) {
-                        redirect = 'dashboard.html';
-                    }
-                    
-                    // Ensure it's a relative path for security
-                    if (redirect.startsWith('http://') || redirect.startsWith('https://')) {
-                        redirect = 'dashboard.html';
-                    }
+                    const redirect = urlParams.get('redirect') || 'dashboard.html';
                     
                     setTimeout(() => {
                         window.location.href = redirect;
                     }, 1000);
                 } else {
-                    showAlert(data.error || 'Invalid credentials. Please try again.');
-                    setLoading(false);
+                    throw new Error(data.error || 'Invalid credentials');
                 }
             } catch (error) {
-                console.error('Login error:', error);
-                
-                // Fallback to demo mode when backend is unavailable
-                if (username === 'admin' && password === 'password123') {
-                    // Create demo token and user
-                    const demoUser = {
-                        username: 'admin',
-                        email: 'admin@portfolio.com',
-                        role: 'admin'
-                    };
-                    const demoToken = btoa(JSON.stringify({
-                        user: 'admin',
-                        exp: Date.now() + (24 * 60 * 60 * 1000)
-                    }));
-                    
-                    localStorage.setItem('adminToken', demoToken);
-                    localStorage.setItem('adminRefreshToken', demoToken);
-                    localStorage.setItem('adminUser', JSON.stringify(demoUser));
-                    localStorage.setItem('demoMode', 'true');
-                    
-                    showAlert('Logged in (Demo Mode) - Redirecting...', 'success');
-                    
-                    setTimeout(() => {
-                        const urlParams = new URLSearchParams(window.location.search);
-                        const redirect = urlParams.get('redirect') || 'dashboard.html';
-                        window.location.href = redirect;
-                    }, 1000);
-                } else {
-                    showAlert('Unable to connect to server. Use admin/password123 for demo mode.');
-                    setLoading(false);
-                }
+                showAlert('Unable to connect to server. Please ensure the backend is running on port 3000.');
+                setLoading(false);
             }
             
-            return false; // Prevent form submission
+            return false;
         }
         
-        // Add enter key support and auto-fill for development
+        // Check if already logged in
         document.addEventListener('DOMContentLoaded', () => {
-            // Ensure form submission is handled correctly
-            const loginForm = document.getElementById('loginForm');
-            loginForm.addEventListener('submit', handleLogin);
+            // Skip auth manager check since it auto-initializes
+            const token = localStorage.getItem('token');
+            if (token && token !== 'undefined' && token !== 'null') {
+                // Already logged in, redirect to dashboard
+                window.location.href = 'dashboard.html';
+            }
             
-            const inputs = document.querySelectorAll('.form-control');
-            inputs.forEach(input => {
-                input.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        const form = document.getElementById('loginForm');
-                        if (form.checkValidity()) {
-                            handleLogin(e);
-                        }
-                    }
-                });
-            });
-            
-            // Auto-fill for development (can be removed in production)
+            // Auto-fill for development
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('autofill') === 'true') {
                 document.getElementById('username').value = 'admin';

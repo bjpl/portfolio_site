@@ -1,5 +1,5 @@
 // User Management JavaScript
-const API_BASE = 'http://localhost:3335/api';
+const API_BASE = 'http://localhost:3000/api';
 
 class UserManagement {
   constructor() {
@@ -297,8 +297,36 @@ class UserManagement {
   }
 
   updatePagination(pagination) {
-    // Implementation for pagination controls
-    console.log('Pagination:', pagination);
+    const paginationContainer = document.querySelector('.pagination');
+    if (!paginationContainer) return;
+    
+    const { page, limit, total } = pagination;
+    const totalPages = Math.ceil(total / limit);
+    
+    let paginationHTML = '';
+    
+    // Previous button
+    if (page > 1) {
+      paginationHTML += `<button onclick="userManager.loadUsers(${page - 1})" class="btn btn-sm">← Previous</button>`;
+    }
+    
+    // Page numbers
+    for (let i = 1; i <= totalPages; i++) {
+      if (i === page) {
+        paginationHTML += `<span class="current-page">${i}</span>`;
+      } else if (i === 1 || i === totalPages || (i >= page - 2 && i <= page + 2)) {
+        paginationHTML += `<button onclick="userManager.loadUsers(${i})" class="btn btn-sm">${i}</button>`;
+      } else if (i === page - 3 || i === page + 3) {
+        paginationHTML += `<span>...</span>`;
+      }
+    }
+    
+    // Next button
+    if (page < totalPages) {
+      paginationHTML += `<button onclick="userManager.loadUsers(${page + 1})" class="btn btn-sm">Next →</button>`;
+    }
+    
+    paginationContainer.innerHTML = paginationHTML;
   }
 
   async makeRequest(endpoint, options = {}) {

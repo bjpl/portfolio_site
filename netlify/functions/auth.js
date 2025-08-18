@@ -22,12 +22,22 @@ function generateToken(user) {
 exports.handler = async (event, context) => {
   // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
+    const origin = event.headers.origin;
+    const allowedOrigins = [
+      'https://vocal-pony-24e3de.netlify.app',
+      // Add your custom domain here when you set it up:
+      // 'https://yourdomain.com',
+      // 'https://www.yourdomain.com',
+      ...(process.env.NODE_ENV === 'development' ? ['http://localhost:1313', 'http://localhost:3000'] : [])
+    ];
+    
     return {
       statusCode: 200,
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': allowedOrigins.includes(origin) ? origin : allowedOrigins[0],
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Credentials': 'true'
       },
       body: ''
     };

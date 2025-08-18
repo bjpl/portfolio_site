@@ -289,24 +289,57 @@
         </div>
     </div>
     
+    <script src="api-client.js"></script>
+    <script src="admin-implementation.js"></script>
     <script>
-        function createBackup() {
-            alert('Create backup functionality coming soon!');
+        // Page-specific backup functionality
+        async function loadBackups() {
+            try {
+                const backups = await apiClient.request('/admin/backup/list');
+                displayBackups(backups);
+            } catch (error) {
+                console.error('Failed to load backups:', error);
+            }
         }
         
-        function createManualBackup() {
-            const name = document.getElementById('backup-name').value || 'Manual backup - ' + new Date().toLocaleDateString();
-            const description = document.getElementById('backup-description').value;
-            alert(`Creating manual backup: ${name}\nDescription: ${description || 'None'}`);
+        function displayBackups(backups) {
+            const container = document.querySelector('.backup-list');
+            if (!container) return;
+            
+            if (backups.length === 0) {
+                container.innerHTML = '<p>No backups available</p>';
+                return;
+            }
+            
+            container.innerHTML = backups.map(backup => `
+                <div class="backup-item">
+                    <h4>${backup.id}</h4>
+                    <p>${backup.description}</p>
+                    <p>Created: ${new Date(backup.timestamp).toLocaleString()}</p>
+                    <button onclick="restoreBackup('${backup.id}')">Restore</button>
+                    <button onclick="deleteBackup('${backup.id}')">Delete</button>
+                </div>
+            `).join('');
         }
         
-        function saveBackupSettings() {
-            alert('Save backup settings functionality coming soon!');
+        async function deleteBackup(id) {
+            if (!confirm('Delete this backup?')) return;
+            
+            try {
+                await apiClient.request(`/admin/backup/${id}`, { method: 'DELETE' });
+                loadBackups();
+                if (window.showToast) {
+                    showToast('Backup deleted', 'success');
+                }
+            } catch (error) {
+                if (window.showToast) {
+                    showToast('Failed to delete backup', 'error');
+                }
+            }
         }
         
-        function handleBackupUpload() {
-            alert('Backup upload and restore functionality coming soon!');
-        }
+        // Load backups on page load
+        document.addEventListener('DOMContentLoaded', loadBackups);
         
         function refreshBackups() {
             location.reload();

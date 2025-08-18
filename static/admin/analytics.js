@@ -1,5 +1,5 @@
 // Analytics JavaScript
-const API_BASE = 'http://localhost:3335/api';
+const API_BASE = 'http://localhost:3000/api';
 
 class Analytics {
   constructor() {
@@ -283,9 +283,79 @@ class Analytics {
   }
 
   setupCharts() {
-    // Placeholder for chart setup
-    // In a real implementation, you would initialize Chart.js or similar here
-    console.log('Charts would be initialized here with Chart.js');
+    // Initialize Chart.js charts
+    const chartConfigs = {
+      visitors: {
+        type: 'line',
+        canvas: 'visitorsChart',
+        data: this.data.overview?.recentVisits || []
+      },
+      sources: {
+        type: 'doughnut',
+        canvas: 'sourcesChart',
+        data: this.data.sources || []
+      },
+      devices: {
+        type: 'pie',
+        canvas: 'devicesChart',
+        data: this.data.devices || []
+      }
+    };
+
+    Object.entries(chartConfigs).forEach(([key, config]) => {
+      const canvas = document.getElementById(config.canvas);
+      if (canvas && typeof Chart !== 'undefined') {
+        new Chart(canvas.getContext('2d'), {
+          type: config.type,
+          data: this.formatChartData(config.type, config.data),
+          options: this.getChartOptions(config.type)
+        });
+      }
+    });
+  }
+
+  formatChartData(type, data) {
+    if (type === 'line') {
+      return {
+        labels: data.map(d => d.date),
+        datasets: [{
+          label: 'Visitors',
+          data: data.map(d => d.count),
+          borderColor: '#667eea',
+          backgroundColor: 'rgba(102, 126, 234, 0.1)',
+          tension: 0.4
+        }]
+      };
+    } else if (type === 'doughnut' || type === 'pie') {
+      return {
+        labels: data.map(d => d.name),
+        datasets: [{
+          data: data.map(d => d.value),
+          backgroundColor: ['#667eea', '#48bb78', '#ed8936', '#f56565', '#9f7aea']
+        }]
+      };
+    }
+    return { labels: [], datasets: [] };
+  }
+
+  getChartOptions(type) {
+    const baseOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: type === 'line' ? 'bottom' : 'right'
+        }
+      }
+    };
+
+    if (type === 'line') {
+      baseOptions.scales = {
+        y: { beginAtZero: true }
+      };
+    }
+
+    return baseOptions;
   }
 
   async exportData() {

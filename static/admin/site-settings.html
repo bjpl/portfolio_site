@@ -6,9 +6,11 @@
     <title>Site Settings - Hugo Dev</title>
     <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="styles.css">
+    <script src="utils/auth-check.js"></script>
     <script src="auth.js"></script>
     <script src="admin-nav.js"></script>
     <script src="toast.js"></script>
+    <script src="js/admin-functions.js"></script>
 </head>
 <body>
     <div class="sidebar">
@@ -286,13 +288,11 @@
     
     <script>
         function saveSettings() {
-            alert('Save settings functionality coming soon!');
+            window.adminFunctions.saveSettings();
         }
         
         function resetSettings() {
-            if (confirm('Are you sure you want to reset all settings to defaults?')) {
-                alert('Reset settings functionality coming soon!');
-            }
+            window.adminFunctions.resetSettings();
         }
         
         function handleLogout() {

@@ -26,7 +26,27 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git config:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(npm run start:simple:*)",
+      "Bash(tree:*)",
+      "Bash(dir:*)",
+      "Bash(for page in dashboard content-editor image-optimizer file-manager build-deploy)",
+      "Bash(done)",
+      "Bash(start chrome http://localhost:3000/admin/auth-test.html)",
+      "Bash(cat:*)",
+      "Bash(start chrome http://localhost:3000/test-websocket.html)",
+      "Bash(start chrome http://localhost:3000/admin/test-all-tools.html)",
+      "Bash(for:*)",
+      "Bash(do if ! grep -q \"toast.js\" \"$file\")",
+      "Bash(then echo \"$file\")",
+      "Bash(fi)",
+      "Bash(ls:*)",
+      "Bash(do echo \"=== $file ===\")",
+      "Bash(start chrome http://localhost:3000/admin/file-manager.html)",
+      "Bash(npm --version)",
+      "Bash(netlify:*)",
+      "Bash(start chrome http://localhost:3000/static/admin/login.html)",
+      "Bash(PORT=3001 npm run start:simple)"
     ],
     "defaultMode": "acceptEdits"
   }

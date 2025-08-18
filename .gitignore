@@ -80,3 +80,6 @@ test-*.json
 
 # Temporary
 nul
+
+# Local Netlify folder
+.netlify

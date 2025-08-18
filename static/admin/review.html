@@ -1261,7 +1261,7 @@
                 displayQualityResults(result);
             } catch (error) {
                 // Use simulated quality check
-                displayQualityResults(simulateQualityCheck(content, title));
+                displayQualityResults(performQualityCheck(content, title));
             }
         }
 
@@ -1281,20 +1281,88 @@
             `).join('');
         }
 
-        // Simulate quality check
-        function simulateQualityCheck(content, title) {
+        // Perform comprehensive quality check
+        function performQualityCheck(content, title) {
             const wordCount = content.split(/\s+/).length;
             const hasTitle = title && title.length > 0;
+            const titleLength = title ? title.length : 0;
             const hasMetaDescription = content.includes('description:');
-
+            const hasKeywords = content.includes('keywords:') || content.includes('tags:');
+            const hasFrontMatter = content.startsWith('---');
+            
+            // Check for images and alt text
+            const imgRegex = /!\[([^\]]*)\]\([^)]+\)/g;
+            const images = content.match(imgRegex) || [];
+            const missingAltText = images.filter(img => img.startsWith('![]')).length;
+            
+            // Check for broken links
+            const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+            const links = content.match(linkRegex) || [];
+            
+            // Check for code blocks
+            const codeBlocks = (content.match(/```/g) || []).length / 2;
+            
+            // Calculate score
+            let score = 100;
+            if (!hasTitle) score -= 20;
+            if (!hasMetaDescription) score -= 10;
+            if (wordCount < 300) score -= 15;
+            if (missingAltText > 0) score -= 5 * missingAltText;
+            if (!hasFrontMatter) score -= 10;
+            if (titleLength > 60) score -= 5;
+            
             return {
-                score: 85,
+                score: Math.max(0, score),
                 checks: [
-                    { status: hasTitle ? 'pass' : 'fail', message: hasTitle ? 'Title present' : 'Missing title', type: 'title' },
-                    { status: hasMetaDescription ? 'pass' : 'warning', message: hasMetaDescription ? 'SEO meta description present' : 'Missing meta description', type: 'meta', fixable: true },
-                    { status: wordCount > 300 ? 'pass' : 'warning', message: `Word count: ${wordCount} words`, type: 'wordcount' },
-                    { status: 'pass', message: 'Valid front matter', type: 'frontmatter' },
-                    { status: 'warning', message: '2 images missing alt text', type: 'alt-text', fixable: true }
+                    { 
+                        status: hasTitle ? 'pass' : 'fail', 
+                        message: hasTitle ? 'Title present' : 'Missing title', 
+                        type: 'title' 
+                    },
+                    { 
+                        status: titleLength <= 60 ? 'pass' : 'warning', 
+                        message: `Title length: ${titleLength} characters ${titleLength > 60 ? '(recommended: < 60)' : ''}`, 
+                        type: 'title-length' 
+                    },
+                    { 
+                        status: hasMetaDescription ? 'pass' : 'warning', 
+                        message: hasMetaDescription ? 'SEO meta description present' : 'Missing meta description', 
+                        type: 'meta', 
+                        fixable: true 
+                    },
+                    { 
+                        status: hasKeywords ? 'pass' : 'info', 
+                        message: hasKeywords ? 'Keywords/tags present' : 'No keywords or tags defined', 
+                        type: 'keywords', 
+                        fixable: true 
+                    },
+                    { 
+                        status: wordCount > 300 ? 'pass' : 'warning', 
+                        message: `Word count: ${wordCount} words ${wordCount < 300 ? '(recommended: 300+)' : ''}`, 
+                        type: 'wordcount' 
+                    },
+                    { 
+                        status: hasFrontMatter ? 'pass' : 'fail', 
+                        message: hasFrontMatter ? 'Valid front matter' : 'Missing front matter', 
+                        type: 'frontmatter', 
+                        fixable: true 
+                    },
+                    { 
+                        status: missingAltText === 0 ? 'pass' : 'warning', 
+                        message: missingAltText === 0 ? 'All images have alt text' : `${missingAltText} images missing alt text`, 
+                        type: 'alt-text', 
+                        fixable: true 
+                    },
+                    { 
+                        status: 'info', 
+                        message: `${links.length} links found`, 
+                        type: 'links' 
+                    },
+                    { 
+                        status: codeBlocks > 0 ? 'info' : 'info', 
+                        message: `${codeBlocks} code blocks`, 
+                        type: 'code' 
+                    }
                 ]
             };
         }

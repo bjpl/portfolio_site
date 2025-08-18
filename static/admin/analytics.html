@@ -6,10 +6,12 @@
     <title>Analytics - Hugo Dev</title>
     <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="styles.css">
+    <script src="utils/auth-check.js"></script>
     <script src="auth.js"></script>
     <script src="admin-nav.js"></script>
     <script src="toast.js"></script>
     <script src="analytics.js"></script>
+    <script src="js/admin-functions.js"></script>
     <style>
         .chart-container {
             background: var(--bg-dark);
@@ -352,7 +354,7 @@
     
     <script>
         function exportData() {
-            alert('Export analytics data functionality coming soon!');
+            window.adminFunctions.exportAnalyticsData();
         }
         
         function refreshAnalytics() {

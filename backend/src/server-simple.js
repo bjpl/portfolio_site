@@ -9,28 +9,66 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-const app = express();
-const PORT = process.env.PORT || 3335;
+// Initialize logger first
+const logger = require('./utils/logger');
 
-// Import content API routes
-const contentApiRoutes = require('./routes/content-api');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Import API routes (if available)
+let contentApiRoutes;
+try {
+  contentApiRoutes = require('./routes/content-api');
+} catch (e) {
+  logger.info('Content API routes not found, using built-in routes');
+}
+
+let filesApiRoutes;
+try {
+  filesApiRoutes = require('./routes/files-api');
+  logger.info('Files API routes loaded');
+} catch (e) {
+  logger.warn('Files API routes not found');
+}
+
+let imagesApiRoutes;
+try {
+  imagesApiRoutes = require('./routes/images-api');
+  logger.info('Images API routes loaded');
+} catch (e) {
+  logger.warn('Images API routes not found');
+}
+
+let buildDeployApiRoutes;
+try {
+  buildDeployApiRoutes = require('./routes/build-deploy-api');
+  logger.info('Build/Deploy API routes loaded');
+} catch (e) {
+  logger.warn('Build/Deploy API routes not found');
+}
 
 // Simple in-memory user store (in production, use a database)
 const users = {
   admin: {
-    username: 'admin',
-    email: 'admin@portfolio.com',
-    password: '$2a$10$afmPk0ks7cRHrNgSv/lf7Oor8EwILf7iOCmNjmd6X7CK3sRbjxp82', // password123
+    username: process.env.ADMIN_USERNAME || 'admin',
+    email: process.env.ADMIN_EMAIL || 'admin@portfolio.com',
+    password: process.env.ADMIN_PASSWORD_HASH || '$2a$10$afmPk0ks7cRHrNgSv/lf7Oor8EwILf7iOCmNjmd6X7CK3sRbjxp82', // Default hash - MUST CHANGE IN PRODUCTION
     role: 'admin'
   }
 };
 
-const JWT_SECRET = process.env.JWT_SECRET || 'portfolio-secret-key-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET || (() => {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('JWT_SECRET must be set in production');
+  }
+  return 'portfolio-secret-key-change-in-production';
+})();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../../public')));
+app.use('/admin', express.static(path.join(__dirname, '../../static/admin')));
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -147,7 +185,7 @@ app.get('/api/portfolio/projects', async (req, res) => {
           }
         }
       } catch (err) {
-        console.log(`Directory ${dirPath} not found, skipping...`);
+        logger.warn(`Directory ${dirPath} not found, skipping...`);
       }
     }
     
@@ -195,14 +233,56 @@ app.get('/api/portfolio/skills', (req, res) => {
   });
 });
 
-// Contact form handler
+// Rate limiting for contact form
+const contactRateLimit = {};
+const CONTACT_LIMIT = 3; // 3 submissions per hour per IP
+const CONTACT_WINDOW = 60 * 60 * 1000; // 1 hour
+
+// Contact form handler with spam protection
 app.post('/api/portfolio/contact', async (req, res) => {
-  const { name, email, subject, message } = req.body;
+  const { name, email, subject, message, honeypot } = req.body;
+  const clientIP = req.ip || req.connection.remoteAddress;
+  
+  // Honeypot spam protection
+  if (honeypot) {
+    return res.status(400).json({ error: 'Invalid submission' });
+  }
+  
+  // Rate limiting
+  const now = Date.now();
+  if (!contactRateLimit[clientIP]) {
+    contactRateLimit[clientIP] = [];
+  }
+  
+  // Clean old submissions
+  contactRateLimit[clientIP] = contactRateLimit[clientIP].filter(
+    time => now - time < CONTACT_WINDOW
+  );
+  
+  if (contactRateLimit[clientIP].length >= CONTACT_LIMIT) {
+    return res.status(429).json({ 
+      error: 'Too many contact submissions. Please try again later.' 
+    });
+  }
   
   // Validate input
   if (!name || !email || !subject || !message) {
     return res.status(400).json({ error: 'All fields are required' });
   }
+  
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: 'Invalid email address' });
+  }
+  
+  // Content length validation
+  if (message.length > 2000) {
+    return res.status(400).json({ error: 'Message too long (max 2000 characters)' });
+  }
+  
+  // Record submission
+  contactRateLimit[clientIP].push(now);
   
   // Save to file for now (in production, use email service)
   const contactDir = path.join(__dirname, '../data/contacts');
@@ -256,6 +336,21 @@ app.post('/api/portfolio/contact', async (req, res) => {
     res.status(500).json({ error: 'Failed to process contact form' });
   }
 });
+
+// Mount files API routes if available
+if (filesApiRoutes) {
+  app.use('/api/files', filesApiRoutes);
+}
+
+// Mount images API routes if available
+if (imagesApiRoutes) {
+  app.use('/api/images', imagesApiRoutes);
+}
+
+// Mount build/deploy API routes if available
+if (buildDeployApiRoutes) {
+  app.use('/api/build', buildDeployApiRoutes);
+}
 
 // Dashboard stats endpoint (protected)
 app.get('/api/dashboard/stats', async (req, res) => {
@@ -330,8 +425,14 @@ app.get('/api/dashboard/stats', async (req, res) => {
   res.json(stats);
 });
 
-// Mount content management API routes
-app.use('/api/editor', contentApiRoutes);
+// Mount admin API routes
+const adminRoutes = require('./routes/admin-api');
+app.use('/api/admin', adminRoutes);
+
+// Mount content management API routes (if available)
+if (contentApiRoutes) {
+  app.use('/api/editor', contentApiRoutes);
+}
 
 // Get recent blog posts
 app.get('/api/blog/recent', async (req, res) => {
@@ -374,7 +475,7 @@ app.get('/api/blog/recent', async (req, res) => {
           }
         }
       } catch (err) {
-        console.log(`Directory ${dir.path} not found, skipping...`);
+        logger.warn(`Directory ${dir.path} not found, skipping...`);
       }
     }
     
@@ -388,22 +489,454 @@ app.get('/api/blog/recent', async (req, res) => {
   }
 });
 
+// Content Management API Endpoints
+const multer = require('multer');
+const upload = multer({ 
+  dest: 'uploads/',
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  fileFilter: (req, file, cb) => {
+    const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'];
+    cb(null, allowed.includes(file.mimetype));
+  }
+});
+
+// Get all content
+app.get('/api/content', async (req, res) => {
+  try {
+    const { type, status, search } = req.query;
+    const contentDirs = type ? [type] : ['make', 'learn', 'think', 'meet'];
+    const allContent = [];
+    
+    for (const dir of contentDirs) {
+      const dirPath = path.join(__dirname, '../../content', dir);
+      try {
+        const files = await fs.readdir(dirPath, { withFileTypes: true });
+        
+        for (const file of files) {
+          if (file.isFile() && file.name.endsWith('.md')) {
+            const filePath = path.join(dirPath, file.name);
+            const content = await fs.readFile(filePath, 'utf8');
+            const { data, content: body } = matter(content);
+            
+            // Apply filters
+            if (status && data.status !== status) continue;
+            if (search && !body.toLowerCase().includes(search.toLowerCase()) && 
+                !data.title?.toLowerCase().includes(search.toLowerCase())) continue;
+            
+            allContent.push({
+              id: `${dir}/${file.name}`,
+              type: dir,
+              title: data.title || file.name.replace('.md', ''),
+              status: data.draft ? 'draft' : 'published',
+              date: data.date || new Date().toISOString(),
+              author: data.author || 'Admin',
+              description: data.description || body.substring(0, 150),
+              tags: data.tags || [],
+              path: `${dir}/${file.name}`
+            });
+          }
+        }
+      } catch (e) {
+        logger.warn(`Directory ${dir} not found`);
+      }
+    }
+    
+    res.json(allContent);
+  } catch (error) {
+    console.error('Error loading content:', error);
+    res.status(500).json({ error: 'Failed to load content' });
+  }
+});
+
+// Get single content item
+app.get('/api/content/:type/:slug', async (req, res) => {
+  try {
+    const { type, slug } = req.params;
+    const filePath = path.join(__dirname, '../../content', type, `${slug}.md`);
+    
+    const content = await fs.readFile(filePath, 'utf8');
+    const { data, content: body } = matter(content);
+    
+    res.json({
+      ...data,
+      content: body,
+      type,
+      slug
+    });
+  } catch (error) {
+    res.status(404).json({ error: 'Content not found' });
+  }
+});
+
+// Create new content
+app.post('/api/content', async (req, res) => {
+  try {
+    const { type, title, content, ...metadata } = req.body;
+    
+    // Generate slug from title
+    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const filename = `${slug}.md`;
+    const dirPath = path.join(__dirname, '../../content', type);
+    const filePath = path.join(dirPath, filename);
+    
+    // Ensure directory exists
+    await fs.mkdir(dirPath, { recursive: true });
+    
+    // Create frontmatter
+    const frontmatter = {
+      title,
+      date: new Date().toISOString(),
+      draft: true,
+      ...metadata
+    };
+    
+    // Create markdown file
+    const fileContent = matter.stringify(content || '', frontmatter);
+    await fs.writeFile(filePath, fileContent);
+    
+    res.json({
+      success: true,
+      path: `${type}/${filename}`,
+      slug
+    });
+  } catch (error) {
+    console.error('Error creating content:', error);
+    res.status(500).json({ error: 'Failed to create content' });
+  }
+});
+
+// Update content
+app.put('/api/content/:type/:slug', async (req, res) => {
+  try {
+    const { type, slug } = req.params;
+    const { content, ...metadata } = req.body;
+    const filePath = path.join(__dirname, '../../content', type, `${slug}.md`);
+    
+    // Read existing file
+    const existingContent = await fs.readFile(filePath, 'utf8');
+    const { data: existingData } = matter(existingContent);
+    
+    // Merge metadata
+    const updatedMetadata = {
+      ...existingData,
+      ...metadata,
+      lastModified: new Date().toISOString()
+    };
+    
+    // Create updated file
+    const fileContent = matter.stringify(content || '', updatedMetadata);
+    await fs.writeFile(filePath, fileContent);
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error updating content:', error);
+    res.status(500).json({ error: 'Failed to update content' });
+  }
+});
+
+// Delete content
+app.delete('/api/content/:type/:slug', async (req, res) => {
+  try {
+    const { type, slug } = req.params;
+    const filePath = path.join(__dirname, '../../content', type, `${slug}.md`);
+    
+    await fs.unlink(filePath);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting content:', error);
+    res.status(500).json({ error: 'Failed to delete content' });
+  }
+});
+
+// Upload media
+app.post('/api/media/upload', upload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    
+    const { filename, mimetype, size } = req.file;
+    const ext = path.extname(req.file.originalname);
+    const newFilename = `${Date.now()}-${Math.random().toString(36).substring(7)}${ext}`;
+    const targetPath = path.join(__dirname, '../../static/uploads', newFilename);
+    
+    // Ensure uploads directory exists
+    await fs.mkdir(path.dirname(targetPath), { recursive: true });
+    
+    // Move file to static directory
+    await fs.rename(req.file.path, targetPath);
+    
+    res.json({
+      success: true,
+      url: `/uploads/${newFilename}`,
+      filename: newFilename,
+      originalName: req.file.originalname,
+      size,
+      type: mimetype
+    });
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    res.status(500).json({ error: 'Failed to upload file' });
+  }
+});
+
+// Get media library
+app.get('/api/media', async (req, res) => {
+  try {
+    const uploadsDir = path.join(__dirname, '../../static/uploads');
+    const files = [];
+    
+    try {
+      const dirFiles = await fs.readdir(uploadsDir);
+      for (const file of dirFiles) {
+        const filePath = path.join(uploadsDir, file);
+        const stats = await fs.stat(filePath);
+        
+        files.push({
+          name: file,
+          url: `/uploads/${file}`,
+          size: stats.size,
+          modified: stats.mtime
+        });
+      }
+    } catch (e) {
+      // Uploads directory might not exist yet
+    }
+    
+    res.json(files);
+  } catch (error) {
+    console.error('Error loading media:', error);
+    res.status(500).json({ error: 'Failed to load media' });
+  }
+});
+
+// Content templates
+app.get('/api/templates', (req, res) => {
+  const templates = [
+    {
+      id: 'blog-post',
+      name: 'Blog Post',
+      description: 'Standard blog post template',
+      frontmatter: {
+        title: '',
+        date: new Date().toISOString(),
+        author: 'Admin',
+        tags: [],
+        draft: true
+      },
+      content: '# Introduction\n\n## Main Content\n\n## Conclusion'
+    },
+    {
+      id: 'project',
+      name: 'Project',
+      description: 'Portfolio project template',
+      frontmatter: {
+        title: '',
+        description: '',
+        date: new Date().toISOString(),
+        technologies: [],
+        featured: false,
+        github: '',
+        demo: '',
+        image: ''
+      },
+      content: '# Project Overview\n\n## Features\n\n## Technical Details\n\n## Results'
+    },
+    {
+      id: 'tutorial',
+      name: 'Tutorial',
+      description: 'Step-by-step tutorial template',
+      frontmatter: {
+        title: '',
+        description: '',
+        date: new Date().toISOString(),
+        difficulty: 'beginner',
+        duration: '10 minutes',
+        tags: []
+      },
+      content: '# Tutorial: [Title]\n\n## Prerequisites\n\n## Step 1\n\n## Step 2\n\n## Conclusion'
+    }
+  ];
+  
+  res.json(templates);
+});
+
+// Content analytics
+app.get('/api/analytics/content', async (req, res) => {
+  try {
+    // In a real app, this would pull from analytics service
+    const analytics = {
+      totalViews: 15234,
+      uniqueVisitors: 3456,
+      avgTimeOnPage: 245, // seconds
+      topContent: [
+        { title: 'React Hooks Guide', views: 2341 },
+        { title: 'Node.js Best Practices', views: 1876 },
+        { title: 'CSS Grid Tutorial', views: 1543 }
+      ],
+      recentActivity: [
+        { action: 'published', content: 'New Blog Post', time: '2 hours ago' },
+        { action: 'edited', content: 'Portfolio Project', time: '5 hours ago' },
+        { action: 'created', content: 'Draft Post', time: '1 day ago' }
+      ]
+    };
+    
+    res.json(analytics);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to load analytics' });
+  }
+});
+
+// SEO analysis
+app.post('/api/seo/analyze', async (req, res) => {
+  try {
+    const { content, title, description, keywords } = req.body;
+    
+    // Simple SEO analysis
+    const analysis = {
+      score: 85,
+      issues: [],
+      suggestions: []
+    };
+    
+    // Check title length
+    if (!title) {
+      analysis.issues.push('Missing title tag');
+      analysis.score -= 20;
+    } else if (title.length > 60) {
+      analysis.suggestions.push('Title is too long (>60 characters)');
+      analysis.score -= 5;
+    } else if (title.length < 30) {
+      analysis.suggestions.push('Title might be too short (<30 characters)');
+      analysis.score -= 3;
+    }
+    
+    // Check description
+    if (!description) {
+      analysis.issues.push('Missing meta description');
+      analysis.score -= 15;
+    } else if (description.length > 160) {
+      analysis.suggestions.push('Description is too long (>160 characters)');
+      analysis.score -= 5;
+    }
+    
+    // Check keywords
+    if (keywords && keywords.length > 0) {
+      const keywordDensity = {};
+      const words = content.toLowerCase().split(/\s+/);
+      
+      keywords.forEach(keyword => {
+        const count = words.filter(w => w.includes(keyword.toLowerCase())).length;
+        const density = (count / words.length) * 100;
+        keywordDensity[keyword] = density.toFixed(2);
+        
+        if (density < 0.5) {
+          analysis.suggestions.push(`Keyword "${keyword}" density is low (${density.toFixed(2)}%)`);
+        } else if (density > 3) {
+          analysis.issues.push(`Keyword "${keyword}" might be over-optimized (${density.toFixed(2)}%)`);
+          analysis.score -= 5;
+        }
+      });
+      
+      analysis.keywordDensity = keywordDensity;
+    }
+    
+    // Check content length
+    const wordCount = content.split(/\s+/).length;
+    if (wordCount < 300) {
+      analysis.suggestions.push('Content might be too short (<300 words)');
+      analysis.score -= 10;
+    }
+    
+    analysis.wordCount = wordCount;
+    analysis.score = Math.max(0, analysis.score);
+    
+    res.json(analysis);
+  } catch (error) {
+    console.error('SEO analysis error:', error);
+    res.status(500).json({ error: 'Failed to analyze SEO' });
+  }
+});
+
 // Serve Hugo site for all other routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../public/index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Simplified portfolio backend running on port ${PORT}`);
-  console.log(`API endpoints:`);
-  console.log(`  - GET  /api/health`);
-  console.log(`  - POST /api/auth/login`);
-  console.log(`  - GET  /api/auth/me`);
-  console.log(`  - POST /api/auth/logout`);
-  console.log(`  - GET  /api/dashboard/stats (protected)`);
-  console.log(`  - GET  /api/portfolio/projects`);
-  console.log(`  - GET  /api/portfolio/skills`);
-  console.log(`  - POST /api/portfolio/contact`);
-  console.log(`  - GET  /api/blog/recent`);
-  console.log(`\nAdmin login: admin / password123`);
+const server = app.listen(PORT, () => {
+  logger.info(`Simplified portfolio backend running on port ${PORT}`);
+  logger.info(`API endpoints:`);
+  logger.info(`  - GET  /api/health`);
+  logger.info(`  - POST /api/auth/login`);
+  logger.info(`  - GET  /api/auth/me`);
+  logger.info(`  - POST /api/auth/logout`);
+  logger.info(`  - GET  /api/dashboard/stats (protected)`);
+  logger.info(`  - GET  /api/portfolio/projects`);
+  logger.info(`  - GET  /api/portfolio/skills`);
+  logger.info(`  - POST /api/portfolio/contact`);
+  logger.info(`  - GET  /api/blog/recent`);
+  logger.info(`  - WS   /ws (WebSocket connection)`);
+  logger.info(`Admin login: Check .env file for credentials`);
 });
+
+// WebSocket support (optional - won't crash if ws not installed)
+try {
+  const WebSocket = require('ws');
+  const wss = new WebSocket.Server({ server, path: '/ws' });
+  
+  // Track authenticated connections
+  const authenticatedClients = new Map();
+  
+  wss.on('connection', (ws) => {
+    logger.info('New WebSocket connection', { module: 'WebSocket' });
+    
+    ws.on('message', (message) => {
+      try {
+        const data = JSON.parse(message);
+        
+        // Handle authentication
+        if (data.type === 'auth' && data.token) {
+          try {
+            const decoded = jwt.verify(data.token, JWT_SECRET);
+            authenticatedClients.set(ws, decoded);
+            ws.send(JSON.stringify({ type: 'auth', status: 'success' }));
+            logger.info(`WebSocket authenticated: ${decoded.username}`, { module: 'WebSocket' });
+          } catch (error) {
+            ws.send(JSON.stringify({ type: 'auth', status: 'failed' }));
+          }
+        }
+        
+        // Handle other message types
+        if (data.type === 'ping') {
+          ws.send(JSON.stringify({ type: 'pong' }));
+        }
+      } catch (error) {
+        console.error('WebSocket message error:', error);
+      }
+    });
+    
+    ws.on('close', () => {
+      authenticatedClients.delete(ws);
+      logger.info('WebSocket connection closed', { module: 'WebSocket' });
+    });
+    
+    // Send initial status
+    ws.send(JSON.stringify({ 
+      type: 'connected', 
+      timestamp: new Date().toISOString() 
+    }));
+  });
+  
+  // Broadcast function for real-time updates
+  global.broadcast = (data) => {
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(data));
+      }
+    });
+  };
+  
+  logger.info('WebSocket server initialized on /ws', { module: 'WebSocket' });
+} catch (error) {
+  logger.warn('WebSocket support not available (install ws package for real-time features)', { module: 'WebSocket' });
+}

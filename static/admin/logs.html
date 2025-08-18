@@ -6,9 +6,11 @@
     <title>Logs - Hugo Dev</title>
     <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="styles.css">
+    <script src="utils/auth-check.js"></script>
     <script src="auth.js"></script>
     <script src="admin-nav.js"></script>
     <script src="toast.js"></script>
+    <script src="js/admin-functions.js"></script>
     <style>
         .log-entry {
             background: var(--bg-dark);
@@ -282,13 +284,11 @@
         }
         
         function clearLogs() {
-            if (confirm('Are you sure you want to clear all logs?')) {
-                alert('Clear logs functionality coming soon!');
-            }
+            window.adminFunctions.clearLogs();
         }
         
         function downloadLogs() {
-            alert('Download logs functionality coming soon!');
+            window.adminFunctions.downloadLogs();
         }
         
         function handleLogout() {
@@ -303,31 +303,96 @@
             document.body.classList.toggle('light-theme');
         }
         
-        // Simulate live log updates
-        setInterval(() => {
+        // Connect to WebSocket for live logs
+        function connectToLogStream() {
+            const ws = new WebSocket('ws://localhost:3000/logs');
             const logViewer = document.getElementById('live-logs');
-            const autoScroll = document.getElementById('auto-scroll').checked;
             
-            if (Math.random() > 0.7) { // 30% chance of new log
-                const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
-                const levels = ['INFO', 'WARN', 'ERROR', 'DEBUG'];
-                const level = levels[Math.floor(Math.random() * levels.length)];
-                const messages = [
-                    'API request processed successfully',
-                    'Database query completed',
-                    'Cache updated',
-                    'User session validated',
-                    'File upload completed'
-                ];
-                const message = messages[Math.floor(Math.random() * messages.length)];
+            ws.onopen = () => {
+                console.log('Connected to log stream');
+            };
+            
+            ws.onmessage = (event) => {
+                const autoScroll = document.getElementById('auto-scroll').checked;
+                const logData = JSON.parse(event.data);
+                const timestamp = new Date(logData.timestamp).toISOString().replace('T', ' ').substring(0, 19);
                 
-                logViewer.textContent += `\n${timestamp} [${level}] ${message}`;
+                logViewer.textContent += `\n${timestamp} [${logData.level}] ${logData.message}`;
                 
                 if (autoScroll) {
                     logViewer.scrollTop = logViewer.scrollHeight;
                 }
+                
+                // Update counters
+                updateLogCounters(logData.level);
+            };
+            
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                // Fallback to polling
+                pollLogs();
+            };
+            
+            ws.onclose = () => {
+                console.log('Log stream disconnected, reconnecting...');
+                setTimeout(connectToLogStream, 5000);
+            };
+        }
+        
+        // Fallback polling for logs
+        async function pollLogs() {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch('http://localhost:3000/api/logs/recent', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const logs = await response.json();
+                    const logViewer = document.getElementById('live-logs');
+                    const autoScroll = document.getElementById('auto-scroll').checked;
+                    
+                    logs.forEach(log => {
+                        const timestamp = new Date(log.timestamp).toISOString().replace('T', ' ').substring(0, 19);
+                        logViewer.textContent += `\n${timestamp} [${log.level}] ${log.message}`;
+                    });
+                    
+                    if (autoScroll) {
+                        logViewer.scrollTop = logViewer.scrollHeight;
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to fetch logs:', error);
             }
-        }, 3000);
+            
+            // Poll every 5 seconds
+            setTimeout(pollLogs, 5000);
+        }
+        
+        function updateLogCounters(level) {
+            const counters = {
+                'ERROR': document.getElementById('error-count'),
+                'WARN': document.getElementById('warning-count')
+            };
+            
+            if (counters[level]) {
+                const current = parseInt(counters[level].textContent) || 0;
+                counters[level].textContent = current + 1;
+            }
+            
+            // Update total
+            const totalElement = document.getElementById('total-logs');
+            const currentTotal = parseInt(totalElement.textContent.replace(',', '')) || 0;
+            totalElement.textContent = (currentTotal + 1).toLocaleString();
+            
+            // Update last update time
+            document.getElementById('last-update').textContent = 'Just now';
+        }
+        
+        // Start log streaming
+        connectToLogStream();
     </script>
 </body>
 </html>

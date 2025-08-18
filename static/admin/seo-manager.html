@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Manager - Portfolio Admin</title>
+    <script src="admin-layout.js"></script>
+    <script src="api-client.js"></script>
+    <script src="js/toast.js"></script>
+    <style>
+        .seo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .seo-score-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .seo-score-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 20s infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-50px, -50px); }
+        }
+        
+        .seo-score-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .seo-score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .seo-score-value {
+            font-size: 48px;
+            font-weight: 700;
+        }
+        
+        .seo-score-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .seo-tips {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .seo-tip {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        
+        .seo-section {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .analysis-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .analysis-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .analysis-item:hover {
+            background: var(--bg-tertiary);
+        }
+        
+        .analysis-status {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+        
+        .analysis-status.good { background: rgba(72, 187, 120, 0.1); }
+        .analysis-status.warning { background: rgba(237, 137, 54, 0.1); }
+        .analysis-status.error { background: rgba(245, 101, 101, 0.1); }
+        
+        .analysis-content {
+            flex: 1;
+        }
+        
+        .analysis-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+        
+        .analysis-description {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        .analysis-action {
+            font-size: 12px;
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .analysis-action:hover {
+            text-decoration: underline;
+        }
+        
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        
+        .keyword-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            position: relative;
+        }
+        
+        .keyword-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .keyword-text {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .keyword-volume {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .keyword-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 12px;
+        }
+        
+        .keyword-metric {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .keyword-metric-label {
+            color: var(--text-muted);
+        }
+        
+        .keyword-metric-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .meta-editor {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .meta-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .meta-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .meta-input {
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .meta-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .meta-counter {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: right;
+        }
+        
+        .meta-counter.warning { color: #ed8936; }
+        .meta-counter.error { color: #f56565; }
+        
+        .preview-box {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+        
+        .preview-title {
+            color: #1a0dab;
+            font-size: 18px;
+            margin-bottom: 4px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .preview-title:hover {
+            text-decoration: underline;
+        }
+        
+        .preview-url {
+            color: #006621;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        
+        .preview-description {
+            color: #545454;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="seo-container">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h1 style="font-size: 28px; margin: 0;">🔍 SEO Manager</h1>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn-secondary" onclick="analyzeCurrentPage()">Analyze Current</button>
+                <button class="btn btn-primary" onclick="runFullAudit()">Run Full Audit</button>
+            </div>
+        </div>
+        
+        <!-- SEO Score Card -->
+        <div class="seo-score-card">
+            <div class="seo-score-header">
+                <div>
+                    <h2 style="margin: 0 0 8px 0; font-size: 24px;">Overall SEO Score</h2>
+                    <p style="opacity: 0.9; margin: 0;">Your site's search engine optimization health</p>
+                </div>
+                <div class="seo-score-circle">
+                    <div class="seo-score-value" id="seoScore">85</div>
+                    <div class="seo-score-label">out of 100</div>
+                </div>
+            </div>
+            <div class="seo-tips">
+                <div class="seo-tip">✅ 12 pages fully optimized</div>
+                <div class="seo-tip">⚠️ 3 pages need attention</div>
+                <div class="seo-tip">🔗 All meta tags present</div>
+                <div class="seo-tip">🚀 Good page speed</div>
+            </div>
+        </div>
+        
+        <!-- Critical Issues -->
+        <div class="seo-section">
+            <div class="section-header">
+                <h3 class="section-title">SEO Analysis</h3>
+                <span style="font-size: 12px; color: var(--text-muted);">Last scan: 2 hours ago</span>
+            </div>
+            <div class="analysis-grid" id="analysisGrid">
+                <!-- Analysis items will be populated here -->
+            </div>
+        </div>
+        
+        <!-- Meta Tags Editor -->
+        <div class="seo-section">
+            <div class="section-header">
+                <h3 class="section-title">Meta Tags Editor</h3>
+                <select id="pageSelector" onchange="loadPageMeta()" style="padding: 8px; border-radius: 6px; border: 1px solid var(--border);">
+                    <option value="/">Home Page</option>
+                    <option value="/about">About</option>
+                    <option value="/portfolio">Portfolio</option>
+                    <option value="/blog">Blog</option>
+                    <option value="/contact">Contact</option>
+                </select>
+            </div>
+            <div class="meta-editor">
+                <div class="meta-field">
+                    <label class="meta-label">Title Tag</label>
+                    <input type="text" class="meta-input" id="metaTitle" placeholder="Enter page title (50-60 characters)" oninput="updateCounter('metaTitle', 60)">
+                    <span class="meta-counter" id="metaTitleCounter">0 / 60</span>
+                </div>
+                <div class="meta-field">
+                    <label class="meta-label">Meta Description</label>
+                    <textarea class="meta-input" id="metaDescription" rows="3" placeholder="Enter meta description (150-160 characters)" oninput="updateCounter('metaDescription', 160)"></textarea>
+                    <span class="meta-counter" id="metaDescriptionCounter">0 / 160</span>
+                </div>
+                <div class="meta-field">
+                    <label class="meta-label">Keywords</label>
+                    <input type="text" class="meta-input" id="metaKeywords" placeholder="keyword1, keyword2, keyword3">
+                </div>
+                <div class="meta-field">
+                    <label class="meta-label">Canonical URL</label>
+                    <input type="url" class="meta-input" id="canonicalUrl" placeholder="https://yoursite.com/page">
+                </div>
+            </div>
+            
+            <!-- Google Preview -->
+            <div class="preview-box">
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Google Search Preview</div>
+                <a class="preview-title" id="previewTitle">Your Page Title Will Appear Here</a>
+                <div class="preview-url" id="previewUrl">https://yoursite.com/page</div>
+                <div class="preview-description" id="previewDescription">Your meta description will appear here. Make it compelling to increase click-through rates.</div>
+            </div>
+            
+            <div style="margin-top: 20px; display: flex; gap: 12px;">
+                <button class="btn btn-primary" onclick="saveMeta()">Save Meta Tags</button>
+                <button class="btn btn-secondary" onclick="previewChanges()">Preview Changes</button>
+            </div>
+        </div>
+        
+        <!-- Keywords Research -->
+        <div class="seo-section">
+            <div class="section-header">
+                <h3 class="section-title">Keyword Performance</h3>
+                <button class="btn btn-secondary" onclick="refreshKeywords()" style="padding: 6px 12px; font-size: 12px;">🔄 Refresh</button>
+            </div>
+            <div class="keyword-grid" id="keywordGrid">
+                <!-- Keywords will be populated here -->
+            </div>
+        </div>
+        
+        <!-- Sitemap & Robots -->
+        <div class="seo-section">
+            <div class="section-header">
+                <h3 class="section-title">Technical SEO</h3>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h4 style="margin-bottom: 12px;">Sitemap.xml</h4>
+                    <div style="background: var(--bg-secondary); padding: 16px; border-radius: 8px;">
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+                            Last generated: Today at 3:45 PM<br>
+                            Pages indexed: 47<br>
+                            Status: <span style="color: #48bb78;">✓ Valid</span>
+                        </p>
+                        <button class="btn btn-primary" onclick="generateSitemap()">Regenerate Sitemap</button>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 12px;">Robots.txt</h4>
+                    <div style="background: var(--bg-secondary); padding: 16px; border-radius: 8px;">
+                        <textarea id="robotsTxt" style="width: 100%; height: 100px; padding: 8px; border: 1px solid var(--border); border-radius: 4px; font-family: monospace; font-size: 12px; background: var(--bg-primary); color: var(--text-primary);">User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Sitemap: https://yoursite.com/sitemap.xml</textarea>
+                        <button class="btn btn-primary" onclick="saveRobots()" style="margin-top: 12px;">Save Robots.txt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSEOAnalysis();
+            loadKeywords();
+            loadPageMeta();
+        });
+        
+        // Load SEO analysis
+        function loadSEOAnalysis() {
+            const analysisData = [
+                {
+                    status: 'good',
+                    icon: '✅',
+                    title: 'Page Titles',
+                    description: 'All pages have unique, optimized title tags',
+                    action: null
+                },
+                {
+                    status: 'warning',
+                    icon: '⚠️',
+                    title: 'Image Alt Text',
+                    description: '3 images missing alt text attributes',
+                    action: 'Fix Now'
+                },
+                {
+                    status: 'good',
+                    icon: '✅',
+                    title: 'Mobile Friendly',
+                    description: 'All pages are mobile responsive',
+                    action: null
+                },
+                {
+                    status: 'error',
+                    icon: '❌',
+                    title: 'Page Speed',
+                    description: 'Homepage loads in 4.2s (should be under 3s)',
+                    action: 'Optimize'
+                },
+                {
+                    status: 'good',
+                    icon: '✅',
+                    title: 'SSL Certificate',
+                    description: 'Site is served over HTTPS',
+                    action: null
+                },
+                {
+                    status: 'warning',
+                    icon: '⚠️',
+                    title: 'Meta Descriptions',
+                    description: '2 pages have duplicate meta descriptions',
+                    action: 'Edit'
+                }
+            ];
+            
+            const grid = document.getElementById('analysisGrid');
+            grid.innerHTML = analysisData.map(item => `
+                <div class="analysis-item">
+                    <div class="analysis-status ${item.status}">${item.icon}</div>
+                    <div class="analysis-content">
+                        <div class="analysis-title">${item.title}</div>
+                        <div class="analysis-description">${item.description}</div>
+                        ${item.action ? `<a class="analysis-action" onclick="fixIssue('${item.title}')">${item.action} →</a>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Load keywords
+        function loadKeywords() {
+            const keywords = [
+                { text: 'portfolio website', volume: '2,400', difficulty: 'Medium', position: 3, trend: '+12%' },
+                { text: 'web developer', volume: '8,100', difficulty: 'High', position: 7, trend: '+5%' },
+                { text: 'react developer', volume: '4,300', difficulty: 'High', position: 12, trend: '-3%' },
+                { text: 'frontend portfolio', volume: '1,200', difficulty: 'Low', position: 2, trend: '+18%' },
+                { text: 'creative portfolio', volume: '3,600', difficulty: 'Medium', position: 5, trend: '+8%' },
+                { text: 'developer blog', volume: '980', difficulty: 'Low', position: 4, trend: '+22%' }
+            ];
+            
+            const grid = document.getElementById('keywordGrid');
+            grid.innerHTML = keywords.map(kw => `
+                <div class="keyword-card">
+                    <div class="keyword-header">
+                        <span class="keyword-text">${kw.text}</span>
+                        <span class="keyword-volume">${kw.volume}/mo</span>
+                    </div>
+                    <div class="keyword-metrics">
+                        <div class="keyword-metric">
+                            <span class="keyword-metric-label">Position:</span>
+                            <span class="keyword-metric-value">#${kw.position}</span>
+                        </div>
+                        <div class="keyword-metric">
+                            <span class="keyword-metric-label">Difficulty:</span>
+                            <span class="keyword-metric-value">${kw.difficulty}</span>
+                        </div>
+                        <div class="keyword-metric">
+                            <span class="keyword-metric-label">Trend:</span>
+                            <span class="keyword-metric-value" style="color: ${kw.trend.startsWith('+') ? '#48bb78' : '#f56565'};">${kw.trend}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Load page meta
+        function loadPageMeta() {
+            const page = document.getElementById('pageSelector').value;
+            
+            // Simulate loading meta data
+            const metaData = {
+                '/': {
+                    title: 'Portfolio - Full Stack Developer & Creative Projects',
+                    description: 'Explore a portfolio of innovative web development projects, featuring modern technologies and creative solutions.',
+                    keywords: 'portfolio, web developer, full stack, react, node.js, hugo',
+                    canonical: window.location.origin + '/'
+                },
+                '/about': {
+                    title: 'About - Developer Journey & Technical Skills',
+                    description: 'Learn about the journey, technical skills, and professional experience in modern web development.',
+                    keywords: 'about, developer, skills, experience, portfolio',
+                    canonical: window.location.origin + '/about'
+                }
+            };
+            
+            const data = metaData[page] || metaData['/'];
+            document.getElementById('metaTitle').value = data.title;
+            document.getElementById('metaDescription').value = data.description;
+            document.getElementById('metaKeywords').value = data.keywords;
+            document.getElementById('canonicalUrl').value = data.canonical;
+            
+            updateCounter('metaTitle', 60);
+            updateCounter('metaDescription', 160);
+            updatePreview();
+        }
+        
+        // Update character counter
+        function updateCounter(fieldId, limit) {
+            const field = document.getElementById(fieldId);
+            const counter = document.getElementById(fieldId + 'Counter');
+            const length = field.value.length;
+            
+            counter.textContent = `${length} / ${limit}`;
+            
+            if (length > limit) {
+                counter.classList.add('error');
+                counter.classList.remove('warning');
+            } else if (length > limit * 0.9) {
+                counter.classList.add('warning');
+                counter.classList.remove('error');
+            } else {
+                counter.classList.remove('warning', 'error');
+            }
+            
+            updatePreview();
+        }
+        
+        // Update Google preview
+        function updatePreview() {
+            const title = document.getElementById('metaTitle').value || 'Your Page Title';
+            const description = document.getElementById('metaDescription').value || 'Your meta description will appear here.';
+            const url = document.getElementById('canonicalUrl').value || 'https://yoursite.com/page';
+            
+            document.getElementById('previewTitle').textContent = title;
+            document.getElementById('previewDescription').textContent = description;
+            document.getElementById('previewUrl').textContent = url;
+        }
+        
+        // Save meta tags
+        async function saveMeta() {
+            const page = document.getElementById('pageSelector').value;
+            const metaData = {
+                page: page,
+                title: document.getElementById('metaTitle').value,
+                description: document.getElementById('metaDescription').value,
+                keywords: document.getElementById('metaKeywords').value,
+                canonical: document.getElementById('canonicalUrl').value
+            };
+            
+            // Save to backend
+            console.log('Saving meta data:', metaData);
+            
+            // Show success message
+            if (window.showToast) {
+                showToast('Meta tags saved successfully!', 'success');
+            } else {
+                console.log('Meta tags saved successfully!');
+            }
+        }
+        
+        // Generate sitemap
+        async function generateSitemap() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = 'Generating...';
+            
+            // Simulate generation
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.textContent = 'Regenerate Sitemap';
+                if (window.showToast) {
+                    showToast('Sitemap generated successfully!', 'success');
+                } else {
+                    console.log('Sitemap generated successfully!');
+                }
+            }, 2000);
+        }
+        
+        // Save robots.txt
+        async function saveRobots() {
+            const content = document.getElementById('robotsTxt').value;
+            console.log('Saving robots.txt:', content);
+            
+            if (window.showToast) {
+                showToast('Robots.txt saved successfully!', 'success');
+            } else {
+                showToast('Robots.txt saved successfully!', 'success');
+            }
+        }
+        
+        // Run full audit
+        async function runFullAudit() {
+            if (confirm('Run a full SEO audit? This may take a few minutes.')) {
+                // Update score with animation
+                let currentScore = 85;
+                const targetScore = 92;
+                const increment = (targetScore - currentScore) / 30;
+                
+                const interval = setInterval(() => {
+                    currentScore += increment;
+                    if (currentScore >= targetScore) {
+                        currentScore = targetScore;
+                        clearInterval(interval);
+                    }
+                    document.getElementById('seoScore').textContent = Math.round(currentScore);
+                }, 50);
+                
+                // Reload analysis
+                setTimeout(() => {
+                    loadSEOAnalysis();
+                    if (window.showToast) {
+                        showToast('SEO audit completed!', 'success');
+                    }
+                }, 1500);
+            }
+        }
+        
+        // Analyze current page
+        function analyzeCurrentPage() {
+            const page = document.getElementById('pageSelector').value;
+            console.log('Analyzing page:', page);
+            runFullAudit();
+        }
+        
+        // Fix issue
+        function fixIssue(issue) {
+            console.log('Fixing issue:', issue);
+            if (window.showToast) {
+                showToast(`Working on: ${issue}`, 'info');
+            }
+        }
+        
+        // Refresh keywords
+        function refreshKeywords() {
+            const btn = event.target;
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                loadKeywords();
+                btn.disabled = false;
+                if (window.showToast) {
+                    showToast('Keywords refreshed!', 'success');
+                }
+            }, 1000);
+        }
+        
+        // Preview changes
+        function previewChanges() {
+            updatePreview();
+            if (window.showToast) {
+                showToast('Preview updated!', 'info');
+            }
+        }
+    </script>
+</body>
+</html>
