@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Editor Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #5b21b6;
+            --primary-dark: #4c1d95;
+            --primary-light: #ede9fe;
+            --bg: #f5f5f5;
+            --surface: white;
+            --text: #333;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .app-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .sidebar-header h1 {
+            font-size: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .file-explorer {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .file-tree {
+            list-style: none;
+        }
+        
+        .file-tree li {
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .file-tree li:hover {
+            background: var(--primary-light);
+        }
+        
+        .file-tree li.selected {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .folder {
+            font-weight: 600;
+        }
+        
+        .folder::before {
+            content: "📁";
+            margin-right: 5px;
+        }
+        
+        .file::before {
+            content: "📄";
+            margin-right: 5px;
+        }
+        
+        /* Main Editor Area */
+        .main-area {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Toolbar */
+        .toolbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 20px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .toolbar-group {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            padding: 0 10px;
+            border-right: 1px solid var(--border);
+        }
+        
+        .toolbar-group:last-child {
+            border-right: none;
+            margin-left: auto;
+        }
+        
+        button {
+            padding: 6px 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        button.icon-btn {
+            padding: 6px 8px;
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        button.icon-btn:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+        
+        button.success {
+            background: var(--success);
+        }
+        
+        button.success:hover {
+            background: #059669;
+        }
+        
+        select {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        /* Editor Area */
+        .editor-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            overflow: hidden;
+        }
+        
+        .editor-pane, .preview-pane {
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .pane-header {
+            padding: 10px 20px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 15px 20px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .metadata-grid input {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .metadata-grid input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(91, 33, 182, 0.1);
+        }
+        
+        .editor-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #editor {
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            border: none;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: none;
+            outline: none;
+        }
+        
+        #preview {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        /* Preview Styles */
+        #preview h1 { 
+            font-size: 2em; 
+            margin: 0.67em 0; 
+            color: var(--primary);
+        }
+        
+        #preview h2 { 
+            font-size: 1.5em; 
+            margin: 0.75em 0;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.3em;
+        }
+        
+        #preview h3 { 
+            font-size: 1.17em; 
+            margin: 0.83em 0;
+        }
+        
+        #preview p { 
+            margin: 1em 0;
+        }
+        
+        #preview ul, #preview ol { 
+            margin: 1em 0; 
+            padding-left: 2em;
+        }
+        
+        #preview blockquote {
+            margin: 1em 0;
+            padding: 0.5em 1em;
+            border-left: 4px solid var(--primary);
+            background: var(--primary-light);
+            font-style: italic;
+        }
+        
+        #preview code {
+            background: var(--border);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+        
+        #preview pre {
+            background: #1f2937;
+            color: #f3f4f6;
+            padding: 1em;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        #preview pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        
+        #preview table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+        }
+        
+        #preview th, #preview td {
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+        }
+        
+        #preview th {
+            background: var(--bg);
+            font-weight: 600;
+        }
+        
+        #preview img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        
+        #preview a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        #preview a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Status Bar */
+        .status-bar {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        .status-left, .status-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            color: var(--primary);
+        }
+        
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .template-card {
+            padding: 20px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        
+        .template-card:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        
+        .template-card .icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .template-card .name {
+            font-weight: 600;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .editor-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .preview-pane {
+                display: none;
+            }
+            
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+        }
+        
+        /* Tooltips */
+        [data-tooltip] {
+            position: relative;
+        }
+        
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 10px;
+            background: #333;
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 100;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>📝 Content Editor</h1>
+            </div>
+            <div class="file-explorer">
+                <div style="margin-bottom: 10px;">
+                    <button onclick="showTemplates()" style="width: 100%;">➕ New Content</button>
+                </div>
+                <ul class="file-tree" id="fileTree">
+                    <li class="folder">writing</li>
+                    <li class="folder">tools</li>
+                    <li class="folder">photography</li>
+                    <li class="folder">me</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Main Editor Area -->
+        <div class="main-area">
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="toolbar-group">
+                    <button class="icon-btn" onclick="insertMarkdown('# ', '\n')" data-tooltip="Heading 1">H1</button>
+                    <button class="icon-btn" onclick="insertMarkdown('## ', '\n')" data-tooltip="Heading 2">H2</button>
+                    <button class="icon-btn" onclick="insertMarkdown('### ', '\n')" data-tooltip="Heading 3">H3</button>
+                </div>
+                
+                <div class="toolbar-group">
+                    <button class="icon-btn" onclick="insertMarkdown('**', '**')" data-tooltip="Bold (Ctrl+B)"><b>B</b></button>
+                    <button class="icon-btn" onclick="insertMarkdown('*', '*')" data-tooltip="Italic (Ctrl+I)"><i>I</i></button>
+                    <button class="icon-btn" onclick="insertMarkdown('~~', '~~')" data-tooltip="Strikethrough"><s>S</s></button>
+                </div>
+                
+                <div class="toolbar-group">
+                    <button class="icon-btn" onclick="insertMarkdown('[', '](url)')" data-tooltip="Link (Ctrl+K)">🔗</button>
+                    <button class="icon-btn" onclick="insertMarkdown('![alt](', ')')" data-tooltip="Image">🖼️</button>
+                    <button class="icon-btn" onclick="insertMarkdown('`', '`')" data-tooltip="Inline Code">&lt;/&gt;</button>
+                    <button class="icon-btn" onclick="insertCodeBlock()" data-tooltip="Code Block">{ }</button>
+                </div>
+                
+                <div class="toolbar-group">
+                    <button class="icon-btn" onclick="insertMarkdown('\n> ', '\n')" data-tooltip="Quote">💬</button>
+                    <button class="icon-btn" onclick="insertList('unordered')" data-tooltip="Bullet List">☰</button>
+                    <button class="icon-btn" onclick="insertList('ordered')" data-tooltip="Numbered List">1.</button>
+                    <button class="icon-btn" onclick="insertTable()" data-tooltip="Table">⊞</button>
+                </div>
+                
+                <div class="toolbar-group">
+                    <select id="templateSelect" onchange="loadTemplate(this.value)">
+                        <option value="">Select Template</option>
+                        <option value="blog">Blog Post</option>
+                        <option value="tool">Tool</option>
+                        <option value="strategy">Strategy</option>
+                        <option value="poem">Poem</option>
+                        <option value="portfolio">Portfolio</option>
+                    </select>
+                </div>
+                
+                <div class="toolbar-group">
+                    <button onclick="saveToFile()" class="success">💾 Save</button>
+                    <button onclick="downloadMarkdown()">⬇️ Download</button>
+                    <button onclick="clearAll()">🗑️ Clear</button>
+                </div>
+            </div>
+            
+            <!-- Editor Container -->
+            <div class="editor-container">
+                <!-- Editor Pane -->
+                <div class="editor-pane">
+                    <div class="pane-header">
+                        <span>Markdown</span>
+                        <span id="wordCount">0 words</span>
+                    </div>
+                    
+                    <div class="metadata-grid">
+                        <input type="text" id="title" placeholder="Title" />
+                        <input type="text" id="slug" placeholder="URL slug (auto-generated)" />
+                        <input type="text" id="description" placeholder="Description" />
+                        <input type="text" id="tags" placeholder="Tags (comma-separated)" />
+                    </div>
+                    
+                    <div class="editor-wrapper">
+                        <textarea id="editor" placeholder="Start writing in Markdown...
+
+## Quick Tips:
+- Use **bold** and *italic* for emphasis
+- Create [links](url) easily
+- Add images with ![alt](image-url)
+- Use > for blockquotes
+- Create lists with - or 1.
+
+Happy writing! ✨"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Preview Pane -->
+                <div class="preview-pane">
+                    <div class="pane-header">
+                        <span>Preview</span>
+                        <span id="readingTime">0 min read</span>
+                    </div>
+                    <div id="preview"></div>
+                </div>
+            </div>
+            
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-left">
+                    <div class="status-item">
+                        <span class="status-indicator"></span>
+                        <span id="saveStatus">Ready</span>
+                    </div>
+                    <div class="status-item">
+                        <span id="charCount">0 characters</span>
+                    </div>
+                    <div class="status-item">
+                        <span id="lineCount">1 line</span>
+                    </div>
+                </div>
+                <div class="status-right">
+                    <div class="status-item">
+                        <span>Markdown</span>
+                    </div>
+                    <div class="status-item">
+                        <span id="lastSaved">No changes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Template Modal -->
+    <div class="modal" id="templateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Choose a Template</h2>
+            </div>
+            <div class="template-grid">
+                <div class="template-card" onclick="selectTemplate('blog')">
+                    <div class="icon">📝</div>
+                    <div class="name">Blog Post</div>
+                </div>
+                <div class="template-card" onclick="selectTemplate('tool')">
+                    <div class="icon">🔧</div>
+                    <div class="name">Tool</div>
+                </div>
+                <div class="template-card" onclick="selectTemplate('strategy')">
+                    <div class="icon">🎯</div>
+                    <div class="name">Strategy</div>
+                </div>
+                <div class="template-card" onclick="selectTemplate('poem')">
+                    <div class="icon">✍️</div>
+                    <div class="name">Poem</div>
+                </div>
+                <div class="template-card" onclick="selectTemplate('portfolio')">
+                    <div class="icon">💼</div>
+                    <div class="name">Portfolio</div>
+                </div>
+                <div class="template-card" onclick="selectTemplate('blank')">
+                    <div class="icon">📄</div>
+                    <div class="name">Blank</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // Elements
+        const editor = document.getElementById('editor');
+        const preview = document.getElementById('preview');
+        const titleInput = document.getElementById('title');
+        const slugInput = document.getElementById('slug');
+        const descriptionInput = document.getElementById('description');
+        const tagsInput = document.getElementById('tags');
+        const wordCountEl = document.getElementById('wordCount');
+        const charCountEl = document.getElementById('charCount');
+        const lineCountEl = document.getElementById('lineCount');
+        const readingTimeEl = document.getElementById('readingTime');
+        const saveStatusEl = document.getElementById('saveStatus');
+        const lastSavedEl = document.getElementById('lastSaved');
+        
+        // Templates
+        const templates = {
+            blog: {
+                content: `## Introduction
+
+Start with a compelling hook that draws readers in...
+
+## The Problem
+
+Describe the challenge or issue you're addressing...
+
+## The Solution
+
+Present your solution or approach...
+
+### Key Benefits
+
+- Benefit 1
+- Benefit 2
+- Benefit 3
+
+## Implementation
+
+Step-by-step guide or detailed explanation...
+
+## Results
+
+What outcomes can be expected...
+
+## Conclusion
+
+Wrap up with key takeaways...
+
+## Next Steps
+
+- Action item 1
+- Action item 2
+- Action item 3`
+            },
+            tool: {
+                content: `## What it is
+
+Brief description of the tool...
+
+## Key Features
+
+- Feature 1
+- Feature 2
+- Feature 3
+
+## How to use it
+
+### Getting Started
+
+1. First step
+2. Second step
+3. Third step
+
+### Advanced Usage
+
+Describe advanced features...
+
+## Quick Specs
+
+- **Cost**: Free / Paid
+- **Platform**: Web / Desktop / Mobile
+- **Learning Curve**: Easy / Moderate / Advanced
+- **Best For**: Target audience
+
+## Pros and Cons
+
+### Pros ✅
+- Advantage 1
+- Advantage 2
+
+### Cons ❌
+- Limitation 1
+- Limitation 2
+
+## Alternatives
+
+- Alternative 1
+- Alternative 2
+
+## Resources
+
+- [Official Documentation](url)
+- [Tutorial](url)
+- [Community](url)`
+            },
+            strategy: {
+                content: `## Core Principle
+
+The fundamental concept behind this strategy...
+
+## Why It Works
+
+Scientific or logical explanation...
+
+## Implementation Framework
+
+### Phase 1: Foundation
+Description of initial setup...
+
+### Phase 2: Development
+Building on the foundation...
+
+### Phase 3: Optimization
+Fine-tuning and improvement...
+
+## Practical Exercises
+
+### Exercise 1: [Name]
+- **Objective**: 
+- **Duration**: 
+- **Instructions**:
+
+### Exercise 2: [Name]
+- **Objective**: 
+- **Duration**: 
+- **Instructions**:
+
+## Common Pitfalls
+
+1. **Pitfall 1**: How to avoid...
+2. **Pitfall 2**: How to avoid...
+
+## Success Metrics
+
+- Metric 1
+- Metric 2
+- Metric 3
+
+## Case Studies
+
+### Example 1
+Brief description...
+
+### Example 2
+Brief description...
+
+## Resources
+
+- Recommended reading
+- Tools needed
+- Support communities`
+            },
+            poem: {
+                content: `<div class="poem-original">
+
+Your poem here
+Line by line
+With natural breaks
+
+Stanza two begins
+After a blank line
+Creating rhythm
+
+</div>
+
+<div class="poem-translation">
+
+*Translation or alternate version*
+*Line by line*
+*In italics*
+
+*Second stanza*
+*Maintains structure*
+*Of the original*
+
+</div>`
+            },
+            portfolio: {
+                content: `## Project Overview
+
+Brief description of the project and its goals...
+
+## The Challenge
+
+What problem were you solving? What were the constraints?
+
+## My Role
+
+- Your responsibilities
+- Team composition
+- Timeline
+
+## The Process
+
+### Research & Discovery
+What research was conducted...
+
+### Design & Planning
+How the solution was designed...
+
+### Development & Implementation
+Technical details and approach...
+
+### Testing & Refinement
+Quality assurance process...
+
+## Technologies Used
+
+- Technology 1
+- Technology 2
+- Technology 3
+
+## Key Features
+
+- Feature 1 with description
+- Feature 2 with description
+- Feature 3 with description
+
+## Results & Impact
+
+- Metric 1: X% improvement
+- Metric 2: X users served
+- Metric 3: X time saved
+
+## Lessons Learned
+
+Key takeaways from the project...
+
+## Links
+
+- [Live Demo](url)
+- [GitHub Repository](url)
+- [Case Study](url)`
+            },
+            blank: {
+                content: ''
+            }
+        };
+        
+        // Auto-save functionality
+        let autoSaveTimer;
+        function autoSave() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                saveToLocal();
+                updateStatus('Auto-saved', 'success');
+            }, 1000);
+        }
+        
+        // Save to localStorage
+        function saveToLocal() {
+            const content = {
+                markdown: editor.value,
+                title: titleInput.value,
+                slug: slugInput.value,
+                description: descriptionInput.value,
+                tags: tagsInput.value,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('editorContent', JSON.stringify(content));
+            lastSavedEl.textContent = `Saved ${new Date().toLocaleTimeString()}`;
+        }
+        
+        // Load from localStorage
+        function loadFromLocal() {
+            const saved = localStorage.getItem('editorContent');
+            if (saved) {
+                const content = JSON.parse(saved);
+                editor.value = content.markdown || '';
+                titleInput.value = content.title || '';
+                slugInput.value = content.slug || '';
+                descriptionInput.value = content.description || '';
+                tagsInput.value = content.tags || '';
+                updatePreview();
+                updateStats();
+            }
+        }
+        
+        // Update preview
+        function updatePreview() {
+            const markdown = editor.value;
+            const html = marked.parse(markdown);
+            
+            // Add title to preview if exists
+            const titleHtml = titleInput.value ? `<h1>${titleInput.value}</h1>` : '';
+            const descHtml = descriptionInput.value ? `<p style="font-size: 1.2em; color: #6b7280; margin-bottom: 2em;">${descriptionInput.value}</p>` : '';
+            
+            preview.innerHTML = titleHtml + descHtml + html;
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const text = editor.value;
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+            const chars = text.length;
+            const lines = text.split('\n').length;
+            const readingTime = Math.max(1, Math.ceil(words / 200));
+            
+            wordCountEl.textContent = `${words} words`;
+            charCountEl.textContent = `${chars} characters`;
+            lineCountEl.textContent = `${lines} line${lines !== 1 ? 's' : ''}`;
+            readingTimeEl.textContent = `${readingTime} min read`;
+        }
+        
+        // Update status
+        function updateStatus(message, type = 'info') {
+            saveStatusEl.textContent = message;
+            const indicator = document.querySelector('.status-indicator');
+            
+            if (type === 'success') {
+                indicator.style.background = 'var(--success)';
+            } else if (type === 'error') {
+                indicator.style.background = 'var(--error)';
+            } else {
+                indicator.style.background = 'var(--warning)';
+            }
+            
+            setTimeout(() => {
+                saveStatusEl.textContent = 'Ready';
+                indicator.style.background = 'var(--success)';
+            }, 3000);
+        }
+        
+        // Generate slug from title
+        function generateSlug() {
+            const title = titleInput.value;
+            const slug = title
+                .toLowerCase()
+                .replace(/[^\w\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/--+/g, '-')
+                .trim();
+            slugInput.value = slug;
+        }
+        
+        // Insert markdown
+        function insertMarkdown(before, after) {
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const text = editor.value;
+            const selected = text.substring(start, end);
+            
+            editor.value = text.substring(0, start) + before + selected + after + text.substring(end);
+            editor.focus();
+            editor.selectionStart = start + before.length;
+            editor.selectionEnd = start + before.length + selected.length;
+            
+            updatePreview();
+            updateStats();
+            autoSave();
+        }
+        
+        // Insert code block
+        function insertCodeBlock() {
+            const start = editor.selectionStart;
+            const text = editor.value;
+            const codeBlock = '\n```javascript\n// Your code here\n\n```\n';
+            
+            editor.value = text.substring(0, start) + codeBlock + text.substring(start);
+            editor.focus();
+            editor.selectionStart = start + 15;
+            editor.selectionEnd = start + 32;
+            
+            updatePreview();
+            updateStats();
+            autoSave();
+        }
+        
+        // Insert list
+        function insertList(type) {
+            const start = editor.selectionStart;
+            const text = editor.value;
+            let list;
+            
+            if (type === 'ordered') {
+                list = '\n1. First item\n2. Second item\n3. Third item\n';
+            } else {
+                list = '\n- First item\n- Second item\n- Third item\n';
+            }
+            
+            editor.value = text.substring(0, start) + list + text.substring(start);
+            editor.focus();
+            
+            updatePreview();
+            updateStats();
+            autoSave();
+        }
+        
+        // Insert table
+        function insertTable() {
+            const start = editor.selectionStart;
+            const text = editor.value;
+            const table = '\n| Header 1 | Header 2 | Header 3 |\n|----------|----------|----------|\n| Cell 1   | Cell 2   | Cell 3   |\n| Cell 4   | Cell 5   | Cell 6   |\n';
+            
+            editor.value = text.substring(0, start) + table + text.substring(start);
+            editor.focus();
+            
+            updatePreview();
+            updateStats();
+            autoSave();
+        }
+        
+        // Load template
+        function loadTemplate(templateName) {
+            if (templateName && templates[templateName]) {
+                if (editor.value && !confirm('This will replace current content. Continue?')) {
+                    document.getElementById('templateSelect').value = '';
+                    return;
+                }
+                editor.value = templates[templateName].content;
+                updatePreview();
+                updateStats();
+                autoSave();
+            }
+        }
+        
+        // Show templates modal
+        function showTemplates() {
+            document.getElementById('templateModal').classList.add('active');
+        }
+        
+        // Select template from modal
+        function selectTemplate(templateName) {
+            loadTemplate(templateName);
+            document.getElementById('templateModal').classList.remove('active');
+            document.getElementById('templateSelect').value = templateName;
+        }
+        
+        // Clear all
+        function clearAll() {
+            if (confirm('Clear all content? This cannot be undone.')) {
+                editor.value = '';
+                titleInput.value = '';
+                slugInput.value = '';
+                descriptionInput.value = '';
+                tagsInput.value = '';
+                updatePreview();
+                updateStats();
+                localStorage.removeItem('editorContent');
+                updateStatus('Content cleared', 'info');
+            }
+        }
+        
+        // Save to file (simulate)
+        function saveToFile() {
+            saveToLocal();
+            updateStatus('Saved successfully!', 'success');
+        }
+        
+        // Download markdown
+        function downloadMarkdown() {
+            const title = titleInput.value || 'untitled';
+            const slug = slugInput.value || title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            const date = new Date().toISOString();
+            
+            const frontmatter = `---
+title: "${titleInput.value}"
+date: ${date}
+draft: false
+description: "${descriptionInput.value}"
+tags: [${tagsInput.value.split(',').map(t => `"${t.trim()}"`).join(', ')}]
+---
+
+`;
+            
+            const content = frontmatter + editor.value;
+            const blob = new Blob([content], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${slug}.md`;
+            a.click();
+            
+            updateStatus('Downloaded!', 'success');
+        }
+        
+        // Event listeners
+        editor.addEventListener('input', () => {
+            updatePreview();
+            updateStats();
+            autoSave();
+        });
+        
+        titleInput.addEventListener('input', () => {
+            generateSlug();
+            updatePreview();
+            autoSave();
+        });
+        
+        [descriptionInput, tagsInput].forEach(input => {
+            input.addEventListener('input', () => {
+                updatePreview();
+                autoSave();
+            });
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'b':
+                        e.preventDefault();
+                        insertMarkdown('**', '**');
+                        break;
+                    case 'i':
+                        e.preventDefault();
+                        insertMarkdown('*', '*');
+                        break;
+                    case 'k':
+                        e.preventDefault();
+                        insertMarkdown('[', '](url)');
+                        break;
+                    case 's':
+                        e.preventDefault();
+                        saveToFile();
+                        break;
+                    case 'd':
+                        e.preventDefault();
+                        downloadMarkdown();
+                        break;
+                }
+            }
+        });
+        
+        // Close modal on outside click
+        document.getElementById('templateModal').addEventListener('click', (e) => {
+            if (e.target.id === 'templateModal') {
+                e.target.classList.remove('active');
+            }
+        });
+        
+        // Initialize
+        loadFromLocal();
+        updatePreview();
+        updateStats();
+        
+        // Initial focus
+        if (!editor.value) {
+            titleInput.focus();
+        }
+    </script>
+</body>
+</html>
