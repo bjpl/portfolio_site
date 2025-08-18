@@ -52,7 +52,8 @@
       "Bash(start chrome http://localhost:3334/admin/simple-editor.html)",
       "Bash(start chrome http://localhost:3334/admin/portfolio.html)",
       "Bash(start chrome http://localhost:1313/portfolio/)",
-      "Bash(start chrome:*)"
+      "Bash(start chrome:*)",
+      "Bash(python:*)"
     ],
     "defaultMode": "acceptEdits"
   }
