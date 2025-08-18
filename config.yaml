@@ -31,5 +31,25 @@ menu:
       weight: 40
 
 params:
-  description: "My Portfolio Site"
-  author: "Your Name"
+  description: "Professional portfolio showcasing web development, design, and creative projects"
+  author: "Brandon Lambert"
+  keywords: ["portfolio", "web development", "design", "programming", "creative", "full stack"]
+  og_image: "/images/og-default.jpg"
+  twitter_username: ""
+  logo: "/images/logo.png"
+
+# SEO and Analytics
+googleAnalytics: ""  # Add your GA tracking ID here (e.g., "G-XXXXXXXXXX")
+enableRobotsTXT: true
+sitemap:
+  changefreq: "weekly"
+  priority: 0.5
+
+# Performance
+minify:
+  minifyOutput: true
+
+# RSS
+outputs:
+  home: ["HTML", "RSS", "JSON"]
+  section: ["HTML", "RSS"]

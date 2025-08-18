@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}</title>
-    <meta name="description" content="{{ .Description | default site.Params.description }}">
+    
+    {{ partial "seo.html" . }}
+    {{ partial "google-analytics.html" . }}
+    
     <link rel="stylesheet" href="/css/main.css">
     <script>
         // Theme setup
@@ -23,6 +26,7 @@
     
     {{ partial "footer.html" . }}
     
+    <script src="/js/lazy-load.js" defer></script>
     <script>
         function toggleTheme() {
             const current = document.documentElement.getAttribute('data-theme');
