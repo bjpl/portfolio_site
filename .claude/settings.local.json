@@ -61,7 +61,9 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:localhost)",
       "WebFetch(domain:localhost)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(do echo \"Testing $url\")",
+      "Bash(do echo \"Testing old URL $url\")"
     ],
     "defaultMode": "acceptEdits"
   }
