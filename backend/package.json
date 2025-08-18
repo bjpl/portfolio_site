@@ -4,10 +4,8 @@
   "description": "Backend for Hugo Management Tools",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "start:simple": "node src/server-simple.js",
-    "dev": "nodemon src/server.js",
-    "dev:simple": "nodemon src/server-simple.js",
+    "start": "node src/simple-cms-server.js",
+    "dev": "nodemon src/simple-cms-server.js",
     "test": "jest --config jest.config.js",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple CMS - Portfolio Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .sidebar-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-header p {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .content-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .content-item {
+            padding: 12px;
+            margin-bottom: 5px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .content-item:hover {
+            background: #e8eaf6;
+        }
+        
+        .content-item.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .content-item-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .content-item-meta {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        
+        .sidebar-actions {
+            padding: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+        
+        .btn-secondary {
+            background: #48bb78;
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-secondary:hover {
+            background: #38a169;
+        }
+        
+        /* Editor */
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .editor-header {
+            background: white;
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .editor-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .editor-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .editor-main {
+            flex: 1;
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            overflow: hidden;
+        }
+        
+        .editor-panel {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .panel-header {
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .frontmatter-grid {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #4a5568;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        
+        #contentEditor {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            resize: none;
+            line-height: 1.6;
+        }
+        
+        .preview-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 6px;
+        }
+        
+        .preview-content h1 { margin: 20px 0 15px; }
+        .preview-content h2 { margin: 18px 0 12px; }
+        .preview-content h3 { margin: 16px 0 10px; }
+        .preview-content p { margin-bottom: 15px; line-height: 1.6; }
+        .preview-content ul, .preview-content ol { margin: 15px 0 15px 30px; }
+        .preview-content li { margin-bottom: 8px; }
+        .preview-content code { 
+            background: #e0e0e0; 
+            padding: 2px 6px; 
+            border-radius: 3px; 
+            font-size: 0.9em;
+        }
+        .preview-content pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        .status-bar {
+            background: white;
+            padding: 10px 20px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+        }
+        
+        .status-message {
+            color: #4a5568;
+        }
+        
+        .status-message.success {
+            color: #48bb78;
+        }
+        
+        .status-message.error {
+            color: #f56565;
+        }
+        
+        /* Loading overlay */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .loading.active {
+            display: flex;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>Simple CMS</h1>
+            <p>Direct Markdown Editing</p>
+        </div>
+        <div class="content-list" id="contentList">
+            <!-- Content files will be loaded here -->
+        </div>
+        <div class="sidebar-actions">
+            <button class="btn btn-primary" onclick="createNewContent()">+ New Content</button>
+            <button class="btn btn-secondary" onclick="deployChanges()">🚀 Deploy to Live</button>
+        </div>
+    </div>
+    
+    <!-- Editor -->
+    <div class="editor-container">
+        <div class="editor-header">
+            <div class="editor-title" id="editorTitle">Select a file to edit</div>
+            <div class="editor-actions">
+                <button class="btn btn-primary" onclick="saveContent()" id="saveBtn" disabled>💾 Save</button>
+                <button class="btn btn-secondary" onclick="buildSite()" id="buildBtn">🔨 Build Site</button>
+            </div>
+        </div>
+        
+        <div class="editor-main">
+            <!-- Frontmatter & Content Editor -->
+            <div class="editor-panel">
+                <div class="panel-header">Edit Content</div>
+                <div class="frontmatter-grid">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="titleField" placeholder="Page title">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="descriptionField" placeholder="Page description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="datetime-local" id="dateField">
+                    </div>
+                    <div class="form-group">
+                        <label>Draft</label>
+                        <input type="checkbox" id="draftField">
+                    </div>
+                </div>
+                <div class="panel-header">Markdown Content</div>
+                <textarea id="contentEditor" placeholder="Write your content in Markdown..."></textarea>
+            </div>
+            
+            <!-- Preview -->
+            <div class="editor-panel">
+                <div class="panel-header">Live Preview</div>
+                <div class="preview-content" id="previewContent">
+                    <p style="color: #999;">Preview will appear here...</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="status-bar">
+            <div class="status-message" id="statusMessage">Ready</div>
+            <div>
+                <span id="wordCount">0 words</span> | 
+                <span id="lastSaved">Not saved</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading overlay -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // State
+        let currentFile = null;
+        let hasChanges = false;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadContentList();
+            setupAutoSave();
+            setupPreview();
+        });
+        
+        // Load content list
+        async function loadContentList() {
+            try {
+                const response = await fetch('/api/content');
+                const data = await response.json();
+                
+                if (data.success) {
+                    renderContentList(data.files);
+                }
+            } catch (error) {
+                showStatus('Failed to load content', 'error');
+            }
+        }
+        
+        // Render content list
+        function renderContentList(files) {
+            const listEl = document.getElementById('contentList');
+            
+            // Group files by type
+            const grouped = {};
+            files.forEach(file => {
+                const type = file.type || 'page';
+                if (!grouped[type]) grouped[type] = [];
+                grouped[type].push(file);
+            });
+            
+            listEl.innerHTML = Object.entries(grouped).map(([type, items]) => `
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 0.75rem; font-weight: 600; color: #666; margin-bottom: 8px; text-transform: uppercase;">
+                        ${type}
+                    </div>
+                    ${items.map(file => `
+                        <div class="content-item ${currentFile === file.path ? 'active' : ''}" 
+                             onclick="loadContent('${file.path}')">
+                            <div class="content-item-title">${file.title}</div>
+                            <div class="content-item-meta">
+                                ${file.date ? new Date(file.date).toLocaleDateString() : 'No date'} 
+                                ${file.draft ? '• Draft' : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+        
+        // Load content file
+        async function loadContent(path) {
+            if (hasChanges && !confirm('You have unsaved changes. Continue?')) {
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const response = await fetch(`/api/content/${path}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentFile = path;
+                    
+                    // Update UI
+                    document.getElementById('editorTitle').textContent = data.frontmatter.title || path;
+                    document.getElementById('titleField').value = data.frontmatter.title || '';
+                    document.getElementById('descriptionField').value = data.frontmatter.description || '';
+                    document.getElementById('dateField').value = data.frontmatter.date ? 
+                        new Date(data.frontmatter.date).toISOString().slice(0, 16) : '';
+                    document.getElementById('draftField').checked = data.frontmatter.draft || false;
+                    document.getElementById('contentEditor').value = data.content;
+                    
+                    // Enable save button
+                    document.getElementById('saveBtn').disabled = false;
+                    
+                    // Update preview
+                    updatePreview();
+                    
+                    // Reset change flag
+                    hasChanges = false;
+                    
+                    // Update active state
+                    loadContentList();
+                }
+            } catch (error) {
+                showStatus('Failed to load content', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // Save content
+        async function saveContent() {
+            if (!currentFile) return;
+            
+            showLoading(true);
+            
+            const frontmatter = {
+                title: document.getElementById('titleField').value,
+                description: document.getElementById('descriptionField').value,
+                date: document.getElementById('dateField').value,
+                draft: document.getElementById('draftField').checked
+            };
+            
+            const content = document.getElementById('contentEditor').value;
+            
+            try {
+                const response = await fetch(`/api/content/${currentFile}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ frontmatter, content })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showStatus('Content saved and committed to Git', 'success');
+                    hasChanges = false;
+                    document.getElementById('lastSaved').textContent = 'Saved ' + new Date().toLocaleTimeString();
+                } else {
+                    showStatus('Failed to save content', 'error');
+                }
+            } catch (error) {
+                showStatus('Failed to save content', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // Build site
+        async function buildSite() {
+            showLoading(true);
+            
+            try {
+                const response = await fetch('/api/build', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    showStatus('Site built successfully', 'success');
+                } else {
+                    showStatus('Build failed', 'error');
+                }
+            } catch (error) {
+                showStatus('Build failed', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // Deploy changes
+        async function deployChanges() {
+            if (!confirm('Deploy all changes to live site?')) return;
+            
+            showLoading(true);
+            
+            try {
+                const response = await fetch('/api/deploy', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    showStatus('Deployed! Changes will be live in ~1 minute', 'success');
+                } else {
+                    showStatus('Deploy failed', 'error');
+                }
+            } catch (error) {
+                showStatus('Deploy failed', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // Create new content
+        function createNewContent() {
+            const filename = prompt('Enter filename (e.g., blog/my-post.md):');
+            if (!filename) return;
+            
+            currentFile = filename.endsWith('.md') ? filename : filename + '.md';
+            
+            // Reset editor
+            document.getElementById('editorTitle').textContent = 'New: ' + currentFile;
+            document.getElementById('titleField').value = '';
+            document.getElementById('descriptionField').value = '';
+            document.getElementById('dateField').value = new Date().toISOString().slice(0, 16);
+            document.getElementById('draftField').checked = true;
+            document.getElementById('contentEditor').value = '';
+            document.getElementById('saveBtn').disabled = false;
+            
+            hasChanges = true;
+            updatePreview();
+        }
+        
+        // Setup auto-save
+        function setupAutoSave() {
+            let timeout;
+            
+            ['titleField', 'descriptionField', 'dateField', 'draftField', 'contentEditor'].forEach(id => {
+                const el = document.getElementById(id);
+                el.addEventListener('input', () => {
+                    hasChanges = true;
+                    updateWordCount();
+                    
+                    clearTimeout(timeout);
+                    timeout = setTimeout(updatePreview, 500);
+                });
+            });
+        }
+        
+        // Setup preview
+        function setupPreview() {
+            updatePreview();
+        }
+        
+        // Update preview
+        function updatePreview() {
+            const content = document.getElementById('contentEditor').value;
+            const html = marked.parse(content || 'Preview will appear here...');
+            document.getElementById('previewContent').innerHTML = html;
+        }
+        
+        // Update word count
+        function updateWordCount() {
+            const content = document.getElementById('contentEditor').value;
+            const words = content.trim().split(/\s+/).filter(w => w.length > 0).length;
+            document.getElementById('wordCount').textContent = `${words} words`;
+        }
+        
+        // Show status
+        function showStatus(message, type = '') {
+            const el = document.getElementById('statusMessage');
+            el.textContent = message;
+            el.className = 'status-message ' + type;
+            
+            if (type === 'success' || type === 'error') {
+                setTimeout(() => {
+                    el.className = 'status-message';
+                    el.textContent = 'Ready';
+                }, 3000);
+            }
+        }
+        
+        // Show loading
+        function showLoading(show) {
+            document.getElementById('loading').className = show ? 'loading active' : 'loading';
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                saveContent();
+            }
+        });
+    </script>
+</body>
+</html>
