@@ -1,11 +1,18 @@
 [build]
-  command = "hugo --minify --cleanDestinationDir --verbose"
+  command = "npm run build:netlify || hugo --minify --cleanDestinationDir --verbose"
   publish = "public"
+  base = ""
 
 [build.environment]
   HUGO_VERSION = "0.121.0"
   HUGO_ENV = "production"
   NODE_VERSION = "18"
+  
+[context.production]
+  command = "hugo --minify --cleanDestinationDir"
+  
+[context.branch-deploy]
+  command = "hugo --minify --cleanDestinationDir"
 
 [[headers]]
   for = "/*"

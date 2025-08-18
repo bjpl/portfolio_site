@@ -1,4 +1,7 @@
 DEPLOY_TRIGGER=true
-TIMESTAMP=2025-08-18T07:50:00Z
-BUILD_ID=navigation-ui-fix
+TIMESTAMP=2025-08-18T08:05:00Z
+BUILD_ID=comprehensive-fix-attempt
 FORCE_DEPLOY=true
+REPOSITORY=bjpl/portfolio_site
+BRANCH=main
+NETLIFY_SITE_ID=dea9a962-e599-4fc3-ac60-1634a60b21a7
