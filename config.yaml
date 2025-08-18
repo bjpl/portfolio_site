@@ -23,11 +23,11 @@ menu:
     - name: "Tools"
       url: "/tools/"
       weight: 20
-    - name: "Think"
-      url: "/think/"
+    - name: "Photography"
+      url: "/photography/"
       weight: 30
-    - name: "Meet"
-      url: "/meet/"
+    - name: "Me"
+      url: "/me/"
       weight: 40
 
 params:
