@@ -1,0 +1,260 @@
+{{ define "main" }}
+<div class="portfolio-container">
+    <header class="portfolio-header">
+        <h1>{{ .Title }}</h1>
+        {{ with .Params.description }}
+        <p class="lead">{{ . }}</p>
+        {{ end }}
+    </header>
+
+    <div class="portfolio-filters">
+        <button class="filter-btn active" data-filter="all">All Projects</button>
+        <button class="filter-btn" data-filter="web-development">Web Development</button>
+        <button class="filter-btn" data-filter="artificial-intelligence">AI & ML</button>
+        <button class="filter-btn" data-filter="mobile">Mobile Apps</button>
+    </div>
+
+    <div class="portfolio-grid">
+        {{ range .Pages }}
+        <article class="portfolio-item" data-categories="{{ delimit .Params.categories " " | lower }}">
+            <a href="{{ .Permalink }}" class="portfolio-link">
+                <div class="portfolio-image">
+                    {{ with .Params.featured_image }}
+                    <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy">
+                    {{ else }}
+                    <div class="placeholder-image">
+                        <span>{{ substr .Title 0 1 }}</span>
+                    </div>
+                    {{ end }}
+                    <div class="portfolio-overlay">
+                        <span class="view-project">View Project →</span>
+                    </div>
+                </div>
+                <div class="portfolio-content">
+                    <h3>{{ .Title }}</h3>
+                    {{ with .Params.client }}
+                    <p class="client">{{ . }}</p>
+                    {{ end }}
+                    <p class="summary">{{ .Params.summary | default .Summary }}</p>
+                    <div class="tech-stack">
+                        {{ range first 3 .Params.technologies }}
+                        <span class="tech-tag">{{ . }}</span>
+                        {{ end }}
+                        {{ if gt (len .Params.technologies) 3 }}
+                        <span class="tech-tag">+{{ sub (len .Params.technologies) 3 }} more</span>
+                        {{ end }}
+                    </div>
+                </div>
+            </a>
+        </article>
+        {{ end }}
+    </div>
+</div>
+
+<style>
+.portfolio-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.portfolio-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.portfolio-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #1a202c;
+}
+
+.lead {
+    font-size: 1.25rem;
+    color: #4a5568;
+}
+
+.portfolio-filters {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 0.5rem 1.5rem;
+    border: 2px solid #e2e8f0;
+    background: white;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.filter-btn.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.portfolio-item {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+}
+
+.portfolio-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+.portfolio-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.portfolio-image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+    background: #f7fafc;
+}
+
+.portfolio-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.placeholder-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 4rem;
+    font-weight: bold;
+}
+
+.portfolio-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.portfolio-item:hover .portfolio-overlay {
+    opacity: 1;
+}
+
+.view-project {
+    color: white;
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+.portfolio-content {
+    padding: 1.5rem;
+}
+
+.portfolio-content h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: #1a202c;
+}
+
+.client {
+    color: #667eea;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.summary {
+    color: #4a5568;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tech-tag {
+    padding: 0.25rem 0.75rem;
+    background: #edf2f7;
+    color: #4a5568;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.portfolio-item.hidden {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .portfolio-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Update active button
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filter items
+            const filter = this.dataset.filter;
+            
+            portfolioItems.forEach(item => {
+                if (filter === 'all') {
+                    item.classList.remove('hidden');
+                } else {
+                    const categories = item.dataset.categories;
+                    if (categories && categories.includes(filter.replace('-', ' '))) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    });
+});
+</script>
+{{ end }}
