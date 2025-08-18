@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Management - Portfolio Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary: #48bb78;
+            --danger: #f56565;
+            --warning: #ed8936;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --bg-tertiary: #edf2f7;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                margin-top: 80px;
+                padding: 20px;
+            }
+        }
+        
+        .page-header {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #38a169;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+        
+        .portfolio-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px var(--shadow);
+            transition: all 0.3s;
+        }
+        
+        .portfolio-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px var(--shadow);
+        }
+        
+        .portfolio-image {
+            height: 200px;
+            background: var(--bg-tertiary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .portfolio-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .portfolio-image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 3rem;
+        }
+        
+        .portfolio-status {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-published {
+            background: rgba(72, 187, 120, 0.9);
+            color: white;
+        }
+        
+        .status-draft {
+            background: rgba(237, 137, 54, 0.9);
+            color: white;
+        }
+        
+        .portfolio-content {
+            padding: 20px;
+        }
+        
+        .portfolio-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        
+        .portfolio-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        
+        .portfolio-tags {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .portfolio-tag {
+            padding: 4px 8px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .portfolio-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        
+        .portfolio-actions .btn {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 2px dashed var(--border);
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        
+        .empty-description {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: var(--text-muted);
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 12px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Portfolio Form Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+        }
+        
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+        
+        .modal-body {
+            padding: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            line-height: 1.5;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+        
+        .form-input[type="url"] {
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .modal-footer {
+            padding: 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Navigation will be injected here -->
+        <div id="admin-nav"></div>
+        
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Portfolio Management</h1>
+                <button class="btn btn-primary" onclick="openProjectModal()">
+                    ➕ New Project
+                </button>
+            </div>
+            
+            <div id="portfolioContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Loading portfolio projects...
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Portfolio Project Modal -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">New Portfolio Project</h2>
+                <button class="modal-close" onclick="closeProjectModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="projectForm">
+                    <div class="form-group">
+                        <label class="form-label" for="projectTitle">Project Title *</label>
+                        <input type="text" id="projectTitle" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="projectDescription">Description</label>
+                        <textarea id="projectDescription" class="form-input form-textarea" placeholder="Brief description of the project"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="projectImage">Featured Image URL</label>
+                        <input type="url" id="projectImage" class="form-input" placeholder="https://example.com/image.jpg">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="projectUrl">Project URL</label>
+                        <input type="url" id="projectUrl" class="form-input" placeholder="https://project-demo.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="projectGithub">GitHub URL</label>
+                        <input type="url" id="projectGithub" class="form-input" placeholder="https://github.com/username/project">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="projectTags">Technologies/Tags</label>
+                        <input type="text" id="projectTags" class="form-input" placeholder="React, Node.js, MongoDB (comma separated)">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="projectContent">Project Details (Markdown)</label>
+                        <textarea id="projectContent" class="form-input form-textarea" style="min-height: 300px; font-family: 'Monaco', 'Menlo', 'Consolas', monospace; font-size: 14px; line-height: 1.6;" placeholder="## Overview
+
+Detailed description of the project, what it does, how it was built, challenges faced, etc.
+
+## Features
+
+- Feature 1
+- Feature 2
+- Feature 3
+
+## Tech Stack
+
+- Frontend: React
+- Backend: Node.js
+- Database: MongoDB
+
+## Challenges & Solutions
+
+Describe any challenges you faced and how you solved them.
+
+## What I Learned
+
+Key takeaways and skills developed during this project."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="projectDraft" style="margin-right: 8px;">
+                            Save as draft
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeProjectModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveProject()" id="saveBtn">Save Project</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load navigation component
+        fetch('/admin/nav.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('admin-nav').innerHTML = html;
+                
+                // Execute any scripts in the nav component
+                const scripts = document.getElementById('admin-nav').querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = script.textContent;
+                    document.head.appendChild(newScript);
+                });
+            })
+            .catch(error => {
+                console.error('Failed to load navigation:', error);
+            });
+    </script>
+    
+    <script>
+        let portfolioProjects = [];
+        let editingProject = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPortfolioProjects();
+        });
+
+        async function loadPortfolioProjects() {
+            try {
+                const response = await fetch('/api/content');
+                const data = await response.json();
+
+                if (data.success) {
+                    // Filter for portfolio/make projects
+                    portfolioProjects = data.files.filter(file => 
+                        file.path.includes('/make/') || 
+                        file.type === 'project' ||
+                        file.path.includes('portfolio')
+                    );
+                    
+                    renderPortfolioGrid();
+                } else {
+                    showError('Failed to load portfolio projects');
+                }
+            } catch (error) {
+                console.error('Error loading portfolio:', error);
+                showError('Failed to load portfolio projects');
+            }
+        }
+
+        function renderPortfolioGrid() {
+            const container = document.getElementById('portfolioContainer');
+            
+            if (portfolioProjects.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">💼</div>
+                        <h2 class="empty-title">No Portfolio Projects Yet</h2>
+                        <p class="empty-description">Create your first portfolio project to showcase your work</p>
+                        <button class="btn btn-primary" onclick="openProjectModal()">Create Project</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const gridHtml = `
+                <div class="portfolio-grid">
+                    ${portfolioProjects.map(project => createProjectCard(project)).join('')}
+                </div>
+            `;
+
+            container.innerHTML = gridHtml;
+        }
+
+        function createProjectCard(project) {
+            const status = project.draft ? 'draft' : 'published';
+            const statusText = project.draft ? 'Draft' : 'Published';
+            
+            return `
+                <div class="portfolio-card">
+                    <div class="portfolio-image">
+                        ${project.image ? 
+                            `<img src="${project.image}" alt="${project.title}" loading="lazy">` :
+                            `<div class="portfolio-image-placeholder">🖼️</div>`
+                        }
+                        <div class="portfolio-status status-${status}">${statusText}</div>
+                    </div>
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">${project.title}</h3>
+                        <p class="portfolio-description">${project.description || 'No description provided'}</p>
+                        ${project.tags ? `
+                            <div class="portfolio-tags">
+                                ${project.tags.split(',').map(tag => `<span class="portfolio-tag">${tag.trim()}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        <div class="portfolio-actions">
+                            <button class="btn btn-outline" onclick="editProject('${project.path}')">Edit</button>
+                            <button class="btn btn-primary" onclick="viewProject('${project.path}')">View</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openProjectModal(project = null) {
+            const modal = document.getElementById('projectModal');
+            const title = document.getElementById('modalTitle');
+            const saveBtn = document.getElementById('saveBtn');
+            
+            if (project) {
+                title.textContent = 'Edit Project';
+                saveBtn.textContent = 'Update Project';
+                fillFormWithProject(project);
+                editingProject = project;
+            } else {
+                title.textContent = 'New Project';
+                saveBtn.textContent = 'Save Project';
+                clearForm();
+                editingProject = null;
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeProjectModal() {
+            document.getElementById('projectModal').classList.remove('active');
+            clearForm();
+            editingProject = null;
+        }
+
+        function clearForm() {
+            document.getElementById('projectForm').reset();
+        }
+
+        function fillFormWithProject(project) {
+            document.getElementById('projectTitle').value = project.title || '';
+            document.getElementById('projectDescription').value = project.description || '';
+            document.getElementById('projectImage').value = project.image || '';
+            document.getElementById('projectUrl').value = project.url || '';
+            document.getElementById('projectGithub').value = project.github || '';
+            document.getElementById('projectTags').value = project.tags || '';
+            document.getElementById('projectContent').value = project.content || '';
+            document.getElementById('projectDraft').checked = project.draft || false;
+        }
+
+        async function saveProject() {
+            const form = document.getElementById('projectForm');
+            const formData = new FormData(form);
+            
+            const title = document.getElementById('projectTitle').value.trim();
+            if (!title) {
+                alert('Please enter a project title');
+                return;
+            }
+
+            const projectData = {
+                title: title,
+                description: document.getElementById('projectDescription').value.trim(),
+                image: document.getElementById('projectImage').value.trim(),
+                url: document.getElementById('projectUrl').value.trim(),
+                github: document.getElementById('projectGithub').value.trim(),
+                tags: document.getElementById('projectTags').value.trim(),
+                draft: document.getElementById('projectDraft').checked,
+                date: new Date().toISOString(),
+                type: 'project'
+            };
+
+            const content = document.getElementById('projectContent').value.trim();
+            
+            // Generate filename
+            const filename = editingProject ? 
+                editingProject.path : 
+                `make/${title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')}.md`;
+
+            try {
+                showLoading(true);
+                
+                const response = await fetch(`/api/content/${filename}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        frontmatter: projectData,
+                        content: content
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showStatus('Project saved successfully!', 'success');
+                    closeProjectModal();
+                    loadPortfolioProjects(); // Refresh the list
+                } else {
+                    showStatus('Failed to save project', 'error');
+                }
+            } catch (error) {
+                console.error('Error saving project:', error);
+                showStatus('Failed to save project', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function editProject(path) {
+            try {
+                showLoading(true);
+                
+                const response = await fetch(`/api/content/${path}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const project = {
+                        ...data.frontmatter,
+                        content: data.content,
+                        path: path
+                    };
+                    openProjectModal(project);
+                }
+            } catch (error) {
+                console.error('Error loading project:', error);
+                showStatus('Failed to load project', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function viewProject(path) {
+            // Open the project in the content editor
+            window.open(`simple-editor.html?file=${path}`, '_blank');
+        }
+
+        function showStatus(message, type) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 24px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10001;
+                transition: all 0.3s;
+                background: ${type === 'success' ? '#48bb78' : '#f56565'};
+            `;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+
+        function showLoading(show) {
+            // Simple loading state - could be enhanced
+            const saveBtn = document.getElementById('saveBtn');
+            if (saveBtn) {
+                saveBtn.disabled = show;
+                saveBtn.textContent = show ? 'Saving...' : (editingProject ? 'Update Project' : 'Save Project');
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('portfolioContainer').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">⚠️</div>
+                    <h2 class="empty-title">Error Loading Projects</h2>
+                    <p class="empty-description">${message}</p>
+                    <button class="btn btn-primary" onclick="loadPortfolioProjects()">Try Again</button>
+                </div>
+            `;
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('projectModal');
+            if (e.target === modal) {
+                closeProjectModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeProjectModal();
+            }
+        });
+    </script>
+</body>
+</html>

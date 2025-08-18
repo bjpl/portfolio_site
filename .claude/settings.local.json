@@ -46,7 +46,12 @@
       "Bash(npm --version)",
       "Bash(netlify:*)",
       "Bash(start chrome http://localhost:3000/static/admin/login.html)",
-      "Bash(PORT=3001 npm run start:simple)"
+      "Bash(PORT=3001 npm run start:simple)",
+      "Bash(PORT=3001 node src/simple-cms-server.js)",
+      "Bash(PORT=3334 node src/simple-cms-server.js)",
+      "Bash(start chrome http://localhost:3334/admin/simple-editor.html)",
+      "Bash(start chrome http://localhost:3334/admin/portfolio.html)",
+      "Bash(start chrome http://localhost:1313/portfolio/)"
     ],
     "defaultMode": "acceptEdits"
   }

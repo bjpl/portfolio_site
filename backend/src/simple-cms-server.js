@@ -24,7 +24,10 @@ const STATIC_DIR = path.join(HUGO_ROOT, 'static');
 const PUBLIC_DIR = path.join(HUGO_ROOT, 'public');
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:1313', 'http://localhost:3334', 'https://vocal-pony-24e3de.netlify.app'],
+    credentials: true
+}));
 app.use(express.json());
 app.use('/admin', express.static(path.join(HUGO_ROOT, 'static/admin')));
 app.use('/api/uploads', express.static(path.join(STATIC_DIR, 'uploads')));
@@ -138,6 +141,56 @@ app.delete('/api/content/*', async (req, res) => {
 });
 
 // ============= IMAGE UPLOAD & OPTIMIZATION =============
+
+// Get uploaded files/media library
+app.get('/api/media', async (req, res) => {
+    try {
+        const uploadsDir = path.join(STATIC_DIR, 'uploads');
+        const files = await getMediaFiles(uploadsDir);
+        res.json({ success: true, files });
+    } catch (error) {
+        console.error('Error getting media files:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+async function getMediaFiles(dir) {
+    const files = [];
+    
+    try {
+        const items = await fs.readdir(dir, { withFileTypes: true });
+        
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            
+            if (item.isDirectory()) {
+                // Recursively get files from subdirectories
+                const subFiles = await getMediaFiles(fullPath);
+                files.push(...subFiles);
+            } else {
+                const stat = await fs.stat(fullPath);
+                const relativePath = path.relative(STATIC_DIR, fullPath);
+                const urlPath = '/' + relativePath.replace(/\\/g, '/');
+                
+                files.push({
+                    name: item.name,
+                    path: relativePath,
+                    url: urlPath,
+                    size: stat.size,
+                    modified: stat.mtime,
+                    type: path.extname(item.name).toLowerCase()
+                });
+            }
+        }
+    } catch (error) {
+        // Directory doesn't exist yet
+        if (error.code !== 'ENOENT') {
+            throw error;
+        }
+    }
+    
+    return files.sort((a, b) => b.modified - a.modified);
+}
 
 // Upload and optimize image
 app.post('/api/upload', upload.single('file'), async (req, res) => {
@@ -305,21 +358,35 @@ app.post('/api/contact', async (req, res) => {
     try {
         const { name, email, message } = req.body;
         
-        // Save to file (in production, send email)
+        // Validate input
+        if (!name || !email || !message) {
+            return res.status(400).json({ success: false, error: 'All fields are required' });
+        }
+        
+        // Save to file
         const contactsDir = path.join(HUGO_ROOT, 'data', 'contacts');
         await fs.mkdir(contactsDir, { recursive: true });
         
-        const contactFile = path.join(contactsDir, `${Date.now()}-${email.replace('@', '-at-')}.json`);
-        await fs.writeFile(contactFile, JSON.stringify({
+        const contactData = {
             name,
             email,
             message,
             timestamp: new Date().toISOString(),
-            ip: req.ip
-        }, null, 2));
+            ip: req.ip,
+            userAgent: req.headers['user-agent']
+        };
         
-        // In production, send email notification here
-        // For now, just log it
+        const contactFile = path.join(contactsDir, `${Date.now()}-${email.replace('@', '-at-')}.json`);
+        await fs.writeFile(contactFile, JSON.stringify(contactData, null, 2));
+        
+        // Send email notification (if configured)
+        try {
+            await sendContactNotification(contactData);
+        } catch (emailError) {
+            console.error('Failed to send email notification:', emailError.message);
+            // Don't fail the request if email fails
+        }
+        
         console.log('New contact form submission:', { name, email });
         
         res.json({ success: true, message: 'Message sent successfully' });
@@ -328,6 +395,38 @@ app.post('/api/contact', async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 });
+
+// Email notification function
+async function sendContactNotification(contactData) {
+    const emailConfig = {
+        to: process.env.CONTACT_EMAIL || 'brandon.lambert87@gmail.com',
+        from: process.env.FROM_EMAIL || 'noreply@portfolio.com',
+        subject: `Portfolio Contact: ${contactData.name}`,
+        html: `
+            <h2>New Contact Form Submission</h2>
+            <p><strong>Name:</strong> ${contactData.name}</p>
+            <p><strong>Email:</strong> ${contactData.email}</p>
+            <p><strong>Message:</strong></p>
+            <p>${contactData.message.replace(/\n/g, '<br>')}</p>
+            <hr>
+            <p><small>Submitted: ${contactData.timestamp}</small></p>
+        `
+    };
+    
+    // For local development, just log the email
+    if (process.env.NODE_ENV === 'development') {
+        console.log('\n📧 EMAIL WOULD BE SENT:');
+        console.log(`To: ${emailConfig.to}`);
+        console.log(`Subject: ${emailConfig.subject}`);
+        console.log(`Message: ${contactData.message}`);
+        console.log('---\n');
+        return;
+    }
+    
+    // In production, use a service like SendGrid, AWS SES, or similar
+    // For now, just log to indicate where email integration would go
+    console.log('Email notification ready for production integration');
+}
 
 // ============= GIT INTEGRATION =============
 

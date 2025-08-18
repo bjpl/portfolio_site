@@ -5,17 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Portfolio Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <!-- Load unified scripts -->
-    <script src="js/navigation.js"></script>
-    <script src="js/toast.js"></script>
-    <script src="js/auth-manager.js"></script>
-    <script src="js/api-config.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/logger.js"></script>
-    <script src="js/modal-dialog.js"></script>
-    <script src="js/admin-base.js"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary: #48bb78;
+            --danger: #f56565;
+            --warning: #ed8936;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --bg-tertiary: #edf2f7;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                margin-top: 80px;
+                padding: 20px;
+            }
+        }
+        
         /* Dashboard specific styles */
         .dashboard-grid {
             display: grid;
@@ -237,13 +275,14 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 16px;
+            padding: 18px 20px;
             background: var(--bg-secondary);
             border-radius: 8px;
             text-decoration: none;
             color: var(--text-primary);
             transition: all 0.2s;
             cursor: pointer;
+            min-height: 60px;
         }
         
         .action-card:hover {
@@ -319,7 +358,12 @@
     </style>
 </head>
 <body>
-    <div class="dashboard-grid">
+    <div class="admin-layout">
+        <!-- Navigation will be injected here -->
+        <div id="admin-nav"></div>
+        
+        <div class="main-content">
+            <div class="dashboard-grid">
         <!-- Stats Row -->
         <div class="stats-row">
             <div class="stat-card">
@@ -428,15 +472,15 @@
                 <div class="quick-actions">
                     <h3 style="margin: 0 0 16px 0; font-size: 18px; color: var(--text-primary);">Quick Actions</h3>
                     <div class="actions-grid">
-                        <a href="content-editor.html" class="action-card">
+                        <a href="simple-editor.html" class="action-card">
                             <span class="action-icon">➕</span>
                             <span class="action-text">New Post</span>
                         </a>
-                        <a href="image-optimizer.html" class="action-card">
+                        <a href="simple-editor.html" class="action-card">
                             <span class="action-icon">🖼️</span>
-                            <span class="action-text">Upload Media</span>
+                            <span class="action-text">Edit Content</span>
                         </a>
-                        <a href="build-deploy.html" class="action-card">
+                        <a href="#" onclick="deployToProduction()" class="action-card">
                             <span class="action-icon">🚀</span>
                             <span class="action-text">Deploy</span>
                         </a>
@@ -469,30 +513,34 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     </div>
 
     <script>
+        // Load navigation component
+        fetch('/admin/nav.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('admin-nav').innerHTML = html;
+                
+                // Execute any scripts in the nav component
+                const scripts = document.getElementById('admin-nav').querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = script.textContent;
+                    document.head.appendChild(newScript);
+                });
+            })
+            .catch(error => {
+                console.error('Failed to load navigation:', error);
+            });
+    </script>
+    
+    <script>
         // Dashboard initialization
         document.addEventListener('DOMContentLoaded', async () => {
-            // Check for demo mode and redirect to login if needed
-            const demoMode = localStorage.getItem('demoMode');
-            const token = localStorage.getItem('token');
-            
-            if (demoMode === 'true') {
-                console.warn('Demo mode detected - redirecting to login');
-                localStorage.clear();
-                window.location.href = '/admin/login.html';
-                return;
-            }
-            
-            if (!token) {
-                console.warn('No authentication token - redirecting to login');
-                window.location.href = '/admin/login.html';
-                return;
-            }
-            
-            // Load dashboard data
+            // Load dashboard data immediately (no auth needed for simple CMS)
             loadDashboardData();
             
             // Initialize WebSocket for real-time updates
@@ -519,13 +567,146 @@
         
         async function loadDashboardData() {
             try {
-                if (window.apiClient) {
-                    const stats = await apiClient.getDashboardStats();
-                    updateStats(stats);
-                }
+                // Load real data from our simple CMS APIs
+                await Promise.all([
+                    loadContentStats(),
+                    loadMediaStats(),
+                    loadAnalyticsStats(),
+                    loadSystemStatus()
+                ]);
             } catch (error) {
                 console.error('Error loading dashboard data:', error);
+                showError('Failed to load dashboard data');
             }
+        }
+
+        async function loadContentStats() {
+            try {
+                const response = await fetch('/api/content');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const files = data.files;
+                    const blogPosts = files.filter(f => f.type === 'blog' || f.path.includes('/blog/')).length;
+                    const pages = files.filter(f => f.type !== 'blog' && !f.path.includes('/blog/')).length;
+                    
+                    document.getElementById('totalPages').textContent = pages || files.length;
+                    document.getElementById('blogPosts').textContent = blogPosts;
+                    
+                    // Update recent activity with real content edits
+                    updateActivityFeed(files);
+                }
+            } catch (error) {
+                console.error('Error loading content stats:', error);
+            }
+        }
+
+        async function loadMediaStats() {
+            try {
+                const response = await fetch('/api/media');
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('mediaFiles').textContent = data.files.length;
+                }
+            } catch (error) {
+                console.error('Error loading media stats:', error);
+            }
+        }
+
+        async function loadAnalyticsStats() {
+            try {
+                const response = await fetch('/api/analytics/summary');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const visitors = data.data.uniqueVisitors;
+                    const visitorCount = visitors > 1000 ? 
+                        (visitors / 1000).toFixed(1) + 'K' : 
+                        visitors.toString();
+                    document.getElementById('visitors').textContent = visitorCount;
+                }
+            } catch (error) {
+                console.error('Error loading analytics stats:', error);
+                // Keep placeholder data if analytics not available
+            }
+        }
+
+        async function loadSystemStatus() {
+            try {
+                // Check API health
+                const apiResponse = await fetch('/api/content');
+                const apiStatus = apiResponse.ok ? 'good' : 'error';
+                updateStatusItem('API', apiStatus ? 'Operational' : 'Error', apiStatus);
+                
+                // Check build status (try to get Hugo version)
+                const buildResponse = await fetch('/api/build', { method: 'POST' });
+                const buildStatus = buildResponse.ok ? 'good' : 'warning';
+                updateStatusItem('Build', buildStatus === 'good' ? 'Ready' : 'Warning', buildStatus);
+                
+            } catch (error) {
+                console.error('Error checking system status:', error);
+            }
+        }
+
+        function updateStatusItem(label, value, status) {
+            const statusItems = document.querySelectorAll('.status-item');
+            statusItems.forEach(item => {
+                const labelEl = item.querySelector('.status-label');
+                if (labelEl && labelEl.textContent === label) {
+                    const valueEl = item.querySelector('.status-value');
+                    valueEl.textContent = value;
+                    valueEl.className = `status-value ${status}`;
+                }
+            });
+        }
+
+        function updateActivityFeed(files) {
+            const activityList = document.getElementById('activityList');
+            
+            // Sort files by date (most recent first)
+            const recentFiles = files
+                .filter(f => f.date)
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 4);
+            
+            const activities = recentFiles.map(file => {
+                const date = new Date(file.date);
+                const timeAgo = getTimeAgo(date);
+                const icon = file.type === 'blog' ? '📝' : '📄';
+                const action = file.draft ? 'drafted' : 'published';
+                
+                return `
+                    <div class="activity-item">
+                        <div class="activity-icon">${icon}</div>
+                        <div class="activity-content">
+                            <div class="activity-text">${action === 'drafted' ? 'Draft created' : 'Page updated'}: "${file.title}"</div>
+                            <div class="activity-time">${timeAgo}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (activities.length > 0) {
+                activityList.innerHTML = activities.join('');
+            }
+        }
+
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffDays = Math.floor(diffHours / 24);
+            
+            if (diffHours < 1) return 'Just now';
+            if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+            if (diffDays < 7) return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
+            return date.toLocaleDateString();
+        }
+
+        function showError(message) {
+            console.error(message);
+            // Could add a toast notification here
         }
         
         function updateStats(stats) {
@@ -632,6 +813,61 @@
             };
             
             return data[period] || data['7d'];
+        }
+        
+        async function deployToProduction() {
+            if (!confirm('Deploy all changes to live site? This will push to Git and trigger Netlify deployment.')) {
+                return;
+            }
+            
+            try {
+                showStatus('Deploying to production...', 'info');
+                
+                const response = await fetch('/api/deploy', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    showStatus('Deployment started! Changes will be live in ~1 minute', 'success');
+                    
+                    // Add to activity feed
+                    addActivity({
+                        icon: '🚀',
+                        text: 'Site deployed to production',
+                        time: 'Just now'
+                    });
+                } else {
+                    showStatus('Deployment failed', 'error');
+                }
+            } catch (error) {
+                console.error('Deployment error:', error);
+                showStatus('Deployment failed', 'error');
+            }
+        }
+        
+        function showStatus(message, type) {
+            // Create a simple toast notification
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 24px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                transition: all 0.3s;
+                background: ${type === 'success' ? '#48bb78' : type === 'error' ? '#f56565' : '#667eea'};
+            `;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
         }
         
         function initializeChart(chartData) {

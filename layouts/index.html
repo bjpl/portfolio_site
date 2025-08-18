@@ -129,8 +129,8 @@
 </section>
 
 <script>
-// API Base URL
-const API_BASE = 'http://localhost:3333/api';
+// API Base URL - Using port 3334 where our CMS backend runs
+const API_BASE = 'http://localhost:3334/api';
 
 // Load featured projects
 async function loadFeaturedProjects() {
@@ -339,7 +339,7 @@ document.getElementById('contact-form')?.addEventListener('submit', async (e) =>
     statusDiv.innerHTML = '<p class="loading">Sending message...</p>';
     
     try {
-        const response = await fetch(`${API_BASE}/portfolio/contact`, {
+        const response = await fetch(`${API_BASE}/contact`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

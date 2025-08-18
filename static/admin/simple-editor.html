@@ -79,13 +79,18 @@
         }
         
         .btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
             border-radius: 8px;
-            font-size: 0.875rem;
+            font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .btn-primary {
@@ -158,6 +163,30 @@
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 2px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .btn-upload {
+            padding: 10px 16px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-upload:hover {
+            background: #38a169;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
         }
         
         .frontmatter-grid {
@@ -180,26 +209,48 @@
         
         .form-group input,
         .form-group textarea {
-            padding: 8px 12px;
+            padding: 12px 16px;
             border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 0.875rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         
         .form-group textarea {
             resize: vertical;
-            min-height: 60px;
+            min-height: 80px;
+            line-height: 1.5;
+        }
+        
+        .form-group input[type="datetime-local"] {
+            padding: 10px 16px;
         }
         
         #contentEditor {
             flex: 1;
-            padding: 12px;
+            padding: 16px 20px;
             border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 14px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+            font-size: 15px;
             resize: none;
-            line-height: 1.6;
+            line-height: 1.7;
+            min-height: 400px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        #contentEditor:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         
         .preview-content {
@@ -283,6 +334,144 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
+        /* Media Library Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+        }
+        
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .modal-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .media-item {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        .media-item:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .media-item.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .media-preview {
+            width: 100%;
+            height: 120px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .media-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+        
+        .media-preview .file-icon {
+            font-size: 2rem;
+            color: #666;
+        }
+        
+        .media-info {
+            padding: 10px;
+        }
+        
+        .media-name {
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+            word-break: break-all;
+        }
+        
+        .media-meta {
+            font-size: 0.625rem;
+            color: #666;
+        }
+        
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .selected-info {
+            font-size: 0.875rem;
+            color: #666;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
     </style>
 </head>
 <body>
@@ -333,8 +522,15 @@
                         <input type="checkbox" id="draftField">
                     </div>
                 </div>
-                <div class="panel-header">Markdown Content</div>
+                <div class="panel-header">
+                    Markdown Content
+                    <div class="header-buttons">
+                        <button class="btn-upload" onclick="openMediaBrowser()">📁 Media Library</button>
+                        <button class="btn-upload" onclick="openImageUpload()">📷 Upload Image</button>
+                    </div>
+                </div>
                 <textarea id="contentEditor" placeholder="Write your content in Markdown..."></textarea>
+                <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
             </div>
             
             <!-- Preview -->
@@ -360,11 +556,40 @@
         <div class="spinner"></div>
     </div>
     
+    <!-- Media Library Modal -->
+    <div class="modal" id="mediaModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Media Library</div>
+                <button class="modal-close" onclick="closeMediaBrowser()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="media-grid" id="mediaGrid">
+                    <!-- Media files will be loaded here -->
+                </div>
+                <div id="mediaLoading" style="text-align: center; padding: 40px; color: #666;">
+                    Loading media files...
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="selected-info" id="selectedInfo">
+                    Select an image to insert
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeMediaBrowser()">Cancel</button>
+                    <button class="btn btn-primary" onclick="insertSelectedMedia()" id="insertBtn" disabled>Insert Image</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         // State
         let currentFile = null;
         let hasChanges = false;
+        let selectedMedia = null;
+        let mediaFiles = [];
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -615,11 +840,213 @@
             document.getElementById('loading').className = show ? 'loading active' : 'loading';
         }
         
+        // Image upload functions
+        function openImageUpload() {
+            document.getElementById('imageUpload').click();
+        }
+        
+        async function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            showLoading(true);
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Insert image markdown at cursor
+                    const editor = document.getElementById('contentEditor');
+                    const cursor = editor.selectionStart;
+                    const before = editor.value.substring(0, cursor);
+                    const after = editor.value.substring(cursor);
+                    
+                    const imageMd = `![${file.name}](${data.url})`;
+                    editor.value = before + imageMd + after;
+                    
+                    // Move cursor after inserted text
+                    editor.selectionStart = editor.selectionEnd = cursor + imageMd.length;
+                    editor.focus();
+                    
+                    // Update preview
+                    updatePreview();
+                    hasChanges = true;
+                    
+                    showStatus('Image uploaded successfully', 'success');
+                } else {
+                    showStatus('Failed to upload image', 'error');
+                }
+            } catch (error) {
+                showStatus('Failed to upload image', 'error');
+            } finally {
+                showLoading(false);
+                // Reset file input
+                event.target.value = '';
+            }
+        }
+        
+        // Media Library Functions
+        async function openMediaBrowser() {
+            const modal = document.getElementById('mediaModal');
+            const grid = document.getElementById('mediaGrid');
+            const loading = document.getElementById('mediaLoading');
+            
+            // Show modal
+            modal.classList.add('active');
+            
+            // Reset state
+            selectedMedia = null;
+            updateInsertButton();
+            
+            // Show loading
+            grid.style.display = 'none';
+            loading.style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/media');
+                const data = await response.json();
+                
+                if (data.success) {
+                    mediaFiles = data.files;
+                    renderMediaGrid();
+                } else {
+                    throw new Error('Failed to load media files');
+                }
+            } catch (error) {
+                console.error('Error loading media:', error);
+                grid.innerHTML = '<div style="text-align: center; padding: 40px; color: #f56565;">Failed to load media files</div>';
+            } finally {
+                loading.style.display = 'none';
+                grid.style.display = 'grid';
+            }
+        }
+        
+        function renderMediaGrid() {
+            const grid = document.getElementById('mediaGrid');
+            
+            if (mediaFiles.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #666;">No media files found. Upload some images to get started!</div>';
+                return;
+            }
+            
+            grid.innerHTML = mediaFiles.map(file => {
+                const isImage = file.type.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+                const fileSize = formatFileSize(file.size);
+                const fileName = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
+                
+                return `
+                    <div class="media-item" onclick="selectMedia('${file.url}', '${file.name}')" data-url="${file.url}">
+                        <div class="media-preview">
+                            ${isImage ? 
+                                `<img src="${file.url}" alt="${file.name}" loading="lazy">` : 
+                                `<div class="file-icon">📄</div>`
+                            }
+                        </div>
+                        <div class="media-info">
+                            <div class="media-name" title="${file.name}">${fileName}</div>
+                            <div class="media-meta">${fileSize}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function selectMedia(url, name) {
+            // Remove previous selection
+            document.querySelectorAll('.media-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Add selection to clicked item
+            const clickedItem = document.querySelector(`[data-url="${url}"]`);
+            if (clickedItem) {
+                clickedItem.classList.add('selected');
+            }
+            
+            // Update state
+            selectedMedia = { url, name };
+            updateInsertButton();
+        }
+        
+        function updateInsertButton() {
+            const insertBtn = document.getElementById('insertBtn');
+            const selectedInfo = document.getElementById('selectedInfo');
+            
+            if (selectedMedia) {
+                insertBtn.disabled = false;
+                selectedInfo.textContent = `Selected: ${selectedMedia.name}`;
+            } else {
+                insertBtn.disabled = true;
+                selectedInfo.textContent = 'Select an image to insert';
+            }
+        }
+        
+        function insertSelectedMedia() {
+            if (!selectedMedia) return;
+            
+            // Insert image markdown at cursor
+            const editor = document.getElementById('contentEditor');
+            const cursor = editor.selectionStart;
+            const before = editor.value.substring(0, cursor);
+            const after = editor.value.substring(cursor);
+            
+            const imageMd = `![${selectedMedia.name}](${selectedMedia.url})`;
+            editor.value = before + imageMd + after;
+            
+            // Move cursor after inserted text
+            editor.selectionStart = editor.selectionEnd = cursor + imageMd.length;
+            editor.focus();
+            
+            // Update preview
+            updatePreview();
+            hasChanges = true;
+            
+            // Close modal
+            closeMediaBrowser();
+            
+            showStatus('Image inserted successfully', 'success');
+        }
+        
+        function closeMediaBrowser() {
+            const modal = document.getElementById('mediaModal');
+            modal.classList.remove('active');
+            selectedMedia = null;
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('mediaModal');
+            if (e.target === modal) {
+                closeMediaBrowser();
+            }
+        });
+        
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                 e.preventDefault();
                 saveContent();
+            }
+            
+            // Close modal with Escape key
+            if (e.key === 'Escape') {
+                closeMediaBrowser();
             }
         });
     </script>
