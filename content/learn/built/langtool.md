@@ -1,12 +1,8 @@
 ---
 title: "LangTool"
-date: 2025-08-18T07:00:00Z
+date: 2025-08-18
 draft: false
 description: "AI-powered CLI language learning application with GPT-4o integration"
-categories: ["language-learning", "ai", "cli"]
-tags: ["python", "gpt-4o", "sqlite", "cli", "language-learning", "conversations"]
-github: "https://github.com/bjpl/langtool"
-technologies: ["Python 3.10+", "OpenAI GPT-4o", "SQLite", "CLI"]
 ---
 
 # LangTool

@@ -1,12 +1,8 @@
 ---
 title: "Spanish Conjugation Practice GUI"
-date: 2025-08-18T07:01:00Z
+date: 2025-08-18
 draft: false
 description: "Desktop application for learning Spanish verb conjugations with AI-powered exercises"
-categories: ["language-learning", "spanish", "gui", "ai"]
-tags: ["python", "spanish", "conjugations", "gpt-4o", "sqlite", "gui", "verbs"]
-github: "https://github.com/bjpl/conjugation_gui"
-technologies: ["Python", "SQLite", "OpenAI GPT-4o", "Desktop GUI"]
 ---
 
 # Spanish Conjugation Practice GUI

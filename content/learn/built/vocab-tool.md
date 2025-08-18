@@ -1,12 +1,8 @@
 ---
 title: "Vocab Tool"
-date: 2025-08-18T07:03:00Z
+date: 2025-08-18
 draft: false
 description: "Python-based vocabulary management tool with Docker support and modern development practices"
-categories: ["language-learning", "vocabulary", "tools"]
-tags: ["python", "docker", "vocabulary", "testing", "ci-cd"]
-github: "https://github.com/bjpl/vocab_tool"
-technologies: ["Python", "Docker", "Pre-commit", "Testing Framework"]
 ---
 
 # Vocab Tool

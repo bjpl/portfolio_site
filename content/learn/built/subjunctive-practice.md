@@ -1,13 +1,8 @@
 ---
 title: "Subjunctive Practice Tool"
-date: 2025-08-18T07:02:00Z
+date: 2025-08-18
 draft: false
 description: "GUI application for practicing subjunctive grammar and language skills"
-categories: ["language-learning", "grammar", "gui"]
-tags: ["python", "poetry", "gui", "subjunctive", "grammar", "practice"]
-github: "https://github.com/bjpl/subjunctive_practice"
-technologies: ["Python", "Poetry", "GUI Framework"]
-status: "In Development"
 ---
 
 # Subjunctive Practice Tool
