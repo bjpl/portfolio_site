@@ -6,6 +6,14 @@
     </header>
     
     <div class="section-grid">
+        {{ $positionsSection := site.GetPage "/writing/positions" }}
+        {{ if $positionsSection }}
+        <a href="{{ $positionsSection.Permalink }}" class="section-card">
+            <h2>🌐 Theoretical Positions</h2>
+            <p>SLA theoretical frameworks emphasizing ecological, social, and critical perspectives on language acquisition and multilingual development.</p>
+        </a>
+        {{ end }}
+        
         {{ $soundsSection := site.GetPage "/writing/sounds" }}
         {{ if $soundsSection }}
         <a href="{{ $soundsSection.Permalink }}" class="section-card">
