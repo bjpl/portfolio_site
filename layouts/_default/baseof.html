@@ -46,7 +46,7 @@
             const urlMappings = {
                 'en': {
                     '/': '/',
-                    '/make/': '/make/',
+                    '/writing/': '/writing/',
                     '/learn/': '/learn/',
                     '/think/': '/think/',
                     '/meet/': '/meet/',
@@ -54,7 +54,7 @@
                 },
                 'es': {
                     '/': '/es/',
-                    '/make/': '/es/hacer/',
+                    '/writing/': '/es/escribir/',
                     '/learn/': '/es/aprender/',
                     '/think/': '/es/pensar/',
                     '/meet/': '/es/conocer/',
@@ -74,7 +74,7 @@
                 if (currentPath.startsWith('/es/')) {
                     const pathWithoutLang = currentPath.replace('/es', '');
                     const sectionMappings = {
-                        '/hacer/': '/make/',
+                        '/escribir/': '/writing/',
                         '/aprender/': '/learn/',
                         '/pensar/': '/think/',
                         '/conocer/': '/meet/'

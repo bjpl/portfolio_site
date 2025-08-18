@@ -1,6 +1,6 @@
 main:
-  - name: Crear
-    url: /es/make/
+  - name: Escribir
+    url: /es/escribir/
     weight: 10
   - name: Aprender
     url: /es/learn/

@@ -20,10 +20,10 @@
             </p>
             <div class="hero-actions">
                 {{ if eq .Language.Lang "es" }}
-                <a href="/es/hacer/" class="btn btn-primary">Ver Portafolio</a>
+                <a href="/es/escribir/" class="btn btn-primary">Ver Escritura</a>
                 <a href="/es/conocer/" class="btn btn-outline">Conectar</a>
                 {{ else }}
-                <a href="/make/" class="btn btn-primary">View Portfolio</a>
+                <a href="/writing/" class="btn btn-primary">View Writing</a>
                 <a href="/meet/" class="btn btn-outline">Get in Touch</a>
                 {{ end }}
             </div>
@@ -82,9 +82,9 @@
         </div>
         <div class="section-footer">
             {{ if eq .Language.Lang "es" }}
-            <a href="/es/hacer/" class="btn btn-secondary">Ver Todos los Proyectos</a>
+            <a href="/es/escribir/" class="btn btn-secondary">Ver Toda la Escritura</a>
             {{ else }}
-            <a href="/make/" class="btn btn-secondary">View All Projects</a>
+            <a href="/writing/" class="btn btn-secondary">View All Writing</a>
             {{ end }}
         </div>
     </div>
@@ -165,7 +165,7 @@ async function loadFeaturedProjects() {
                                 `<span class="tech-tag">${tech}</span>`
                             ).join('') : ''}
                         </div>
-                        <a href="/make/${project.slug}/" class="project-link">View Project →</a>
+                        <a href="/writing/${project.slug}/" class="project-link">View Project →</a>
                     </div>
                 </div>
             `).join('');
@@ -194,7 +194,7 @@ function loadDemoProjects() {
                     <span class="tech-tag">Sound Design</span>
                     <span class="tech-tag">Music</span>
                 </div>
-                <a href="/make/sounds/" class="project-link">View Audio Work →</a>
+                <a href="/writing/sounds/" class="project-link">View Audio Work →</a>
             </div>
         </div>
         <div class="project-card">
@@ -209,7 +209,7 @@ function loadDemoProjects() {
                     <span class="tech-tag">Graphics</span>
                     <span class="tech-tag">Visual Arts</span>
                 </div>
-                <a href="/make/visuals/" class="project-link">View Design Work →</a>
+                <a href="/writing/visuals/" class="project-link">View Design Work →</a>
             </div>
         </div>
         <div class="project-card">
@@ -224,7 +224,7 @@ function loadDemoProjects() {
                     <span class="tech-tag">Content</span>
                     <span class="tech-tag">Articles</span>
                 </div>
-                <a href="/make/words/" class="project-link">View Writing →</a>
+                <a href="/writing/words/" class="project-link">View Writing →</a>
             </div>
         </div>
     `;

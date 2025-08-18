@@ -60,7 +60,8 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:localhost)",
-      "WebFetch(domain:localhost)"
+      "WebFetch(domain:localhost)",
+      "Bash(mv:*)"
     ],
     "defaultMode": "acceptEdits"
   }

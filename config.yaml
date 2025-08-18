@@ -17,8 +17,8 @@ languages:
 
 menu:
   main:
-    - name: "Make"
-      url: "/make/"
+    - name: "Writing"
+      url: "/writing/"
       weight: 10
     - name: "Learn"
       url: "/learn/"

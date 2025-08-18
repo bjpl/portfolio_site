@@ -512,9 +512,9 @@ Key takeaways and skills developed during this project."></textarea>
                 const data = await response.json();
 
                 if (data.success) {
-                    // Filter for portfolio/make projects
+                    // Filter for portfolio/writing projects
                     portfolioProjects = data.files.filter(file => 
-                        file.path.includes('/make/') || 
+                        file.path.includes('/writing/') || 
                         file.type === 'project' ||
                         file.path.includes('portfolio')
                     );
