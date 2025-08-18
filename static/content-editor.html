@@ -208,8 +208,9 @@
                     <button onclick="insertMarkdown('`', '`')">Code</button>
                     <button onclick="insertMarkdown('\n> ', '\n')">Quote</button>
                     <button onclick="insertList()">List</button>
+                    <button onclick="insertHR()">---</button>
                     <button class="secondary" onclick="clearEditor()">Clear</button>
-                    <button class="secondary" onclick="downloadMarkdown()">Download</button>
+                    <button class="secondary" onclick="downloadMarkdown()">Save</button>
                 </div>
                 
                 <textarea id="editor" placeholder="Start writing in Markdown...">## Introduction
@@ -313,6 +314,18 @@ Wrap up your thoughts...</textarea>
             const list = '\n- Item 1\n- Item 2\n- Item 3\n';
             
             editor.value = text.substring(0, start) + list + text.substring(start);
+            editor.focus();
+            updatePreview();
+            saveToLocal();
+        }
+        
+        // Insert horizontal rule
+        function insertHR() {
+            const start = editor.selectionStart;
+            const text = editor.value;
+            const hr = '\n\n---\n\n';
+            
+            editor.value = text.substring(0, start) + hr + text.substring(start);
             editor.focus();
             updatePreview();
             saveToLocal();
