@@ -8,8 +8,6 @@ tags: ["california", "journey", "connection", "places"]
 type: "words"
 ---
 
-# Again, with you
-
 I would love to share California 
 with you
 It's blues, the new, and the skew.

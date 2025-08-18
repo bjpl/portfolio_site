@@ -9,7 +9,6 @@ type: "words"
 language: "es"
 ---
 
-# Sobre colleciones
 
 Soy un coleccionista
 Pero no encontrarás mis especímenes

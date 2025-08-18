@@ -3,51 +3,36 @@ title: "Spanish Conjugation Practice GUI"
 date: 2025-08-18
 draft: false
 description: "Desktop application for learning Spanish verb conjugations with AI-powered exercises"
+github: "https://github.com/bjpl/spanish-conjugation-gui"
+tags: ["Python", "AI", "Language Learning", "GPT-4o"]
 ---
 
 # Spanish Conjugation Practice GUI
 
-A desktop application designed to help users learn and practice Spanish verb conjugations through an interactive, AI-powered learning experience with dual learning modes and adaptive progress tracking.
+Desktop application that helps learners master Spanish verb conjugations through adaptive AI-powered exercises and progress tracking.
 
-## Key Features
+## Quick Specs
 
-- **Dual Learning Modes**
-  - Offline: Local conjugation engine for 100+ verbs
-  - Online: AI-powered contextual exercises with GPT-4o
-- **Comprehensive Verb Coverage** - Regular, irregular, and stem-changing verbs
-- **Multiple Tenses** - Present, Preterite, Imperfect, Future, Conditional, Subjunctive
-- **Adaptive Learning** - Spaced repetition and progress tracking
-- **Interactive Exercises** - Free response and multiple-choice formats
-- **Customizable Interface** - Dark/light themes, optional English translations
+**Stack:** Python | SQLite | OpenAI GPT-4o  
+**Type:** Desktop GUI Application  
+**Status:** Active Development  
+**Users:** Language learners, Spanish students  
 
-## Technologies Used
+## Core Features
 
-- **Python** - Core application development
-- **SQLite** - Progress tracking and data persistence
-- **OpenAI GPT-4o API** - AI-powered explanations and contextual exercises
-- **Desktop GUI** - Interactive user interface
+- 🤖 **AI-Powered Learning** - GPT-4o contextual exercises and explanations
+- 📊 **Adaptive Practice** - Automatically identifies and targets weak areas  
+- 🎯 **100+ Verbs** - Regular, irregular, and stem-changing conjugations
+- 📈 **Progress Tracking** - Spaced repetition with performance analytics
+- 🌓 **Dual Modes** - Online (AI) and offline practice options
 
-## Learning Features
+## What Makes It Special
 
-- **Automatic Weak Area Detection** - Identifies and focuses on areas needing improvement
-- **Three Difficulty Levels** - Beginner, intermediate, and advanced practice
-- **Instant AI Feedback** - GPT-4o powered explanations and hints
-- **Session Summaries** - Performance statistics and progress analytics
-- **Flexible Learning Paths** - Tailored to user's proficiency level
+This tool combines traditional conjugation practice with modern AI to provide personalized feedback and contextual learning. Unlike static apps, it adapts to your learning pace and provides explanations tailored to your mistakes.
 
-## User Experience
+---
 
-- Intuitive interface with comprehensive progress tracking
-- Session-based learning with performance metrics
-- Contextual explanations for grammar rules
-- Personalized practice recommendations
-
-## Use Cases
-
-- Self-guided Spanish language learning
-- Supplemental tool for language students
-- Verb conjugation mastery
-- Grammar skill reinforcement
+[View on GitHub →](https://github.com/bjpl/spanish-conjugation-gui)
 
 ## Repository
 

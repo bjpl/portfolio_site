@@ -9,7 +9,6 @@ type: "words"
 language: "es"
 ---
 
-# Un tríptico de Medellín
 
 ## Hacia Medellín
 

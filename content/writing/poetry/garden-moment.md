@@ -8,7 +8,6 @@ tags: ["garden", "moment", "presence", "nature"]
 type: "words"
 ---
 
-# Garden moment
 
 A leaf in the shape of a heart,
 

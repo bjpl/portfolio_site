@@ -8,7 +8,6 @@ tags: ["news", "history", "future", "truth", "together"]
 type: "words"
 ---
 
-# Together
 
 My news is not news to them
 Their history is not past to me.

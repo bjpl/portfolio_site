@@ -8,7 +8,6 @@ tags: ["wisdom", "tears", "earth", "sustain", "uncertainty"]
 type: "words"
 ---
 
-# Without knowing
 
 That without you I still
 Grow wiser, but wearier.

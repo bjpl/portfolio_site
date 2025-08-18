@@ -9,7 +9,6 @@ type: "words"
 language: "es"
 ---
 
-# Tríptico de fichas en movimiento
 
 ## La apertura
 
