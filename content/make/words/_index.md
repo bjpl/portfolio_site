@@ -5,6 +5,7 @@ draft: false
 section: "make"
 subsection: "words"
 type: "words"
+layout: "list"
 ---
 
 # Words

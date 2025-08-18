@@ -4,8 +4,9 @@ date: 2024-01-15
 draft: false
 section: "learn"
 subsection: "built"
+layout: "list"
 ---
 
 # Built
 
-Content for learn/built will appear here.
+Projects and applications I've developed for learning and education.
