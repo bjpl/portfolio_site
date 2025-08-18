@@ -1,0 +1,181 @@
+{{ define "main" }}
+<div class="container">
+    <header class="page-header">
+        <h1>{{ .Title }}</h1>
+        {{ with .Description }}<p class="lead">{{ . }}</p>{{ end }}
+    </header>
+    
+    {{ .Content }}
+    
+    <div class="positions-grid">
+        <section class="position-category">
+            <h3>🌱 Foundational Frameworks</h3>
+            <div class="position-list">
+                {{ range where .Pages "Title" "in" (slice "Ecological Language Learning" "Dialogic Acquisition" "Mediation in Language Learning") }}
+                <article class="position-card">
+                    <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+                    <p>{{ .Description }}</p>
+                </article>
+                {{ end }}
+            </div>
+        </section>
+
+        <section class="position-category">
+            <h3>🔄 Identity & Development</h3>
+            <div class="position-list">
+                {{ range where .Pages "Title" "in" (slice "Transformational Identity" "Person-in-Context" "Emergent Motivation") }}
+                <article class="position-card">
+                    <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+                    <p>{{ .Description }}</p>
+                </article>
+                {{ end }}
+            </div>
+        </section>
+
+        <section class="position-category">
+            <h3>🌍 Multilingual Perspectives</h3>
+            <div class="position-list">
+                {{ range where .Pages "Title" "in" (slice "Multi-Competence & Translanguaging" "Language Socialization" "Intercultural Communicative Competence") }}
+                <article class="position-card">
+                    <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+                    <p>{{ .Description }}</p>
+                </article>
+                {{ end }}
+            </div>
+        </section>
+
+        <section class="position-category">
+            <h3>👥 Social & Institutional</h3>
+            <div class="position-list">
+                {{ range where .Pages "Title" "in" (slice "Communities of Practice" "Collaborative Knowledge Construction" "Institutional Awareness") }}
+                <article class="position-card">
+                    <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+                    <p>{{ .Description }}</p>
+                </article>
+                {{ end }}
+            </div>
+        </section>
+
+        <section class="position-category">
+            <h3>🎯 Critical Perspectives</h3>
+            <div class="position-list">
+                {{ range where .Pages "Title" "in" (slice "Teacher Identity" "Complex Dynamic Development") }}
+                <article class="position-card">
+                    <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+                    <p>{{ .Description }}</p>
+                </article>
+                {{ end }}
+            </div>
+        </section>
+    </div>
+
+    <!-- Alternative: Simple list view if categories don't work -->
+    {{ if not (where .Pages "Title" "Ecological Language Learning") }}
+    <div class="content-list">
+        {{ range .Pages.ByTitle }}
+        <article class="position-item">
+            <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+            {{ with .Description }}<p>{{ . }}</p>{{ end }}
+            <a href="{{ .Permalink }}" class="read-more">Read more →</a>
+        </article>
+        {{ end }}
+    </div>
+    {{ end }}
+</div>
+
+<style>
+.positions-grid {
+    margin-top: 3rem;
+}
+
+.position-category {
+    margin-bottom: 3rem;
+}
+
+.position-category h3 {
+    color: #5b21b6;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #ede9fe;
+    padding-bottom: 0.5rem;
+}
+
+.position-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.position-card {
+    background: #fafafa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.position-card:hover {
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.position-card h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.1rem;
+}
+
+.position-card h4 a {
+    color: #1f2937;
+    text-decoration: none;
+}
+
+.position-card h4 a:hover {
+    color: #5b21b6;
+}
+
+.position-card p {
+    color: #6b7280;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.position-item {
+    padding: 2rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.position-item:last-child {
+    border-bottom: none;
+}
+
+.position-item h3 {
+    margin: 0 0 0.5rem 0;
+}
+
+.position-item h3 a {
+    color: #1f2937;
+    text-decoration: none;
+}
+
+.position-item h3 a:hover {
+    color: #5b21b6;
+}
+
+.position-item p {
+    color: #6b7280;
+    margin: 0.5rem 0;
+}
+
+.read-more {
+    color: #5b21b6;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+</style>
+{{ end }}

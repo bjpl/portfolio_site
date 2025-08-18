@@ -893,6 +893,113 @@ async function bulkFindReplace() {
     log(`\n✅ Replaced ${totalReplacements} instances across ${filesModified} files`, 'green');
 }
 
+async function searchContent() {
+    log('\n🔍 Search Content', 'bright');
+    log('================\n', 'bright');
+    
+    const searchType = await prompt('Search in (1) titles, (2) content, (3) both:');
+    const searchTerm = await prompt('Search term:');
+    
+    if (!searchTerm) {
+        log('No search term provided!', 'red');
+        return;
+    }
+    
+    log(`\nSearching for "${searchTerm}"...`, 'yellow');
+    
+    const results = [];
+    
+    async function searchFile(filepath) {
+        const content = await fs.readFile(filepath, 'utf-8');
+        const lines = content.split('\n');
+        const relPath = path.relative('content', filepath);
+        
+        // Parse frontmatter for title
+        let title = 'Untitled';
+        const titleMatch = content.match(/title:\s*"([^"]+)"/);
+        if (titleMatch) {
+            title = titleMatch[1];
+        }
+        
+        const searchLower = searchTerm.toLowerCase();
+        let found = false;
+        const matches = [];
+        
+        // Search in title
+        if (searchType === '1' || searchType === '3') {
+            if (title.toLowerCase().includes(searchLower)) {
+                found = true;
+                matches.push({
+                    type: 'title',
+                    text: title
+                });
+            }
+        }
+        
+        // Search in content
+        if (searchType === '2' || searchType === '3') {
+            lines.forEach((line, index) => {
+                if (line.toLowerCase().includes(searchLower)) {
+                    found = true;
+                    if (matches.length < 3) { // Limit matches per file
+                        matches.push({
+                            type: 'content',
+                            lineNumber: index + 1,
+                            text: line.trim().substring(0, 100)
+                        });
+                    }
+                }
+            });
+        }
+        
+        if (found) {
+            results.push({
+                path: relPath,
+                title,
+                matches
+            });
+        }
+    }
+    
+    async function scanDir(dir) {
+        const items = await fs.readdir(dir, { withFileTypes: true });
+        
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            
+            if (item.isDirectory()) {
+                await scanDir(fullPath);
+            } else if (item.name.endsWith('.md') && !item.name.startsWith('_')) {
+                await searchFile(fullPath);
+            }
+        }
+    }
+    
+    await scanDir('content');
+    
+    // Display results
+    if (results.length === 0) {
+        log('\nNo matches found.', 'yellow');
+    } else {
+        log(`\n✅ Found ${results.length} files with matches:`, 'green');
+        
+        results.forEach(result => {
+            log(`\n📄 ${result.title}`, 'bright');
+            log(`   Path: ${result.path}`, 'cyan');
+            
+            result.matches.forEach(match => {
+                if (match.type === 'title') {
+                    log(`   ✓ Title match`, 'green');
+                } else {
+                    log(`   Line ${match.lineNumber}: ...${match.text}...`, 'yellow');
+                }
+            });
+        });
+        
+        log(`\n📊 Summary: ${results.length} files, ${results.reduce((sum, r) => sum + r.matches.length, 0)} total matches`, 'bright');
+    }
+}
+
 async function contentStats() {
     log('\n📊 Content Statistics', 'bright');
     log('====================\n', 'bright');
@@ -1039,13 +1146,14 @@ async function mainMenu() {
     log('\nOptions:', 'yellow');
     log('  1. Create new content', 'cyan');
     log('  2. List all content', 'cyan');
-    log('  3. Validate content', 'cyan');
-    log('  4. Preview content', 'cyan');
-    log('  5. Export content', 'cyan');
-    log('  6. Content statistics', 'cyan');
-    log('  7. Bulk operations', 'cyan');
-    log('  8. Build site', 'cyan');
-    log('  9. Exit', 'cyan');
+    log('  3. Search content', 'cyan');
+    log('  4. Validate content', 'cyan');
+    log('  5. Preview content', 'cyan');
+    log('  6. Export content', 'cyan');
+    log('  7. Content statistics', 'cyan');
+    log('  8. Bulk operations', 'cyan');
+    log('  9. Build site', 'cyan');
+    log('  0. Exit', 'cyan');
     
     const choice = await prompt('\nSelect option:');
     
@@ -1057,24 +1165,27 @@ async function mainMenu() {
             await listContent();
             break;
         case '3':
-            await validateContent();
+            await searchContent();
             break;
         case '4':
-            await previewContent();
+            await validateContent();
             break;
         case '5':
-            await exportContent();
+            await previewContent();
             break;
         case '6':
-            await contentStats();
+            await exportContent();
             break;
         case '7':
-            await bulkOperations();
+            await contentStats();
             break;
         case '8':
-            await buildSite();
+            await bulkOperations();
             break;
         case '9':
+            await buildSite();
+            break;
+        case '0':
             log('\nGoodbye! 👋', 'green');
             rl.close();
             return;
