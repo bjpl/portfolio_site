@@ -228,18 +228,29 @@ async function validateContent() {
     log('\n🔍 Validating Content', 'bright');
     log('====================\n', 'bright');
     
-    const issues = [];
+    const issues = {
+        errors: [],
+        warnings: [],
+        suggestions: []
+    };
+    
+    let totalFiles = 0;
     
     async function checkFile(filepath) {
         const content = await fs.readFile(filepath, 'utf-8');
         const filename = path.basename(filepath);
+        const relPath = path.relative('content', filepath);
+        totalFiles++;
         
         // Check for required frontmatter
         if (!content.includes('title:')) {
-            issues.push(`${filename}: Missing title`);
+            issues.errors.push(`❌ ${relPath}: Missing title in frontmatter`);
         }
         if (!content.includes('date:')) {
-            issues.push(`${filename}: Missing date`);
+            issues.errors.push(`❌ ${relPath}: Missing date in frontmatter`);
+        }
+        if (!content.includes('description:')) {
+            issues.warnings.push(`⚠️  ${relPath}: No description (affects SEO)`);
         }
         
         // Check for empty content
@@ -248,7 +259,9 @@ async function validateContent() {
         const actualContent = lines.slice(contentStart).join('\n').trim();
         
         if (actualContent.length < 50) {
-            issues.push(`${filename}: Content too short (${actualContent.length} chars)`);
+            issues.warnings.push(`⚠️  ${relPath}: Very short content (${actualContent.length} chars)`);
+        } else if (actualContent.length < 200) {
+            issues.suggestions.push(`💡 ${relPath}: Consider expanding content (${actualContent.length} chars)`);
         }
         
         // Check for broken links
@@ -256,15 +269,22 @@ async function validateContent() {
         let match;
         while ((match = linkRegex.exec(content)) !== null) {
             const url = match[2];
-            if (url.startsWith('/') || url.startsWith('./')) {
+            if (url === 'url' || url === '#') {
+                issues.warnings.push(`⚠️  ${relPath}: Placeholder link found: "${url}"`);
+            } else if (url.startsWith('/') || url.startsWith('./')) {
                 // Check if local file exists
                 const localPath = path.join('static', url);
                 try {
                     await fs.access(localPath);
                 } catch {
-                    issues.push(`${filename}: Broken link to ${url}`);
+                    issues.errors.push(`❌ ${relPath}: Broken link to ${url}`);
                 }
             }
+        }
+        
+        // Check for draft status
+        if (content.includes('draft: true')) {
+            issues.suggestions.push(`💡 ${relPath}: Still in draft mode`);
         }
     }
     
@@ -284,11 +304,26 @@ async function validateContent() {
     
     await scanDir('content');
     
-    if (issues.length === 0) {
-        log('✅ All content validated successfully!', 'green');
-    } else {
-        log(`Found ${issues.length} issues:`, 'red');
-        issues.forEach(issue => log(`  ⚠️  ${issue}`, 'yellow'));
+    // Display results
+    log(`\nScanned ${totalFiles} files:`, 'cyan');
+    
+    if (issues.errors.length > 0) {
+        log(`\n❌ Errors (${issues.errors.length}):`, 'red');
+        issues.errors.forEach(issue => log(issue, 'red'));
+    }
+    
+    if (issues.warnings.length > 0) {
+        log(`\n⚠️  Warnings (${issues.warnings.length}):`, 'yellow');
+        issues.warnings.forEach(issue => log(issue, 'yellow'));
+    }
+    
+    if (issues.suggestions.length > 0) {
+        log(`\n💡 Suggestions (${issues.suggestions.length}):`, 'cyan');
+        issues.suggestions.forEach(issue => log(issue, 'cyan'));
+    }
+    
+    if (issues.errors.length === 0 && issues.warnings.length === 0) {
+        log('\n✅ All content validated successfully!', 'green');
     }
 }
 
@@ -329,6 +364,223 @@ async function previewContent() {
     }
 }
 
+async function exportContent() {
+    log('\n📤 Export Content', 'bright');
+    log('================\n', 'bright');
+    
+    log('Export formats:', 'yellow');
+    log('  1. JSON (structured data)', 'cyan');
+    log('  2. HTML (rendered output)', 'cyan');
+    log('  3. ZIP (complete backup)', 'cyan');
+    log('  4. CSV (metadata only)', 'cyan');
+    
+    const format = await prompt('\nSelect format (1-4):');
+    
+    const exportDir = 'exports';
+    await fs.mkdir(exportDir, { recursive: true });
+    
+    const timestamp = new Date().toISOString().replace(/:/g, '-').split('.')[0];
+    
+    switch(format) {
+        case '1':
+            await exportJSON(exportDir, timestamp);
+            break;
+        case '2':
+            await exportHTML(exportDir, timestamp);
+            break;
+        case '3':
+            await exportZIP(exportDir, timestamp);
+            break;
+        case '4':
+            await exportCSV(exportDir, timestamp);
+            break;
+        default:
+            log('Invalid format!', 'red');
+    }
+}
+
+async function exportJSON(exportDir, timestamp) {
+    log('\nExporting to JSON...', 'yellow');
+    
+    const allContent = [];
+    
+    async function scanDir(dir) {
+        const items = await fs.readdir(dir, { withFileTypes: true });
+        
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            
+            if (item.isDirectory()) {
+                await scanDir(fullPath);
+            } else if (item.name.endsWith('.md') && !item.name.startsWith('_')) {
+                const content = await fs.readFile(fullPath, 'utf-8');
+                const parsed = parseMarkdownFile(content);
+                allContent.push({
+                    path: path.relative('content', fullPath),
+                    ...parsed
+                });
+            }
+        }
+    }
+    
+    await scanDir('content');
+    
+    const outputFile = path.join(exportDir, `content-${timestamp}.json`);
+    await fs.writeFile(outputFile, JSON.stringify(allContent, null, 2));
+    
+    log(`✅ Exported ${allContent.length} files to ${outputFile}`, 'green');
+}
+
+async function exportHTML(exportDir, timestamp) {
+    log('\nExporting to HTML...', 'yellow');
+    
+    const { marked } = await import('marked');
+    let html = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Content Export - ${timestamp}</title>
+    <style>
+        body { font-family: system-ui; max-width: 900px; margin: 0 auto; padding: 20px; }
+        article { margin: 40px 0; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; }
+        h1 { color: #5b21b6; }
+        .metadata { background: #f3f4f6; padding: 10px; border-radius: 4px; margin-bottom: 20px; }
+        .metadata span { margin-right: 20px; color: #6b7280; }
+    </style>
+</head>
+<body>\n`;
+    
+    async function scanDir(dir) {
+        const items = await fs.readdir(dir, { withFileTypes: true });
+        
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            
+            if (item.isDirectory()) {
+                await scanDir(fullPath);
+            } else if (item.name.endsWith('.md') && !item.name.startsWith('_')) {
+                const content = await fs.readFile(fullPath, 'utf-8');
+                const parsed = parseMarkdownFile(content);
+                
+                html += `<article>
+                    <h1>${parsed.frontmatter.title || 'Untitled'}</h1>
+                    <div class="metadata">
+                        <span>📅 ${parsed.frontmatter.date || 'No date'}</span>
+                        <span>📁 ${path.dirname(path.relative('content', fullPath))}</span>
+                        ${parsed.frontmatter.tags ? `<span>🏷️ ${parsed.frontmatter.tags.join(', ')}</span>` : ''}
+                    </div>
+                    ${marked.parse(parsed.content)}
+                </article>\n`;
+            }
+        }
+    }
+    
+    await scanDir('content');
+    html += '</body>\n</html>';
+    
+    const outputFile = path.join(exportDir, `content-${timestamp}.html`);
+    await fs.writeFile(outputFile, html);
+    
+    log(`✅ Exported to ${outputFile}`, 'green');
+}
+
+async function exportZIP(exportDir, timestamp) {
+    log('\nCreating ZIP backup...', 'yellow');
+    
+    try {
+        const zipFile = path.join(exportDir, `content-backup-${timestamp}.zip`);
+        
+        // Using native tar command (available on Windows 10+)
+        await execPromise(`tar -czf ${zipFile} content`);
+        
+        log(`✅ Created backup: ${zipFile}`, 'green');
+    } catch (error) {
+        log('❌ ZIP creation failed. Trying alternative method...', 'yellow');
+        
+        // Fallback: Copy entire content directory
+        const backupDir = path.join(exportDir, `content-backup-${timestamp}`);
+        await fs.cp('content', backupDir, { recursive: true });
+        
+        log(`✅ Created backup directory: ${backupDir}`, 'green');
+    }
+}
+
+async function exportCSV(exportDir, timestamp) {
+    log('\nExporting metadata to CSV...', 'yellow');
+    
+    let csv = 'Path,Title,Date,Description,Tags,Word Count\n';
+    let fileCount = 0;
+    
+    async function scanDir(dir) {
+        const items = await fs.readdir(dir, { withFileTypes: true });
+        
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            
+            if (item.isDirectory()) {
+                await scanDir(fullPath);
+            } else if (item.name.endsWith('.md') && !item.name.startsWith('_')) {
+                const content = await fs.readFile(fullPath, 'utf-8');
+                const parsed = parseMarkdownFile(content);
+                const wordCount = parsed.content.split(/\s+/).length;
+                
+                const row = [
+                    path.relative('content', fullPath),
+                    parsed.frontmatter.title || 'Untitled',
+                    parsed.frontmatter.date || '',
+                    parsed.frontmatter.description || '',
+                    (parsed.frontmatter.tags || []).join('; '),
+                    wordCount
+                ];
+                
+                csv += row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(',') + '\n';
+                fileCount++;
+            }
+        }
+    }
+    
+    await scanDir('content');
+    
+    const outputFile = path.join(exportDir, `content-metadata-${timestamp}.csv`);
+    await fs.writeFile(outputFile, csv);
+    
+    log(`✅ Exported ${fileCount} files to ${outputFile}`, 'green');
+}
+
+function parseMarkdownFile(content) {
+    const lines = content.split('\n');
+    const frontmatterStart = lines.findIndex(line => line === '---');
+    const frontmatterEnd = lines.findIndex((line, i) => i > frontmatterStart && line === '---');
+    
+    let frontmatter = {};
+    if (frontmatterStart === 0 && frontmatterEnd > 0) {
+        const yamlLines = lines.slice(1, frontmatterEnd);
+        yamlLines.forEach(line => {
+            const match = line.match(/^([^:]+):\s*(.*)$/);
+            if (match) {
+                const key = match[1].trim();
+                let value = match[2].trim();
+                
+                // Parse arrays
+                if (value.startsWith('[') && value.endsWith(']')) {
+                    value = value.slice(1, -1).split(',').map(v => v.trim().replace(/"/g, ''));
+                } else {
+                    value = value.replace(/"/g, '');
+                }
+                
+                frontmatter[key] = value;
+            }
+        });
+    }
+    
+    const contentLines = frontmatterEnd > 0 ? lines.slice(frontmatterEnd + 1) : lines;
+    
+    return {
+        frontmatter,
+        content: contentLines.join('\n').trim()
+    };
+}
+
 async function buildSite() {
     log('\n🔨 Building Site', 'bright');
     log('===============\n', 'bright');
@@ -362,6 +614,423 @@ async function buildSite() {
     }
 }
 
+async function bulkOperations() {
+    log('\n⚡ Bulk Operations', 'bright');
+    log('=================\n', 'bright');
+    
+    log('Available operations:', 'yellow');
+    log('  1. Validate all content', 'cyan');
+    log('  2. Convert all drafts to published', 'cyan');
+    log('  3. Update all dates to today', 'cyan');
+    log('  4. Add tag to all files', 'cyan');
+    log('  5. Export all content', 'cyan');
+    log('  6. Find and replace across files', 'cyan');
+    
+    const choice = await prompt('\nSelect operation:');
+    
+    switch(choice) {
+        case '1':
+            await bulkValidate();
+            break;
+        case '2':
+            await bulkPublish();
+            break;
+        case '3':
+            await bulkUpdateDates();
+            break;
+        case '4':
+            await bulkAddTag();
+            break;
+        case '5':
+            await bulkExport();
+            break;
+        case '6':
+            await bulkFindReplace();
+            break;
+        default:
+            log('Invalid operation!', 'red');
+    }
+}
+
+async function bulkValidate() {
+    log('\n🔍 Validating all content...', 'yellow');
+    
+    let totalFiles = 0;
+    let validFiles = 0;
+    const issues = [];
+    
+    async function validateFile(filepath) {
+        const content = await fs.readFile(filepath, 'utf-8');
+        const relPath = path.relative('content', filepath);
+        totalFiles++;
+        
+        let fileValid = true;
+        
+        if (!content.includes('title:')) {
+            issues.push(`❌ ${relPath}: Missing title`);
+            fileValid = false;
+        }
+        if (!content.includes('date:')) {
+            issues.push(`❌ ${relPath}: Missing date`);
+            fileValid = false;
+        }
+        
+        if (fileValid) validFiles++;
+    }
+    
+    async function scanDir(dir) {
+        const items = await fs.readdir(dir, { withFileTypes: true });
+        
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            
+            if (item.isDirectory()) {
+                await scanDir(fullPath);
+            } else if (item.name.endsWith('.md') && !item.name.startsWith('_')) {
+                await validateFile(fullPath);
+            }
+        }
+    }
+    
+    await scanDir('content');
+    
+    log(`\n✅ Validation complete: ${validFiles}/${totalFiles} files valid`, 'green');
+    
+    if (issues.length > 0) {
+        log('\nIssues found:', 'red');
+        issues.forEach(issue => log(issue, 'red'));
+    }
+}
+
+async function bulkPublish() {
+    const confirm = await prompt('Convert ALL drafts to published? (yes/no):');
+    if (confirm.toLowerCase() !== 'yes') return;
+    
+    log('\n📢 Publishing all drafts...', 'yellow');
+    
+    let count = 0;
+    
+    async function publishFile(filepath) {
+        const content = await fs.readFile(filepath, 'utf-8');
+        
+        if (content.includes('draft: true')) {
+            const updated = content.replace('draft: true', 'draft: false');
+            await fs.writeFile(filepath, updated);
+            count++;
+            log(`  ✅ Published: ${path.relative('content', filepath)}`, 'green');
+        }
+    }
+    
+    async function scanDir(dir) {
+        const items = await fs.readdir(dir, { withFileTypes: true });
+        
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            
+            if (item.isDirectory()) {
+                await scanDir(fullPath);
+            } else if (item.name.endsWith('.md') && !item.name.startsWith('_')) {
+                await publishFile(fullPath);
+            }
+        }
+    }
+    
+    await scanDir('content');
+    
+    log(`\n✅ Published ${count} drafts`, 'green');
+}
+
+async function bulkUpdateDates() {
+    const confirm = await prompt('Update ALL content dates to today? (yes/no):');
+    if (confirm.toLowerCase() !== 'yes') return;
+    
+    log('\n📅 Updating dates...', 'yellow');
+    
+    const today = new Date().toISOString();
+    let count = 0;
+    
+    async function updateFile(filepath) {
+        const content = await fs.readFile(filepath, 'utf-8');
+        const updated = content.replace(/date:\s*"[^"]*"/g, `date: "${today}"`);
+        
+        if (updated !== content) {
+            await fs.writeFile(filepath, updated);
+            count++;
+            log(`  ✅ Updated: ${path.relative('content', filepath)}`, 'green');
+        }
+    }
+    
+    async function scanDir(dir) {
+        const items = await fs.readdir(dir, { withFileTypes: true });
+        
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            
+            if (item.isDirectory()) {
+                await scanDir(fullPath);
+            } else if (item.name.endsWith('.md') && !item.name.startsWith('_')) {
+                await updateFile(fullPath);
+            }
+        }
+    }
+    
+    await scanDir('content');
+    
+    log(`\n✅ Updated ${count} files`, 'green');
+}
+
+async function bulkAddTag() {
+    const tag = await prompt('Enter tag to add:');
+    const section = await prompt('Apply to specific section? (leave empty for all):');
+    
+    log(`\n🏷️ Adding tag "${tag}"...`, 'yellow');
+    
+    let count = 0;
+    
+    async function addTagToFile(filepath) {
+        const content = await fs.readFile(filepath, 'utf-8');
+        const parsed = parseMarkdownFile(content);
+        
+        if (parsed.frontmatter.tags) {
+            const tags = Array.isArray(parsed.frontmatter.tags) 
+                ? parsed.frontmatter.tags 
+                : parsed.frontmatter.tags.split(',').map(t => t.trim());
+            
+            if (!tags.includes(tag)) {
+                tags.push(tag);
+                const tagLine = `tags: [${tags.map(t => `"${t}"`).join(', ')}]`;
+                const updated = content.replace(/tags:\s*\[[^\]]*\]/g, tagLine);
+                await fs.writeFile(filepath, updated);
+                count++;
+                log(`  ✅ Tagged: ${path.relative('content', filepath)}`, 'green');
+            }
+        }
+    }
+    
+    async function scanDir(dir) {
+        const items = await fs.readdir(dir, { withFileTypes: true });
+        
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            
+            if (item.isDirectory()) {
+                if (!section || fullPath.includes(section)) {
+                    await scanDir(fullPath);
+                }
+            } else if (item.name.endsWith('.md') && !item.name.startsWith('_')) {
+                await addTagToFile(fullPath);
+            }
+        }
+    }
+    
+    await scanDir('content');
+    
+    log(`\n✅ Added tag to ${count} files`, 'green');
+}
+
+async function bulkExport() {
+    log('\n📦 Exporting all content...', 'yellow');
+    
+    const exportDir = 'exports';
+    await fs.mkdir(exportDir, { recursive: true });
+    
+    const timestamp = new Date().toISOString().replace(/:/g, '-').split('.')[0];
+    
+    // Export as JSON
+    await exportJSON(exportDir, timestamp);
+    
+    // Export as HTML
+    await exportHTML(exportDir, timestamp);
+    
+    // Export metadata as CSV
+    await exportCSV(exportDir, timestamp);
+    
+    log('\n✅ Bulk export complete!', 'green');
+}
+
+async function bulkFindReplace() {
+    const findText = await prompt('Find text:');
+    const replaceText = await prompt('Replace with:');
+    const confirm = await prompt(`Replace "${findText}" with "${replaceText}" in all files? (yes/no):`);
+    
+    if (confirm.toLowerCase() !== 'yes') return;
+    
+    log('\n🔄 Finding and replacing...', 'yellow');
+    
+    let filesModified = 0;
+    let totalReplacements = 0;
+    
+    async function processFile(filepath) {
+        const content = await fs.readFile(filepath, 'utf-8');
+        const regex = new RegExp(findText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+        const matches = content.match(regex);
+        
+        if (matches) {
+            const updated = content.replace(regex, replaceText);
+            await fs.writeFile(filepath, updated);
+            filesModified++;
+            totalReplacements += matches.length;
+            log(`  ✅ Replaced ${matches.length} instances in: ${path.relative('content', filepath)}`, 'green');
+        }
+    }
+    
+    async function scanDir(dir) {
+        const items = await fs.readdir(dir, { withFileTypes: true });
+        
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            
+            if (item.isDirectory()) {
+                await scanDir(fullPath);
+            } else if (item.name.endsWith('.md') && !item.name.startsWith('_')) {
+                await processFile(fullPath);
+            }
+        }
+    }
+    
+    await scanDir('content');
+    
+    log(`\n✅ Replaced ${totalReplacements} instances across ${filesModified} files`, 'green');
+}
+
+async function contentStats() {
+    log('\n📊 Content Statistics', 'bright');
+    log('====================\n', 'bright');
+    
+    const stats = {
+        totalFiles: 0,
+        totalWords: 0,
+        bySection: {},
+        byType: {},
+        recentFiles: [],
+        draftCount: 0,
+        publishedCount: 0
+    };
+    
+    async function analyzeFile(filepath) {
+        const content = await fs.readFile(filepath, 'utf-8');
+        const parsed = parseMarkdownFile(content);
+        const section = path.dirname(path.relative('content', filepath));
+        const wordCount = parsed.content.split(/\s+/).filter(w => w.length > 0).length;
+        const stat = await fs.stat(filepath);
+        
+        stats.totalFiles++;
+        stats.totalWords += wordCount;
+        
+        // By section
+        if (!stats.bySection[section]) {
+            stats.bySection[section] = { count: 0, words: 0 };
+        }
+        stats.bySection[section].count++;
+        stats.bySection[section].words += wordCount;
+        
+        // By type
+        const type = parsed.frontmatter.type || 'unknown';
+        if (!stats.byType[type]) {
+            stats.byType[type] = 0;
+        }
+        stats.byType[type]++;
+        
+        // Draft vs Published
+        if (parsed.frontmatter.draft === 'true' || parsed.frontmatter.draft === true) {
+            stats.draftCount++;
+        } else {
+            stats.publishedCount++;
+        }
+        
+        // Recent files
+        stats.recentFiles.push({
+            path: path.relative('content', filepath),
+            title: parsed.frontmatter.title || 'Untitled',
+            modified: stat.mtime,
+            words: wordCount
+        });
+    }
+    
+    async function scanDir(dir) {
+        const items = await fs.readdir(dir, { withFileTypes: true });
+        
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            
+            if (item.isDirectory()) {
+                await scanDir(fullPath);
+            } else if (item.name.endsWith('.md') && !item.name.startsWith('_')) {
+                await analyzeFile(fullPath);
+            }
+        }
+    }
+    
+    await scanDir('content');
+    
+    // Sort recent files by modification date
+    stats.recentFiles.sort((a, b) => b.modified - a.modified);
+    
+    // Display statistics
+    log('📈 Overall Statistics', 'bright');
+    log('--------------------', 'cyan');
+    log(`Total Files: ${stats.totalFiles}`, 'cyan');
+    log(`Total Words: ${stats.totalWords.toLocaleString()}`, 'cyan');
+    log(`Average Words/File: ${Math.round(stats.totalWords / stats.totalFiles)}`, 'cyan');
+    log(`Published: ${stats.publishedCount} | Drafts: ${stats.draftCount}`, 'cyan');
+    
+    log('\n📁 Content by Section', 'bright');
+    log('--------------------', 'cyan');
+    Object.entries(stats.bySection).forEach(([section, data]) => {
+        log(`${section}: ${data.count} files, ${data.words.toLocaleString()} words`, 'cyan');
+    });
+    
+    log('\n🏷️ Content by Type', 'bright');
+    log('-----------------', 'cyan');
+    Object.entries(stats.byType).forEach(([type, count]) => {
+        log(`${type}: ${count} files`, 'cyan');
+    });
+    
+    log('\n🕐 Recently Modified', 'bright');
+    log('-------------------', 'cyan');
+    stats.recentFiles.slice(0, 5).forEach(file => {
+        const timeAgo = getTimeAgo(file.modified);
+        log(`${file.title} (${file.words} words) - ${timeAgo}`, 'cyan');
+    });
+    
+    // Insights
+    log('\n💡 Insights', 'bright');
+    log('----------', 'yellow');
+    
+    const readingTime = Math.round(stats.totalWords / 200);
+    log(`Total reading time: ${readingTime} minutes`, 'yellow');
+    
+    const mostActive = Object.entries(stats.bySection)
+        .sort((a, b) => b[1].count - a[1].count)[0];
+    log(`Most active section: ${mostActive[0]} (${mostActive[1].count} files)`, 'yellow');
+    
+    const draftPercentage = Math.round((stats.draftCount / stats.totalFiles) * 100);
+    if (draftPercentage > 30) {
+        log(`⚠️ ${draftPercentage}% of content is still in draft`, 'yellow');
+    }
+}
+
+function getTimeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    
+    const intervals = [
+        { label: 'year', seconds: 31536000 },
+        { label: 'month', seconds: 2592000 },
+        { label: 'day', seconds: 86400 },
+        { label: 'hour', seconds: 3600 },
+        { label: 'minute', seconds: 60 }
+    ];
+    
+    for (const interval of intervals) {
+        const count = Math.floor(seconds / interval.seconds);
+        if (count >= 1) {
+            return `${count} ${interval.label}${count !== 1 ? 's' : ''} ago`;
+        }
+    }
+    
+    return 'just now';
+}
+
 // Main menu
 async function mainMenu() {
     log('\n🚀 Content Development Tool', 'bright');
@@ -372,8 +1041,11 @@ async function mainMenu() {
     log('  2. List all content', 'cyan');
     log('  3. Validate content', 'cyan');
     log('  4. Preview content', 'cyan');
-    log('  5. Build site', 'cyan');
-    log('  6. Exit', 'cyan');
+    log('  5. Export content', 'cyan');
+    log('  6. Content statistics', 'cyan');
+    log('  7. Bulk operations', 'cyan');
+    log('  8. Build site', 'cyan');
+    log('  9. Exit', 'cyan');
     
     const choice = await prompt('\nSelect option:');
     
@@ -391,9 +1063,18 @@ async function mainMenu() {
             await previewContent();
             break;
         case '5':
-            await buildSite();
+            await exportContent();
             break;
         case '6':
+            await contentStats();
+            break;
+        case '7':
+            await bulkOperations();
+            break;
+        case '8':
+            await buildSite();
+            break;
+        case '9':
             log('\nGoodbye! 👋', 'green');
             rl.close();
             return;

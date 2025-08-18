@@ -198,6 +198,13 @@
                 </div>
                 
                 <div class="toolbar">
+                    <select onchange="insertTemplate(this.value); this.value='';" style="padding: 8px; margin-right: 10px;">
+                        <option value="">Quick Templates...</option>
+                        <option value="blog">Blog Post</option>
+                        <option value="tool">Tool/Strategy</option>
+                        <option value="poem">Poem</option>
+                        <option value="project">Portfolio</option>
+                    </select>
                     <button onclick="insertMarkdown('# ', '\n')">H1</button>
                     <button onclick="insertMarkdown('## ', '\n')">H2</button>
                     <button onclick="insertMarkdown('### ', '\n')">H3</button>
@@ -329,6 +336,102 @@ Wrap up your thoughts...</textarea>
             editor.focus();
             updatePreview();
             saveToLocal();
+        }
+        
+        // Insert template
+        function insertTemplate(type) {
+            if (!type) return;
+            
+            const templates = {
+                blog: `## The Problem
+
+Describe the issue or challenge...
+
+## The Solution  
+
+How to address it...
+
+## Key Takeaways
+
+1. First point
+2. Second point
+3. Third point
+
+## Next Steps
+
+What to do next...`,
+                tool: `## What it is
+
+Brief description...
+
+## How to use it
+
+Step-by-step instructions...
+
+## Quick Specs
+
+- **Cost**: 
+- **Platform**: 
+- **Best for**: 
+
+## Pro Tips
+
+1. Tip one
+2. Tip two`,
+                poem: `<div class="poem-original">
+
+First line
+Second line
+Third line
+
+New stanza here
+Continues flowing
+Until complete
+
+</div>
+
+<div class="poem-translation">
+
+*Primera línea*
+*Segunda línea*  
+*Tercera línea*
+
+*Nueva estrofa aquí*
+*Continúa fluyendo*
+*Hasta completarse*
+
+</div>`,
+                project: `## Project Overview
+
+What this project accomplished...
+
+## Challenge
+
+The problem that needed solving...
+
+## Solution
+
+How it was solved...
+
+## Technologies
+
+- Tech 1
+- Tech 2
+- Tech 3
+
+## Results
+
+What was achieved...`
+            };
+            
+            if (templates[type]) {
+                const start = editor.selectionStart;
+                const text = editor.value;
+                editor.value = text.substring(0, start) + '\n\n' + templates[type] + '\n\n' + text.substring(start);
+                editor.focus();
+                updatePreview();
+                saveToLocal();
+            }
         }
         
         // Clear editor
