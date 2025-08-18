@@ -3,21 +3,21 @@
     <div class="container">
         <div class="hero-content">
             <h1 class="hero-title">
-                {{ if eq .Language.Lang "es" }}
-                <span class="gradient-text">Brandon J.P. Lambert</span>
-                <span class="subtitle">Catalizador | Creador | Educador de cuarta generación</span>
-                {{ else }}
-                <span class="gradient-text">Brandon J.P. Lambert</span>
-                <span class="subtitle">Catalyst | Creator | Fourth-gen educator</span>
-                {{ end }}
+                <span class="gradient-text">Brandon JP Lambert</span>
+                <span class="subtitle">MA-TESOL | Fourth-Generation Educator</span>
             </h1>
             <p class="hero-description">
                 {{ if eq .Language.Lang "es" }}
-                10+ años transformando la educación a través de la tecnología. De enseñar cursos de posgrado a desarrollar currículos para 800,000+ estudiantes y crear herramientas impulsadas por IA.
+                Educador de cuarta generación con MA-TESOL y 10 años en educación de idiomas y edtech - desde enseñar cursos de posgrado enfocados en arte y diseño hasta definir currículos para más de 800,000 jóvenes estudiantes chinos, diseñar programas especializados para diplomáticos, entrenar instructores de VR, y desarrollar herramientas personalizadas impulsadas por IA.
                 {{ else }}
-                10+ years transforming education through technology. From teaching graduate courses to developing curriculum for 800,000+ learners and building AI-powered tools.
+                Fourth-generation educator with MA-TESOL and 10 years in language education and edtech - from teaching graduate-level art and design-focused courses to scoping curriculum for 800,000+ young Chinese learners, designing specialized programs for diplomats, coaching VR instructors, and developing custom AI-powered tools.
                 {{ end }}
             </p>
+            <div class="location-info">
+                <span class="location-item">📍 <strong>Current:</strong> Mountain View, California, USA</span>
+                <span class="location-divider">|</span>
+                <span class="location-item">📍 <strong>Late 2025/Early 2026:</strong> Medellín, Colombia</span>
+            </div>
             <div class="hero-actions">
                 {{ if eq .Language.Lang "es" }}
                 <a href="/es/writing/" class="btn btn-primary">Ver Escritura</a>
@@ -368,11 +368,39 @@ document.addEventListener('DOMContentLoaded', () => {
 .hero-description {
     font-size: 1.25rem;
     line-height: 1.6;
-    margin-bottom: var(--space-2xl);
+    margin-bottom: var(--space-xl);
     color: var(--color-text-secondary);
-    max-width: 36rem;
+    max-width: 48rem;
     margin-left: auto;
     margin-right: auto;
+}
+
+.location-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    flex-wrap: wrap;
+}
+
+.location-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.location-divider {
+    color: var(--color-border);
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .location-divider {
+        display: inline;
+    }
 }
 
 .hero-actions {

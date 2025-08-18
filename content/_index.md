@@ -1,17 +1,20 @@
 ---
-title: "Welcome to My Portfolio"
+title: "Brandon JP Lambert"
 date: 2025-08-14
 draft: false
-description: "Professional portfolio showcasing my work and expertise"
+description: "Fourth-generation educator with MA-TESOL and 10 years in language education and edtech"
 ---
 
-# Welcome to My Portfolio
+# Brandon JP Lambert
 
-I'm a creative professional passionate about bringing ideas to life through technology and design. Explore my work across different domains:
+Fourth-generation educator with MA-TESOL and 10 years in language education and edtech - from teaching graduate-level art and design-focused courses to scoping curriculum for 800,000+ young Chinese learners, designing specialized programs for diplomats, coaching VR instructors, and developing custom AI-powered tools.
 
-- **[Make](/make/)** - My creative projects and productions
-- **[Learn](/learn/)** - Educational resources and insights
-- **[Think](/think/)** - Thoughts and perspectives on technology
-- **[Meet](/meet/)** - Get to know me and connect
+📍 **Current:** Mountain View, California, USA  
+📍 **Late 2025/Early 2026:** Medellín, Colombia
 
-Feel free to explore and reach out if you'd like to collaborate!
+## Explore My Work
+
+- **[Writing](/writing/)** - SLA theory, poetry, and creative works
+- **[Tools](/tools/)** - Language learning strategies and resources
+- **[Photography](/photography/)** - Visual storytelling and documentation
+- **[Me](/me/)** - More about my journey and background
