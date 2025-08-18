@@ -5,7 +5,6 @@ draft: false
 description: "Python-based vocabulary management tool with Docker support and modern development practices"
 categories: ["language-learning", "vocabulary", "tools"]
 tags: ["python", "docker", "vocabulary", "testing", "ci-cd"]
-type: "built"
 github: "https://github.com/bjpl/vocab_tool"
 technologies: ["Python", "Docker", "Pre-commit", "Testing Framework"]
 ---

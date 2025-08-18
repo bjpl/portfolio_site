@@ -5,7 +5,6 @@ draft: false
 description: "Desktop application for learning Spanish verb conjugations with AI-powered exercises"
 categories: ["language-learning", "spanish", "gui", "ai"]
 tags: ["python", "spanish", "conjugations", "gpt-4o", "sqlite", "gui", "verbs"]
-type: "built"
 github: "https://github.com/bjpl/conjugation_gui"
 technologies: ["Python", "SQLite", "OpenAI GPT-4o", "Desktop GUI"]
 ---

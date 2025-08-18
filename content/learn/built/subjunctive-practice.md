@@ -5,7 +5,6 @@ draft: false
 description: "GUI application for practicing subjunctive grammar and language skills"
 categories: ["language-learning", "grammar", "gui"]
 tags: ["python", "poetry", "gui", "subjunctive", "grammar", "practice"]
-type: "built"
 github: "https://github.com/bjpl/subjunctive_practice"
 technologies: ["Python", "Poetry", "GUI Framework"]
 status: "In Development"

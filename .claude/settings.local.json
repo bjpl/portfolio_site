@@ -58,7 +58,9 @@
       "WebFetch(domain:app.netlify.com)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:localhost)",
+      "WebFetch(domain:localhost)"
     ],
     "defaultMode": "acceptEdits"
   }
