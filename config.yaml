@@ -1,6 +1,6 @@
 baseURL: "https://vocal-pony-24e3de.netlify.app/"
 defaultContentLanguage: "en"
-title: "Portfolio"
+title: "Brandon JP Lambert"
 # theme: "your-theme-name"  # No theme - using custom layouts
 
 languages:
@@ -8,12 +8,12 @@ languages:
     languageName: "English"
     languageCode: "en-US"
     weight: 1
-    title: "Portfolio"
+    title: "Brandon JP Lambert"
   es:
     languageName: "Español"
     languageCode: "es-ES"
     weight: 2
-    title: "Portafolio"
+    title: "Brandon JP Lambert"
 
 menu:
   main:
