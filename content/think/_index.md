@@ -3,8 +3,6 @@ title: "Think"
 date: 2024-01-15
 draft: false
 description: "Thoughts, insights, and perspectives on technology and creativity"
-menu: "main"
-weight: 30
 ---
 
 # Think

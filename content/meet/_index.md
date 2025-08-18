@@ -3,8 +3,6 @@ title: "Meet"
 date: 2024-01-15
 draft: false
 description: "Get to know me and my work"
-menu: "main"
-weight: 40
 ---
 
 # Meet

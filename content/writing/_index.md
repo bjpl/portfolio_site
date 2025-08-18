@@ -3,8 +3,6 @@ title: "Writing"
 date: 2025-08-14
 draft: false
 description: "Creative writing and written works"
-menu: "main"
-weight: 10
 ---
 
 # Writing
