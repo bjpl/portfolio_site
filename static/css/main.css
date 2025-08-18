@@ -2,21 +2,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    /* Professional Color Palette */
+    /* Professional Educator Color Palette */
     --color-bg: #fafbfc;
     --color-surface: #ffffff;
-    --color-text-primary: #1c2434;
-    --color-text-secondary: #64748b;
-    --color-text-muted: #94a3b8;
-    --color-primary: #2563eb;
-    --color-primary-hover: #1d4ed8;
-    --color-primary-light: #dbeafe;
-    --color-accent: #2563eb;
-    --color-success: #059669;
-    --color-warning: #d97706;
-    --color-error: #dc2626;
-    --color-border: #e2e8f0;
-    --color-border-light: #f1f5f9;
+    --color-text-primary: #1a202c;
+    --color-text-secondary: #4a5568;
+    --color-text-muted: #718096;
+    --color-primary: #5b21b6;
+    --color-primary-hover: #4c1d95;
+    --color-primary-light: #ede9fe;
+    --color-accent: #8b5cf6;
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+    --color-border: #e5e7eb;
+    --color-border-light: #f3f4f6;
     
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -45,21 +45,21 @@
 }
 
 [data-theme="dark"] {
-    /* Clean, modern dark theme */
-    --color-bg: #0a0b0e;
-    --color-surface: #15161a;
-    --color-text-primary: #e8eaed;
-    --color-text-secondary: #9aa0a6;
-    --color-text-muted: #5f6368;
-    --color-primary: #4285f4;
-    --color-primary-hover: #1a73e8;
-    --color-primary-light: rgba(66, 133, 244, 0.12);
-    --color-accent: #4285f4;
-    --color-success: #34a853;
-    --color-warning: #fbbc04;
-    --color-error: #ea4335;
-    --color-border: rgba(255, 255, 255, 0.08);
-    --color-border-light: rgba(255, 255, 255, 0.04);
+    /* Sophisticated dark theme */
+    --color-bg: #0f0f11;
+    --color-surface: #1a1a1f;
+    --color-text-primary: #f3f4f6;
+    --color-text-secondary: #9ca3af;
+    --color-text-muted: #6b7280;
+    --color-primary: #a78bfa;
+    --color-primary-hover: #8b5cf6;
+    --color-primary-light: rgba(167, 139, 250, 0.15);
+    --color-accent: #c084fc;
+    --color-success: #34d399;
+    --color-warning: #fbbf24;
+    --color-error: #f87171;
+    --color-border: rgba(255, 255, 255, 0.1);
+    --color-border-light: rgba(255, 255, 255, 0.05);
     
     /* Clean shadows */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
@@ -922,6 +922,8 @@ button[type="submit"]:active,
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    font-weight: 800;
+    letter-spacing: -0.03em;
 }
 
 .hero-title .subtitle {
@@ -1496,7 +1498,7 @@ button[type="submit"]:active,
 }
 
 [data-theme="dark"] .hero-title .gradient-text {
-    background: linear-gradient(135deg, var(--color-primary), #8ab4f8);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
