@@ -55,7 +55,10 @@
       "Bash(start chrome:*)",
       "Bash(python:*)",
       "WebFetch(domain:vocal-pony-24e3de.netlify.app)",
-      "WebFetch(domain:app.netlify.com)"
+      "WebFetch(domain:app.netlify.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:github.com)"
     ],
     "defaultMode": "acceptEdits"
   }
