@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Integration Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .test-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-card h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        .test-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px 0;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background: #5a67d8;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        .status.success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        .status.error {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        .status.pending {
+            background: #feebc8;
+            color: #744210;
+        }
+        .console-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .error { color: #f48771; }
+        .warning { color: #dcdcaa; }
+        .info { color: #9cdcfe; }
+        .success { color: #6a9955; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Portfolio CMS Browser Integration Test</h1>
+    
+    <div class="test-grid">
+        <!-- Test 1: Admin Dashboard -->
+        <div class="test-card">
+            <h3>📊 Admin Dashboard</h3>
+            <p>Test the main dashboard loads without errors</p>
+            <button class="test-button" onclick="testDashboard()">Test Dashboard</button>
+            <iframe id="dashboard-frame" style="display:none"></iframe>
+            <div id="dashboard-status" class="status pending">Not tested</div>
+            <div id="dashboard-console" class="console-output" style="display:none"></div>
+        </div>
+
+        <!-- Test 2: Content Editor -->
+        <div class="test-card">
+            <h3>✏️ Content Editor</h3>
+            <p>Test the content editor functionality</p>
+            <button class="test-button" onclick="testEditor()">Test Editor</button>
+            <div id="editor-status" class="status pending">Not tested</div>
+            <div id="editor-console" class="console-output" style="display:none"></div>
+        </div>
+
+        <!-- Test 3: Portfolio Manager -->
+        <div class="test-card">
+            <h3>🎨 Portfolio Manager</h3>
+            <p>Test portfolio CRUD operations</p>
+            <button class="test-button" onclick="testPortfolio()">Test Portfolio</button>
+            <div id="portfolio-status" class="status pending">Not tested</div>
+            <div id="portfolio-console" class="console-output" style="display:none"></div>
+        </div>
+
+        <!-- Test 4: Media Library -->
+        <div class="test-card">
+            <h3>🖼️ Media Library</h3>
+            <p>Test image upload and management</p>
+            <button class="test-button" onclick="testMedia()">Test Media</button>
+            <div id="media-status" class="status pending">Not tested</div>
+            <div id="media-console" class="console-output" style="display:none"></div>
+        </div>
+
+        <!-- Test 5: Analytics -->
+        <div class="test-card">
+            <h3>📈 Analytics</h3>
+            <p>Test analytics tracking and display</p>
+            <button class="test-button" onclick="testAnalytics()">Test Analytics</button>
+            <div id="analytics-status" class="status pending">Not tested</div>
+            <div id="analytics-console" class="console-output" style="display:none"></div>
+        </div>
+
+        <!-- Test 6: Contact Form -->
+        <div class="test-card">
+            <h3>📧 Contact Form</h3>
+            <p>Test contact form submission</p>
+            <button class="test-button" onclick="testContact()">Test Contact</button>
+            <div id="contact-status" class="status pending">Not tested</div>
+            <div id="contact-console" class="console-output" style="display:none"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3334/api';
+        const ADMIN_BASE = 'http://localhost:3334/admin';
+        const HUGO_BASE = 'http://localhost:1313';
+
+        function updateStatus(testId, status, message) {
+            const statusEl = document.getElementById(`${testId}-status`);
+            statusEl.className = `status ${status}`;
+            statusEl.textContent = message;
+        }
+
+        function addConsoleMessage(testId, type, message) {
+            const consoleEl = document.getElementById(`${testId}-console`);
+            consoleEl.style.display = 'block';
+            const msgEl = document.createElement('div');
+            msgEl.className = type;
+            msgEl.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleEl.appendChild(msgEl);
+        }
+
+        async function testDashboard() {
+            updateStatus('dashboard', 'pending', 'Testing...');
+            
+            try {
+                // Test API endpoints used by dashboard
+                const tests = [
+                    { url: `${API_BASE}/content`, name: 'Content API' },
+                    { url: `${API_BASE}/media`, name: 'Media API' },
+                    { url: `${API_BASE}/analytics/summary`, name: 'Analytics API' }
+                ];
+                
+                let allPassed = true;
+                
+                for (const test of tests) {
+                    try {
+                        const response = await fetch(test.url);
+                        if (response.ok) {
+                            addConsoleMessage('dashboard', 'success', `✓ ${test.name} working`);
+                        } else {
+                            addConsoleMessage('dashboard', 'error', `✗ ${test.name} failed: ${response.status}`);
+                            allPassed = false;
+                        }
+                    } catch (error) {
+                        addConsoleMessage('dashboard', 'error', `✗ ${test.name} error: ${error.message}`);
+                        allPassed = false;
+                    }
+                }
+                
+                // Test dashboard page loads
+                const dashboardResponse = await fetch(`${ADMIN_BASE}/dashboard.html`);
+                if (dashboardResponse.ok) {
+                    addConsoleMessage('dashboard', 'success', '✓ Dashboard page loads');
+                } else {
+                    addConsoleMessage('dashboard', 'error', '✗ Dashboard page failed to load');
+                    allPassed = false;
+                }
+                
+                updateStatus('dashboard', allPassed ? 'success' : 'error', 
+                    allPassed ? 'All tests passed' : 'Some tests failed');
+            } catch (error) {
+                updateStatus('dashboard', 'error', `Error: ${error.message}`);
+                addConsoleMessage('dashboard', 'error', error.message);
+            }
+        }
+
+        async function testEditor() {
+            updateStatus('editor', 'pending', 'Testing...');
+            
+            try {
+                // Create test content
+                const testContent = {
+                    frontmatter: {
+                        title: 'Browser Test Page',
+                        date: new Date().toISOString(),
+                        draft: true
+                    },
+                    content: 'This is a test from the browser integration test.'
+                };
+                
+                // Test save functionality
+                const saveResponse = await fetch(`${API_BASE}/content/test-browser-page.md`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testContent)
+                });
+                
+                if (saveResponse.ok) {
+                    addConsoleMessage('editor', 'success', '✓ Content save works');
+                    
+                    // Test read back
+                    const readResponse = await fetch(`${API_BASE}/content/test-browser-page.md`);
+                    if (readResponse.ok) {
+                        addConsoleMessage('editor', 'success', '✓ Content read works');
+                        
+                        // Clean up
+                        const deleteResponse = await fetch(`${API_BASE}/content/test-browser-page.md`, {
+                            method: 'DELETE'
+                        });
+                        if (deleteResponse.ok) {
+                            addConsoleMessage('editor', 'success', '✓ Content delete works');
+                        }
+                    }
+                    
+                    updateStatus('editor', 'success', 'All editor tests passed');
+                } else {
+                    updateStatus('editor', 'error', 'Save failed');
+                    addConsoleMessage('editor', 'error', '✗ Content save failed');
+                }
+            } catch (error) {
+                updateStatus('editor', 'error', `Error: ${error.message}`);
+                addConsoleMessage('editor', 'error', error.message);
+            }
+        }
+
+        async function testPortfolio() {
+            updateStatus('portfolio', 'pending', 'Testing...');
+            
+            try {
+                // Test portfolio list
+                const listResponse = await fetch(`${API_BASE}/content`);
+                const data = await listResponse.json();
+                
+                if (data.success) {
+                    const portfolioItems = data.files.filter(f => f.path.startsWith('portfolio/'));
+                    addConsoleMessage('portfolio', 'info', `Found ${portfolioItems.length} portfolio items`);
+                    
+                    if (portfolioItems.length > 0) {
+                        addConsoleMessage('portfolio', 'success', '✓ Portfolio items exist');
+                        
+                        // Test reading a portfolio item
+                        const itemPath = portfolioItems[0].path;
+                        const itemResponse = await fetch(`${API_BASE}/content/${itemPath}`);
+                        if (itemResponse.ok) {
+                            addConsoleMessage('portfolio', 'success', '✓ Can read portfolio items');
+                        }
+                    }
+                    
+                    updateStatus('portfolio', 'success', 'Portfolio tests passed');
+                } else {
+                    updateStatus('portfolio', 'error', 'Failed to list portfolio');
+                }
+            } catch (error) {
+                updateStatus('portfolio', 'error', `Error: ${error.message}`);
+                addConsoleMessage('portfolio', 'error', error.message);
+            }
+        }
+
+        async function testMedia() {
+            updateStatus('media', 'pending', 'Testing...');
+            
+            try {
+                // Test media library API
+                const mediaResponse = await fetch(`${API_BASE}/media`);
+                const data = await mediaResponse.json();
+                
+                if (data.success) {
+                    addConsoleMessage('media', 'info', `Found ${data.files.length} media files`);
+                    
+                    // Check for our test image
+                    const hasTestImage = data.files.some(f => f.name === 'tree_image.jpg');
+                    if (hasTestImage) {
+                        addConsoleMessage('media', 'success', '✓ Test image found in library');
+                    } else {
+                        addConsoleMessage('media', 'warning', '⚠ Test image not found');
+                    }
+                    
+                    // Test image accessibility
+                    const testImageResponse = await fetch(`${HUGO_BASE}/uploads/tree_image.jpg`);
+                    if (testImageResponse.ok) {
+                        addConsoleMessage('media', 'success', '✓ Images accessible via Hugo');
+                    }
+                    
+                    updateStatus('media', 'success', 'Media tests passed');
+                } else {
+                    updateStatus('media', 'error', 'Failed to get media library');
+                }
+            } catch (error) {
+                updateStatus('media', 'error', `Error: ${error.message}`);
+                addConsoleMessage('media', 'error', error.message);
+            }
+        }
+
+        async function testAnalytics() {
+            updateStatus('analytics', 'pending', 'Testing...');
+            
+            try {
+                // Send test analytics event
+                const analyticsData = {
+                    type: 'pageview',
+                    data: {
+                        path: '/test-browser',
+                        referrer: '',
+                        sessionId: 'browser-test-' + Date.now(),
+                        timestamp: new Date().toISOString(),
+                        screenWidth: window.screen.width,
+                        screenHeight: window.screen.height,
+                        userAgent: navigator.userAgent
+                    }
+                };
+                
+                const trackResponse = await fetch(`${API_BASE}/analytics`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(analyticsData)
+                });
+                
+                if (trackResponse.ok) {
+                    addConsoleMessage('analytics', 'success', '✓ Analytics tracking works');
+                    
+                    // Get summary
+                    const summaryResponse = await fetch(`${API_BASE}/analytics/summary`);
+                    if (summaryResponse.ok) {
+                        const summary = await summaryResponse.json();
+                        addConsoleMessage('analytics', 'success', '✓ Analytics summary works');
+                        addConsoleMessage('analytics', 'info', `Total events: ${summary.data?.totalEvents || 0}`);
+                    }
+                    
+                    updateStatus('analytics', 'success', 'Analytics tests passed');
+                } else {
+                    updateStatus('analytics', 'error', 'Tracking failed');
+                }
+            } catch (error) {
+                updateStatus('analytics', 'error', `Error: ${error.message}`);
+                addConsoleMessage('analytics', 'error', error.message);
+            }
+        }
+
+        async function testContact() {
+            updateStatus('contact', 'pending', 'Testing...');
+            
+            try {
+                // Test contact form submission
+                const contactData = {
+                    name: 'Browser Test User',
+                    email: 'test@browser.com',
+                    message: 'This is a test message from the browser integration test.',
+                    timestamp: new Date().toISOString()
+                };
+                
+                const contactResponse = await fetch(`${API_BASE}/contact`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(contactData)
+                });
+                
+                if (contactResponse.ok) {
+                    addConsoleMessage('contact', 'success', '✓ Contact form submission works');
+                    const result = await contactResponse.json();
+                    
+                    if (result.emailSent) {
+                        addConsoleMessage('contact', 'success', '✓ Email notification sent');
+                    } else {
+                        addConsoleMessage('contact', 'warning', '⚠ Email not configured (expected)');
+                    }
+                    
+                    updateStatus('contact', 'success', 'Contact form tests passed');
+                } else {
+                    updateStatus('contact', 'error', 'Submission failed');
+                }
+            } catch (error) {
+                updateStatus('contact', 'error', `Error: ${error.message}`);
+                addConsoleMessage('contact', 'error', error.message);
+            }
+        }
+
+        // Auto-run basic connectivity test on load
+        window.addEventListener('load', async () => {
+            console.log('Browser Integration Test Loaded');
+            console.log('CMS Server:', API_BASE);
+            console.log('Hugo Server:', HUGO_BASE);
+            
+            // Check server availability
+            try {
+                const cmsCheck = await fetch(`${API_BASE}/content`);
+                const hugoCheck = await fetch(HUGO_BASE);
+                
+                if (cmsCheck.ok && hugoCheck.ok) {
+                    console.log('✓ Both servers are running');
+                } else {
+                    console.error('✗ Server connectivity issue');
+                }
+            } catch (error) {
+                console.error('✗ Cannot connect to servers:', error);
+            }
+        });
+    </script>
+</body>
+</html>
