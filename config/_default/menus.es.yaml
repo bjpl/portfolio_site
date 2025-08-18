@@ -2,8 +2,8 @@ main:
   - name: Escribir
     url: /es/escribir/
     weight: 10
-  - name: Aprender
-    url: /es/learn/
+  - name: Herramientas
+    url: /es/herramientas/
     weight: 20
   - name: Pensar
     url: /es/think/

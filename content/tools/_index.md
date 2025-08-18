@@ -1,30 +1,24 @@
 ---
-title: "Developer Tools"
-date: 2024-01-15
+title: "Tools"
+date: 2025-08-14
 draft: false
+description: "Tools and resources I've built and use"
+menu: "main"
+weight: 20
 ---
 
-# Content Management Tools
+# Tools
 
-Access our content management tools:
+Discover the tools and resources from my development journey:
 
-## 📊 [Dashboard](/admin/dashboard.html)
-Content creation dashboard with statistics and quick actions for managing your Hugo site.
+## Tool Categories
 
-## 📝 [Review Tool](/admin/review.html)
-Content review and revision system with quality checks and collaboration features.
+### [Built Projects](/tools/built/)
+Projects I've built to learn new technologies and concepts.
 
-## 📤 [Bulk Upload](/admin/bulk-upload.html)
-Bulk content upload system for images, videos, PDFs, and social media content.
+### [What I Use](/tools/what-i-use/)
+Curated collection of valuable tools and resources I use regularly.
 
-## 🔧 [Connection Test](/admin/test-connection.html)
-Test API connection and verify all systems are running correctly.
+### [Strategies](/tools/strategies/)
+Effective development strategies and methodologies I've developed.
 
----
-
-### Quick Links
-
-- **Tools Hub**: [Visual Interface](/admin/) - See all tools with visual cards
-- **Direct Dashboard**: [/admin/dashboard.html](/admin/dashboard.html)
-- **Direct Review**: [/admin/review.html](/admin/review.html)
-- **Direct Upload**: [/admin/bulk-upload.html](/admin/bulk-upload.html)

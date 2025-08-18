@@ -17,5 +17,5 @@ Audio projects, music production, and podcasts that bring ideas to life through 
 ## [Visuals](/writing/visuals/)
 Design work, branding, and visual storytelling that captures attention and communicates effectively.
 
-## [Words](/writing/words/)
-Writing samples, technical documentation, and creative content that informs and inspires.
+## [Poetry](/writing/poetry/)
+Poetry, prose, and creative writing that informs and inspires.

@@ -20,8 +20,8 @@ menu:
     - name: "Writing"
       url: "/writing/"
       weight: 10
-    - name: "Learn"
-      url: "/learn/"
+    - name: "Tools"
+      url: "/tools/"
       weight: 20
     - name: "Think"
       url: "/think/"
