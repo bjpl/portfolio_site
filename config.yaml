@@ -1,4 +1,4 @@
-baseURL: "http://localhost:1313/"
+baseURL: "https://vocal-pony-24e3de.netlify.app/"
 defaultContentLanguage: "en"
 title: "Portfolio"
 # theme: "your-theme-name"  # No theme - using custom layouts
