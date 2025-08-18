@@ -1,0 +1,49 @@
+{{ define "main" }}
+<div class="container">
+    <header class="page-header">
+        <h1>{{ .Title }}</h1>
+        <p>{{ .Description }}</p>
+    </header>
+    
+    <div class="section-grid">
+        {{ $soundsSection := site.GetPage "/writing/sounds" }}
+        {{ if $soundsSection }}
+        <a href="{{ $soundsSection.Permalink }}" class="section-card">
+            <h2>🎵 Sounds</h2>
+            <p>Audio projects, music production, and podcasts that bring ideas to life through sound. Explore the intersection of technology and audio creativity.</p>
+        </a>
+        {{ end }}
+        
+        {{ $visualsSection := site.GetPage "/writing/visuals" }}
+        {{ if $visualsSection }}
+        <a href="{{ $visualsSection.Permalink }}" class="section-card">
+            <h2>🎨 Visuals</h2>
+            <p>Design work, branding, and visual storytelling that captures attention and communicates effectively through compelling imagery.</p>
+        </a>
+        {{ end }}
+        
+        {{ $poetrySection := site.GetPage "/writing/poetry" }}
+        {{ if $poetrySection }}
+        <a href="{{ $poetrySection.Permalink }}" class="section-card">
+            <h2>✍️ Poetry</h2>
+            <p>Poetry, prose, and creative writing that informs and inspires. Words crafted to evoke emotion and capture the human experience.</p>
+        </a>
+        {{ end }}
+    </div>
+    
+    {{ if .Pages }}
+    <section class="content-preview">
+        <h2 class="section-title">Recent Work</h2>
+        <div class="content-list">
+            {{ range first 3 .Pages.ByDate.Reverse }}
+            <article>
+                <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+                <time>{{ .Date.Format "January 2, 2006" }}</time>
+                {{ with .Description }}<p>{{ . }}</p>{{ end }}
+            </article>
+            {{ end }}
+        </div>
+    </section>
+    {{ end }}
+</div>
+{{ end }}
