@@ -63,7 +63,8 @@
       "WebFetch(domain:localhost)",
       "Bash(mv:*)",
       "Bash(do echo \"Testing $url\")",
-      "Bash(do echo \"Testing old URL $url\")"
+      "Bash(do echo \"Testing old URL $url\")",
+      "Bash(gh repo view:*)"
     ],
     "defaultMode": "acceptEdits"
   }
