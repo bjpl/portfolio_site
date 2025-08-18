@@ -20,8 +20,8 @@
             </p>
             <div class="hero-actions">
                 {{ if eq .Language.Lang "es" }}
-                <a href="/es/escribir/" class="btn btn-primary">Ver Escritura</a>
-                <a href="/es/conocer/" class="btn btn-outline">Conectar</a>
+                <a href="/es/writing/" class="btn btn-primary">Ver Escritura</a>
+                <a href="/es/meet/" class="btn btn-outline">Conectar</a>
                 {{ else }}
                 <a href="/writing/" class="btn btn-primary">View Writing</a>
                 <a href="/meet/" class="btn btn-outline">Get in Touch</a>
@@ -82,7 +82,7 @@
         </div>
         <div class="section-footer">
             {{ if eq .Language.Lang "es" }}
-            <a href="/es/escribir/" class="btn btn-secondary">Ver Toda la Escritura</a>
+            <a href="/es/writing/" class="btn btn-secondary">Ver Toda la Escritura</a>
             {{ else }}
             <a href="/writing/" class="btn btn-secondary">View All Writing</a>
             {{ end }}
@@ -103,30 +103,6 @@
     </div>
 </section>
 
-<section class="contact-section">
-    <div class="container">
-        <h2 class="section-title">Let's Work Together</h2>
-        <p class="section-description">Have a project in mind? I'd love to hear about it.</p>
-        <form id="contact-form" class="contact-form">
-            <div class="form-row">
-                <div class="form-group">
-                    <input type="text" id="name" name="name" placeholder="Your Name" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" id="email" name="email" placeholder="Your Email" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <input type="text" id="subject" name="subject" placeholder="Subject" required>
-            </div>
-            <div class="form-group">
-                <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Send Message</button>
-            <div id="contact-status" class="form-status"></div>
-        </form>
-    </div>
-</section>
 
 <script>
 // API Base URL - Using port 3334 where our CMS backend runs
@@ -324,41 +300,6 @@ function loadDemoSkills() {
     `;
 }
 
-// Handle contact form submission
-document.getElementById('contact-form')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        subject: document.getElementById('subject').value,
-        message: document.getElementById('message').value
-    };
-    
-    const statusDiv = document.getElementById('contact-status');
-    statusDiv.innerHTML = '<p class="loading">Sending message...</p>';
-    
-    try {
-        const response = await fetch(`${API_BASE}/contact`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok) {
-            statusDiv.innerHTML = '<p class="success">Message sent successfully! I\'ll get back to you soon.</p>';
-            document.getElementById('contact-form').reset();
-        } else {
-            throw new Error(data.error || 'Failed to send message');
-        }
-    } catch (error) {
-        statusDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
-    }
-});
 
 // Load data on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -386,9 +327,8 @@ document.addEventListener('DOMContentLoaded', () => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at 30% 20%, var(--color-primary-light) 0%, transparent 50%),
-                radial-gradient(circle at 70% 80%, var(--color-accent) 0%, transparent 50%);
-    opacity: 0.03;
+    background: radial-gradient(circle at 30% 20%, var(--color-primary-light) 0%, transparent 50%);
+    opacity: 0.05;
     pointer-events: none;
 }
 
@@ -411,10 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--color-primary);
     display: block;
     line-height: 1.1;
 }
@@ -586,7 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 .project-image {
     height: 200px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #3b82f6;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -622,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 .project-link {
-    color: #667eea;
+    color: #3b82f6;
     text-decoration: none;
     font-weight: 600;
 }
@@ -641,7 +578,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 .skill-category h4 {
-    color: #667eea;
+    color: #3b82f6;
     margin-bottom: 1rem;
 }
 
@@ -669,62 +606,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 .skill-progress {
     height: 100%;
-    background: #667eea;
+    background: #3b82f6;
     transition: width 1s ease;
 }
 
-/* Contact Form */
-.contact-section {
-    padding: 80px 0;
-}
-
-.contact-form {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 12px 16px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
-.form-status {
-    margin-top: 1rem;
-    text-align: center;
-}
-
-.form-status .success {
-    color: #48bb78;
-}
-
-.form-status .error {
-    color: #f56565;
-}
-
-.form-status .loading {
-    color: #667eea;
-}
 
 /* Admin Tools */
 .admin-tools {
@@ -753,7 +638,7 @@ document.addEventListener('DOMContentLoaded', () => {
 .tool-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-    color: #667eea;
+    color: #3b82f6;
 }
 
 .tool-icon {
@@ -812,10 +697,6 @@ document.addEventListener('DOMContentLoaded', () => {
 @media (max-width: 768px) {
     .hero-title {
         font-size: 2.5rem;
-    }
-    
-    .form-row {
-        grid-template-columns: 1fr;
     }
     
     .hero-actions {

@@ -10,15 +10,10 @@
     
     <link rel="stylesheet" href="/css/main.css">
     
+    <!-- Theme Toggle (Load immediately to prevent flash) -->
+    <script src="/js/theme-toggle.js"></script>
     <!-- Analytics Tracker -->
     <script src="/js/analytics-tracker.js" defer></script>
-    <script>
-        // Theme setup
-        (function() {
-            const theme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', theme);
-        })();
-    </script>
 </head>
 <body>
     {{ partial "header.html" . }}
@@ -30,14 +25,37 @@
     {{ partial "footer.html" . }}
     
     <script src="/js/lazy-load.js" defer></script>
+    
+    {{/* Dark Mode Implementation - Guaranteed to work */}}
     <script>
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-        }
-
+        // Dark mode toggle - inline implementation
+        document.addEventListener('DOMContentLoaded', function() {
+            const btn = document.getElementById('theme-toggle-btn');
+            const icon = document.getElementById('theme-icon');
+            
+            // Initialize theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                if (icon) icon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+            }
+            
+            // Add click handler
+            if (btn) {
+                btn.addEventListener('click', function() {
+                    const current = document.documentElement.getAttribute('data-theme') || 'light';
+                    const newTheme = current === 'dark' ? 'light' : 'dark';
+                    
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    
+                    if (icon) icon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                    
+                    console.log('Theme changed to:', newTheme);
+                });
+            }
+        });
+        
         function switchLanguage(targetLang) {
             const currentPath = window.location.pathname;
             const currentLang = '{{ .Language.Lang }}';
@@ -50,14 +68,16 @@
                     '/tools/': '/tools/',
                     '/think/': '/think/',
                     '/meet/': '/meet/',
+                    '/contact/': '/contact/',
                     '/admin': '/admin'
                 },
                 'es': {
                     '/': '/es/',
-                    '/writing/': '/es/escribir/',
-                    '/tools/': '/es/herramientas/',
-                    '/think/': '/es/pensar/',
-                    '/meet/': '/es/conocer/',
+                    '/writing/': '/es/writing/',
+                    '/tools/': '/es/tools/',
+                    '/think/': '/es/think/',
+                    '/meet/': '/es/meet/',
+                    '/contact/': '/es/contact/',
                     '/admin': '/admin'
                 }
             };
@@ -74,10 +94,11 @@
                 if (currentPath.startsWith('/es/')) {
                     const pathWithoutLang = currentPath.replace('/es', '');
                     const sectionMappings = {
-                        '/escribir/': '/writing/',
-                        '/herramientas/': '/tools/',
-                        '/pensar/': '/think/',
-                        '/conocer/': '/meet/'
+                        '/writing/': '/writing/',
+                        '/tools/': '/tools/',
+                        '/think/': '/think/',
+                        '/meet/': '/meet/',
+                        '/contact/': '/contact/'
                     };
                     
                     for (const [spanish, english] of Object.entries(sectionMappings)) {

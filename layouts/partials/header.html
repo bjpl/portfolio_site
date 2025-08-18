@@ -7,11 +7,19 @@
             
             <nav class="site-nav" aria-label="Main navigation">
                 <ul>
-                    <li><a href="/writing/">Writing</a></li>
-                    <li><a href="/tools/">Tools</a></li>
-                    <li><a href="/think/">Think</a></li>
-                    <li><a href="/meet/">Meet</a></li>
-                    <li><a href="/contact/">Contact</a></li>
+                    {{ if eq .Language.Lang "es" }}
+                    <li><a href="{{ "/es/writing/" | absURL }}">Escritura</a></li>
+                    <li><a href="{{ "/es/tools/" | absURL }}">Herramientas</a></li>
+                    <li><a href="{{ "/es/think/" | absURL }}">Pensar</a></li>
+                    <li><a href="{{ "/es/meet/" | absURL }}">Conocer</a></li>
+                    <li><a href="{{ "/es/contact/" | absURL }}">Contacto</a></li>
+                    {{ else }}
+                    <li><a href="{{ "/writing/" | absURL }}">Writing</a></li>
+                    <li><a href="{{ "/tools/" | absURL }}">Tools</a></li>
+                    <li><a href="{{ "/think/" | absURL }}">Think</a></li>
+                    <li><a href="{{ "/meet/" | absURL }}">Meet</a></li>
+                    <li><a href="{{ "/contact/" | absURL }}">Contact</a></li>
+                    {{ end }}
                 </ul>
             </nav>
             
@@ -29,8 +37,8 @@
                 </div>
                 
                 {{/* Theme Toggle */}}
-                <button class="theme-toggle" aria-label="Toggle theme">
-                    🌓
+                <button class="theme-toggle" aria-label="Toggle theme" id="theme-toggle-btn">
+                    <span id="theme-icon">🌙</span>
                 </button>
             </div>
         </div>
