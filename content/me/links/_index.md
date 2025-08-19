@@ -493,40 +493,25 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/chinottove" target="_blank" data-tags="california caribbean chinottove english-speaking latin-america los-angeles north-america south-america spanish-speaking usa ve venezuela venezuelan west-coast">🥤 Chinotto Venezuela</a>
 </div>
 
+<h4>Colombian Food & Restaurants</h4>
+<div class="link-grid">
 <a href="https://instagram.com/cochibacon" target="_blank" data-tags="andean bacon bogota cochibacon colombia food restaurant south-america spanish-speaking">🥓 Cochi Bacon</a>
-
 <a href="https://instagram.com/koreaimportaciones" target="_blank" data-tags="cuisine food gastronomy koreaimportaciones">🥢 Comida Asiática</a>
-
 <a href="https://instagram.com/dominospizzacol" target="_blank" data-tags="andean co colombia colombian dominospizzacol latin-america south-america spanish-speaking">🍕 Domino's Pizza Colombia</a>
-
 <a href="https://instagram.com/eatbucaramanga" target="_blank" data-tags="bucaramanga city-of-parks colombia eatbucaramanga food guide santander south-america spanish-speaking">🍴 Eat Bucaramanga</a>
-
 <a href="https://instagram.com/elclubgastronomico" target="_blank" data-tags="andean bogota colombia elclubgastronomico gastronomy restaurant south-america spanish-speaking">🍷 El Club Gastronómico</a>
-
 <a href="https://instagram.com/elcorraloficial" target="_blank" data-tags="elcorraloficial">🍔 El Corral</a>
 
 <a href="https://instagram.com/entrearbolescali" target="_blank" data-tags="cali colombia entrearbolescali pacific restaurant south-america spanish-speaking valle-del-cauca">🌳 Entre Árboles</a>
-
 <a href="https://instagram.com/frisbylohace" target="_blank" data-tags="frisbylohace">🍗 Frisby</a>
-
 <a href="https://instagram.com/gatoradecolombia" target="_blank" data-tags="andean co colombia colombian gatoradecolombia latin-america south-america spanish-speaking">🥤 Gatorade Colombia</a>
-
 <a href="https://instagram.com/goyurtcolombia" target="_blank" data-tags="goyurtcolombia">🥛 Goyurt</a>
-
-<a href="https://instagram.com/goyurtcolombia" target="_blank" data-tags="goyurtcolombia">🥛 Goyurt</a>
-
 <a href="https://instagram.com/heinzcolombia" target="_blank" data-tags="andean co colombia colombian heinzcolombia latin-america south-america spanish-speaking">🍅 Heinz Colombia</a>
-
 <a href="https://instagram.com/holafood___" target="_blank" data-tags="food holafood___ restaurant">🍜 HolaFood</a>
-
 <a href="https://instagram.com/kfc.colombia" target="_blank" data-tags="andean co colombia colombian kfc.colombia latin-america south-america spanish-speaking">🍗 KFC Colombia</a>
-
 <a href="https://instagram.com/lccolombia" target="_blank" data-tags="andean co colombia colombian latin-america lccolombia south-america spanish-speaking">🍕 Little Caesars Colombia</a>
-
 <a href="https://instagram.com/machan_colombia_1102" target="_blank" data-tags="andean co colombia colombian latin-america machan-colombia-1102 machan_colombia_1102 south-america spanish-speaking">🇯🇵 Machan Colombia</a>
-
 <a href="https://instagram.com/madeinbucara" target="_blank" data-tags="bucaramanga co colombia colombian food latin-america local madeinbucara santander south-america spanish-speaking">🇨🇴 Made In Bucara</a>
-
 <a href="https://instagram.com/maggicolombia" target="_blank" data-tags="andean co colombia colombian latin-america maggicolombia south-america spanish-speaking">🍲 Maggi Colombia</a>
 
 <a href="https://instagram.com/mcdonaldscol" target="_blank" data-tags="andean co colombia colombian latin-america mcdonaldscol south-america spanish-speaking">🍔 McDonald's Colombia</a>
@@ -568,6 +553,7 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/mimedellinsaborea" target="_blank" data-tags="antioquia city-of-eternal-spring colombia food medellin mimedellinsaborea restaurant south-america spanish-speaking">🍽️ Mi Medellín Saborea</a>
 
 <a href="https://instagram.com/popayan_moderna" target="_blank" data-tags="cauca colombia lifestyle popayan popayan-moderna popayan_moderna south-america spanish-speaking white-city">🏛️ Popayán Moderna</a>
+</div>
 </div>
 </div>
 
