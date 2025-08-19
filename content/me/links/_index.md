@@ -304,23 +304,27 @@ A curated collection of content I find inspiring, educational, or just plain int
 
 <h4>Arts & Entertainment</h4>
 <div class="link-grid">
+        <a href="https://instagram.com/berlitzcolombia" target="_blank">🗣️ Berlitz Colombia</a>
+
         <a href="https://instagram.com/culturaenbta" target="_blank">🎨 Secretaría de Cultura Bogotá</a>
 
         <a href="https://instagram.com/fiteatrocali" target="_blank">🎭 Festival Teatro Cali</a>
 
+        <a href="https://instagram.com/fteatronacional" target="_blank">🎭 Teatro Nacional</a>
+
         <a href="https://instagram.com/muestracineespanol" target="_blank">🎬 Muestra Cine Español</a>
 
-        <a href="https://instagram.com/unicaucaposgrados" target="_blank">🎓 Centro Posgrados Cauca</a>
-</div>
-
-        <a href="https://instagram.com/bibliotecasmed" target="_blank">📚 Sistema de Bibliotecas Medellín</a>
+        <a href="https://instagram.com/plazamayormed" target="_blank">🏛️ Plaza Mayor Medellín</a>
 
         <a href="https://instagram.com/somamexico" target="_blank" data-tags="mexico mexico-city art education">🎨 SOMA Mexico • CDMX</a>
 
         <a href="https://instagram.com/teatrometropolitano" target="_blank">🎭 Teatro Metropolitano</a>
 
-        <a href="https://instagram.com/fteatronacional" target="_blank">🎭 Teatro Nacional</a>
+        <a href="https://instagram.com/unicaucaposgrados" target="_blank">🎓 Centro Posgrados Cauca</a>
+</div>
 
+<h4>Universities & Education</h4>
+<div class="link-grid">
         <a href="https://instagram.com/udea" target="_blank">🎓 Universidad de Antioquia</a>
 
         <a href="https://instagram.com/unibarranquilla_" target="_blank">🎓 Universidad de Barranquilla</a>
@@ -332,8 +336,11 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/upedagogicanacional" target="_blank" data-tags="colombia bogota university education">🎓 Universidad Pedagógica • Bogotá</a>
 
         <a href="https://instagram.com/upbcolombia" target="_blank">🎓 Universidad Pontificia Bolivariana</a>
+</div>
 
-        <a href="https://instagram.com/berlitzcolombia" target="_blank">🗣️ Berlitz Colombia</a>
+<h4>Additional Museums & Cultural Sites</h4>
+<div class="link-grid">
+        <a href="https://instagram.com/bibliotecasmed" target="_blank">📚 Sistema de Bibliotecas Medellín</a>
 
         <a href="https://instagram.com/centromemoriah" target="_blank">🕊️ Centro Nacional Memoria Histórica</a>
 
@@ -352,8 +359,6 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/museomyt" target="_blank" data-tags="mexico mexico-city museum tolerance memory">🏛️ Museo Memoria y Tolerancia • CDMX</a>
 
         <a href="https://instagram.com/museonacionalco" target="_blank">🏛️ Museo Nacional</a>
-
-        <a href="https://instagram.com/plazamayormed" target="_blank">🏛️ Plaza Mayor Medellín</a>
 </div>
 </div>
 
