@@ -24,7 +24,12 @@
     let statsElements;
 
     // Initialize on DOM load
-    document.addEventListener('DOMContentLoaded', initialize);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialize);
+    } else {
+        // DOM is already loaded
+        setTimeout(initialize, 100);
+    }
 
     function initialize() {
         console.log('Initializing links page...');
@@ -46,6 +51,16 @@
             categoryFilters: !!categoryFilters,
             statsElements: !!statsElements.totalLinks
         });
+        
+        // Check if links are present
+        const testLinks = document.querySelectorAll('.link-grid a');
+        console.log('Test query found', testLinks.length, 'links');
+        
+        if (testLinks.length === 0) {
+            console.error('No links found! Retrying in 500ms...');
+            setTimeout(initialize, 500);
+            return;
+        }
 
         // Process all links
         processLinks();
@@ -248,8 +263,16 @@
         
         // Hide empty sections
         document.querySelectorAll('.instagram-links').forEach(section => {
-            const visibleLinks = section.querySelectorAll('.link-grid a:not([style*="none"])');
-            section.style.display = visibleLinks.length > 0 ? '' : 'none';
+            const allSectionLinks = section.querySelectorAll('.link-grid a');
+            let hasVisibleLinks = false;
+            
+            allSectionLinks.forEach(link => {
+                if (link.style.display !== 'none') {
+                    hasVisibleLinks = true;
+                }
+            });
+            
+            section.style.display = hasVisibleLinks ? '' : 'none';
         });
     }
 
@@ -552,3 +575,85 @@
     }
 
 })();
+
+// Fallback simple search if modern features don't work
+window.addEventListener('load', function() {
+    console.log('Running fallback setup...');
+    const searchInput = document.getElementById('search-input');
+    const categoryFilters = document.getElementById('category-filters');
+    
+    // Setup search
+    if (searchInput && !searchInput.hasAttribute('data-fallback')) {
+        searchInput.setAttribute('data-fallback', 'true');
+        
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            console.log('Fallback search:', searchTerm);
+            
+            // Get all links
+            const allLinks = document.querySelectorAll('.link-grid a');
+            let visibleCount = 0;
+            
+            allLinks.forEach(link => {
+                const text = link.textContent.toLowerCase();
+                const tags = (link.getAttribute('data-tags') || '').toLowerCase();
+                const href = link.href.toLowerCase();
+                
+                if (!searchTerm || text.includes(searchTerm) || tags.includes(searchTerm) || href.includes(searchTerm)) {
+                    link.style.display = '';
+                    link.style.opacity = '1';
+                    visibleCount++;
+                } else {
+                    link.style.display = 'none';
+                }
+            });
+            
+            console.log('Fallback search results:', visibleCount, 'visible');
+            
+            // Hide empty sections
+            document.querySelectorAll('.instagram-links').forEach(section => {
+                const links = section.querySelectorAll('.link-grid a');
+                let hasVisible = false;
+                links.forEach(l => {
+                    if (l.style.display !== 'none') hasVisible = true;
+                });
+                section.style.display = hasVisible ? '' : 'none';
+            });
+        });
+    }
+    
+    // Setup category filters
+    if (categoryFilters) {
+        categoryFilters.addEventListener('click', function(e) {
+            if (e.target.classList.contains('pill')) {
+                console.log('Fallback category filter:', e.target.getAttribute('data-category'));
+                
+                // Update active state
+                document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                const category = e.target.getAttribute('data-category');
+                
+                if (category === 'all') {
+                    // Show all sections
+                    document.querySelectorAll('.instagram-links').forEach(section => {
+                        section.style.display = '';
+                    });
+                    document.querySelectorAll('.link-grid a').forEach(link => {
+                        link.style.display = '';
+                        link.style.opacity = '1';
+                    });
+                } else {
+                    // Hide all sections first
+                    document.querySelectorAll('.instagram-links').forEach(section => {
+                        if (section.classList.contains(category)) {
+                            section.style.display = '';
+                        } else {
+                            section.style.display = 'none';
+                        }
+                    });
+                }
+            }
+        });
+    }
+});
