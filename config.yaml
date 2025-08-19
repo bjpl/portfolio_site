@@ -53,6 +53,12 @@ sitemap:
 minify:
   minifyOutput: true
 
+# Markdown rendering
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+
 # RSS
 outputs:
   home: ["HTML", "RSS", "JSON"]

@@ -9,7 +9,7 @@
         </header>
         
         <div class="page-content">
-            {{ .Content }}
+            {{ .Content | safeHTML }}
         </div>
     </div>
 </div>
