@@ -622,30 +622,6 @@ A curated collection of content I find inspiring, educational, or just plain int
 </div>
 </div>
 
-## YouTube Picks
-
-<div class="youtube-grid">
-<!-- YouTube embeds will be added here -->
-<p style="padding: 2rem; text-align: center; color: var(--color-text-secondary);">
-        YouTube content coming soon. Will feature educational videos, language learning resources, and tech tutorials.
-</p>
-</div>
-
-## Web Discoveries
-
-<div class="web-links">
-<p style="padding: 2rem; text-align: center; color: var(--color-text-secondary);">
-        Web resources and articles coming soon. Will include the best finds from around the web on education, technology, and language learning.
-</p>
-</div>
-
-## Podcasts & Audio
-
-<div class="podcast-list">
-<p style="padding: 2rem; text-align: center; color: var(--color-text-secondary);">
-        Podcast recommendations coming soon. Will feature episodes on education, EdTech, and language acquisition.
-</p>
-</div>
 
 <!-- Instagram embed script -->
 <script async src="//www.instagram.com/embed.js"></script>
