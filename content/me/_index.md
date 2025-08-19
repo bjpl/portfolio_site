@@ -44,6 +44,14 @@ I bridge the gap between education and technology, from teaching graduate-level 
 📧 [brandon.lambert87@gmail.com](mailto:brandon.lambert87@gmail.com)  
 💼 [LinkedIn](https://www.linkedin.com/in/brandonjplambert)
 
+## My Theoretical Positions
+
+Explore my perspectives on language education and pedagogy in the [Positions](/me/positions/) section.
+
+## Weekly Links & Resources
+
+Check out my curated [Links](/me/links/) - featuring Instagram highlights, YouTube videos, and web resources I find inspiring.
+
 ---
 
 *Currently exploring: AI in education, VR language learning, and building tools that make learning more accessible and engaging.*

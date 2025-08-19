@@ -10,123 +10,53 @@ menu:
 
 I'd love to hear from you! Whether you have a project in mind, want to collaborate, or just want to say hello, feel free to reach out.
 
-<form id="contactForm" class="contact-form">
-    <div class="form-group">
-        <label for="name">Name *</label>
-        <input type="text" id="name" name="name" required>
-    </div>
-    
-    <div class="form-group">
-        <label for="email">Email *</label>
-        <input type="email" id="email" name="email" required>
-    </div>
-    
-    <div class="form-group">
-        <label for="message">Message *</label>
-        <textarea id="message" name="message" rows="6" required></textarea>
-    </div>
-    
-    <button type="submit" class="btn-submit">Send Message</button>
-</form>
+## Connect on LinkedIn
 
-<script src="/js/contact-form.js"></script>
+💼 **LinkedIn:** [linkedin.com/in/brandonjplambert](https://linkedin.com/in/brandonjplambert)
+
+Feel free to send me a message on LinkedIn. I'm always open to connecting with fellow professionals, educators, and developers.
 
 <style>
-.contact-form {
-    max-width: 600px;
+.linkedin-cta {
     margin: 2rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(0, 119, 181, 0.1), rgba(0, 119, 181, 0.05));
+    border-radius: 12px;
+    text-align: center;
 }
 
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: var(--text-primary, #1a202c);
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid var(--border, #e2e8f0);
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-    font-family: inherit;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
-.btn-submit {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.linkedin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    background: #0077b5;
     color: white;
-    padding: 0.75rem 2rem;
-    border: none;
+    text-decoration: none;
     border-radius: 8px;
-    font-size: 1rem;
     font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.btn-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
-}
-
-.btn-submit:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-.form-message {
-    padding: 1rem;
-    border-radius: 8px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
     margin-top: 1rem;
-    animation: slideIn 0.3s ease;
 }
 
-.form-message-success {
-    background: #c6f6d5;
-    color: #22543d;
-    border: 1px solid #9ae6b4;
+.linkedin-btn:hover {
+    background: #005885;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 119, 181, 0.3);
 }
 
-.form-message-error {
-    background: #fed7d7;
-    color: #742a2a;
-    border: 1px solid #fc8181;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Dark mode support */
-[data-theme="dark"] .form-group input,
-[data-theme="dark"] .form-group textarea {
-    background: var(--bg-secondary, #2d3748);
-    color: var(--text-primary, #e2e8f0);
-    border-color: var(--border, #4a5568);
-}
-
-[data-theme="dark"] .form-group input:focus,
-[data-theme="dark"] .form-group textarea:focus {
-    border-color: #9f7aea;
+.linkedin-icon {
+    width: 24px;
+    height: 24px;
 }
 </style>
+
+<div class="linkedin-cta">
+    <a href="https://linkedin.com/in/brandonjplambert" target="_blank" rel="noopener" class="linkedin-btn">
+        <svg class="linkedin-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+        Connect on LinkedIn
+    </a>
+</div>

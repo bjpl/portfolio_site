@@ -6,35 +6,11 @@
     </header>
     
     <div class="section-grid">
-        {{ $positionsSection := site.GetPage "/writing/positions" }}
-        {{ if $positionsSection }}
-        <a href="{{ $positionsSection.Permalink }}" class="section-card">
-            <h2>🌐 Theoretical Positions</h2>
-            <p>SLA theoretical frameworks emphasizing ecological, social, and critical perspectives on language acquisition and multilingual development.</p>
-        </a>
-        {{ end }}
-        
-        {{ $soundsSection := site.GetPage "/writing/sounds" }}
-        {{ if $soundsSection }}
-        <a href="{{ $soundsSection.Permalink }}" class="section-card">
-            <h2>🎵 Sounds</h2>
-            <p>Audio projects, music production, and podcasts that bring ideas to life through sound. Explore the intersection of technology and audio creativity.</p>
-        </a>
-        {{ end }}
-        
-        {{ $visualsSection := site.GetPage "/writing/visuals" }}
-        {{ if $visualsSection }}
-        <a href="{{ $visualsSection.Permalink }}" class="section-card">
-            <h2>🎨 Visuals</h2>
-            <p>Design work, branding, and visual storytelling that captures attention and communicates effectively through compelling imagery.</p>
-        </a>
-        {{ end }}
-        
         {{ $poetrySection := site.GetPage "/writing/poetry" }}
         {{ if $poetrySection }}
-        <a href="{{ $poetrySection.Permalink }}" class="section-card">
+        <a href="{{ $poetrySection.Permalink }}" class="section-card featured">
             <h2>✍️ Poetry</h2>
-            <p>Poetry, prose, and creative writing that informs and inspires. Words crafted to evoke emotion and capture the human experience.</p>
+            <p>Poetry and creative writing exploring language, identity, and the spaces between cultures. Words crafted to evoke emotion and capture the human experience.</p>
         </a>
         {{ end }}
     </div>

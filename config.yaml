@@ -37,6 +37,10 @@ params:
   og_image: "/images/og-default.jpg"
   twitter_username: ""
   logo: "/images/logo.png"
+  social:
+    linkedin: "https://linkedin.com/in/brandonjplambert"
+    github: "https://github.com/bjpl"
+    email: "contact@brandonjplambert.com"
 
 # SEO and Analytics
 googleAnalytics: ""  # Add your GA tracking ID here (e.g., "G-XXXXXXXXXX")

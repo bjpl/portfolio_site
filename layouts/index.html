@@ -21,10 +21,18 @@
             <div class="hero-actions">
                 {{ if eq .Language.Lang "es" }}
                 <a href="/es/writing/" class="btn btn-primary">Ver Escritura</a>
-                <a href="/es/me/" class="btn btn-outline">Conóceme</a>
+                <a href="/es/cv/" class="btn btn-outline">Ver CV</a>
                 {{ else }}
-                <a href="/writing/" class="btn btn-primary">View Writing</a>
-                <a href="/me/" class="btn btn-outline">About Me</a>
+                <a href="/writing/" class="btn btn-primary">View Portfolio</a>
+                <a href="/cv/" class="btn btn-outline">View CV</a>
+                {{ end }}
+                {{ with site.Params.social.linkedin }}
+                <a href="{{ . }}" target="_blank" rel="noopener" class="btn btn-linkedin-hero">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 6px;">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                    Connect on LinkedIn
+                </a>
                 {{ end }}
             </div>
         </div>
@@ -36,24 +44,24 @@
         <h2 class="section-title">{{ if eq .Language.Lang "es" }}Lo Que Hago{{ else }}What I Do{{ end }}</h2>
         <div class="features-grid">
             <div class="feature-card">
-                <div class="feature-icon">🎓</div>
-                <h3>{{ if eq .Language.Lang "es" }}Educación & Currículo{{ else }}Education & Curriculum{{ end }}</h3>
-                <p>{{ if eq .Language.Lang "es" }}Diseñando programas de aprendizaje innovadores y desarrollando currículos para audiencias globales{{ else }}Designing innovative learning programs and developing curriculum for global audiences{{ end }}</p>
+                <h3>{{ if eq .Language.Lang "es" }}Desarrollo Curricular{{ else }}Curriculum Development{{ end }}</h3>
+                <p>{{ if eq .Language.Lang "es" }}Diseñando e implementando programas educativos escalables para más de 800,000 estudiantes globalmente{{ else }}Designing and implementing scalable educational programs for 800,000+ learners globally{{ end }}</p>
+                <a href="/services/" class="feature-link">Learn More →</a>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🤖</div>
-                <h3>{{ if eq .Language.Lang "es" }}IA & EdTech{{ else }}AI & EdTech{{ end }}</h3>
-                <p>{{ if eq .Language.Lang "es" }}Construyendo herramientas educativas impulsadas por IA y automatizando flujos de trabajo educativos{{ else }}Building AI-powered educational tools and automating educational workflows{{ end }}</p>
+                <h3>{{ if eq .Language.Lang "es" }}Estrategia EdTech{{ else }}EdTech Strategy{{ end }}</h3>
+                <p>{{ if eq .Language.Lang "es" }}Integrando IA y VR/AR para crear experiencias de aprendizaje personalizadas y efectivas{{ else }}Integrating AI and VR/AR to create personalized, effective learning experiences{{ end }}</p>
+                <a href="/services/" class="feature-link">Learn More →</a>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🌐</div>
-                <h3>{{ if eq .Language.Lang "es" }}Programas de Idiomas{{ else }}Language Programs{{ end }}</h3>
-                <p>{{ if eq .Language.Lang "es" }}Creando programas especializados de inglés para diplomáticos, profesionales tecnológicos y estudiantes de arte{{ else }}Creating specialized English programs for diplomats, tech professionals, and art students{{ end }}</p>
+                <h3>{{ if eq .Language.Lang "es" }}Desarrollo Profesional{{ else }}Professional Development{{ end }}</h3>
+                <p>{{ if eq .Language.Lang "es" }}Capacitando educadores en pedagogías innovadoras y tecnologías educativas emergentes{{ else }}Training educators in innovative pedagogies and emerging educational technologies{{ end }}</p>
+                <a href="/services/" class="feature-link">Learn More →</a>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3>{{ if eq .Language.Lang "es" }}Gestión de Programas{{ else }}Program Management{{ end }}</h3>
-                <p>{{ if eq .Language.Lang "es" }}Liderando equipos multifuncionales y escalando iniciativas educativas en startups y universidades{{ else }}Leading cross-functional teams and scaling educational initiatives at startups and universities{{ end }}</p>
+                <h3>{{ if eq .Language.Lang "es" }}Evaluación de Programas{{ else }}Program Evaluation{{ end }}</h3>
+                <p>{{ if eq .Language.Lang "es" }}Midiendo y mejorando el impacto educativo a través de análisis basados en datos{{ else }}Measuring and improving educational impact through data-driven analysis{{ end }}</p>
+                <a href="/services/" class="feature-link">Learn More →</a>
             </div>
         </div>
     </div>
@@ -141,7 +149,7 @@ async function loadFeaturedProjects() {
                                 `<span class="tech-tag">${tech}</span>`
                             ).join('') : ''}
                         </div>
-                        <a href="/writing/${project.slug}/" class="project-link">View Project →</a>
+                        <a href="/writing/${project.slug || ''}" class="project-link">View Project →</a>
                     </div>
                 </div>
             `).join('');
@@ -365,6 +373,16 @@ document.addEventListener('DOMContentLoaded', () => {
     opacity: 0.8;
 }
 
+.tagline {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    margin: var(--space-lg) auto;
+    max-width: 36rem;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+}
+
 .hero-description {
     font-size: 1.25rem;
     line-height: 1.6;
@@ -475,6 +493,22 @@ document.addEventListener('DOMContentLoaded', () => {
     color: white;
 }
 
+.btn-linkedin-hero {
+    background: #0077b5;
+    color: white;
+    border-color: #0077b5;
+    box-shadow: var(--shadow-md);
+}
+
+.btn-linkedin-hero:hover {
+    background: #005885;
+    border-color: #005885;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    text-decoration: none;
+    color: white;
+}
+
 /* Sections */
 .section-title {
     text-align: center;
@@ -519,9 +553,19 @@ document.addEventListener('DOMContentLoaded', () => {
     box-shadow: 0 5px 20px rgba(0,0,0,0.15);
 }
 
-.feature-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+.feature-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.feature-link:hover {
+    transform: translateX(4px);
+    color: var(--color-primary-hover);
 }
 
 /* Portfolio Preview */
