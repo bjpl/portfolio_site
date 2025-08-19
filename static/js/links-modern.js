@@ -92,32 +92,54 @@
     }
 
     function processLinks() {
-        const allLinkElements = document.querySelectorAll('.link-grid a');
-        console.log('Found links:', allLinkElements.length);
-        
-        allLinkElements.forEach(link => {
-            const linkData = {
-                element: link,
-                text: link.textContent.toLowerCase(),
-                href: link.href,
-                tags: (link.getAttribute('data-tags') || '').toLowerCase(),
-                category: getCategory(link),
-                region: getRegion(link)
-            };
+        try {
+            const allLinkElements = document.querySelectorAll('.link-grid a');
+            console.log('Found links:', allLinkElements.length);
             
-            state.allLinks.push(linkData);
+            if (allLinkElements.length === 0) {
+                console.warn('No links found to process');
+                return;
+            }
             
-            // Extract stats
-            if (linkData.category) state.stats.categories.add(linkData.category);
-            
-            // Extract countries from tags
-            const countries = linkData.tags.match(/[a-z-]+(?=\s|$)/g) || [];
-            countries.forEach(country => {
-                if (country.length > 2) state.stats.countries.add(country);
+            allLinkElements.forEach(link => {
+                try {
+                    const linkData = {
+                        element: link,
+                        text: (link.textContent || '').toLowerCase().trim(),
+                        href: link.href || '',
+                        tags: (link.getAttribute('data-tags') || '').toLowerCase().trim(),
+                        category: getCategory(link),
+                        region: getRegion(link)
+                    };
+                    
+                    // Skip invalid links
+                    if (!linkData.href) {
+                        console.warn('Skipping link without href:', linkData.text);
+                        return;
+                    }
+                    
+                    state.allLinks.push(linkData);
+                    
+                    // Extract stats
+                    if (linkData.category) state.stats.categories.add(linkData.category);
+                    
+                    // Extract countries from tags
+                    const countries = linkData.tags.match(/[a-z-]+(?=\s|$)/g) || [];
+                    countries.forEach(country => {
+                        if (country.length > 2 && country.length < 30) { // Sanity check
+                            state.stats.countries.add(country);
+                        }
+                    });
+                } catch (err) {
+                    console.error('Error processing link:', err, link);
+                }
             });
-        });
-        
-        state.stats.totalLinks = state.allLinks.length;
+            
+            state.stats.totalLinks = state.allLinks.length;
+            console.log('Processed links:', state.stats.totalLinks);
+        } catch (err) {
+            console.error('Error in processLinks:', err);
+        }
     }
 
     function getCategory(link) {
@@ -643,11 +665,27 @@ window.addEventListener('load', function() {
             let visibleCount = 0;
             
             allLinks.forEach(link => {
-                const text = link.textContent.toLowerCase();
-                const tags = (link.getAttribute('data-tags') || '').toLowerCase();
-                const href = link.href.toLowerCase();
+                const text = link.textContent.toLowerCase().trim();
+                const tags = (link.getAttribute('data-tags') || '').toLowerCase().trim();
+                const href = (link.href || '').toLowerCase();
                 
-                if (!searchTerm || text.includes(searchTerm) || tags.includes(searchTerm) || href.includes(searchTerm)) {
+                // Handle edge cases
+                const searchTerms = searchTerm.split(/\s+/).filter(t => t.length > 0);
+                let matches = false;
+                
+                if (!searchTerm || searchTerm.length === 0) {
+                    matches = true;
+                } else if (searchTerms.length > 1) {
+                    // Multi-word search - match ALL terms
+                    matches = searchTerms.every(term => 
+                        text.includes(term) || tags.includes(term) || href.includes(term)
+                    );
+                } else {
+                    // Single word search
+                    matches = text.includes(searchTerm) || tags.includes(searchTerm) || href.includes(searchTerm);
+                }
+                
+                if (matches) {
                     link.style.display = '';
                     link.style.opacity = '1';
                     visibleCount++;
