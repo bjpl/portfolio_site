@@ -200,12 +200,12 @@ A curated collection of content I find inspiring, educational, or just plain int
 <div class="instagram-links organizations">
 <div class="link-grid">
         <a href="https://instagram.com/onumujeresmx" target="_blank" data-tags="un united-nations women gender-equality mexico mexico-city ngo">🇺🇳 ONU Mujeres México • UN Women</a>
-        <a href="https://instagram.com/aimexico" target="_blank" data-tags="amnesty human-rights mexico ngo civil-rights justice">⚖️ Amnistía Internacional • México</a>
+        <a href="https://instagram.com/aimexico" target="_blank" data-tags="amnesty human-rights mexico ngo civil-rights justice">⚖️ Amnistía Internacional<span class="location"> • México</span></a>
         <a href="https://instagram.com/hiascolombia" target="_blank" data-tags="hias refugees migration colombia bogota humanitarian ngo">🤲 HIAS Colombia • Refugee Support</a>
         <a href="https://instagram.com/ocha_venezuela" target="_blank" data-tags="un ocha humanitarian venezuela caracas crisis-response">🇺🇳 OCHA Venezuela • UN Humanitarian</a>
         <a href="https://instagram.com/amchamcolombia" target="_blank" data-tags="american-chamber commerce colombia bogota business usa">🇺🇸 AmCham Colombia • Bogotá</a>
         <a href="https://instagram.com/koica_colombia" target="_blank" data-tags="korea cooperation development colombia bogota aid">🇰🇷 KOICA Colombia • Korean Aid</a>
-        <a href="https://instagram.com/cruzrojacol" target="_blank" data-tags="red-cross colombia humanitarian emergency medical ngo">❤️ Cruz Roja Colombiana • Red Cross</a>
+        <a href="https://instagram.com/cruzrojacol" target="_blank" data-tags="red-cross colombia humanitarian emergency medical ngo">❤️ Cruz Roja Colombiana<span class="location"> • Red Cross</span></a>
         <a href="https://instagram.com/ochacolombia" target="_blank" data-tags="un ocha humanitarian colombia bogota crisis-response">🇺🇳 OCHA Colombia • UN Humanitarian</a>
         <a href="https://instagram.com/unfpa_colombia" target="_blank" data-tags="un unfpa population health colombia bogota reproductive-health">🇺🇳 UNFPA Colombia • UN Population</a>
         <a href="https://instagram.com/transparenciacolombia" target="_blank" data-tags="transparency corruption colombia bogota governance ngo">👁️ Transparencia por Colombia • Anti-Corruption</a>
@@ -243,7 +243,7 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/nesteavzla" target="_blank" data-tags="venezuela beverages tea iced-tea nestle">🍵 Nestea • Venezuela</a>
         <a href="https://instagram.com/7upve" target="_blank" data-tags="venezuela beverages soda lemon-lime pepsico">🥤 7Up • Venezuela</a>
         <a href="https://instagram.com/cocacolave" target="_blank" data-tags="venezuela beverages soda cola coca-cola">🥤 Coca-Cola • Venezuela</a>
-        <a href="https://instagram.com/nescafeve" target="_blank" data-tags="venezuela coffee instant-coffee nestle beverages">☕ Nescafé • Venezuela</a>
+        <a href="https://instagram.com/nescafeve" target="_blank" data-tags="venezuela coffee instant-coffee nestle beverages">☕ Nescafé<span class="location"> • Venezuela</span></a>
         <a href="https://instagram.com/oreo.venezuela" target="_blank" data-tags="venezuela cookies snacks mondelez sweets">🍪 Oreo • Venezuela</a>
         <a href="https://instagram.com/papajohnsve" target="_blank" data-tags="venezuela pizza restaurant fast-food delivery">🍕 Papa John's • Venezuela</a>
 </div>
@@ -268,7 +268,7 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/tealacavenezuela" target="_blank" data-tags="venezuela butter margarine dairy local-brand">🧈 Tealca • Venezuela</a>
         <a href="https://instagram.com/migurtve" target="_blank" data-tags="venezuela yogurt dairy probiotics local-brand">🥛 MiGurt • Venezuela</a>
         <a href="https://instagram.com/parmalatve" target="_blank" data-tags="venezuela dairy milk yogurt parmalat international">🥛 Parmalat • Venezuela</a>
-        <a href="https://instagram.com/cafe.sellorojo" target="_blank" data-tags="venezuela coffee colombian-coffee beverages">☕ Café Sello Rojo • Venezuela</a>
+        <a href="https://instagram.com/cafe.sellorojo" target="_blank" data-tags="venezuela coffee colombian-coffee beverages">☕ Café Sello Rojo<span class="location"> • Venezuela</span></a>
         <a href="https://instagram.com/trolligomitas" target="_blank" data-tags="venezuela candy gummy sweets trolli international">🍬 Gomitas Trolli • Venezuela</a>
 </div>
 </div>
@@ -348,12 +348,12 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/mintransporteco" target="_blank">🚗 Ministerio de Transporte</a>
         <a href="https://instagram.com/minciencias_co" target="_blank" data-tags="colombia science technology research innovation government bogota ministry">🔬 Minciencias • Science & Technology Ministry</a>
         <a href="https://instagram.com/funcionpublicacolombia" target="_blank" data-tags="colombia public-service government bogota civil-service employment">🏛️ Función Pública • Public Service</a>
-        <a href="https://instagram.com/consejosuperiorjudicatura" target="_blank" data-tags="colombia justice judiciary courts government bogota legal">⚖️ Consejo Superior Judicatura • Judicial Council</a>
+        <a href="https://instagram.com/consejosuperiorjudicatura" target="_blank" data-tags="colombia justice judiciary courts government bogota legal">⚖️ Consejo Superior Judicatura<span class="location"> • Judicial Council</span></a>
         <a href="https://instagram.com/cne_colombia" target="_blank" data-tags="colombia elections democracy voting government bogota electoral">🗳️ Consejo Nacional Electoral • Elections</a>
         <a href="https://instagram.com/stransparenciaoficial" target="_blank" data-tags="colombia transparency anti-corruption government bogota accountability">🔍 Secretaría de Transparencia • Anti-Corruption</a>
-        <a href="https://instagram.com/ministeriominasyenergia" target="_blank" data-tags="colombia energy mining oil gas government bogota ministry petroleum">⚡ MinMinas y Energía • Energy & Mining</a>
-        <a href="https://instagram.com/minjusticiaco" target="_blank" data-tags="colombia justice law legal-system government bogota ministry prisons">⚖️ MinJusticia • Justice Ministry</a>
-        <a href="https://instagram.com/minigualdadcol" target="_blank" data-tags="colombia gender-equality women lgbti rights government bogota ministry">⚖️ MinIgualdad • Gender Equality Ministry</a>
+        <a href="https://instagram.com/ministeriominasyenergia" target="_blank" data-tags="colombia energy mining oil gas government bogota ministry petroleum">⚡ MinMinas y Energía<span class="location"> • Energy & Mining</span></a>
+        <a href="https://instagram.com/minjusticiaco" target="_blank" data-tags="colombia justice law legal-system government bogota ministry prisons">⚖️ MinJusticia<span class="location"> • Justice Ministry</span></a>
+        <a href="https://instagram.com/minigualdadcol" target="_blank" data-tags="colombia gender-equality women lgbti rights government bogota ministry">⚖️ MinIgualdad<span class="location"> • Gender Equality Ministry</span></a>
         <a href="https://instagram.com/minagriculturacol" target="_blank" data-tags="colombia agriculture farming rural-development government bogota ministry">🌾 MinAgricultura • Agriculture & Rural Dev</a>
         <a href="https://instagram.com/infopresidencia" target="_blank" data-tags="colombia president government bogota casa-narino executive politics">🇨🇴 Presidencia de Colombia • Casa de Nariño</a>
 </div>
@@ -483,13 +483,13 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/medellin_guru" target="_blank" data-tags="colombia medellin antioquia travel guide">🏙️ Medellín Guru • Medellín</a>
         <a href="https://instagram.com/medellinenvideos" target="_blank" data-tags="colombia medellin antioquia videos">📽️ Medellín en Videos • Medellín</a>
         <a href="https://instagram.com/medellinenelmapa_" target="_blank" data-tags="colombia medellin antioquia maps guide">🗺️ Medellín en el Mapa • Medellín</a>
-        <a href="https://instagram.com/visitarmedellin" target="_blank" data-tags="colombia medellin antioquia tourism">✈️ Visitar Medellín • Medellín</a>
+        <a href="https://instagram.com/visitarmedellin" target="_blank" data-tags="colombia medellin antioquia tourism">✈️ Visitar Medellín<span class="location"> • Medellín</span></a>
         <a href="https://instagram.com/foodinbogota" target="_blank" data-tags="colombia bogota food restaurants">🍴 Food in Bogotá • Bogotá</a>
-        <a href="https://instagram.com/teamobogota" target="_blank" data-tags="colombia bogota lifestyle love">❤️ Te Amo Bogotá • Bogotá</a>
+        <a href="https://instagram.com/teamobogota" target="_blank" data-tags="colombia bogota lifestyle love">❤️ Te Amo Bogotá<span class="location"> • Bogotá</span></a>
         <a href="https://instagram.com/visitbogota.co" target="_blank" data-tags="colombia bogota tourism official">🏙️ Visit Bogotá • Bogotá</a>
         <a href="https://instagram.com/bogotaplan" target="_blank" data-tags="colombia bogota events culture">🎭 Bogotá Plan • Bogotá</a>
         <a href="https://instagram.com/bogotacomidas" target="_blank" data-tags="colombia bogota food restaurants">🍴 Bogotá Comidas • Bogotá</a>
-        <a href="https://instagram.com/cucutaturismo" target="_blank" data-tags="colombia cucuta norte-santander tourism">✈️ Cúcuta Turismo • Cúcuta</a>
+        <a href="https://instagram.com/cucutaturismo" target="_blank" data-tags="colombia cucuta norte-santander tourism">✈️ Cúcuta Turismo<span class="location"> • Cúcuta</span></a>
         <a href="https://instagram.com/bicitour_medellin" target="_blank" data-tags="colombia medellin antioquia bicycle tours">🚴 Bicitour Medellín • Medellín</a>
         <a href="https://instagram.com/expoartesano" target="_blank" data-tags="colombia crafts artisan fair">🎨 Expoartesano • Colombia</a>
 </div>

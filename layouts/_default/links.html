@@ -181,9 +181,43 @@
     font-size: 0.9rem;
     transition: all 0.2s ease;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+/* Clean location indicator */
+.link-grid a .location {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-left: 0.25rem;
+}
+
+/* Hide tag tooltip - tags are searchable but not displayed */
+.link-grid a[data-tags] {
+    /* Tags are used for search only */
+}
+
+/* Visual feedback for search matches */
+.link-grid a.text-match {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), transparent);
+}
+
+.link-grid a.tag-match {
+    border-color: var(--color-accent);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), transparent);
+}
+
+/* Subtle indicator for tag matches */
+.link-grid a.tag-match::after {
+    content: '•';
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    color: var(--color-accent);
+    font-size: 0.8rem;
+    opacity: 0.6;
 }
 
 .link-grid a::before {
@@ -199,8 +233,9 @@
 
 .link-grid a:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     border-color: var(--color-primary);
+    background: var(--color-surface);
 }
 
 .link-grid a:hover::before {

@@ -37,11 +37,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     const href = link.getAttribute('href').toLowerCase();
                     const tags = (link.getAttribute('data-tags') || '').toLowerCase();
                     
-                    if (searchTerm === '' || 
-                        text.includes(searchTerm) || 
-                        href.includes(searchTerm) || 
-                        tags.includes(searchTerm)) {
+                    // Remove previous match indicators
+                    link.classList.remove('tag-match', 'text-match');
+                    
+                    if (searchTerm === '') {
                         link.style.display = '';
+                        visibleCount++;
+                    } else if (text.includes(searchTerm) || href.includes(searchTerm)) {
+                        link.style.display = '';
+                        link.classList.add('text-match');
+                        visibleCount++;
+                    } else if (tags.includes(searchTerm)) {
+                        link.style.display = '';
+                        link.classList.add('tag-match');
                         visibleCount++;
                     } else {
                         link.style.display = 'none';
