@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const searchBar = document.createElement('div');
         searchBar.className = 'search-container';
         searchBar.innerHTML = `
-            <input type="text" id="link-search" class="search-input" placeholder="Search links... (e.g., 'Mexico', 'Embassy', 'Food')">
+            <input type="text" id="link-search" class="search-input" placeholder="Search by country, city, or keyword... (e.g., 'Bogota', 'Mexico', 'Embassy', 'Medellin')">
             <div class="search-stats"></div>
         `;
         
@@ -35,8 +35,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 allLinks.forEach(link => {
                     const text = link.textContent.toLowerCase();
                     const href = link.getAttribute('href').toLowerCase();
+                    const tags = (link.getAttribute('data-tags') || '').toLowerCase();
                     
-                    if (searchTerm === '' || text.includes(searchTerm) || href.includes(searchTerm)) {
+                    if (searchTerm === '' || 
+                        text.includes(searchTerm) || 
+                        href.includes(searchTerm) || 
+                        tags.includes(searchTerm)) {
                         link.style.display = '';
                         visibleCount++;
                     } else {

@@ -17,43 +17,43 @@ A curated collection of content I find inspiring, educational, or just plain int
 <div class="instagram-links diplomatic">
 <h4>Mexico Embassies Worldwide</h4>
 <div class="link-grid">
-        <a href="https://instagram.com/embamexjp" target="_blank">🇯🇵 Mexico in Japan</a>
-        <a href="https://instagram.com/embamexperu" target="_blank">🇵🇪 Mexico in Peru</a>
-        <a href="https://instagram.com/emba_mexbol" target="_blank">🇧🇴 Mexico in Bolivia</a>
-        <a href="https://instagram.com/embamexesp" target="_blank">🇪🇸 Mexico in Spain</a>
-        <a href="https://instagram.com/embamex_italia" target="_blank">🇮🇹 Mexico in Italy</a>
-        <a href="https://instagram.com/embamexgua" target="_blank">🇬🇹 Mexico in Guatemala</a>
-        <a href="https://instagram.com/embamexchi" target="_blank">🇨🇱 Mexico in Chile</a>
-        <a href="https://instagram.com/embamexur" target="_blank">🇺🇾 Mexico in Uruguay</a>
-        <a href="https://instagram.com/embamexcan" target="_blank">🇨🇦 Mexico in Canada</a>
-        <a href="https://instagram.com/embamexcol" target="_blank">🇨🇴 Mexico in Colombia</a>
-        <a href="https://instagram.com/embamexeua" target="_blank">🇺🇸 Mexico in USA</a>
-        <a href="https://instagram.com/embamexlibano" target="_blank">🇱🇧 Mexico in Lebanon</a>
-        <a href="https://instagram.com/embamexvenezuela" target="_blank">🇻🇪 Mexico in Venezuela</a>
-        <a href="https://instagram.com/consulmexsea" target="_blank">🇺🇸 Mexican Consulate Seattle</a>
+        <a href="https://instagram.com/embamexjp" target="_blank" data-tags="mexico japan tokyo embassy">🇯🇵 Mexico in Japan • Tokyo</a>
+        <a href="https://instagram.com/embamexperu" target="_blank" data-tags="mexico peru lima embassy">🇵🇪 Mexico in Peru • Lima</a>
+        <a href="https://instagram.com/emba_mexbol" target="_blank" data-tags="mexico bolivia la-paz embassy">🇧🇴 Mexico in Bolivia • La Paz</a>
+        <a href="https://instagram.com/embamexesp" target="_blank" data-tags="mexico spain madrid embassy">🇪🇸 Mexico in Spain • Madrid</a>
+        <a href="https://instagram.com/embamex_italia" target="_blank" data-tags="mexico italy rome embassy">🇮🇹 Mexico in Italy • Rome</a>
+        <a href="https://instagram.com/embamexgua" target="_blank" data-tags="mexico guatemala guatemala-city embassy">🇬🇹 Mexico in Guatemala</a>
+        <a href="https://instagram.com/embamexchi" target="_blank" data-tags="mexico chile santiago embassy">🇨🇱 Mexico in Chile • Santiago</a>
+        <a href="https://instagram.com/embamexur" target="_blank" data-tags="mexico uruguay montevideo embassy">🇺🇾 Mexico in Uruguay • Montevideo</a>
+        <a href="https://instagram.com/embamexcan" target="_blank" data-tags="mexico canada ottawa embassy">🇨🇦 Mexico in Canada • Ottawa</a>
+        <a href="https://instagram.com/embamexcol" target="_blank" data-tags="mexico colombia bogota embassy">🇨🇴 Mexico in Colombia • Bogotá</a>
+        <a href="https://instagram.com/embamexeua" target="_blank" data-tags="mexico usa washington-dc embassy">🇺🇸 Mexico in USA • Washington DC</a>
+        <a href="https://instagram.com/embamexlibano" target="_blank" data-tags="mexico lebanon beirut embassy">🇱🇧 Mexico in Lebanon • Beirut</a>
+        <a href="https://instagram.com/embamexvenezuela" target="_blank" data-tags="mexico venezuela caracas embassy">🇻🇪 Mexico in Venezuela • Caracas</a>
+        <a href="https://instagram.com/consulmexsea" target="_blank" data-tags="mexico usa seattle consulate washington">🇺🇸 Mexican Consulate • Seattle</a>
 </div>
     
 <h4>Foreign Embassies in Mexico</h4>
 <div class="link-grid">
-        <a href="https://instagram.com/embmexenjordania" target="_blank">🇯🇴 Jordan Embassy</a>
-        <a href="https://instagram.com/elperuenmex" target="_blank">🇵🇪 Peru Embassy</a>
-        <a href="https://instagram.com/belgicaenmexico" target="_blank">🇧🇪 Belgium Embassy</a>
-        <a href="https://instagram.com/embacumex" target="_blank">🇨🇺 Cuba Embassy</a>
-        <a href="https://instagram.com/qatarembassymex" target="_blank">🇶🇦 Qatar Embassy</a>
-        <a href="https://instagram.com/irishembmexico" target="_blank">🇮🇪 Ireland Embassy</a>
-        <a href="https://instagram.com/usembassymex" target="_blank">🇺🇸 USA Embassy</a>
-        <a href="https://instagram.com/indiainmex" target="_blank">🇮🇳 India Embassy</a>
-        <a href="https://instagram.com/rdenmexico" target="_blank">🇩🇴 Dominican Republic</a>
-        <a href="https://instagram.com/embachilemexico" target="_blank">🇨🇱 Chile Embassy</a>
-        <a href="https://instagram.com/ukinmexico" target="_blank">🇬🇧 UK Embassy</a>
-        <a href="https://instagram.com/japanemb_mexico" target="_blank">🇯🇵 Japan Embassy</a>
-        <a href="https://instagram.com/finlandiaenmexico" target="_blank">🇫🇮 Finland Embassy</a>
-        <a href="https://instagram.com/brasilnomexico" target="_blank">🇧🇷 Brazil Embassy</a>
-        <a href="https://instagram.com/embpanamamex" target="_blank">🇵🇦 Panama Embassy</a>
-        <a href="https://instagram.com/ukrembassymex" target="_blank">🇺🇦 Ukraine Embassy</a>
-        <a href="https://instagram.com/casadesuiza" target="_blank">🇨🇭 Switzerland Embassy</a>
-        <a href="https://instagram.com/alemaniamexi" target="_blank">🇩🇪 Germany Embassy</a>
-        <a href="https://instagram.com/franciaenmexico" target="_blank">🇫🇷 France Embassy</a>
+        <a href="https://instagram.com/embmexenjordania" target="_blank" data-tags="jordan mexico mexico-city embassy">🇯🇴 Jordan Embassy • Mexico City</a>
+        <a href="https://instagram.com/elperuenmex" target="_blank" data-tags="peru mexico mexico-city embassy">🇵🇪 Peru Embassy • Mexico City</a>
+        <a href="https://instagram.com/belgicaenmexico" target="_blank" data-tags="belgium mexico mexico-city embassy">🇧🇪 Belgium Embassy • Mexico City</a>
+        <a href="https://instagram.com/embacumex" target="_blank" data-tags="cuba mexico mexico-city embassy">🇨🇺 Cuba Embassy • Mexico City</a>
+        <a href="https://instagram.com/qatarembassymex" target="_blank" data-tags="qatar mexico mexico-city embassy">🇶🇦 Qatar Embassy • Mexico City</a>
+        <a href="https://instagram.com/irishembmexico" target="_blank" data-tags="ireland mexico mexico-city embassy">🇮🇪 Ireland Embassy • Mexico City</a>
+        <a href="https://instagram.com/usembassymex" target="_blank" data-tags="usa mexico mexico-city embassy">🇺🇸 USA Embassy • Mexico City</a>
+        <a href="https://instagram.com/indiainmex" target="_blank" data-tags="india mexico mexico-city embassy">🇮🇳 India Embassy • Mexico City</a>
+        <a href="https://instagram.com/rdenmexico" target="_blank" data-tags="dominican-republic mexico mexico-city embassy">🇩🇴 Dominican Republic • Mexico City</a>
+        <a href="https://instagram.com/embachilemexico" target="_blank" data-tags="chile mexico mexico-city embassy">🇨🇱 Chile Embassy • Mexico City</a>
+        <a href="https://instagram.com/ukinmexico" target="_blank" data-tags="uk britain mexico mexico-city embassy">🇬🇧 UK Embassy • Mexico City</a>
+        <a href="https://instagram.com/japanemb_mexico" target="_blank" data-tags="japan mexico mexico-city embassy">🇯🇵 Japan Embassy • Mexico City</a>
+        <a href="https://instagram.com/finlandiaenmexico" target="_blank" data-tags="finland mexico mexico-city embassy">🇫🇮 Finland Embassy • Mexico City</a>
+        <a href="https://instagram.com/brasilnomexico" target="_blank" data-tags="brazil mexico mexico-city embassy">🇧🇷 Brazil Embassy • Mexico City</a>
+        <a href="https://instagram.com/embpanamamex" target="_blank" data-tags="panama mexico mexico-city embassy">🇵🇦 Panama Embassy • Mexico City</a>
+        <a href="https://instagram.com/ukrembassymex" target="_blank" data-tags="ukraine mexico mexico-city embassy">🇺🇦 Ukraine Embassy • Mexico City</a>
+        <a href="https://instagram.com/casadesuiza" target="_blank" data-tags="switzerland mexico mexico-city embassy">🇨🇭 Switzerland Embassy • Mexico City</a>
+        <a href="https://instagram.com/alemaniamexi" target="_blank" data-tags="germany mexico mexico-city embassy">🇩🇪 Germany Embassy • Mexico City</a>
+        <a href="https://instagram.com/franciaenmexico" target="_blank" data-tags="france mexico mexico-city embassy">🇫🇷 France Embassy • Mexico City</a>
 </div>
     
 <h4>Venezuela Diplomatic Network</h4>
@@ -74,14 +74,14 @@ A curated collection of content I find inspiring, educational, or just plain int
     
 <h4>Colombia Diplomatic Network</h4>
 <div class="link-grid">
-        <a href="https://instagram.com/embcolindia" target="_blank">🇮🇳 Colombia in India</a>
-        <a href="https://instagram.com/embcolombiaenarg" target="_blank">🇦🇷 Colombia in Argentina</a>
-        <a href="https://instagram.com/embcolombiaenrd" target="_blank">🇩🇴 Colombia in Rep. Dom.</a>
-        <a href="https://instagram.com/embajadadecolombiaen" target="_blank">🌍 Colombia Embassy</a>
-        <a href="https://instagram.com/colombianembassyuk" target="_blank">🇬🇧 Colombia in UK</a>
-        <a href="https://instagram.com/embcoltailandia" target="_blank">🇹🇭 Colombia in Thailand</a>
-        <a href="https://instagram.com/embcolghana" target="_blank">🇬🇭 Colombia in Ghana</a>
-        <a href="https://instagram.com/consuladocollondres" target="_blank">🇬🇧 Colombia Consulate London</a>
+        <a href="https://instagram.com/embcolindia" target="_blank" data-tags="colombia india new-delhi embassy">🇮🇳 Colombia in India • New Delhi</a>
+        <a href="https://instagram.com/embcolombiaenarg" target="_blank" data-tags="colombia argentina buenos-aires embassy">🇦🇷 Colombia in Argentina • Buenos Aires</a>
+        <a href="https://instagram.com/embcolombiaenrd" target="_blank" data-tags="colombia dominican-republic santo-domingo embassy">🇩🇴 Colombia in Rep. Dom. • Santo Domingo</a>
+        <a href="https://instagram.com/embajadadecolombiaen" target="_blank" data-tags="colombia embassy">🌍 Colombia Embassy</a>
+        <a href="https://instagram.com/colombianembassyuk" target="_blank" data-tags="colombia uk london embassy">🇬🇧 Colombia in UK • London</a>
+        <a href="https://instagram.com/embcoltailandia" target="_blank" data-tags="colombia thailand bangkok embassy">🇹🇭 Colombia in Thailand • Bangkok</a>
+        <a href="https://instagram.com/embcolghana" target="_blank" data-tags="colombia ghana accra embassy">🇬🇭 Colombia in Ghana • Accra</a>
+        <a href="https://instagram.com/consuladocollondres" target="_blank" data-tags="colombia uk london consulate">🇬🇧 Colombia Consulate • London</a>
         <a href="https://instagram.com/embajadacolpan" target="_blank">🇵🇦 Colombia in Panama</a>
         <a href="https://instagram.com/del_colombiaunesco" target="_blank">🇺🇳 Colombia UNESCO</a>
         <a href="https://instagram.com/embcolnl" target="_blank">🇳🇱 Colombia in Netherlands</a>
@@ -142,14 +142,14 @@ A curated collection of content I find inspiring, educational, or just plain int
 
 <div class="instagram-links cultural">
 <div class="link-grid">
-        <a href="https://instagram.com/comhaltascolombia" target="_blank">🎵 Comhaltas Colombia</a>
-        <a href="https://instagram.com/museomyt" target="_blank">🏛️ Museo Memoria y Tolerancia</a>
-        <a href="https://instagram.com/somamexico" target="_blank">🎨 SOMA Mexico</a>
-        <a href="https://instagram.com/museodelamujercdmx" target="_blank">👩 Museo de la Mujer CDMX</a>
-        <a href="https://instagram.com/agnmex" target="_blank">📚 Archivo General de la Nación</a>
-        <a href="https://instagram.com/museohnunal" target="_blank">🦖 Museo Historia Natural</a>
-        <a href="https://instagram.com/upedagogicanacional" target="_blank">🎓 Universidad Pedagógica</a>
-        <a href="https://instagram.com/universidaddelcauca" target="_blank">🎓 Universidad Del Cauca</a>
+        <a href="https://instagram.com/comhaltascolombia" target="_blank" data-tags="colombia bogota irish culture music">🎵 Comhaltas Colombia • Bogotá</a>
+        <a href="https://instagram.com/museomyt" target="_blank" data-tags="mexico mexico-city museum tolerance memory">🏛️ Museo Memoria y Tolerancia • CDMX</a>
+        <a href="https://instagram.com/somamexico" target="_blank" data-tags="mexico mexico-city art education">🎨 SOMA Mexico • CDMX</a>
+        <a href="https://instagram.com/museodelamujercdmx" target="_blank" data-tags="mexico mexico-city museum women">👩 Museo de la Mujer • CDMX</a>
+        <a href="https://instagram.com/agnmex" target="_blank" data-tags="mexico mexico-city archive national">📚 Archivo General de la Nación • Mexico</a>
+        <a href="https://instagram.com/museohnunal" target="_blank" data-tags="colombia bogota museum natural-history">🦖 Museo Historia Natural • Bogotá</a>
+        <a href="https://instagram.com/upedagogicanacional" target="_blank" data-tags="colombia bogota university education">🎓 Universidad Pedagógica • Bogotá</a>
+        <a href="https://instagram.com/universidaddelcauca" target="_blank" data-tags="colombia popayan cauca university">🎓 Universidad Del Cauca • Popayán</a>
         <a href="https://instagram.com/unicaucaposgrados" target="_blank">🎓 Centro Posgrados Cauca</a>
         <a href="https://instagram.com/berlitzcolombia" target="_blank">🗣️ Berlitz Colombia</a>
         <a href="https://instagram.com/fiteatrocali" target="_blank">🎭 Festival Teatro Cali</a>
@@ -291,14 +291,14 @@ A curated collection of content I find inspiring, educational, or just plain int
     
 <h4>Colombian Cities & Departments</h4>
 <div class="link-grid">
-        <a href="https://instagram.com/alcaldiadebucaramanga" target="_blank">🏛️ Alcaldía Bucaramanga</a>
-        <a href="https://instagram.com/alcaldiadecaldas" target="_blank">🏛️ Alcaldía de Caldas</a>
-        <a href="https://instagram.com/educacioncali" target="_blank">🎓 Educación Cali</a>
-        <a href="https://instagram.com/educacion_bogota" target="_blank">🎓 Educación Bogotá</a>
-        <a href="https://instagram.com/habitatbogota" target="_blank">🏘️ Habitat Bogotá</a>
-        <a href="https://instagram.com/participacionbogota" target="_blank">🤝 Participación Bogotá</a>
-        <a href="https://instagram.com/integracionsocialbog" target="_blank">🤲 Integración Social Bogotá</a>
-        <a href="https://instagram.com/bogotaescivica" target="_blank">🏛️ Cultura Ciudadana Bogotá</a>
+        <a href="https://instagram.com/alcaldiadebucaramanga" target="_blank" data-tags="colombia bucaramanga santander government municipal">🏛️ Alcaldía • Bucaramanga</a>
+        <a href="https://instagram.com/alcaldiadecaldas" target="_blank" data-tags="colombia caldas manizales government municipal">🏛️ Alcaldía de Caldas • Manizales</a>
+        <a href="https://instagram.com/educacioncali" target="_blank" data-tags="colombia cali valle-del-cauca education government">🎓 Educación • Cali</a>
+        <a href="https://instagram.com/educacion_bogota" target="_blank" data-tags="colombia bogota education government">🎓 Educación • Bogotá</a>
+        <a href="https://instagram.com/habitatbogota" target="_blank" data-tags="colombia bogota housing government">🏘️ Habitat • Bogotá</a>
+        <a href="https://instagram.com/participacionbogota" target="_blank" data-tags="colombia bogota participation government">🤝 Participación • Bogotá</a>
+        <a href="https://instagram.com/integracionsocialbog" target="_blank" data-tags="colombia bogota social-services government">🤲 Integración Social • Bogotá</a>
+        <a href="https://instagram.com/bogotaescivica" target="_blank" data-tags="colombia bogota culture government">🏛️ Cultura Ciudadana • Bogotá</a>
         <a href="https://instagram.com/secdeportepopayan" target="_blank">⚽ Deporte Popayán</a>
         <a href="https://instagram.com/secculturayturismopopayan" target="_blank">🎭 Cultura y Turismo Popayán</a>
         <a href="https://instagram.com/policiabmanga" target="_blank">👮 Policía Bucaramanga</a>
@@ -420,16 +420,16 @@ A curated collection of content I find inspiring, educational, or just plain int
 <div class="instagram-links local-food">
 <h4>Colombian Food & Restaurants</h4>
 <div class="link-grid">
-        <a href="https://instagram.com/cochibacon" target="_blank">🥓 Cochi Bacon</a>
-        <a href="https://instagram.com/mimedellinsaborea" target="_blank">🍽️ Mi Medellín Saborea</a>
-        <a href="https://instagram.com/elclubgastronomico" target="_blank">🍷 El Club Gastronómico</a>
-        <a href="https://instagram.com/entrearbolescali" target="_blank">🌳 Entre Árboles Cali</a>
-        <a href="https://instagram.com/unjardinenelcielo" target="_blank">🌄 Un Jardín en el Cielo</a>
-        <a href="https://instagram.com/madeinbucara" target="_blank">🇨🇴 Made In Bucara</a>
-        <a href="https://instagram.com/eatbucaramanga" target="_blank">🍴 Eat Bucaramanga</a>
-        <a href="https://instagram.com/quehacerbga" target="_blank">📍 Qué Hacer Bucaramanga</a>
-        <a href="https://instagram.com/hecho_enbogota" target="_blank">🏙️ Hecho en Bogotá</a>
-        <a href="https://instagram.com/popayan_moderna" target="_blank">🏛️ Popayán Moderna</a>
+        <a href="https://instagram.com/cochibacon" target="_blank" data-tags="colombia bogota restaurant food bacon">🥓 Cochi Bacon • Bogotá</a>
+        <a href="https://instagram.com/mimedellinsaborea" target="_blank" data-tags="colombia medellin antioquia food restaurant">🍽️ Mi Medellín Saborea • Medellín</a>
+        <a href="https://instagram.com/elclubgastronomico" target="_blank" data-tags="colombia bogota restaurant gastronomy">🍷 El Club Gastronómico • Bogotá</a>
+        <a href="https://instagram.com/entrearbolescali" target="_blank" data-tags="colombia cali valle-del-cauca restaurant">🌳 Entre Árboles • Cali</a>
+        <a href="https://instagram.com/unjardinenelcielo" target="_blank" data-tags="colombia bogota restaurant rooftop">🌄 Un Jardín en el Cielo • Bogotá</a>
+        <a href="https://instagram.com/madeinbucara" target="_blank" data-tags="colombia bucaramanga santander food local">🇨🇴 Made In Bucara • Bucaramanga</a>
+        <a href="https://instagram.com/eatbucaramanga" target="_blank" data-tags="colombia bucaramanga santander food guide">🍴 Eat Bucaramanga • Bucaramanga</a>
+        <a href="https://instagram.com/quehacerbga" target="_blank" data-tags="colombia bucaramanga santander guide events">📍 Qué Hacer • Bucaramanga</a>
+        <a href="https://instagram.com/hecho_enbogota" target="_blank" data-tags="colombia bogota local products crafts">🏙️ Hecho en Bogotá</a>
+        <a href="https://instagram.com/popayan_moderna" target="_blank" data-tags="colombia popayan cauca lifestyle">🏛️ Popayán Moderna • Popayán</a>
         <a href="https://instagram.com/lccolombia" target="_blank">🍕 Little Caesars Colombia</a>
         <a href="https://instagram.com/nestlecolombia" target="_blank">🍫 Nestlé Colombia</a>
         <a href="https://instagram.com/bimbocolombia" target="_blank">🍞 Bimbo Colombia</a>
@@ -475,23 +475,23 @@ A curated collection of content I find inspiring, educational, or just plain int
 <div class="instagram-links travel">
 <h4>Travel Bloggers & Content Creators</h4>
 <div class="link-grid">
-        <a href="https://instagram.com/colombianfamily" target="_blank">👨‍👩‍👧‍👦 Colombian Family</a>
-        <a href="https://instagram.com/viajandoempelota" target="_blank">🎒 Viajando Empelota</a>
-        <a href="https://instagram.com/nomadafrustrada" target="_blank">🌍 Nómada Frustrada</a>
-        <a href="https://instagram.com/vivatailandia" target="_blank">🇹🇭 Viva Tailandia</a>
-        <a href="https://instagram.com/_losbuenossomosmas" target="_blank">💛 Los Buenos Somos Más</a>
-        <a href="https://instagram.com/medellin_guru" target="_blank">🏙️ Medellín Guru</a>
-        <a href="https://instagram.com/medellinenvideos" target="_blank">📽️ Medellín en Videos</a>
-        <a href="https://instagram.com/medellinenelmapa_" target="_blank">🗺️ Medellín en el Mapa</a>
-        <a href="https://instagram.com/visitarmedellin" target="_blank">✈️ Visitar Medellín</a>
-        <a href="https://instagram.com/foodinbogota" target="_blank">🍴 Food in Bogotá</a>
-        <a href="https://instagram.com/teamobogota" target="_blank">❤️ Te Amo Bogotá</a>
-        <a href="https://instagram.com/visitbogota.co" target="_blank">🏙️ Visit Bogotá</a>
-        <a href="https://instagram.com/bogotaplan" target="_blank">🎭 Bogotá Plan</a>
-        <a href="https://instagram.com/bogotacomidas" target="_blank">🍴 Bogotá Comidas</a>
-        <a href="https://instagram.com/cucutaturismo" target="_blank">✈️ Cúcuta Turismo</a>
-        <a href="https://instagram.com/bicitour_medellin" target="_blank">🚴 Bicitour Medellín</a>
-        <a href="https://instagram.com/expoartesano" target="_blank">🎨 Expoartesano</a>
+        <a href="https://instagram.com/colombianfamily" target="_blank" data-tags="colombia travel family lifestyle">👨‍👩‍👧‍👦 Colombian Family • Colombia</a>
+        <a href="https://instagram.com/viajandoempelota" target="_blank" data-tags="travel backpacking latin-america">🎒 Viajando Empelota • Latin America</a>
+        <a href="https://instagram.com/nomadafrustrada" target="_blank" data-tags="travel digital-nomad worldwide">🌍 Nómada Frustrada • Worldwide</a>
+        <a href="https://instagram.com/vivatailandia" target="_blank" data-tags="thailand bangkok travel asia">🇹🇭 Viva Tailandia • Thailand</a>
+        <a href="https://instagram.com/_losbuenossomosmas" target="_blank" data-tags="colombia positive lifestyle">💛 Los Buenos Somos Más • Colombia</a>
+        <a href="https://instagram.com/medellin_guru" target="_blank" data-tags="colombia medellin antioquia travel guide">🏙️ Medellín Guru • Medellín</a>
+        <a href="https://instagram.com/medellinenvideos" target="_blank" data-tags="colombia medellin antioquia videos">📽️ Medellín en Videos • Medellín</a>
+        <a href="https://instagram.com/medellinenelmapa_" target="_blank" data-tags="colombia medellin antioquia maps guide">🗺️ Medellín en el Mapa • Medellín</a>
+        <a href="https://instagram.com/visitarmedellin" target="_blank" data-tags="colombia medellin antioquia tourism">✈️ Visitar Medellín • Medellín</a>
+        <a href="https://instagram.com/foodinbogota" target="_blank" data-tags="colombia bogota food restaurants">🍴 Food in Bogotá • Bogotá</a>
+        <a href="https://instagram.com/teamobogota" target="_blank" data-tags="colombia bogota lifestyle love">❤️ Te Amo Bogotá • Bogotá</a>
+        <a href="https://instagram.com/visitbogota.co" target="_blank" data-tags="colombia bogota tourism official">🏙️ Visit Bogotá • Bogotá</a>
+        <a href="https://instagram.com/bogotaplan" target="_blank" data-tags="colombia bogota events culture">🎭 Bogotá Plan • Bogotá</a>
+        <a href="https://instagram.com/bogotacomidas" target="_blank" data-tags="colombia bogota food restaurants">🍴 Bogotá Comidas • Bogotá</a>
+        <a href="https://instagram.com/cucutaturismo" target="_blank" data-tags="colombia cucuta norte-santander tourism">✈️ Cúcuta Turismo • Cúcuta</a>
+        <a href="https://instagram.com/bicitour_medellin" target="_blank" data-tags="colombia medellin antioquia bicycle tours">🚴 Bicitour Medellín • Medellín</a>
+        <a href="https://instagram.com/expoartesano" target="_blank" data-tags="colombia crafts artisan fair">🎨 Expoartesano • Colombia</a>
 </div>
 </div>
 
