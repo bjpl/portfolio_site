@@ -19,13 +19,14 @@
 <style>
 .links-container {
     min-height: 100vh;
-    padding: var(--space-3xl) 0;
+    padding: 2rem 0;
     background: var(--color-bg);
 }
 
 .page-header {
     text-align: center;
-    margin-bottom: var(--space-2xl);
+    margin-bottom: 2rem;
+    padding: 0 1rem;
 }
 
 .page-title {
@@ -43,15 +44,16 @@
 }
 
 .page-content {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 var(--space-lg);
+    padding: 0 1rem;
 }
 
 /* Search and Filter Styles */
 .search-container {
-    margin: var(--space-2xl) 0;
+    margin: 2rem auto;
     text-align: center;
+    max-width: 800px;
 }
 
 .search-input {
@@ -80,8 +82,9 @@
 }
 
 .filter-container {
-    margin: var(--space-xl) 0;
+    margin: 1.5rem auto;
     text-align: center;
+    max-width: 1000px;
 }
 
 .filter-buttons {
@@ -117,30 +120,32 @@
 
 /* Instagram Links Styling */
 .instagram-links {
-    margin: var(--space-2xl) 0;
-    padding: var(--space-xl);
+    margin: 2rem 0;
+    padding: 1.5rem;
     background: var(--color-surface);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-sm);
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .instagram-links h3 {
-    font-size: var(--text-2xl);
+    font-size: 1.5rem;
     color: var(--color-text-primary);
-    margin-bottom: var(--space-lg);
-    padding-bottom: var(--space-md);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
     border-bottom: 3px solid var(--color-primary);
 }
 
 .instagram-links h4 {
-    font-size: var(--text-lg);
+    font-size: 1.1rem;
     color: var(--color-text-primary);
-    margin: var(--space-xl) 0 var(--space-md) 0;
-    padding: var(--space-sm) 0;
+    margin: 1.5rem 0 1rem 0;
+    padding: 0.5rem 0;
     border-bottom: 2px solid var(--color-border);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
 }
 
 .collapse-icon {
@@ -159,24 +164,26 @@
 
 .link-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: var(--space-sm);
-    margin: var(--space-md) 0;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
 }
 
 .link-grid a {
     display: flex;
     align-items: center;
-    padding: var(--space-sm) var(--space-md);
+    padding: 0.75rem 1rem;
     background: var(--color-bg);
     border: 1px solid var(--color-border-light);
-    border-radius: var(--radius-lg);
+    border-radius: 8px;
     color: var(--color-text-primary);
     text-decoration: none;
-    font-size: var(--text-sm);
-    transition: all var(--transition-fast);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .link-grid a::before {
@@ -323,40 +330,112 @@
 /* Responsive */
 @media (max-width: 768px) {
     .page-title {
-        font-size: var(--text-3xl);
+        font-size: 1.75rem;
     }
     
     .links-container {
-        padding: var(--space-2xl) var(--space-md);
+        padding: 1.5rem 0;
+    }
+    
+    .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.5rem;
+    }
+    
+    .link-grid a {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+    }
+    
+    .instagram-links {
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .filter-buttons {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+        min-width: 80px;
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-content {
+        padding: 0 0.75rem;
+    }
+    
+    .instagram-links {
+        padding: 0.75rem;
+        margin: 1rem 0;
     }
     
     .link-grid {
         grid-template-columns: 1fr;
     }
     
-    .instagram-links {
-        padding: var(--space-lg);
-    }
-    
-    .filter-buttons {
-        justify-content: stretch;
-    }
-    
-    .filter-btn {
-        flex: 1;
-        min-width: 100px;
+    .link-grid a {
+        padding: 0.6rem 0.8rem;
     }
 }
 
-@media (max-width: 480px) {
-    .page-content {
-        padding: 0 var(--space-md);
-    }
-    
-    .instagram-links {
-        padding: var(--space-md);
-        margin: var(--space-lg) 0;
-    }
+/* Additional improvements */
+.page-content h1 {
+    font-size: 2rem;
+    margin: 2rem 0 1rem;
+    color: var(--color-text-primary);
+}
+
+.page-content h2 {
+    font-size: 1.75rem;
+    margin: 2.5rem 0 1.5rem;
+    color: var(--color-text-primary);
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-border);
+}
+
+.page-content > p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    max-width: 800px;
+}
+
+/* Better organization for sections */
+.instagram-links + .instagram-links {
+    margin-top: 1rem;
+}
+
+/* Ensure consistent spacing */
+.link-grid:empty {
+    display: none;
+}
+
+/* Better hover states */
+.link-grid a:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-color: var(--color-primary);
+    z-index: 1;
+}
+
+/* Fix text overflow */
+.link-grid a {
+    min-height: 44px;
+}
+
+/* Improve link counter visibility */
+.link-counter {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-weight: 400;
+    margin-left: auto;
+    padding-left: 0.5rem;
 }
 </style>
 {{ end }}
