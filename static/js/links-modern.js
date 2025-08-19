@@ -23,6 +23,46 @@
     let contentWrapper;
     let statsElements;
 
+    // Self-diagnostic function
+    function runDiagnostics() {
+        console.log('🔍 Running Links Page Diagnostics...');
+        
+        const diagnostics = {
+            dom: {
+                searchInput: !!document.getElementById('search-input'),
+                categoryFilters: !!document.getElementById('category-filters'),
+                statsElements: {
+                    totalLinks: !!document.getElementById('total-links'),
+                    categories: !!document.getElementById('total-categories'),
+                    countries: !!document.getElementById('total-countries')
+                },
+                linkGrids: document.querySelectorAll('.link-grid').length,
+                links: document.querySelectorAll('.link-grid a').length
+            },
+            state: {
+                linksProcessed: state.allLinks.length,
+                categories: state.stats.categories.size,
+                countries: state.stats.countries.size
+            }
+        };
+        
+        console.table(diagnostics.dom);
+        console.table(diagnostics.state);
+        
+        // Check for common issues
+        if (diagnostics.dom.links === 0) {
+            console.error('❌ No links found! Check if HTML is rendering correctly.');
+        }
+        if (!diagnostics.dom.searchInput) {
+            console.error('❌ Search input not found!');
+        }
+        if (diagnostics.state.linksProcessed === 0 && diagnostics.dom.links > 0) {
+            console.error('❌ Links found but not processed!');
+        }
+        
+        return diagnostics;
+    }
+    
     // Initialize on DOM load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initialize);
@@ -30,6 +70,9 @@
         // DOM is already loaded
         setTimeout(initialize, 100);
     }
+    
+    // Expose diagnostic function globally
+    window.linksPageDiagnostics = runDiagnostics;
 
     function initialize() {
         console.log('Initializing links page...');
@@ -89,6 +132,11 @@
         
         // Setup tooltips
         setupTooltips();
+        
+        // Run diagnostics after initialization
+        setTimeout(() => {
+            runDiagnostics();
+        }, 500);
     }
 
     function processLinks() {
