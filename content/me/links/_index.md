@@ -3,7 +3,7 @@ title: "Links & Resources"
 date: 2025-01-18
 draft: false
 description: "Curated collection of inspiring content from Instagram, YouTube, and around the web"
-layout: "links"
+layout: "links-modern"
 ---
 
 # Weekly Links Roundup
