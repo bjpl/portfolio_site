@@ -508,34 +508,10 @@
         link.classList.add('visited');
     }
     
-    // Add strategic tooltips
+    // Add strategic tooltips - DISABLED to keep cards clean
     function setupTooltips() {
-        const links = document.querySelectorAll('.link-grid a');
-        
-        links.forEach(link => {
-            const tags = link.getAttribute('data-tags');
-            if (tags) {
-                // Extract key information from tags
-                const tagArray = tags.split(' ');
-                const countries = tagArray.filter(t => t.match(/^(mexico|colombia|venezuela|usa|canada|brazil|argentina|chile|peru)/i));
-                const types = tagArray.filter(t => t.match(/^(embassy|consulate|museum|restaurant|government|cultural)/i));
-                
-                // Create tooltip content
-                let tooltipText = '';
-                if (types.length > 0) {
-                    tooltipText += `Type: ${types[0]}`;
-                }
-                if (countries.length > 0) {
-                    tooltipText += tooltipText ? ' | ' : '';
-                    tooltipText += `Location: ${countries[0]}`;
-                }
-                
-                if (tooltipText) {
-                    link.setAttribute('title', tooltipText);
-                    link.style.cursor = 'pointer';
-                }
-            }
-        });
+        // Tooltips disabled - tags are only for search, not display
+        return;
     }
 
     function showNotification(message) {
