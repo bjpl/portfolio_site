@@ -346,6 +346,16 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/mincultura" target="_blank">🎨 MinCultura Colombia</a>
         <a href="https://instagram.com/mininterior" target="_blank">🏛️ Ministerio del Interior</a>
         <a href="https://instagram.com/mintransporteco" target="_blank">🚗 Ministerio de Transporte</a>
+        <a href="https://instagram.com/minciencias_co" target="_blank">🔬 Minciencias Colombia</a>
+        <a href="https://instagram.com/funcionpublicacolombia" target="_blank">🏛️ Función Pública</a>
+        <a href="https://instagram.com/consejosuperiorjudicatura" target="_blank">⚖️ Consejo Superior Judicatura</a>
+        <a href="https://instagram.com/cne_colombia" target="_blank">🗳️ Consejo Nacional Electoral</a>
+        <a href="https://instagram.com/stransparenciaoficial" target="_blank">🔍 Secretaría de Transparencia</a>
+        <a href="https://instagram.com/ministeriominasyenergia" target="_blank">⚡ Ministerio de Minas y Energía</a>
+        <a href="https://instagram.com/minjusticiaco" target="_blank">⚖️ Ministerio de Justicia</a>
+        <a href="https://instagram.com/minigualdadcol" target="_blank">⚖️ Ministerio de Igualdad</a>
+        <a href="https://instagram.com/minagriculturacol" target="_blank">🌾 Ministerio de Agricultura</a>
+        <a href="https://instagram.com/infopresidencia" target="_blank">🇨🇴 Presidencia de Colombia</a>
     </div>
 </div>
 
