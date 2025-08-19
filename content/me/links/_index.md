@@ -58,18 +58,18 @@ A curated collection of content I find inspiring, educational, or just plain int
     
 <h4>Venezuela Diplomatic Network</h4>
 <div class="link-grid">
-        <a href="https://instagram.com/embavenmexico" target="_blank">🇲🇽 Venezuela in Mexico</a>
-        <a href="https://instagram.com/embavenitalia" target="_blank">🇮🇹 Venezuela in Italy</a>
-        <a href="https://instagram.com/embavefrancia" target="_blank">🇫🇷 Venezuela in France</a>
-        <a href="https://instagram.com/alemaniaenvenezuela" target="_blank">🇩🇪 Germany in Venezuela</a>
-        <a href="https://instagram.com/embespvenezuela" target="_blank">🇪🇸 Spain in Venezuela</a>
-        <a href="https://instagram.com/suizaenvenezuela" target="_blank">🇨🇭 Switzerland in Venezuela</a>
-        <a href="https://instagram.com/ueenvenezuela" target="_blank">🇪🇺 EU in Venezuela</a>
-        <a href="https://instagram.com/ukinvenezuela" target="_blank">🇬🇧 UK in Venezuela</a>
-        <a href="https://instagram.com/embbarven" target="_blank">🇧🇧 Barbados in Venezuela</a>
-        <a href="https://instagram.com/embafrancia" target="_blank">🇫🇷 France in Venezuela</a>
-        <a href="https://instagram.com/brenvenezuela" target="_blank">🇧🇷 Brazil in Venezuela</a>
-        <a href="https://instagram.com/plenvenezuela" target="_blank">🇻🇪 Venezuela Embassy</a>
+        <a href="https://instagram.com/embavenmexico" target="_blank" data-tags="venezuela mexico mexico-city embassy diplomatic">🇲🇽 Venezuela in Mexico • Mexico City</a>
+        <a href="https://instagram.com/embavenitalia" target="_blank" data-tags="venezuela italy rome embassy diplomatic europe">🇮🇹 Venezuela in Italy • Rome</a>
+        <a href="https://instagram.com/embavefrancia" target="_blank" data-tags="venezuela france paris embassy diplomatic europe">🇫🇷 Venezuela in France • Paris</a>
+        <a href="https://instagram.com/alemaniaenvenezuela" target="_blank" data-tags="germany venezuela caracas embassy diplomatic europe">🇩🇪 Germany in Venezuela • Caracas</a>
+        <a href="https://instagram.com/embespvenezuela" target="_blank" data-tags="spain venezuela caracas embassy diplomatic europe">🇪🇸 Spain in Venezuela • Caracas</a>
+        <a href="https://instagram.com/suizaenvenezuela" target="_blank" data-tags="switzerland venezuela caracas embassy diplomatic europe">🇨🇭 Switzerland in Venezuela • Caracas</a>
+        <a href="https://instagram.com/ueenvenezuela" target="_blank" data-tags="european-union venezuela caracas embassy diplomatic eu">🇪🇺 EU in Venezuela • Caracas</a>
+        <a href="https://instagram.com/ukinvenezuela" target="_blank" data-tags="uk britain venezuela caracas embassy diplomatic">🇬🇧 UK in Venezuela • Caracas</a>
+        <a href="https://instagram.com/embbarven" target="_blank" data-tags="barbados venezuela caracas embassy diplomatic caribbean">🇧🇧 Barbados in Venezuela • Caracas</a>
+        <a href="https://instagram.com/embafrancia" target="_blank" data-tags="france venezuela caracas embassy diplomatic europe">🇫🇷 France in Venezuela • Caracas</a>
+        <a href="https://instagram.com/brenvenezuela" target="_blank" data-tags="brazil venezuela caracas embassy diplomatic south-america">🇧🇷 Brazil in Venezuela • Caracas</a>
+        <a href="https://instagram.com/plenvenezuela" target="_blank" data-tags="venezuela embassy diplomatic foreign-affairs">🇻🇪 Venezuela Embassy • Official</a>
 </div>
     
 <h4>Colombia Diplomatic Network</h4>
@@ -199,21 +199,21 @@ A curated collection of content I find inspiring, educational, or just plain int
 
 <div class="instagram-links organizations">
 <div class="link-grid">
-        <a href="https://instagram.com/onumujeresmx" target="_blank">🇺🇳 ONU Mujeres México</a>
-        <a href="https://instagram.com/aimexico" target="_blank">⚖️ Amnistía Internacional México</a>
-        <a href="https://instagram.com/hiascolombia" target="_blank">🤲 HIAS Colombia</a>
-        <a href="https://instagram.com/ocha_venezuela" target="_blank">🇺🇳 OCHA Venezuela</a>
-        <a href="https://instagram.com/amchamcolombia" target="_blank">🇺🇸 AmCham Colombia</a>
-        <a href="https://instagram.com/koica_colombia" target="_blank">🇰🇷 KOICA Colombia</a>
-        <a href="https://instagram.com/cruzrojacol" target="_blank">❤️ Cruz Roja Colombiana</a>
-        <a href="https://instagram.com/ochacolombia" target="_blank">🇺🇳 OCHA Colombia</a>
-        <a href="https://instagram.com/unfpa_colombia" target="_blank">🇺🇳 UNFPA Colombia</a>
-        <a href="https://instagram.com/transparenciacolombia" target="_blank">👁️ Transparencia por Colombia</a>
-        <a href="https://instagram.com/civix_colombia" target="_blank">🏛️ CIVIX Colombia</a>
-        <a href="https://instagram.com/hannsseidelcol" target="_blank">🇩🇪 Hanns Seidel Stiftung</a>
-        <a href="https://instagram.com/onumujerescol" target="_blank">🇺🇳 ONU Mujeres Colombia</a>
-        <a href="https://instagram.com/oeicolombia" target="_blank">🌎 OEI Colombia</a>
-        <a href="https://instagram.com/colombiafintech" target="_blank">💳 Colombia Fintech</a>
+        <a href="https://instagram.com/onumujeresmx" target="_blank" data-tags="un united-nations women gender-equality mexico mexico-city ngo">🇺🇳 ONU Mujeres México • UN Women</a>
+        <a href="https://instagram.com/aimexico" target="_blank" data-tags="amnesty human-rights mexico ngo civil-rights justice">⚖️ Amnistía Internacional • México</a>
+        <a href="https://instagram.com/hiascolombia" target="_blank" data-tags="hias refugees migration colombia bogota humanitarian ngo">🤲 HIAS Colombia • Refugee Support</a>
+        <a href="https://instagram.com/ocha_venezuela" target="_blank" data-tags="un ocha humanitarian venezuela caracas crisis-response">🇺🇳 OCHA Venezuela • UN Humanitarian</a>
+        <a href="https://instagram.com/amchamcolombia" target="_blank" data-tags="american-chamber commerce colombia bogota business usa">🇺🇸 AmCham Colombia • Bogotá</a>
+        <a href="https://instagram.com/koica_colombia" target="_blank" data-tags="korea cooperation development colombia bogota aid">🇰🇷 KOICA Colombia • Korean Aid</a>
+        <a href="https://instagram.com/cruzrojacol" target="_blank" data-tags="red-cross colombia humanitarian emergency medical ngo">❤️ Cruz Roja Colombiana • Red Cross</a>
+        <a href="https://instagram.com/ochacolombia" target="_blank" data-tags="un ocha humanitarian colombia bogota crisis-response">🇺🇳 OCHA Colombia • UN Humanitarian</a>
+        <a href="https://instagram.com/unfpa_colombia" target="_blank" data-tags="un unfpa population health colombia bogota reproductive-health">🇺🇳 UNFPA Colombia • UN Population</a>
+        <a href="https://instagram.com/transparenciacolombia" target="_blank" data-tags="transparency corruption colombia bogota governance ngo">👁️ Transparencia por Colombia • Anti-Corruption</a>
+        <a href="https://instagram.com/civix_colombia" target="_blank" data-tags="civic technology colombia bogota democracy governance">🏛️ CIVIX Colombia • Civic Tech</a>
+        <a href="https://instagram.com/hannsseidelcol" target="_blank" data-tags="germany foundation colombia bogota democracy development">🇩🇪 Hanns Seidel Stiftung • German Foundation</a>
+        <a href="https://instagram.com/onumujerescol" target="_blank" data-tags="un united-nations women gender-equality colombia bogota ngo">🇺🇳 ONU Mujeres Colombia • UN Women</a>
+        <a href="https://instagram.com/oeicolombia" target="_blank" data-tags="oei education ibero-american colombia bogota cooperation">🌎 OEI Colombia • Ibero-American Education</a>
+        <a href="https://instagram.com/colombiafintech" target="_blank" data-tags="fintech technology finance colombia bogota startups innovation">💳 Colombia Fintech • Financial Tech</a>
         <a href="https://instagram.com/unicef_colombia" target="_blank">🇺🇳 UNICEF Colombia</a>
         <a href="https://instagram.com/wwf_colombia" target="_blank">🐼 WWF Colombia</a>
         <a href="https://instagram.com/ueencolombia" target="_blank">🇪🇺 Unión Europea en Colombia</a>
@@ -236,40 +236,40 @@ A curated collection of content I find inspiring, educational, or just plain int
 <div class="instagram-links food-brands">
 <h4>International Brands</h4>
 <div class="link-grid">
-        <a href="https://instagram.com/doritosvzla" target="_blank">🌮 Doritos</a>
-        <a href="https://instagram.com/jacksvenezuela" target="_blank">🍿 Jack's</a>
-        <a href="https://instagram.com/pepsicovzla" target="_blank">🥤 PepsiCo</a>
-        <a href="https://instagram.com/pepsiven" target="_blank">🥤 Pepsi</a>
-        <a href="https://instagram.com/nesteavzla" target="_blank">🍵 Nestea</a>
-        <a href="https://instagram.com/7upve" target="_blank">🥤 7Up</a>
-        <a href="https://instagram.com/cocacolave" target="_blank">🥤 Coca-Cola</a>
-        <a href="https://instagram.com/nescafeve" target="_blank">☕ Nescafé</a>
-        <a href="https://instagram.com/oreo.venezuela" target="_blank">🍪 Oreo</a>
-        <a href="https://instagram.com/papajohnsve" target="_blank">🍕 Papa John's</a>
+        <a href="https://instagram.com/doritosvzla" target="_blank" data-tags="venezuela food snacks chips frito-lay pepsico">🌮 Doritos • Venezuela</a>
+        <a href="https://instagram.com/jacksvenezuela" target="_blank" data-tags="venezuela food snacks popcorn">🍿 Jack's • Venezuela</a>
+        <a href="https://instagram.com/pepsicovzla" target="_blank" data-tags="venezuela beverages soda pepsico multinational">🥤 PepsiCo • Venezuela</a>
+        <a href="https://instagram.com/pepsiven" target="_blank" data-tags="venezuela beverages soda cola pepsico">🥤 Pepsi • Venezuela</a>
+        <a href="https://instagram.com/nesteavzla" target="_blank" data-tags="venezuela beverages tea iced-tea nestle">🍵 Nestea • Venezuela</a>
+        <a href="https://instagram.com/7upve" target="_blank" data-tags="venezuela beverages soda lemon-lime pepsico">🥤 7Up • Venezuela</a>
+        <a href="https://instagram.com/cocacolave" target="_blank" data-tags="venezuela beverages soda cola coca-cola">🥤 Coca-Cola • Venezuela</a>
+        <a href="https://instagram.com/nescafeve" target="_blank" data-tags="venezuela coffee instant-coffee nestle beverages">☕ Nescafé • Venezuela</a>
+        <a href="https://instagram.com/oreo.venezuela" target="_blank" data-tags="venezuela cookies snacks mondelez sweets">🍪 Oreo • Venezuela</a>
+        <a href="https://instagram.com/papajohnsve" target="_blank" data-tags="venezuela pizza restaurant fast-food delivery">🍕 Papa John's • Venezuela</a>
 </div>
     
 <h4>Local Venezuelan Brands</h4>
 <div class="link-grid">
-        <a href="https://instagram.com/chiskesitos" target="_blank">🧀 ChisKesitos</a>
-        <a href="https://instagram.com/primorvzla" target="_blank">🍴 Primor</a>
-        <a href="https://instagram.com/savoynestle" target="_blank">🍫 Savoy</a>
-        <a href="https://instagram.com/plumrosevzla" target="_blank">🥩 Plumrose</a>
-        <a href="https://instagram.com/cerealesmaizoritos" target="_blank">🥣 Maizoritos</a>
-        <a href="https://instagram.com/monaca.ve" target="_blank">🌾 Molinos Nacionales</a>
-        <a href="https://instagram.com/bonobon_vzla" target="_blank">🍬 Bonobon</a>
-        <a href="https://instagram.com/danibiskoficialve" target="_blank">🍪 Danibisk</a>
-        <a href="https://instagram.com/iberiavenezuela" target="_blank">🍴 Iberia</a>
-        <a href="https://instagram.com/pastassindoni" target="_blank">🍝 Pastas Sindoni</a>
-        <a href="https://instagram.com/alimentosmunchy" target="_blank">🍿 Alimentos Munchy</a>
-        <a href="https://instagram.com/pirulinve" target="_blank">🍫 Pirulin</a>
-        <a href="https://instagram.com/osole_foods" target="_blank">🍴 Osole Foods</a>
-        <a href="https://instagram.com/pastascaprive" target="_blank">🍝 Pastas Capri</a>
-        <a href="https://instagram.com/somoslagranja" target="_blank">🥛 Alimentos La Granja</a>
-        <a href="https://instagram.com/tealacavenezuela" target="_blank">🧈 Tealca</a>
-        <a href="https://instagram.com/migurtve" target="_blank">🥛 MiGurt</a>
-        <a href="https://instagram.com/parmalatve" target="_blank">🥛 Parmalat</a>
-        <a href="https://instagram.com/cafe.sellorojo" target="_blank">☕ Café Sello Rojo</a>
-        <a href="https://instagram.com/trolligomitas" target="_blank">🍬 Gomitas Trolli</a>
+        <a href="https://instagram.com/chiskesitos" target="_blank" data-tags="venezuela food snacks cheese local-brand">🧀 ChisKesitos • Venezuela</a>
+        <a href="https://instagram.com/primorvzla" target="_blank" data-tags="venezuela food cooking-oil margarine local-brand">🍴 Primor • Venezuela</a>
+        <a href="https://instagram.com/savoynestle" target="_blank" data-tags="venezuela chocolate candy nestle sweets local-favorite">🍫 Savoy • Venezuela</a>
+        <a href="https://instagram.com/plumrosevzla" target="_blank" data-tags="venezuela food meat deli processed-meat">🥩 Plumrose • Venezuela</a>
+        <a href="https://instagram.com/cerealesmaizoritos" target="_blank" data-tags="venezuela cereal breakfast corn local-brand">🥣 Maizoritos • Venezuela</a>
+        <a href="https://instagram.com/monaca.ve" target="_blank" data-tags="venezuela flour corn-flour harina-pan local-brand">🌾 Molinos Nacionales MONACA • Venezuela</a>
+        <a href="https://instagram.com/bonobon_vzla" target="_blank" data-tags="venezuela candy chocolate wafer arcor sweets">🍬 Bonobon • Venezuela</a>
+        <a href="https://instagram.com/danibiskoficialve" target="_blank" data-tags="venezuela cookies biscuits snacks local-brand">🍪 Danibisk • Venezuela</a>
+        <a href="https://instagram.com/iberiavenezuela" target="_blank" data-tags="venezuela food canned-goods sardines tuna">🍴 Iberia • Venezuela</a>
+        <a href="https://instagram.com/pastassindoni" target="_blank" data-tags="venezuela pasta food italian local-brand">🍝 Pastas Sindoni • Venezuela</a>
+        <a href="https://instagram.com/alimentosmunchy" target="_blank" data-tags="venezuela snacks chips popcorn local-brand">🍿 Alimentos Munchy • Venezuela</a>
+        <a href="https://instagram.com/pirulinve" target="_blank" data-tags="venezuela chocolate wafer candy local-favorite sweets">🍫 Pirulin • Venezuela</a>
+        <a href="https://instagram.com/osole_foods" target="_blank" data-tags="venezuela food processed local-brand">🍴 Osole Foods • Venezuela</a>
+        <a href="https://instagram.com/pastascaprive" target="_blank" data-tags="venezuela pasta food italian local-brand">🍝 Pastas Capri • Venezuela</a>
+        <a href="https://instagram.com/somoslagranja" target="_blank" data-tags="venezuela dairy milk yogurt local-brand">🥛 Alimentos La Granja • Venezuela</a>
+        <a href="https://instagram.com/tealacavenezuela" target="_blank" data-tags="venezuela butter margarine dairy local-brand">🧈 Tealca • Venezuela</a>
+        <a href="https://instagram.com/migurtve" target="_blank" data-tags="venezuela yogurt dairy probiotics local-brand">🥛 MiGurt • Venezuela</a>
+        <a href="https://instagram.com/parmalatve" target="_blank" data-tags="venezuela dairy milk yogurt parmalat international">🥛 Parmalat • Venezuela</a>
+        <a href="https://instagram.com/cafe.sellorojo" target="_blank" data-tags="venezuela coffee colombian-coffee beverages">☕ Café Sello Rojo • Venezuela</a>
+        <a href="https://instagram.com/trolligomitas" target="_blank" data-tags="venezuela candy gummy sweets trolli international">🍬 Gomitas Trolli • Venezuela</a>
 </div>
 </div>
 
@@ -346,16 +346,16 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/mincultura" target="_blank">🎨 MinCultura Colombia</a>
         <a href="https://instagram.com/mininterior" target="_blank">🏛️ Ministerio del Interior</a>
         <a href="https://instagram.com/mintransporteco" target="_blank">🚗 Ministerio de Transporte</a>
-        <a href="https://instagram.com/minciencias_co" target="_blank">🔬 Minciencias Colombia</a>
-        <a href="https://instagram.com/funcionpublicacolombia" target="_blank">🏛️ Función Pública</a>
-        <a href="https://instagram.com/consejosuperiorjudicatura" target="_blank">⚖️ Consejo Superior Judicatura</a>
-        <a href="https://instagram.com/cne_colombia" target="_blank">🗳️ Consejo Nacional Electoral</a>
-        <a href="https://instagram.com/stransparenciaoficial" target="_blank">🔍 Secretaría de Transparencia</a>
-        <a href="https://instagram.com/ministeriominasyenergia" target="_blank">⚡ Ministerio de Minas y Energía</a>
-        <a href="https://instagram.com/minjusticiaco" target="_blank">⚖️ Ministerio de Justicia</a>
-        <a href="https://instagram.com/minigualdadcol" target="_blank">⚖️ Ministerio de Igualdad</a>
-        <a href="https://instagram.com/minagriculturacol" target="_blank">🌾 Ministerio de Agricultura</a>
-        <a href="https://instagram.com/infopresidencia" target="_blank">🇨🇴 Presidencia de Colombia</a>
+        <a href="https://instagram.com/minciencias_co" target="_blank" data-tags="colombia science technology research innovation government bogota ministry">🔬 Minciencias • Science & Technology Ministry</a>
+        <a href="https://instagram.com/funcionpublicacolombia" target="_blank" data-tags="colombia public-service government bogota civil-service employment">🏛️ Función Pública • Public Service</a>
+        <a href="https://instagram.com/consejosuperiorjudicatura" target="_blank" data-tags="colombia justice judiciary courts government bogota legal">⚖️ Consejo Superior Judicatura • Judicial Council</a>
+        <a href="https://instagram.com/cne_colombia" target="_blank" data-tags="colombia elections democracy voting government bogota electoral">🗳️ Consejo Nacional Electoral • Elections</a>
+        <a href="https://instagram.com/stransparenciaoficial" target="_blank" data-tags="colombia transparency anti-corruption government bogota accountability">🔍 Secretaría de Transparencia • Anti-Corruption</a>
+        <a href="https://instagram.com/ministeriominasyenergia" target="_blank" data-tags="colombia energy mining oil gas government bogota ministry petroleum">⚡ MinMinas y Energía • Energy & Mining</a>
+        <a href="https://instagram.com/minjusticiaco" target="_blank" data-tags="colombia justice law legal-system government bogota ministry prisons">⚖️ MinJusticia • Justice Ministry</a>
+        <a href="https://instagram.com/minigualdadcol" target="_blank" data-tags="colombia gender-equality women lgbti rights government bogota ministry">⚖️ MinIgualdad • Gender Equality Ministry</a>
+        <a href="https://instagram.com/minagriculturacol" target="_blank" data-tags="colombia agriculture farming rural-development government bogota ministry">🌾 MinAgricultura • Agriculture & Rural Dev</a>
+        <a href="https://instagram.com/infopresidencia" target="_blank" data-tags="colombia president government bogota casa-narino executive politics">🇨🇴 Presidencia de Colombia • Casa de Nariño</a>
 </div>
 </div>
 
@@ -392,26 +392,26 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/paramountplusmx" target="_blank">📺 Paramount+ México</a>
         <a href="https://instagram.com/caracoltv" target="_blank">📺 Caracol Televisión</a>
         <a href="https://instagram.com/telemundo" target="_blank">📺 Telemundo</a>
-        <a href="https://instagram.com/netflixfamilia" target="_blank">📺 Netflix Familia</a>
-        <a href="https://instagram.com/primevideolat" target="_blank">📺 Prime Video LATAM</a>
-        <a href="https://instagram.com/hbolatam" target="_blank">📺 HBO Latinoamérica</a>
-        <a href="https://instagram.com/disneyplusla" target="_blank">📺 Disney+ Latinoamérica</a>
-        <a href="https://instagram.com/netflixes" target="_blank">📺 Netflix España</a>
-        <a href="https://instagram.com/netflixlat" target="_blank">📺 Netflix Latinoamérica</a>
-        <a href="https://instagram.com/netflixcolombia" target="_blank">📺 Netflix Colombia</a>
-        <a href="https://instagram.com/elpaiscali" target="_blank">📰 El País Cali</a>
-        <a href="https://instagram.com/bloomberglineacolombia" target="_blank">📰 Bloomberg Línea Colombia</a>
-        <a href="https://instagram.com/cnnee" target="_blank">📺 CNN en Español</a>
-        <a href="https://instagram.com/eltiempo" target="_blank">📰 EL TIEMPO</a>
-        <a href="https://instagram.com/elespectador" target="_blank">📰 El Espectador</a>
-        <a href="https://instagram.com/historylatam" target="_blank">📺 History Latinoamérica</a>
-        <a href="https://instagram.com/caracolradio" target="_blank">📻b Caracol Radio</a>
-        <a href="https://instagram.com/nayibbukele" target="_blank">🇸🇻 Nayib Bukele</a>
-        <a href="https://instagram.com/cucutanoticias" target="_blank">📰 Cúcuta Noticias</a>
-        <a href="https://instagram.com/radionacionalco" target="_blank">📻 Radio Nacional Colombia</a>
-        <a href="https://instagram.com/caracolmedellin" target="_blank">📻 Caracol Radio Medellín</a>
-        <a href="https://instagram.com/senalcolombiatv" target="_blank">📺 Señal Colombia</a>
-        <a href="https://instagram.com/forbescolombia" target="_blank">📰 Forbes Colombia</a>
+        <a href="https://instagram.com/netflixfamilia" target="_blank" data-tags="netflix streaming entertainment family latin-america tv movies">📺 Netflix Familia • Latin America</a>
+        <a href="https://instagram.com/primevideolat" target="_blank" data-tags="amazon prime-video streaming latin-america entertainment tv movies">📺 Prime Video LATAM • Streaming</a>
+        <a href="https://instagram.com/hbolatam" target="_blank" data-tags="hbo warner streaming latin-america entertainment tv series">📺 HBO Latinoamérica • Premium TV</a>
+        <a href="https://instagram.com/disneyplusla" target="_blank" data-tags="disney streaming latin-america entertainment family movies">📺 Disney+ Latinoamérica • Family Entertainment</a>
+        <a href="https://instagram.com/netflixes" target="_blank" data-tags="netflix streaming spain espana entertainment tv movies">📺 Netflix España • Spain</a>
+        <a href="https://instagram.com/netflixlat" target="_blank" data-tags="netflix streaming latin-america entertainment tv movies">📺 Netflix Latinoamérica • Regional</a>
+        <a href="https://instagram.com/netflixcolombia" target="_blank" data-tags="netflix streaming colombia entertainment tv movies bogota">📺 Netflix Colombia • Local Content</a>
+        <a href="https://instagram.com/elpaiscali" target="_blank" data-tags="newspaper media colombia cali valle-del-cauca news journalism">📰 El País • Cali</a>
+        <a href="https://instagram.com/bloomberglineacolombia" target="_blank" data-tags="bloomberg business finance news colombia bogota economy">📰 Bloomberg Línea • Colombia Business</a>
+        <a href="https://instagram.com/cnnee" target="_blank" data-tags="cnn news television spanish latin-america usa journalism">📺 CNN en Español • International News</a>
+        <a href="https://instagram.com/eltiempo" target="_blank" data-tags="newspaper media colombia bogota news journalism national">📰 EL TIEMPO • Colombia's Leading Paper</a>
+        <a href="https://instagram.com/elespectador" target="_blank" data-tags="newspaper media colombia bogota news journalism oldest">📰 El Espectador • Est. 1887</a>
+        <a href="https://instagram.com/historylatam" target="_blank" data-tags="history-channel television documentary latin-america education">📺 History Latinoamérica • Documentaries</a>
+        <a href="https://instagram.com/caracolradio" target="_blank" data-tags="radio news colombia bogota journalism media broadcast">📻b Caracol Radio • National Network</a>
+        <a href="https://instagram.com/nayibbukele" target="_blank" data-tags="el-salvador president politics san-salvador government leader">🇸🇻 Nayib Bukele • President of El Salvador</a>
+        <a href="https://instagram.com/cucutanoticias" target="_blank" data-tags="news media colombia cucuta norte-santander local journalism">📰 Cúcuta Noticias • Local News</a>
+        <a href="https://instagram.com/radionacionalco" target="_blank" data-tags="radio public-media colombia bogota news culture music">📻 Radio Nacional • Public Broadcasting</a>
+        <a href="https://instagram.com/caracolmedellin" target="_blank" data-tags="radio news colombia medellin antioquia journalism local">📻 Caracol Radio • Medellín</a>
+        <a href="https://instagram.com/senalcolombiatv" target="_blank" data-tags="television public-tv colombia bogota culture education documentary">📺 Señal Colombia • Public TV</a>
+        <a href="https://instagram.com/forbescolombia" target="_blank" data-tags="forbes business magazine colombia bogota economy finance entrepreneurship">📰 Forbes Colombia • Business Magazine</a>
 </div>
 </div>
 
@@ -500,14 +500,14 @@ A curated collection of content I find inspiring, educational, or just plain int
 <div class="instagram-links education">
 <h4>Teachers & Educators</h4>
 <div class="link-grid">
-        <a href="https://instagram.com/espeak.english" target="_blank">🗣️ E-Speak English</a>
-        <a href="https://instagram.com/laprofemonica" target="_blank">👩‍🏫 La Profe Mónica</a>
-        <a href="https://instagram.com/jdoviedoar" target="_blank">👨‍💼 Juan Daniel Oviedo</a>
-        <a href="https://instagram.com/coreano_paso_a_paso" target="_blank">🇰🇷 Aprende Coreano</a>
-        <a href="https://instagram.com/ohayolily" target="_blank">🇯🇵 Lily 丽丽</a>
-        <a href="https://instagram.com/limn_ai" target="_blank">🤖 Tobias Rees</a>
-        <a href="https://instagram.com/carter.cote" target="_blank">👨‍🎓 Carter Cote</a>
-        <a href="https://instagram.com/javiermoralesfotografo" target="_blank">📸 Javier Morales Fotógrafo</a>
+        <a href="https://instagram.com/espeak.english" target="_blank" data-tags="english language-learning esl education teacher online">🗣️ E-Speak English • Language Learning</a>
+        <a href="https://instagram.com/laprofemonica" target="_blank" data-tags="spanish teacher education colombia language-learning pedagogy">👩‍🏫 La Profe Mónica • Spanish Teacher</a>
+        <a href="https://instagram.com/jdoviedoar" target="_blank" data-tags="colombia statistics education dane government bogota data">👨‍💼 Juan Daniel Oviedo • DANE Statistics</a>
+        <a href="https://instagram.com/coreano_paso_a_paso" target="_blank" data-tags="korean language-learning korea education asia k-pop culture">🇰🇷 Aprende Coreano • Korean Learning</a>
+        <a href="https://instagram.com/ohayolily" target="_blank" data-tags="japanese chinese language-learning asia education polyglot">🇯🇵 Lily 丽丽 • Asian Languages</a>
+        <a href="https://instagram.com/limn_ai" target="_blank" data-tags="ai artificial-intelligence research education technology future">🤖 Tobias Rees • AI Research</a>
+        <a href="https://instagram.com/carter.cote" target="_blank" data-tags="education content-creator student life university">👨‍🎓 Carter Cote • Education Content</a>
+        <a href="https://instagram.com/javiermoralesfotografo" target="_blank" data-tags="photography weddings colombia cartagena visual-arts creative">📸 Javier Morales • Wedding Photography</a>
 </div>
 </div>
 
