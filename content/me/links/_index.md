@@ -250,8 +250,8 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/ueencolombia" target="_blank" data-tags="andean co colombia colombian eu europe european-union latin-america south-america spanish-speaking ueencolombia">🇪🇺 Unión Europea en Colombia</a>
 <a href="https://instagram.com/wwf_colombia" target="_blank" data-tags="andean co colombia colombian latin-america south-america spanish-speaking wwf-colombia wwf_colombia">🐼 WWF Colombia</a>
 <a href="https://instagram.com/zoologicodecali" target="_blank" data-tags="cali colombia pacific salsa-capital south-america spanish-speaking valle-del-cauca zoologicodecali">🦁 Zoológico de Cali</a>
-<a href="https://instagram.com/aimexico" target="_blank" data-tags="amnesty human-rights mexico ngo civil-rights justice">⚖️ Amnistía Internacional<span class="location"> • México</span></a>
-<a href="https://instagram.com/cruzrojacol" target="_blank" data-tags="red-cross colombia humanitarian emergency medical ngo">❤️ Cruz Roja Colombiana<span class="location"> • Red Cross</span></a>
+<a href="https://instagram.com/aimexico" target="_blank" data-tags="amnesty human-rights mexico ngo civil-rights justice">⚖️ Amnistía Internacional</a>
+<a href="https://instagram.com/cruzrojacol" target="_blank" data-tags="red-cross colombia humanitarian emergency medical ngo">❤️ Cruz Roja Colombiana</a>
 <a href="https://instagram.com/civix_colombia" target="_blank" data-tags="andean bogota civic civix-colombia civix_colombia co colombia colombian democracy governance latin-america south-america spanish-speaking technology">🏛️ CIVIX Colombia</a>
 <a href="https://instagram.com/parquescolombia" target="_blank" data-tags="parquescolombia">🏞️ Parques Nacionales</a>
 <a href="https://instagram.com/transparenciacolombia" target="_blank" data-tags="andean bogota co colombia colombian corruption governance latin-america ngo south-america spanish-speaking transparenciacolombia transparency">👁️ Transparencia por Colombia</a>
@@ -273,7 +273,7 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/papajohnsve" target="_blank" data-tags="california caribbean delivery english-speaking fast-food latin-america los-angeles north-america papajohnsve pizza restaurant south-america spanish-speaking usa ve venezuela venezuelan west-coast">🍕 Papa John's</a>
 <a href="https://instagram.com/pepsiven" target="_blank" data-tags="beverages california caribbean cola english-speaking latin-america los-angeles north-america pepsico pepsiven soda south-america spanish-speaking usa ve venezuela venezuelan west-coast">🥤 Pepsi</a>
 <a href="https://instagram.com/pepsicovzla" target="_blank" data-tags="beverages california caribbean english-speaking latin-america los-angeles multinational north-america pepsico pepsicovzla soda south-america spanish-speaking usa ve venezuela venezuelan west-coast">🥤 PepsiCo</a>
-<a href="https://instagram.com/nescafeve" target="_blank" data-tags="venezuela coffee instant-coffee nestle beverages">☕ Nescafé<span class="location"> • Venezuela</span></a>
+<a href="https://instagram.com/nescafeve" target="_blank" data-tags="venezuela coffee instant-coffee nestle beverages">☕ Nescafé</a>
 </div>
     
 <h4>Local Venezuelan Brands</h4>
@@ -297,7 +297,7 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/primorvzla" target="_blank" data-tags="california caribbean cooking-oil english-speaking food latin-america local-brand los-angeles margarine north-america primorvzla south-america spanish-speaking usa ve venezuela venezuelan west-coast">🍴 Primor</a>
 <a href="https://instagram.com/savoynestle" target="_blank" data-tags="california candy caribbean chocolate english-speaking latin-america local-favorite los-angeles nestle north-america savoynestle south-america spanish-speaking sweets usa ve venezuela venezuelan west-coast">🍫 Savoy</a>
 <a href="https://instagram.com/tealacavenezuela" target="_blank" data-tags="butter california caribbean dairy english-speaking latin-america local-brand los-angeles margarine north-america south-america spanish-speaking tealacavenezuela usa ve venezuela venezuelan west-coast">🧈 Tealca</a>
-<a href="https://instagram.com/cafe.sellorojo" target="_blank" data-tags="venezuela coffee colombian-coffee beverages">☕ Café Sello Rojo<span class="location"> • Venezuela</span></a>
+<a href="https://instagram.com/cafe.sellorojo" target="_blank" data-tags="venezuela coffee colombian-coffee beverages">☕ Café Sello Rojo</a>
 </div>
 </div>
 
@@ -321,16 +321,16 @@ A curated collection of content I find inspiring, educational, or just plain int
 <h4>National Government Ministries</h4>
 <div class="link-grid">
 <a href="https://instagram.com/infopresidencia" target="_blank" data-tags="andean bogota casa-narino co colombia colombian executive government infopresidencia latin-america politics president south-america spanish-speaking">🇨🇴 Presidencia de Colombia</a>
-<a href="https://instagram.com/consejosuperiorjudicatura" target="_blank" data-tags="colombia justice judiciary courts government bogota legal">⚖️ Consejo Superior Judicatura<span class="location"> • Judicial Council</span></a>
+<a href="https://instagram.com/consejosuperiorjudicatura" target="_blank" data-tags="colombia justice judiciary courts government bogota legal">⚖️ Consejo Superior Judicatura</a>
 <a href="https://instagram.com/cortesupremaj" target="_blank" data-tags="cortesupremaj">⚖️ Corte Suprema</a>
 <a href="https://instagram.com/minagriculturacol" target="_blank" data-tags="cultural minagriculturacol">🌾 MinAgricultura</a>
 <a href="https://instagram.com/minambientecol" target="_blank" data-tags="andean co colombia colombian latin-america minambientecol south-america spanish-speaking">🌳 MinAmbiente Colombia</a>
 <a href="https://instagram.com/minciencias_co" target="_blank" data-tags="administration bogota colombia government innovation minciencias-co minciencias_co ministry public-sector research science spanish-speaking technology">🔬 Minciencias</a>
 <a href="https://instagram.com/mincultura" target="_blank" data-tags="cultural mincultura">🎨 MinCultura Colombia</a>
 <a href="https://instagram.com/mineducacioncol" target="_blank" data-tags="mineducacioncol">🎓 MinEducación</a>
-<a href="https://instagram.com/minigualdadcol" target="_blank" data-tags="colombia gender-equality women lgbti rights government bogota ministry">⚖️ MinIgualdad<span class="location"> • Gender Equality Ministry</span></a>
-<a href="https://instagram.com/minjusticiaco" target="_blank" data-tags="colombia justice law legal-system government bogota ministry prisons">⚖️ MinJusticia<span class="location"> • Justice Ministry</span></a>
-<a href="https://instagram.com/ministeriominasyenergia" target="_blank" data-tags="colombia energy mining oil gas government bogota ministry petroleum">⚡ MinMinas y Energía<span class="location"> • Energy & Mining</span></a>
+<a href="https://instagram.com/minigualdadcol" target="_blank" data-tags="colombia gender-equality women lgbti rights government bogota ministry">⚖️ MinIgualdad</a>
+<a href="https://instagram.com/minjusticiaco" target="_blank" data-tags="colombia justice law legal-system government bogota ministry prisons">⚖️ MinJusticia</a>
+<a href="https://instagram.com/ministeriominasyenergia" target="_blank" data-tags="colombia energy mining oil gas government bogota ministry petroleum">⚡ MinMinas y Energía</a>
 <a href="https://instagram.com/minsaludcol" target="_blank" data-tags="minsaludcol">🏥 MinSalud</a>
 <a href="https://instagram.com/mintrabajocol" target="_blank" data-tags="mintrabajocol">💼 MinTrabajo</a>
 <a href="https://instagram.com/mintransporteco" target="_blank" data-tags="government mintransporteco public-sector">🚗 Ministerio de Transporte</a>
@@ -384,40 +384,26 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/dagmaoficial" target="_blank" data-tags="dagmaoficial">🌳 DAGMA Oficial</a>
 <a href="https://instagram.com/educacioncali" target="_blank" data-tags="cali colombia educacioncali education government pacific south-america valle-del-cauca">🎓 Educación</a>
 <a href="https://instagram.com/seguridadcali" target="_blank" data-tags="cali colombia pacific salsa-capital seguridadcali south-america spanish-speaking valle-del-cauca">🚓 Seguridad Cali</a>
+<a href="https://instagram.com/alcaldiabogota" target="_blank" data-tags="administration alcaldiabogota andean bogota capital-city colombia distrito-capital government local-government politics south-america spanish-speaking">🏛️ Alcaldía Mayor de Bogotá</a>
+<a href="https://instagram.com/alcaldiapopayan" target="_blank" data-tags="alcaldiapopayan cauca colombia popayan south-america spanish-speaking white-city">🏛️ Alcaldía Popayán</a>
+<a href="https://instagram.com/alcaldiadetunja" target="_blank" data-tags="alcaldiadetunja andes boyaca colombia south-america spanish-speaking tunja">🏛️ Alcaldía Tunja</a>
+<a href="https://instagram.com/alcaldiadebucaramanga" target="_blank" data-tags="alcaldiadebucaramanga bucaramanga colombia government municipal santander south-america spanish-speaking">🏛️ Alcaldía</a>
+<a href="https://instagram.com/centromemoriabogota" target="_blank" data-tags="andean bogota capital-city centromemoriabogota colombia distrito-capital south-america spanish-speaking">🕊️ Centro Memoria Bogotá</a>
+<a href="https://instagram.com/cne_colombia" target="_blank" data-tags="bogota cne-colombia cne_colombia colombia democracy elections electoral government spanish-speaking voting">🗳️ Consejo Nacional Electoral</a>
+<a href="https://instagram.com/bogotaescivica" target="_blank" data-tags="bogotaescivica cultural">🏛️ Cultura Ciudadana</a>
+<a href="https://instagram.com/defensoriacol" target="_blank" data-tags="defensoriacol">🛡️ Defensoría del Pueblo</a>
 </div>
 
-<a href="https://instagram.com/alcaldiabogota" target="_blank" data-tags="administration alcaldiabogota andean bogota capital-city colombia distrito-capital government local-government politics south-america spanish-speaking">🏛️ Alcaldía Mayor de Bogotá</a>
-
-<a href="https://instagram.com/alcaldiapopayan" target="_blank" data-tags="alcaldiapopayan cauca colombia popayan south-america spanish-speaking white-city">🏛️ Alcaldía Popayán</a>
-
-<a href="https://instagram.com/alcaldiadetunja" target="_blank" data-tags="alcaldiadetunja andes boyaca colombia south-america spanish-speaking tunja">🏛️ Alcaldía Tunja</a>
-
-<a href="https://instagram.com/alcaldiadebucaramanga" target="_blank" data-tags="alcaldiadebucaramanga bucaramanga colombia government municipal santander south-america spanish-speaking">🏛️ Alcaldía</a>
-
-<a href="https://instagram.com/centromemoriabogota" target="_blank" data-tags="andean bogota capital-city centromemoriabogota colombia distrito-capital south-america spanish-speaking">🕊️ Centro Memoria Bogotá</a>
-
-<a href="https://instagram.com/cne_colombia" target="_blank" data-tags="bogota cne-colombia cne_colombia colombia democracy elections electoral government spanish-speaking voting">🗳️ Consejo Nacional Electoral</a>
-
-<a href="https://instagram.com/bogotaescivica" target="_blank" data-tags="bogotaescivica cultural">🏛️ Cultura Ciudadana</a>
-
-<a href="https://instagram.com/defensoriacol" target="_blank" data-tags="defensoriacol">🛡️ Defensoría del Pueblo</a>
-
+<h4>Additional Government Entities</h4>
+<div class="link-grid">
 <a href="https://instagram.com/miespacioesbogota" target="_blank" data-tags="andean bogota capital-city colombia distrito-capital miespacioesbogota south-america spanish-speaking">🏞️ Espacio Público Bogotá</a>
-
 <a href="https://instagram.com/funcionpublicacolombia" target="_blank" data-tags="bogota civil-service colombia employment funcionpublicacolombia government public-service spanish-speaking">🏛️ Función Pública</a>
-
 <a href="https://instagram.com/gobbolivar" target="_blank" data-tags="gobbolivar">🏛️ Gobernación de Bolívar</a>
-
 <a href="https://instagram.com/gobernacionrisaralda" target="_blank" data-tags="gobernacionrisaralda">🏛️ Gobernación Risaralda</a>
-
 <a href="https://instagram.com/gobertolima" target="_blank" data-tags="gobertolima lima pacific peru south-america spanish-speaking">🏛️ Gobernación Tolima</a>
-
 <a href="https://instagram.com/gobiernbta" target="_blank" data-tags="andean bogota capital-city colombia distrito-capital gobiernbta government south-america spanish-speaking">🏛️ Gobierno Bogotá</a>
-
 <a href="https://instagram.com/habitatbogota" target="_blank" data-tags="andean bogota colombia government habitatbogota housing south-america spanish-speaking">🏘️ Habitat</a>
-
 <a href="https://instagram.com/mindefensaco" target="_blank" data-tags="mindefensaco">🛡️ MinDefensa</a>
-
 <a href="https://instagram.com/mininterior" target="_blank" data-tags="government mininterior public-sector">🏛️ Ministerio del Interior</a>
 </div>
 </div>
@@ -596,9 +582,9 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/viajandoempelota" target="_blank" data-tags="backpacking california english-speaking latin-america los-angeles north-america travel usa viajandoempelota west-coast">🎒 Viajando Empelota</a>
 <a href="https://instagram.com/vivatailandia" target="_blank" data-tags="asia bangkok california english-speaking los-angeles north-america thailand travel usa vivatailandia west-coast">🇹🇭 Viva Tailandia</a>
 <a href="https://instagram.com/colombianfamily" target="_blank" data-tags="andean co colombia colombian colombianfamily family latin-america lifestyle south-america spanish-speaking travel">👨‍👩‍👧‍👦 Colombian Family</a>
-<a href="https://instagram.com/cucutaturismo" target="_blank" data-tags="colombia cucuta norte-santander tourism">✈️ Cúcuta Turismo<span class="location"> • Cúcuta</span></a>
-<a href="https://instagram.com/visitarmedellin" target="_blank" data-tags="colombia medellin antioquia tourism">✈️ Visitar Medellín<span class="location"> • Medellín</span></a>
-<a href="https://instagram.com/teamobogota" target="_blank" data-tags="colombia bogota lifestyle love">❤️ Te Amo Bogotá<span class="location"> • Bogotá</span></a>
+<a href="https://instagram.com/cucutaturismo" target="_blank" data-tags="colombia cucuta norte-santander tourism">✈️ Cúcuta Turismo</a>
+<a href="https://instagram.com/visitarmedellin" target="_blank" data-tags="colombia medellin antioquia tourism">✈️ Visitar Medellín</a>
+<a href="https://instagram.com/teamobogota" target="_blank" data-tags="colombia bogota lifestyle love">❤️ Te Amo Bogotá</a>
 <a href="https://instagram.com/medellinenelmapa_" target="_blank" data-tags="antioquia city-of-eternal-spring colombia guide maps medellin medellinenelmapa- medellinenelmapa_ south-america spanish-speaking">🗺️ Medellín en el Mapa</a>
 <a href="https://instagram.com/medellinenvideos" target="_blank" data-tags="antioquia city-of-eternal-spring colombia medellin medellinenvideos south-america spanish-speaking videos">📽️ Medellín en Videos</a>
 <a href="https://instagram.com/medellin_guru" target="_blank" data-tags="antioquia city-of-eternal-spring colombia guide medellin medellin-guru medellin_guru south-america spanish-speaking travel">🏙️ Medellín Guru</a>
