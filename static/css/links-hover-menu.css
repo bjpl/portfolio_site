@@ -1,0 +1,209 @@
+/* Hover Menu System for Links */
+
+/* Link container with hover menu */
+.link-item-wrapper {
+    position: relative;
+    display: block;
+}
+
+.link-item {
+    position: relative;
+    display: block;
+    padding: 0.875rem 1rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    color: #374151;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.link-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 12px 24px rgba(102, 126, 234, 0.15),
+        0 4px 8px rgba(102, 126, 234, 0.1);
+    border-color: #667eea;
+}
+
+/* Hover menu */
+.hover-menu {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.98);
+    padding: 6px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.link-item-wrapper:hover .hover-menu {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Social media icons */
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: white;
+    border: 1.5px solid #e5e7eb;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    position: relative;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+    border-color: currentColor;
+}
+
+.social-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+/* Instagram icon */
+.social-icon.instagram {
+    color: #E4405F;
+}
+
+.social-icon.instagram:hover {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: white;
+    border-color: #dc2743;
+}
+
+/* Website icon */
+.social-icon.website {
+    color: #667eea;
+}
+
+.social-icon.website:hover {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+/* YouTube icon */
+.social-icon.youtube {
+    color: #FF0000;
+}
+
+.social-icon.youtube:hover {
+    background: #FF0000;
+    color: white;
+    border-color: #FF0000;
+}
+
+/* Tooltip */
+.social-icon::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    background: #1f2937;
+    color: white;
+    font-size: 11px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    margin-bottom: 4px;
+}
+
+.social-icon:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .hover-menu {
+        opacity: 1;
+        visibility: visible;
+        position: static;
+        transform: none;
+        margin-top: 8px;
+        justify-content: flex-start;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+    }
+    
+    .social-icon {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .social-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* Dark mode support */
+[data-theme="dark"] .link-item {
+    background: linear-gradient(145deg, #1e293b, #334155);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #e5e7eb;
+}
+
+[data-theme="dark"] .hover-menu {
+    background: rgba(30, 41, 59, 0.98);
+}
+
+[data-theme="dark"] .social-icon {
+    background: #1e293b;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .social-icon:hover {
+    border-color: currentColor;
+}
+
+/* Loading state */
+.link-item-wrapper.loading .hover-menu {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* Disabled state */
+.social-icon.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Animation for menu appearance */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+}
+
+.link-item-wrapper:hover .hover-menu {
+    animation: slideIn 0.3s ease;
+}
