@@ -384,10 +384,14 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/dagmaoficial" target="_blank" data-tags="dagmaoficial">🌳 DAGMA Oficial</a>
 <a href="https://instagram.com/educacioncali" target="_blank" data-tags="cali colombia educacioncali education government pacific south-america valle-del-cauca">🎓 Educación</a>
 <a href="https://instagram.com/seguridadcali" target="_blank" data-tags="cali colombia pacific salsa-capital seguridadcali south-america spanish-speaking valle-del-cauca">🚓 Seguridad Cali</a>
+</div>
+
+<h4>Metropolitan & Regional Governments</h4>
+<div class="link-grid">
 <a href="https://instagram.com/alcaldiabogota" target="_blank" data-tags="administration alcaldiabogota andean bogota capital-city colombia distrito-capital government local-government politics south-america spanish-speaking">🏛️ Alcaldía Mayor de Bogotá</a>
 <a href="https://instagram.com/alcaldiapopayan" target="_blank" data-tags="alcaldiapopayan cauca colombia popayan south-america spanish-speaking white-city">🏛️ Alcaldía Popayán</a>
 <a href="https://instagram.com/alcaldiadetunja" target="_blank" data-tags="alcaldiadetunja andes boyaca colombia south-america spanish-speaking tunja">🏛️ Alcaldía Tunja</a>
-<a href="https://instagram.com/alcaldiadebucaramanga" target="_blank" data-tags="alcaldiadebucaramanga bucaramanga colombia government municipal santander south-america spanish-speaking">🏛️ Alcaldía</a>
+<a href="https://instagram.com/alcaldiadebucaramanga" target="_blank" data-tags="alcaldiadebucaramanga bucaramanga colombia government municipal santander south-america spanish-speaking">🏛️ Alcaldía Bucaramanga</a>
 <a href="https://instagram.com/centromemoriabogota" target="_blank" data-tags="andean bogota capital-city centromemoriabogota colombia distrito-capital south-america spanish-speaking">🕊️ Centro Memoria Bogotá</a>
 <a href="https://instagram.com/cne_colombia" target="_blank" data-tags="bogota cne-colombia cne_colombia colombia democracy elections electoral government spanish-speaking voting">🗳️ Consejo Nacional Electoral</a>
 <a href="https://instagram.com/bogotaescivica" target="_blank" data-tags="bogotaescivica cultural">🏛️ Cultura Ciudadana</a>
