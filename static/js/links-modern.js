@@ -27,6 +27,8 @@
     document.addEventListener('DOMContentLoaded', initialize);
 
     function initialize() {
+        console.log('Initializing links page...');
+        
         // Cache DOM elements
         searchInput = document.getElementById('search-input');
         categoryFilters = document.getElementById('category-filters');
@@ -38,6 +40,12 @@
             totalCategories: document.getElementById('total-categories'),
             totalCountries: document.getElementById('total-countries')
         };
+        
+        console.log('DOM elements found:', {
+            searchInput: !!searchInput,
+            categoryFilters: !!categoryFilters,
+            statsElements: !!statsElements.totalLinks
+        });
 
         // Process all links
         processLinks();
@@ -67,6 +75,7 @@
 
     function processLinks() {
         const allLinkElements = document.querySelectorAll('.link-grid a');
+        console.log('Found links:', allLinkElements.length);
         
         allLinkElements.forEach(link => {
             const linkData = {
@@ -156,6 +165,8 @@
         const searchTerm = searchInput.value.toLowerCase().trim();
         state.searchTerm = searchTerm;
         
+        console.log('Searching for:', searchTerm);
+        
         filterLinks();
         highlightMatches(searchTerm);
         
@@ -202,10 +213,13 @@
     function filterLinks() {
         const { searchTerm, currentCategory, currentRegion } = state;
         
+        let visibleCount = 0;
+        let hiddenCount = 0;
+        
         state.allLinks.forEach(linkData => {
             const { element, text, href, tags, category, region } = linkData;
             
-            // Search filter
+            // Search filter - check all fields including tags
             const matchesSearch = !searchTerm || 
                 text.includes(searchTerm) || 
                 href.includes(searchTerm) || 
@@ -222,15 +236,19 @@
             if (matchesSearch && matchesCategory && matchesRegion) {
                 element.style.display = '';
                 element.classList.add('fade-in');
+                visibleCount++;
             } else {
                 element.style.display = 'none';
                 element.classList.remove('fade-in');
+                hiddenCount++;
             }
         });
         
+        console.log(`Filter results: ${visibleCount} visible, ${hiddenCount} hidden`);
+        
         // Hide empty sections
         document.querySelectorAll('.instagram-links').forEach(section => {
-            const visibleLinks = section.querySelectorAll('.link-grid a[style=""]');
+            const visibleLinks = section.querySelectorAll('.link-grid a:not([style*="none"])');
             section.style.display = visibleLinks.length > 0 ? '' : 'none';
         });
     }
