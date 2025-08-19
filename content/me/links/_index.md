@@ -159,6 +159,39 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/coreacolombia" target="_blank">🇰🇷 Centro Cultural Coreano</a>
         <a href="https://instagram.com/descubriendo.china" target="_blank">🇨🇳 Descubriendo China</a>
         <a href="https://instagram.com/muestracineespanol" target="_blank">🎬 Muestra Cine Español</a>
+        <a href="https://instagram.com/museos_de_medellin" target="_blank">🏛️ Mesa de Museos Medellín</a>
+        <a href="https://instagram.com/bibliotecasmed" target="_blank">📚 Sistema de Bibliotecas Medellín</a>
+        <a href="https://instagram.com/fundacionlasgolondrinas" target="_blank">🕊️ Fundación Las Golondrinas</a>
+        <a href="https://instagram.com/plazamayormed" target="_blank">🏛️ Plaza Mayor Medellín</a>
+        <a href="https://instagram.com/centromemoriah" target="_blank">🕊️ Centro Nacional Memoria Histórica</a>
+        <a href="https://instagram.com/teatrometropolitano" target="_blank">🎭 Teatro Metropolitano</a>
+        <a href="https://instagram.com/elmamm" target="_blank">🎨 MAMM - Museo Arte Moderno</a>
+        <a href="https://instagram.com/fteatronacional" target="_blank">🎭 Teatro Nacional</a>
+        <a href="https://instagram.com/archivodebogota" target="_blank">📚 Archivo de Bogotá</a>
+        <a href="https://instagram.com/labogotadayer" target="_blank">📷 La Bogotá de Ayer</a>
+        <a href="https://instagram.com/goetheinstitut_kolumbien" target="_blank">🇩🇪 Goethe-Institut</a>
+        <a href="https://instagram.com/afbarranquilla" target="_blank">🇫🇷 Alianza Francesa Barranquilla</a>
+        <a href="https://instagram.com/afbogota" target="_blank">🇫🇷 Alianza Francesa Bogotá</a>
+        <a href="https://instagram.com/culturaenbta" target="_blank">🎨 Secretaría de Cultura Bogotá</a>
+        <a href="https://instagram.com/planetariobog" target="_blank">🌌 Planetario de Bogotá</a>
+        <a href="https://instagram.com/bogotart" target="_blank">🎨 Bogotart</a>
+        <a href="https://instagram.com/museodebogota" target="_blank">🏛️ Museo de Bogotá</a>
+        <a href="https://instagram.com/bibliotecaluisangelarango" target="_blank">📚 Biblioteca Luis Ángel Arango</a>
+        <a href="https://instagram.com/unicartagena" target="_blank">🎓 Universidad de Cartagena</a>
+        <a href="https://instagram.com/udea" target="_blank">🎓 Universidad de Antioquia</a>
+        <a href="https://instagram.com/mambogota" target="_blank">🎨 MAM Bogotá</a>
+        <a href="https://instagram.com/bibliotecanalco" target="_blank">📚 Biblioteca Nacional</a>
+        <a href="https://instagram.com/planetariomed" target="_blank">🌌 Planetario de Medellín</a>
+        <a href="https://instagram.com/museodeantioquia" target="_blank">🏛️ Museo de Antioquia</a>
+        <a href="https://instagram.com/icanh_co" target="_blank">🏺 Instituto Antropología</a>
+        <a href="https://instagram.com/museonacionalco" target="_blank">🏛️ Museo Nacional</a>
+        <a href="https://instagram.com/jardinbotanicodebogota" target="_blank">🌿 Jardín Botánico Bogotá</a>
+        <a href="https://instagram.com/jardinbotanicomedellin" target="_blank">🌿 Jardín Botánico Medellín</a>
+        <a href="https://instagram.com/jardinbotanicocartagena" target="_blank">🌿 Jardín Botánico Cartagena</a>
+        <a href="https://instagram.com/ipcc_cartagena" target="_blank">🏛️ Instituto Patrimonio Cartagena</a>
+        <a href="https://instagram.com/archivohistoricobaq" target="_blank">📚 Archivo Histórico Barranquilla</a>
+        <a href="https://instagram.com/unibarranquilla_" target="_blank">🎓 Universidad de Barranquilla</a>
+        <a href="https://instagram.com/upbcolombia" target="_blank">🎓 Universidad Pontificia Bolivariana</a>
     </div>
 </div>
 
@@ -179,6 +212,22 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/civix_colombia" target="_blank">🏛️ CIVIX Colombia</a>
         <a href="https://instagram.com/hannsseidelcol" target="_blank">🇩🇪 Hanns Seidel Stiftung</a>
         <a href="https://instagram.com/onumujerescol" target="_blank">🇺🇳 ONU Mujeres Colombia</a>
+        <a href="https://instagram.com/oeicolombia" target="_blank">🌎 OEI Colombia</a>
+        <a href="https://instagram.com/colombiafintech" target="_blank">💳 Colombia Fintech</a>
+        <a href="https://instagram.com/unicef_colombia" target="_blank">🇺🇳 UNICEF Colombia</a>
+        <a href="https://instagram.com/wwf_colombia" target="_blank">🐼 WWF Colombia</a>
+        <a href="https://instagram.com/ueencolombia" target="_blank">🇪🇺 Unión Europea en Colombia</a>
+        <a href="https://instagram.com/adr_colombia" target="_blank">🌱 Agencia Desarrollo Rural</a>
+        <a href="https://instagram.com/birdscolombia" target="_blank">🦅 Birds Colombia</a>
+        <a href="https://instagram.com/primatesapc" target="_blank">🐵 Asociación Primatológica</a>
+        <a href="https://instagram.com/zoologicodecali" target="_blank">🦁 Zoológico de Cali</a>
+        <a href="https://instagram.com/ambiente_bogota" target="_blank">🌳 Ambiente Bogotá</a>
+        <a href="https://instagram.com/icnunal" target="_blank">🌿 Instituto Ciencias Naturales</a>
+        <a href="https://instagram.com/parquescolombia" target="_blank">🏞️ Parques Nacionales</a>
+        <a href="https://instagram.com/instituto_humboldt" target="_blank">🌿 Instituto Humboldt</a>
+        <a href="https://instagram.com/asuntosambientalesctg" target="_blank">🌳 Asuntos Ambientales Cartagena</a>
+        <a href="https://instagram.com/supersolidaria" target="_blank">🤝 Superintendencia Solidaria</a>
+        <a href="https://instagram.com/supertransporte_oficial" target="_blank">🚗 SuperTransporte</a>
     </div>
 </div>
 
@@ -264,6 +313,39 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/centromemoriabogota" target="_blank">🕊️ Centro Memoria Bogotá</a>
         <a href="https://instagram.com/minambientecol" target="_blank">🌳 MinAmbiente Colombia</a>
         <a href="https://instagram.com/elmetrobogota" target="_blank">🚇 Metro de Bogotá</a>
+        <a href="https://instagram.com/alcaldiadeibague" target="_blank">🏛️ Alcaldía de Ibagué</a>
+        <a href="https://instagram.com/seguridadcali" target="_blank">🚓 Seguridad Cali</a>
+        <a href="https://instagram.com/aviacionpolicialcolombia" target="_blank">🚁 Aviación Policial</a>
+        <a href="https://instagram.com/educacionponal" target="_blank">🎓 Educación Policial</a>
+        <a href="https://instagram.com/escuelanavaldecadetes" target="_blank">⚓ Escuela Naval</a>
+        <a href="https://instagram.com/cortesupremaj" target="_blank">⚖️ Corte Suprema</a>
+        <a href="https://instagram.com/defensoriacol" target="_blank">🛡️ Defensoría del Pueblo</a>
+        <a href="https://instagram.com/mintrabajocol" target="_blank">💼 MinTrabajo</a>
+        <a href="https://instagram.com/mineducacioncol" target="_blank">🎓 MinEducación</a>
+        <a href="https://instagram.com/fuerzaaereacol" target="_blank">✈️ Fuerza Aérea</a>
+        <a href="https://instagram.com/minsaludcol" target="_blank">🏥 MinSalud</a>
+        <a href="https://instagram.com/mindefensaco" target="_blank">🛡️ MinDefensa</a>
+        <a href="https://instagram.com/educacionmed" target="_blank">🎓 Secretaría Educación Medellín</a>
+        <a href="https://instagram.com/policiamedellin_" target="_blank">👮 Policía Medellín</a>
+        <a href="https://instagram.com/miespacioesbogota" target="_blank">🏞️ Espacio Público Bogotá</a>
+        <a href="https://instagram.com/bogota_turismo" target="_blank">✈️ IDT Bogotá</a>
+        <a href="https://instagram.com/policiadecolombia" target="_blank">👮 Policía Nacional</a>
+        <a href="https://instagram.com/transmilenio" target="_blank">🚌 TransMilenio</a>
+        <a href="https://instagram.com/alcaldiabogota" target="_blank">🏛️ Alcaldía Mayor de Bogotá</a>
+        <a href="https://instagram.com/alcaldiacucuta" target="_blank">🏛️ Alcaldía de Cúcuta</a>
+        <a href="https://instagram.com/policiacucuta" target="_blank">👮 Policía Cúcuta</a>
+        <a href="https://instagram.com/alcaldiacartagena" target="_blank">🏛️ Alcaldía Cartagena</a>
+        <a href="https://instagram.com/alcaldiadetunja" target="_blank">🏛️ Alcaldía Tunja</a>
+        <a href="https://instagram.com/gerenciasocialbaq" target="_blank">🤝 Gerencia Social Barranquilla</a>
+        <a href="https://instagram.com/transmetrobaq" target="_blank">🚌 Transmetro Barranquilla</a>
+        <a href="https://instagram.com/aguasdecartagena" target="_blank">💧 Aguas de Cartagena</a>
+        <a href="https://instagram.com/seceducacionctg" target="_blank">🎓 Sec Educación Cartagena</a>
+        <a href="https://instagram.com/sed_barranquilla" target="_blank">🎓 Secretaría Educación Bqlla</a>
+        <a href="https://instagram.com/gobbolivar" target="_blank">🏛️ Gobernación de Bolívar</a>
+        <a href="https://instagram.com/alcaldiabarranquilla" target="_blank">🏛️ Alcaldía de Barranquilla</a>
+        <a href="https://instagram.com/mincultura" target="_blank">🎨 MinCultura Colombia</a>
+        <a href="https://instagram.com/mininterior" target="_blank">🏛️ Ministerio del Interior</a>
+        <a href="https://instagram.com/mintransporteco" target="_blank">🚗 Ministerio de Transporte</a>
     </div>
 </div>
 
@@ -283,11 +365,43 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/bodegaschinas" target="_blank">🏪 Bodegas Chinas</a>
         <a href="https://instagram.com/jsomonline" target="_blank">💼 JSOM</a>
         <a href="https://instagram.com/conversecol" target="_blank">👟 Converse Colombia</a>
+        <a href="https://instagram.com/drogueriascafam" target="_blank">💊 Droguerías Cafam</a>
+        <a href="https://instagram.com/oxxocolombia" target="_blank">🏪 OXXO Colombia</a>
+        <a href="https://instagram.com/toyotacolombia" target="_blank">🚗 Toyota Colombia</a>
+        <a href="https://instagram.com/lenovocolombia" target="_blank">💻 Lenovo Colombia</a>
+        <a href="https://instagram.com/hyundai_col" target="_blank">🚗 Hyundai Colombia</a>
+        <a href="https://instagram.com/hpcolombia_" target="_blank">💻 HP Colombia</a>
+        <a href="https://instagram.com/samsungcolombia" target="_blank">📱 Samsung Colombia</a>
+        <a href="https://instagram.com/microsoft_contacto" target="_blank">💻 Microsoft Colombia</a>
+        <a href="https://instagram.com/oster_col" target="_blank">🔌 Oster Colombia</a>
+        <a href="https://instagram.com/crocscolombia_oficial" target="_blank">👟 Crocs Colombia</a>
+        <a href="https://instagram.com/minisocolombiaoficial" target="_blank">🏪 Miniso Colombia</a>
+        <a href="https://instagram.com/bancodebogota" target="_blank">🏦 Banco De Bogotá</a>
+        <a href="https://instagram.com/bancolombia" target="_blank">🏦 Bancolombia</a>
         <a href="https://instagram.com/primevideomx" target="_blank">📺 Prime Video México</a>
         <a href="https://instagram.com/paramountplusmx" target="_blank">📺 Paramount+ México</a>
         <a href="https://instagram.com/caracoltv" target="_blank">📺 Caracol Televisión</a>
         <a href="https://instagram.com/telemundo" target="_blank">📺 Telemundo</a>
         <a href="https://instagram.com/netflixfamilia" target="_blank">📺 Netflix Familia</a>
+        <a href="https://instagram.com/primevideolat" target="_blank">📺 Prime Video LATAM</a>
+        <a href="https://instagram.com/hbolatam" target="_blank">📺 HBO Latinoamérica</a>
+        <a href="https://instagram.com/disneyplusla" target="_blank">📺 Disney+ Latinoamérica</a>
+        <a href="https://instagram.com/netflixes" target="_blank">📺 Netflix España</a>
+        <a href="https://instagram.com/netflixlat" target="_blank">📺 Netflix Latinoamérica</a>
+        <a href="https://instagram.com/netflixcolombia" target="_blank">📺 Netflix Colombia</a>
+        <a href="https://instagram.com/elpaiscali" target="_blank">📰 El País Cali</a>
+        <a href="https://instagram.com/bloomberglineacolombia" target="_blank">📰 Bloomberg Línea Colombia</a>
+        <a href="https://instagram.com/cnnee" target="_blank">📺 CNN en Español</a>
+        <a href="https://instagram.com/eltiempo" target="_blank">📰 EL TIEMPO</a>
+        <a href="https://instagram.com/elespectador" target="_blank">📰 El Espectador</a>
+        <a href="https://instagram.com/historylatam" target="_blank">📺 History Latinoamérica</a>
+        <a href="https://instagram.com/caracolradio" target="_blank">📻b Caracol Radio</a>
+        <a href="https://instagram.com/nayibbukele" target="_blank">🇸🇻 Nayib Bukele</a>
+        <a href="https://instagram.com/cucutanoticias" target="_blank">📰 Cúcuta Noticias</a>
+        <a href="https://instagram.com/radionacionalco" target="_blank">📻 Radio Nacional Colombia</a>
+        <a href="https://instagram.com/caracolmedellin" target="_blank">📻 Caracol Radio Medellín</a>
+        <a href="https://instagram.com/senalcolombiatv" target="_blank">📺 Señal Colombia</a>
+        <a href="https://instagram.com/forbescolombia" target="_blank">📰 Forbes Colombia</a>
     </div>
 </div>
 
@@ -332,6 +446,17 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/mercatus9" target="_blank">🏪 Mercatus 9 Asiático</a>
         <a href="https://instagram.com/holafood___" target="_blank">🍜 HolaFood</a>
         <a href="https://instagram.com/machan_colombia_1102" target="_blank">🇯🇵 Machan Colombia</a>
+        <a href="https://instagram.com/chocoramoficial" target="_blank">🍫 Chocoramo</a>
+        <a href="https://instagram.com/heinzcolombia" target="_blank">🍅 Heinz Colombia</a>
+        <a href="https://instagram.com/goyurtcolombia" target="_blank">🥛 Goyurt</a>
+        <a href="https://instagram.com/chinottove" target="_blank">🥤 Chinotto Venezuela</a>
+        <a href="https://instagram.com/gatoradecolombia" target="_blank">🥤 Gatorade Colombia</a>
+        <a href="https://instagram.com/zenuoficial" target="_blank">🥩 Zenú</a>
+        <a href="https://instagram.com/colcafe" target="_blank">☕ Colcafé</a>
+        <a href="https://instagram.com/pepsicolombia" target="_blank">🥤 Pepsi Colombia</a>
+        <a href="https://instagram.com/chocolatesjet" target="_blank">🍫 Chocolates Jet</a>
+        <a href="https://instagram.com/alimentosdoria" target="_blank">🍝 Alimentos Doria</a>
+        <a href="https://instagram.com/mcdonaldscol" target="_blank">🍔 McDonald's Colombia</a>
     </div>
 </div>
 
@@ -345,6 +470,18 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/nomadafrustrada" target="_blank">🌍 Nómada Frustrada</a>
         <a href="https://instagram.com/vivatailandia" target="_blank">🇹🇭 Viva Tailandia</a>
         <a href="https://instagram.com/_losbuenossomosmas" target="_blank">💛 Los Buenos Somos Más</a>
+        <a href="https://instagram.com/medellin_guru" target="_blank">🏙️ Medellín Guru</a>
+        <a href="https://instagram.com/medellinenvideos" target="_blank">📽️ Medellín en Videos</a>
+        <a href="https://instagram.com/medellinenelmapa_" target="_blank">🗺️ Medellín en el Mapa</a>
+        <a href="https://instagram.com/visitarmedellin" target="_blank">✈️ Visitar Medellín</a>
+        <a href="https://instagram.com/foodinbogota" target="_blank">🍴 Food in Bogotá</a>
+        <a href="https://instagram.com/teamobogota" target="_blank">❤️ Te Amo Bogotá</a>
+        <a href="https://instagram.com/visitbogota.co" target="_blank">🏙️ Visit Bogotá</a>
+        <a href="https://instagram.com/bogotaplan" target="_blank">🎭 Bogotá Plan</a>
+        <a href="https://instagram.com/bogotacomidas" target="_blank">🍴 Bogotá Comidas</a>
+        <a href="https://instagram.com/cucutaturismo" target="_blank">✈️ Cúcuta Turismo</a>
+        <a href="https://instagram.com/bicitour_medellin" target="_blank">🚴 Bicitour Medellín</a>
+        <a href="https://instagram.com/expoartesano" target="_blank">🎨 Expoartesano</a>
     </div>
 </div>
 
@@ -357,6 +494,10 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/laprofemonica" target="_blank">👩‍🏫 La Profe Mónica</a>
         <a href="https://instagram.com/jdoviedoar" target="_blank">👨‍💼 Juan Daniel Oviedo</a>
         <a href="https://instagram.com/coreano_paso_a_paso" target="_blank">🇰🇷 Aprende Coreano</a>
+        <a href="https://instagram.com/ohayolily" target="_blank">🇯🇵 Lily 丽丽</a>
+        <a href="https://instagram.com/limn_ai" target="_blank">🤖 Tobias Rees</a>
+        <a href="https://instagram.com/carter.cote" target="_blank">👨‍🎓 Carter Cote</a>
+        <a href="https://instagram.com/javiermoralesfotografo" target="_blank">📸 Javier Morales Fotógrafo</a>
     </div>
 </div>
 
