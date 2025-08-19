@@ -501,7 +501,6 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/eatbucaramanga" target="_blank" data-tags="bucaramanga city-of-parks colombia eatbucaramanga food guide santander south-america spanish-speaking">🍴 Eat Bucaramanga</a>
 <a href="https://instagram.com/elclubgastronomico" target="_blank" data-tags="andean bogota colombia elclubgastronomico gastronomy restaurant south-america spanish-speaking">🍷 El Club Gastronómico</a>
 <a href="https://instagram.com/elcorraloficial" target="_blank" data-tags="elcorraloficial">🍔 El Corral</a>
-
 <a href="https://instagram.com/entrearbolescali" target="_blank" data-tags="cali colombia entrearbolescali pacific restaurant south-america spanish-speaking valle-del-cauca">🌳 Entre Árboles</a>
 <a href="https://instagram.com/frisbylohace" target="_blank" data-tags="frisbylohace">🍗 Frisby</a>
 <a href="https://instagram.com/gatoradecolombia" target="_blank" data-tags="andean co colombia colombian gatoradecolombia latin-america south-america spanish-speaking">🥤 Gatorade Colombia</a>
@@ -513,7 +512,6 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/machan_colombia_1102" target="_blank" data-tags="andean co colombia colombian latin-america machan-colombia-1102 machan_colombia_1102 south-america spanish-speaking">🇯🇵 Machan Colombia</a>
 <a href="https://instagram.com/madeinbucara" target="_blank" data-tags="bucaramanga co colombia colombian food latin-america local madeinbucara santander south-america spanish-speaking">🇨🇴 Made In Bucara</a>
 <a href="https://instagram.com/maggicolombia" target="_blank" data-tags="andean co colombia colombian latin-america maggicolombia south-america spanish-speaking">🍲 Maggi Colombia</a>
-
 <a href="https://instagram.com/mcdonaldscol" target="_blank" data-tags="andean co colombia colombian latin-america mcdonaldscol south-america spanish-speaking">🍔 McDonald's Colombia</a>
 
 <a href="https://instagram.com/mercatus9" target="_blank" data-tags="mercatus9">🏪 Mercatus 9 Asiático</a>
@@ -553,7 +551,6 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/mimedellinsaborea" target="_blank" data-tags="antioquia city-of-eternal-spring colombia food medellin mimedellinsaborea restaurant south-america spanish-speaking">🍽️ Mi Medellín Saborea</a>
 
 <a href="https://instagram.com/popayan_moderna" target="_blank" data-tags="cauca colombia lifestyle popayan popayan-moderna popayan_moderna south-america spanish-speaking white-city">🏛️ Popayán Moderna</a>
-</div>
 </div>
 </div>
 
