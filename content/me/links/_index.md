@@ -513,43 +513,24 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/madeinbucara" target="_blank" data-tags="bucaramanga co colombia colombian food latin-america local madeinbucara santander south-america spanish-speaking">🇨🇴 Made In Bucara</a>
 <a href="https://instagram.com/maggicolombia" target="_blank" data-tags="andean co colombia colombian latin-america maggicolombia south-america spanish-speaking">🍲 Maggi Colombia</a>
 <a href="https://instagram.com/mcdonaldscol" target="_blank" data-tags="andean co colombia colombian latin-america mcdonaldscol south-america spanish-speaking">🍔 McDonald's Colombia</a>
-
 <a href="https://instagram.com/mercatus9" target="_blank" data-tags="mercatus9">🏪 Mercatus 9 Asiático</a>
-
 <a href="https://instagram.com/nestlecolombia" target="_blank" data-tags="andean co colombia colombian latin-america nestlecolombia south-america spanish-speaking">🍫 Nestlé Colombia</a>
-
 <a href="https://instagram.com/oreo.colombia" target="_blank" data-tags="andean co colombia colombian latin-america oreo.colombia south-america spanish-speaking">🍪 Oreo Colombia</a>
-
 <a href="https://instagram.com/papajohnscolombia" target="_blank" data-tags="andean co colombia colombian latin-america papajohnscolombia south-america spanish-speaking">🍕 Papa John's Colombia</a>
-
 <a href="https://instagram.com/papas.margarita" target="_blank" data-tags="papas.margarita">🥔 Papas Margarita</a>
-
 <a href="https://instagram.com/pepsicolombia" target="_blank" data-tags="andean co colombia colombian latin-america pepsicolombia south-america spanish-speaking">🥤 Pepsi Colombia</a>
-
 <a href="https://instagram.com/postobonempresa" target="_blank" data-tags="postobonempresa">🥤 Postobón</a>
-
 <a href="https://instagram.com/quehacerbga" target="_blank" data-tags="bucaramanga colombia events guide quehacerbga santander south-america spanish-speaking">📍 Qué Hacer</a>
-
 <a href="https://instagram.com/sbarrocolombia" target="_blank" data-tags="andean co colombia colombian latin-america sbarrocolombia south-america spanish-speaking">🍕 Sbarro Colombia</a>
-
 <a href="https://instagram.com/subwaycol" target="_blank" data-tags="andean co colombia colombian latin-america south-america spanish-speaking subwaycol">🥖 Subway Colombia</a>
-
 <a href="https://instagram.com/superintersupermercados" target="_blank" data-tags="superintersupermercados">🛒 Super Inter</a>
-
 <a href="https://instagram.com/unjardinenelcielo" target="_blank" data-tags="andean bogota colombia restaurant rooftop south-america spanish-speaking unjardinenelcielo">🌄 Un Jardín en el Cielo</a>
-
 <a href="https://instagram.com/zenuoficial" target="_blank" data-tags="zenuoficial">🥩 Zenú</a>
-
 <a href="https://instagram.com/colcafe" target="_blank" data-tags="colcafe dining food hospitality restaurant">☕ Colcafé</a>
-
 <a href="https://instagram.com/dunkin_co" target="_blank" data-tags="andean co colombia colombian dunkin-co dunkin_co latin-america south-america spanish-speaking">☕ Dunkin' Colombia</a>
-
 <a href="https://instagram.com/nescafe_col" target="_blank" data-tags="andean co colombia colombian dining food hospitality latin-america nescafe-col nescafe_col restaurant south-america spanish-speaking">☕ Nescafé Colombia</a>
-
 <a href="https://instagram.com/hecho_enbogota" target="_blank" data-tags="andean bogota capital-city colombia crafts distrito-capital hecho-enbogota hecho_enbogota local products south-america spanish-speaking">🏙️ Hecho en Bogotá</a>
-
 <a href="https://instagram.com/mimedellinsaborea" target="_blank" data-tags="antioquia city-of-eternal-spring colombia food medellin mimedellinsaborea restaurant south-america spanish-speaking">🍽️ Mi Medellín Saborea</a>
-
 <a href="https://instagram.com/popayan_moderna" target="_blank" data-tags="cauca colombia lifestyle popayan popayan-moderna popayan_moderna south-america spanish-speaking white-city">🏛️ Popayán Moderna</a>
 </div>
 </div>
