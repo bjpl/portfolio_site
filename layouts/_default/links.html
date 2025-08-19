@@ -1,0 +1,59 @@
+{{ define "main" }}
+<div class="links-container">
+    <div class="container">
+        <header class="page-header">
+            <h1 class="page-title">{{ .Title }}</h1>
+            {{ with .Description }}
+            <p class="page-description">{{ . }}</p>
+            {{ end }}
+        </header>
+        
+        <div class="page-content">
+            {{ .Content }}
+        </div>
+    </div>
+</div>
+
+<style>
+.links-container {
+    min-height: 100vh;
+    padding: var(--space-3xl) 0;
+    background: var(--color-bg);
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+}
+
+.page-title {
+    font-size: var(--text-4xl);
+    font-weight: 800;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.page-description {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    max-width: 48rem;
+    margin: 0 auto;
+}
+
+.page-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: var(--text-3xl);
+    }
+    
+    .links-container {
+        padding: var(--space-2xl) var(--space-md);
+    }
+}
+</style>
+{{ end }}
