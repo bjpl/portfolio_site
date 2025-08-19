@@ -18,13 +18,13 @@ A curated collection of content I find inspiring, educational, or just plain int
 <div class="instagram-links diplomatic">
 <h4>Mexico Embassies Worldwide</h4>
 <div class="link-grid">
-<a href="https://instagram.com/consulmexsea" target="_blank" data-tags="consulate diplomatic foreign-affairs international-relations">🇺🇸 Mexican Consulate</a>
-<a href="https://instagram.com/emba_mexbol" target="_blank" data-tags="andean andes bolivia bolivian california emba-mexbol embassy la-paz landlocked latin-america los-angeles mexican mexico mx nafta north-america south-america spanish-speaking usa west-coast">🇧🇴 Mexico in Bolivia</a>
+<a href="https://instagram.com/consulmexsea" target="_blank" data-tags="consular-services consulate consulmexsea diplomatic foreign-affairs international-relations usa">🇺🇸 Mexican Consulate</a>
+<a href="https://instagram.com/emba_mexbol" target="_blank" data-tags="andean andes bolivia bolivian california emba-mexbol emba_mexbol embassy la-paz landlocked latin-america los-angeles mexican mexico mx nafta north-america south-america spanish-speaking usa west-coast">🇧🇴 Mexico in Bolivia</a>
 <a href="https://instagram.com/embamexcan" target="_blank" data-tags="canada canadian commonwealth embamexcan embassy english-speaking latin-america mexican mexico mx nafta north-america ontario ottawa spanish-speaking">🇨🇦 Mexico in Canada</a>
 <a href="https://instagram.com/embamexchi" target="_blank" data-tags="chile chilean embamexchi embassy latin-america mexican mexico mx nafta north-america pacific santiago south-america southern-cone spanish-speaking">🇨🇱 Mexico in Chile</a>
 <a href="https://instagram.com/embamexcol" target="_blank" data-tags="andean bogota co colombia colombian embamexcol embassy latin-america mexican mexico mx nafta north-america south-america spanish-speaking">🇨🇴 Mexico in Colombia</a>
 <a href="https://instagram.com/embamexgua" target="_blank" data-tags="california central-america embamexgua embassy guatemala guatemala-city guatemalan latin-america los-angeles mexican mexico mx nafta north-america spanish-speaking usa west-coast">🇬🇹 Mexico in Guatemala</a>
-<a href="https://instagram.com/embamex_italia" target="_blank" data-tags="embamex-italia embassy eu europe italian italy latin-america mediterranean mexican mexico mx nafta north-america rome spanish-speaking">🇮🇹 Mexico in Italy</a>
+<a href="https://instagram.com/embamex_italia" target="_blank" data-tags="embamex-italia embamex_italia embassy eu europe italian italy latin-america mediterranean mexican mexico mx nafta north-america rome spanish-speaking">🇮🇹 Mexico in Italy</a>
 <a href="https://instagram.com/embamexjp" target="_blank" data-tags="asia east-asia embamexjp embassy japan japanese latin-america mexican mexico mx nafta north-america pacific spanish-speaking tokyo">🇯🇵 Mexico in Japan</a>
 <a href="https://instagram.com/embamexlibano" target="_blank" data-tags="arab beirut embamexlibano embassy latin-america lebanese lebanon mediterranean mexican mexico middle-east mx nafta north-america spanish-speaking">🇱🇧 Mexico in Lebanon</a>
 <a href="https://instagram.com/embamexperu" target="_blank" data-tags="andean embamexperu embassy latin-america lima mexican mexico mx nafta north-america pacific peru peruvian south-america spanish-speaking">🇵🇪 Mexico in Peru</a>
@@ -36,25 +36,25 @@ A curated collection of content I find inspiring, educational, or just plain int
     
 <h4>Foreign Embassies in Mexico</h4>
 <div class="link-grid">
-<a href="https://instagram.com/belgicaenmexico" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇧🇪 Belgium Embassy</a>
-<a href="https://instagram.com/brasilnomexico" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇧🇷 Brazil Embassy</a>
-<a href="https://instagram.com/embachilemexico" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇨🇱 Chile Embassy</a>
-<a href="https://instagram.com/embacumex" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇨🇺 Cuba Embassy</a>
+<a href="https://instagram.com/belgicaenmexico" target="_blank" data-tags="belgicaenmexico diplomatic embassy foreign-affairs international-relations">🇧🇪 Belgium Embassy</a>
+<a href="https://instagram.com/brasilnomexico" target="_blank" data-tags="brasilnomexico brazil diplomatic embassy foreign-affairs international-relations">🇧🇷 Brazil Embassy</a>
+<a href="https://instagram.com/embachilemexico" target="_blank" data-tags="diplomatic embachilemexico embassy foreign-affairs international-relations">🇨🇱 Chile Embassy</a>
+<a href="https://instagram.com/embacumex" target="_blank" data-tags="diplomatic embacumex embassy foreign-affairs international-relations">🇨🇺 Cuba Embassy</a>
 <a href="https://instagram.com/rdenmexico" target="_blank" data-tags="capital caribbean cdmx dominican dominican-republic embassy island latin-america mexican mexico mexico-city mx nafta north-america rdenmexico spanish-speaking">🇩🇴 Dominican Republic</a>
-<a href="https://instagram.com/finlandiaenmexico" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇫🇮 Finland Embassy</a>
-<a href="https://instagram.com/franciaenmexico" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇫🇷 France Embassy</a>
-<a href="https://instagram.com/alemaniamexi" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇩🇪 Germany Embassy</a>
-<a href="https://instagram.com/indiainmex" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇮🇳 India Embassy</a>
-<a href="https://instagram.com/irishembmexico" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇮🇪 Ireland Embassy</a>
-<a href="https://instagram.com/japanemb_mexico" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇯🇵 Japan Embassy</a>
-<a href="https://instagram.com/embmexenjordania" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇯🇴 Jordan Embassy</a>
-<a href="https://instagram.com/embpanamamex" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇵🇦 Panama Embassy</a>
-<a href="https://instagram.com/elperuenmex" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇵🇪 Peru Embassy</a>
-<a href="https://instagram.com/qatarembassymex" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇶🇦 Qatar Embassy</a>
-<a href="https://instagram.com/casadesuiza" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇨🇭 Switzerland Embassy</a>
-<a href="https://instagram.com/ukinmexico" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇬🇧 UK Embassy</a>
-<a href="https://instagram.com/ukrembassymex" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇺🇦 Ukraine Embassy</a>
-<a href="https://instagram.com/usembassymex" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇺🇸 USA Embassy</a>
+<a href="https://instagram.com/finlandiaenmexico" target="_blank" data-tags="diplomatic embassy finlandiaenmexico foreign-affairs international-relations">🇫🇮 Finland Embassy</a>
+<a href="https://instagram.com/franciaenmexico" target="_blank" data-tags="diplomatic embassy foreign-affairs franciaenmexico international-relations">🇫🇷 France Embassy</a>
+<a href="https://instagram.com/alemaniamexi" target="_blank" data-tags="alemaniamexi diplomatic embassy foreign-affairs international-relations">🇩🇪 Germany Embassy</a>
+<a href="https://instagram.com/indiainmex" target="_blank" data-tags="diplomatic embassy foreign-affairs indiainmex international-relations">🇮🇳 India Embassy</a>
+<a href="https://instagram.com/irishembmexico" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations irishembmexico">🇮🇪 Ireland Embassy</a>
+<a href="https://instagram.com/japanemb_mexico" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations japanemb_mexico">🇯🇵 Japan Embassy</a>
+<a href="https://instagram.com/embmexenjordania" target="_blank" data-tags="diplomatic embassy embmexenjordania foreign-affairs international-relations">🇯🇴 Jordan Embassy</a>
+<a href="https://instagram.com/embpanamamex" target="_blank" data-tags="diplomatic embassy embpanamamex foreign-affairs international-relations">🇵🇦 Panama Embassy</a>
+<a href="https://instagram.com/elperuenmex" target="_blank" data-tags="diplomatic elperuenmex embassy foreign-affairs international-relations">🇵🇪 Peru Embassy</a>
+<a href="https://instagram.com/qatarembassymex" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations qatarembassymex">🇶🇦 Qatar Embassy</a>
+<a href="https://instagram.com/casadesuiza" target="_blank" data-tags="casadesuiza diplomatic embassy foreign-affairs international-relations">🇨🇭 Switzerland Embassy</a>
+<a href="https://instagram.com/ukinmexico" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations ukinmexico">🇬🇧 UK Embassy</a>
+<a href="https://instagram.com/ukrembassymex" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations ukrembassymex">🇺🇦 Ukraine Embassy</a>
+<a href="https://instagram.com/usembassymex" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations usa usembassymex">🇺🇸 USA Embassy</a>
 </div>
     
 <h4>Venezuela Diplomatic Network</h4>
@@ -67,7 +67,7 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/embespvenezuela" target="_blank" data-tags="california caracas caribbean diplomatic embassy embespvenezuela eu europe iberian latin-america los-angeles mediterranean north-america south-america spain spanish spanish-speaking usa ve venezuela venezuelan west-coast">🇪🇸 Spain in Venezuela</a>
 <a href="https://instagram.com/suizaenvenezuela" target="_blank" data-tags="alpine california caracas caribbean diplomatic embassy europe latin-america los-angeles neutral north-america south-america spanish-speaking suizaenvenezuela swiss switzerland usa ve venezuela venezuelan west-coast">🇨🇭 Switzerland in Venezuela</a>
 <a href="https://instagram.com/ukinvenezuela" target="_blank" data-tags="britain british california caracas caribbean commonwealth diplomatic embassy english-speaking europe latin-america los-angeles north-america south-america spanish-speaking uk ukinvenezuela usa ve venezuela venezuelan west-coast">🇬🇧 UK in Venezuela</a>
-<a href="https://instagram.com/plenvenezuela" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇻🇪 Venezuela Embassy</a>
+<a href="https://instagram.com/plenvenezuela" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations plenvenezuela venezuela">🇻🇪 Venezuela Embassy</a>
 <a href="https://instagram.com/embavefrancia" target="_blank" data-tags="california caribbean diplomatic embassy embavefrancia eu europe france french french-speaking latin-america los-angeles north-america paris south-america spanish-speaking usa ve venezuela venezuelan west-coast western-europe">🇫🇷 Venezuela in France</a>
 <a href="https://instagram.com/embavenitalia" target="_blank" data-tags="california caribbean diplomatic embassy embavenitalia eu europe italian italy latin-america los-angeles mediterranean north-america rome south-america spanish-speaking usa ve venezuela venezuelan west-coast">🇮🇹 Venezuela in Italy</a>
 <a href="https://instagram.com/embavenmexico" target="_blank" data-tags="california capital caribbean cdmx diplomatic embassy embavenmexico latin-america los-angeles mexican mexico mexico-city mx nafta north-america south-america spanish-speaking usa ve venezuela venezuelan west-coast">🇲🇽 Venezuela in Mexico</a>
@@ -77,15 +77,15 @@ A curated collection of content I find inspiring, educational, or just plain int
 <div class="link-grid">
 <a href="https://instagram.com/ausembco" target="_blank" data-tags="andean ausembco australia australian co colombia colombian commonwealth english-speaking latin-america oceania pacific south-america spanish-speaking">🇦🇺 Australia in Colombia</a>
 <a href="https://instagram.com/echilecolombia" target="_blank" data-tags="andean chile chilean co colombia colombian echilecolombia latin-america pacific south-america southern-cone spanish-speaking">🇨🇱 Chile in Colombia</a>
-<a href="https://instagram.com/consuladocolombiaatlanta" target="_blank" data-tags="consulate diplomatic foreign-affairs international-relations">🇺🇸 Colombia Consulate Atlanta</a>
-<a href="https://instagram.com/consuladocolboston" target="_blank" data-tags="consulate diplomatic foreign-affairs international-relations">🇺🇸 Colombia Consulate Boston</a>
-<a href="https://instagram.com/consuladocolombiafrance" target="_blank" data-tags="consulate diplomatic foreign-affairs international-relations">🇫🇷 Colombia Consulate France</a>
-<a href="https://instagram.com/consuladocollosangeles" target="_blank" data-tags="consulate diplomatic foreign-affairs international-relations">🇺🇸 Colombia Consulate LA</a>
-<a href="https://instagram.com/consuladocolmadrid" target="_blank" data-tags="consulate diplomatic foreign-affairs international-relations">🇪🇸 Colombia Consulate Madrid</a>
-<a href="https://instagram.com/consuladocolmex" target="_blank" data-tags="consulate diplomatic foreign-affairs international-relations">🇲🇽 Colombia Consulate Mexico</a>
-<a href="https://instagram.com/consuladocolparis" target="_blank" data-tags="consulate diplomatic foreign-affairs international-relations">🇫🇷 Colombia Consulate Paris</a>
-<a href="https://instagram.com/consuladocollondres" target="_blank" data-tags="consulate diplomatic foreign-affairs international-relations">🇬🇧 Colombia Consulate</a>
-<a href="https://instagram.com/embajadadecolombiaen" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🌍 Colombia Embassy</a>
+<a href="https://instagram.com/consuladocolombiaatlanta" target="_blank" data-tags="consuladocolombiaatlanta consular-services consulate diplomatic foreign-affairs international-relations usa">🇺🇸 Colombia Consulate Atlanta</a>
+<a href="https://instagram.com/consuladocolboston" target="_blank" data-tags="consuladocolboston consular-services consulate diplomatic foreign-affairs international-relations usa">🇺🇸 Colombia Consulate Boston</a>
+<a href="https://instagram.com/consuladocolombiafrance" target="_blank" data-tags="consuladocolombiafrance consular-services consulate diplomatic foreign-affairs international-relations">🇫🇷 Colombia Consulate France</a>
+<a href="https://instagram.com/consuladocollosangeles" target="_blank" data-tags="consuladocollosangeles consular-services consulate diplomatic foreign-affairs international-relations usa">🇺🇸 Colombia Consulate LA</a>
+<a href="https://instagram.com/consuladocolmadrid" target="_blank" data-tags="consuladocolmadrid consular-services consulate diplomatic foreign-affairs international-relations">🇪🇸 Colombia Consulate Madrid</a>
+<a href="https://instagram.com/consuladocolmex" target="_blank" data-tags="consuladocolmex consular-services consulate diplomatic foreign-affairs international-relations mexico">🇲🇽 Colombia Consulate Mexico</a>
+<a href="https://instagram.com/consuladocolparis" target="_blank" data-tags="consuladocolparis consular-services consulate diplomatic foreign-affairs international-relations">🇫🇷 Colombia Consulate Paris</a>
+<a href="https://instagram.com/consuladocollondres" target="_blank" data-tags="consuladocollondres consular-services consulate diplomatic foreign-affairs international-relations">🇬🇧 Colombia Consulate</a>
+<a href="https://instagram.com/embajadadecolombiaen" target="_blank" data-tags="diplomatic embajadadecolombiaen embassy foreign-affairs international-relations">🌍 Colombia Embassy</a>
 <a href="https://instagram.com/embcolombiaenarg" target="_blank" data-tags="andean argentina argentinian buenos-aires co colombia colombian embassy embcolombiaenarg latin-america rio-de-la-plata south-america southern-cone spanish-speaking">🇦🇷 Colombia in Argentina</a>
 <a href="https://instagram.com/embcolaustria" target="_blank" data-tags="alpine andean austria austrian co colombia colombian embcolaustria eu europe latin-america south-america spanish-speaking">🇦🇹 Colombia in Austria</a>
 <a href="https://instagram.com/embajadacolcanada" target="_blank" data-tags="andean canada canadian co colombia colombian commonwealth embajadacolcanada english-speaking latin-america north-america south-america spanish-speaking">🇨🇦 Colombia in Canada</a>
@@ -105,18 +105,18 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/embajadacolesp" target="_blank" data-tags="andean co colombia colombian embajadacolesp eu europe iberian latin-america mediterranean south-america spain spanish spanish-speaking">🇪🇸 Colombia in Spain</a>
 <a href="https://instagram.com/colombiaensuiza" target="_blank" data-tags="alpine andean california co colombia colombiaensuiza colombian europe latin-america los-angeles neutral north-america south-america spanish-speaking swiss switzerland usa west-coast">🇨🇭 Colombia in Switzerland</a>
 <a href="https://instagram.com/embcoltailandia" target="_blank" data-tags="andean bangkok california co colombia colombian embassy embcoltailandia latin-america los-angeles north-america south-america spanish-speaking thailand usa west-coast">🇹🇭 Colombia in Thailand</a>
-<a href="https://instagram.com/embajadacolombia_eau" target="_blank" data-tags="andean arab co colombia colombian embajadacolombia-eau emirates gulf latin-america middle-east south-america spanish-speaking uae">🇦🇪 Colombia in UAE</a>
+<a href="https://instagram.com/embajadacolombia_eau" target="_blank" data-tags="andean arab co colombia colombian embajadacolombia-eau embajadacolombia_eau emirates gulf latin-america middle-east south-america spanish-speaking uae">🇦🇪 Colombia in UAE</a>
 <a href="https://instagram.com/colombianembassyuk" target="_blank" data-tags="andean britain british co colombia colombian colombianembassyuk commonwealth embassy england english-speaking europe latin-america london south-america spanish-speaking uk">🇬🇧 Colombia in UK</a>
 <a href="https://instagram.com/colombiaembassyus" target="_blank" data-tags="american andean co colombia colombiaembassyus colombian english-speaking latin-america north-america south-america spanish-speaking united-states usa">🇺🇸 Colombia in USA</a>
 <a href="https://instagram.com/embacolombiaenvzla" target="_blank" data-tags="andean california caribbean co colombia colombian embacolombiaenvzla latin-america los-angeles north-america south-america spanish-speaking usa ve venezuela venezuelan west-coast">🇻🇪 Colombia in Venezuela</a>
-<a href="https://instagram.com/del_colombiaunesco" target="_blank" data-tags="andean co colombia colombian del-colombiaunesco latin-america south-america spanish-speaking">🇺🇳 Colombia UNESCO</a>
+<a href="https://instagram.com/del_colombiaunesco" target="_blank" data-tags="andean co colombia colombian del-colombiaunesco del_colombiaunesco latin-america south-america spanish-speaking">🇺🇳 Colombia UNESCO</a>
 <a href="https://instagram.com/embajadacubacol" target="_blank" data-tags="andean caribbean co colombia colombian cuba cuban embajadacubacol island latin-america south-america spanish-speaking">🇨🇺 Cuba in Colombia</a>
 <a href="https://instagram.com/denmarkincolombia" target="_blank" data-tags="andean co colombia colombian danish denmark denmarkincolombia eu europe latin-america nordic scandinavia south-america spanish-speaking">🇩🇰 Denmark in Colombia</a>
 <a href="https://instagram.com/denmarkinfrance" target="_blank" data-tags="danish denmark denmarkinfrance eu europe france french french-speaking nordic scandinavia western-europe">🇩🇰 Denmark in France</a>
 <a href="https://instagram.com/rdencolombia" target="_blank" data-tags="andean co colombia colombian latin-america rdencolombia south-america spanish-speaking">🇩🇴 Dominican Rep. in Colombia</a>
-<a href="https://instagram.com/francia_en_colombia" target="_blank" data-tags="andean co colombia colombian eu europe france francia-en-colombia french french-speaking latin-america south-america spanish-speaking western-europe">🇫🇷 France in Colombia</a>
+<a href="https://instagram.com/francia_en_colombia" target="_blank" data-tags="andean co colombia colombian eu europe france francia-en-colombia francia_en_colombia french french-speaking latin-america south-america spanish-speaking western-europe">🇫🇷 France in Colombia</a>
 <a href="https://instagram.com/alemaniaencolombia" target="_blank" data-tags="alemaniaencolombia andean central-europe co colombia colombian eu europe german germany latin-america south-america spanish-speaking">🇩🇪 Germany in Colombia</a>
-<a href="https://instagram.com/embajadagt_col" target="_blank" data-tags="andean california central-america co colombia colombian embajadagt-col guatemala guatemala-city guatemalan latin-america los-angeles north-america south-america spanish-speaking usa west-coast">🇬🇹 Guatemala in Colombia</a>
+<a href="https://instagram.com/embajadagt_col" target="_blank" data-tags="andean california central-america co colombia colombian embajadagt-col embajadagt_col guatemala guatemala-city guatemalan latin-america los-angeles north-america south-america spanish-speaking usa west-coast">🇬🇹 Guatemala in Colombia</a>
 <a href="https://instagram.com/indiaincolombia" target="_blank" data-tags="andean asia co colombia colombian commonwealth india indiaincolombia indian latin-america south-america south-asia spanish-speaking">🇮🇳 India in Colombia</a>
 <a href="https://instagram.com/irelandcolombia" target="_blank" data-tags="andean california co colombia colombian eu europe ireland irelandcolombia irish latin-america los-angeles north-america south-america spanish-speaking usa west-coast">🇮🇪 Ireland in Colombia</a>
 <a href="https://instagram.com/embajadadelperuco" target="_blank" data-tags="andean co colombia colombian embajadadelperuco latin-america pacific peru peruvian south-america spanish-speaking">🇵🇪 Peru in Colombia</a>
@@ -127,15 +127,15 @@ A curated collection of content I find inspiring, educational, or just plain int
     
 <h4>Other Consulates & Missions</h4>
 <div class="link-grid">
-<a href="https://instagram.com/consuladocolantofa" target="_blank" data-tags="consulate diplomatic foreign-affairs international-relations">🇨🇱 Colombia Consulate Antofagasta</a>
+<a href="https://instagram.com/consuladocolantofa" target="_blank" data-tags="consuladocolantofa consular-services consulate diplomatic foreign-affairs international-relations">🇨🇱 Colombia Consulate Antofagasta</a>
 <a href="https://instagram.com/uemexico" target="_blank" data-tags="eu europe european-union latin-america mexican mexico mx nafta north-america spanish-speaking uemexico">🇲🇽 EU in Mexico</a>
 <a href="https://instagram.com/euintheus" target="_blank" data-tags="american english-speaking eu euintheus europe european-union north-america united-states usa">🇺🇸 EU in USA</a>
 <a href="https://instagram.com/spainintheusa" target="_blank" data-tags="american english-speaking eu europe iberian mediterranean north-america spain spainintheusa spanish spanish-speaking united-states usa">🇺🇸 Spain in USA</a>
-<a href="https://instagram.com/consvemedellin" target="_blank" data-tags="consulate diplomatic foreign-affairs international-relations">🇨🇴 Venezuela Consulate Medellín</a>
-<a href="https://instagram.com/consulveneriohacha" target="_blank" data-tags="consulate diplomatic foreign-affairs international-relations">🇨🇴 Venezuela Consulate Riohacha</a>
-<a href="https://instagram.com/embavecolombia" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇻🇪 Venezuela Embassy Colombia</a>
-<a href="https://instagram.com/embavene_col" target="_blank" data-tags="andean california caribbean co colombia colombian embavene-col latin-america los-angeles north-america south-america spanish-speaking usa ve venezuela venezuelan west-coast">🇻🇪 Venezuela in Colombia</a>
-<a href="https://instagram.com/embavenez_india" target="_blank" data-tags="asia california caribbean commonwealth embavenez-india india indian latin-america los-angeles north-america south-america south-asia spanish-speaking usa ve venezuela venezuelan west-coast">🇮🇳 Venezuela in India</a>
+<a href="https://instagram.com/consvemedellin" target="_blank" data-tags="colombia consular-services consulate consvemedellin diplomatic foreign-affairs international-relations">🇨🇴 Venezuela Consulate Medellín</a>
+<a href="https://instagram.com/consulveneriohacha" target="_blank" data-tags="colombia consular-services consulate consulveneriohacha diplomatic foreign-affairs international-relations">🇨🇴 Venezuela Consulate Riohacha</a>
+<a href="https://instagram.com/embavecolombia" target="_blank" data-tags="diplomatic embassy embavecolombia foreign-affairs international-relations venezuela">🇻🇪 Venezuela Embassy Colombia</a>
+<a href="https://instagram.com/embavene_col" target="_blank" data-tags="andean california caribbean co colombia colombian embavene-col embavene_col latin-america los-angeles north-america south-america spanish-speaking usa ve venezuela venezuelan west-coast">🇻🇪 Venezuela in Colombia</a>
+<a href="https://instagram.com/embavenez_india" target="_blank" data-tags="asia california caribbean commonwealth embavenez-india embavenez_india india indian latin-america los-angeles north-america south-america south-asia spanish-speaking usa ve venezuela venezuelan west-coast">🇮🇳 Venezuela in India</a>
 </div>
 </div>
 
@@ -147,21 +147,21 @@ A curated collection of content I find inspiring, educational, or just plain int
 <div class="link-grid">
 <a href="https://instagram.com/afbarranquilla" target="_blank" data-tags="afbarranquilla atlantico barranquilla california caribbean colombia eu europe france french french-speaking los-angeles north-america south-america usa west-coast western-europe">🇫🇷 Alianza Francesa Barranquilla</a>
 <a href="https://instagram.com/afbogota" target="_blank" data-tags="afbogota andean bogota colombia eu europe france french french-speaking south-america western-europe">🇫🇷 Alianza Francesa Bogotá</a>
-<a href="https://instagram.com/coreacolombia" target="_blank" data-tags="cultural">🇰🇷 Centro Cultural Coreano</a>
+<a href="https://instagram.com/coreacolombia" target="_blank" data-tags="coreacolombia cultural">🇰🇷 Centro Cultural Coreano</a>
 <a href="https://instagram.com/comhaltascolombia" target="_blank" data-tags="andean bogota co colombia colombian comhaltascolombia culture irish latin-america music south-america spanish-speaking">🎵 Comhaltas Colombia</a>
 <a href="https://instagram.com/descubriendo.china" target="_blank" data-tags="asia china chinese descubriendo.china east-asia">🇨🇳 Descubriendo China</a>
-<a href="https://instagram.com/embajada_corea" target="_blank" data-tags="diplomatic embassy foreign-affairs international-relations">🇰🇷 Embajada de Corea</a>
-<a href="https://instagram.com/goetheinstitut_kolumbien" target="_blank" data-tags="goetheinstitut-kolumbien">🇩🇪 Goethe-Institut</a>
+<a href="https://instagram.com/embajada_corea" target="_blank" data-tags="diplomatic embajada_corea embassy foreign-affairs international-relations">🇰🇷 Embajada de Corea</a>
+<a href="https://instagram.com/goetheinstitut_kolumbien" target="_blank" data-tags="goetheinstitut-kolumbien goetheinstitut_kolumbien">🇩🇪 Goethe-Institut</a>
 <a href="https://instagram.com/iicbogota" target="_blank" data-tags="andean bogota colombia iicbogota south-america">🇮🇹 Istituto Italiano Bogotá</a>
 </div>
 
 <h4>Museums & Galleries</h4>
 <div class="link-grid">
 <a href="https://instagram.com/bogotart" target="_blank" data-tags="andean bogota bogotart colombia south-america">🎨 Bogotart</a>
-<a href="https://instagram.com/elmamm" target="_blank" data-tags="museum">🎨 MAMM - Museo Arte Moderno</a>
+<a href="https://instagram.com/elmamm" target="_blank" data-tags="culture elmamm museum">🎨 MAMM - Museo Arte Moderno</a>
 <a href="https://instagram.com/mambogota" target="_blank" data-tags="andean bogota colombia mambogota south-america">🎨 MAM Bogotá</a>
-<a href="https://instagram.com/museodelamujercdmx" target="_blank" data-tags="museum">👩 Museo de la Mujer</a>
-<a href="https://instagram.com/museohnunal" target="_blank" data-tags="museum">🦖 Museo Historia Natural</a>
+<a href="https://instagram.com/museodelamujercdmx" target="_blank" data-tags="culture museodelamujercdmx museum">👩 Museo de la Mujer</a>
+<a href="https://instagram.com/museohnunal" target="_blank" data-tags="culture museohnunal museum">🦖 Museo Historia Natural</a>
 </div>
 
 <h4>Libraries & Archives</h4>
@@ -176,7 +176,7 @@ A curated collection of content I find inspiring, educational, or just plain int
 
 <h4>Science & Nature Centers</h4>
 <div class="link-grid">
-<a href="https://instagram.com/icanh_co" target="_blank" data-tags="academic education icanh-co institute research">🏺 Instituto Antropología</a>
+<a href="https://instagram.com/icanh_co" target="_blank" data-tags="academic education icanh-co icanh_co institute research">🏺 Instituto Antropología</a>
 <a href="https://instagram.com/jardinbotanicodebogota" target="_blank" data-tags="andean bogota colombia jardinbotanicodebogota south-america">🌿 Jardín Botánico Bogotá</a>
 <a href="https://instagram.com/jardinbotanicocartagena" target="_blank" data-tags="bolivar caribbean cartagena coast colombia jardinbotanicocartagena south-america">🌿 Jardín Botánico Cartagena</a>
 <a href="https://instagram.com/jardinbotanicomedellin" target="_blank" data-tags="antioquia colombia jardinbotanicomedellin medellin south-america">🌿 Jardín Botánico Medellín</a>
@@ -187,24 +187,24 @@ A curated collection of content I find inspiring, educational, or just plain int
 <h4>Arts & Entertainment</h4>
 <div class="link-grid">
 <a href="https://instagram.com/berlitzcolombia" target="_blank" data-tags="andean berlitzcolombia co colombia colombian latin-america south-america spanish-speaking">🗣️ Berlitz Colombia</a>
-<a href="https://instagram.com/culturaenbta" target="_blank" data-tags="cultural">🎨 Secretaría de Cultura Bogotá</a>
-<a href="https://instagram.com/fiteatrocali" target="_blank" data-tags="theater">🎭 Festival Teatro Cali</a>
-<a href="https://instagram.com/fteatronacional" target="_blank" data-tags="theater">🎭 Teatro Nacional</a>
+<a href="https://instagram.com/culturaenbta" target="_blank" data-tags="culturaenbta cultural">🎨 Secretaría de Cultura Bogotá</a>
+<a href="https://instagram.com/fiteatrocali" target="_blank" data-tags="fiteatrocali theater">🎭 Festival Teatro Cali</a>
+<a href="https://instagram.com/fteatronacional" target="_blank" data-tags="fteatronacional theater">🎭 Teatro Nacional</a>
 <a href="https://instagram.com/muestracineespanol" target="_blank" data-tags="muestracineespanol">🎬 Muestra Cine Español</a>
 <a href="https://instagram.com/plazamayormed" target="_blank" data-tags="administration antioquia california colombia government local-government los-angeles medellin north-america plazamayormed politics south-america usa west-coast">🏛️ Plaza Mayor Medellín</a>
 <a href="https://instagram.com/somamexico" target="_blank" data-tags="art education latin-america mexican mexico mexico-city mx nafta north-america somamexico spanish-speaking">🎨 SOMA Mexico</a>
-<a href="https://instagram.com/teatrometropolitano" target="_blank" data-tags="theater">🎭 Teatro Metropolitano</a>
+<a href="https://instagram.com/teatrometropolitano" target="_blank" data-tags="teatrometropolitano theater">🎭 Teatro Metropolitano</a>
 <a href="https://instagram.com/unicaucaposgrados" target="_blank" data-tags="unicaucaposgrados">🎓 Centro Posgrados Cauca</a>
 </div>
 
 <h4>Universities & Education</h4>
 <div class="link-grid">
-<a href="https://instagram.com/udea" target="_blank" data-tags="education">🎓 Universidad de Antioquia</a>
-<a href="https://instagram.com/unibarranquilla_" target="_blank" data-tags="education">🎓 Universidad de Barranquilla</a>
-<a href="https://instagram.com/unicartagena" target="_blank" data-tags="education">🎓 Universidad de Cartagena</a>
-<a href="https://instagram.com/universidaddelcauca" target="_blank" data-tags="education">🎓 Universidad Del Cauca</a>
-<a href="https://instagram.com/upedagogicanacional" target="_blank" data-tags="education">🎓 Universidad Pedagógica</a>
-<a href="https://instagram.com/upbcolombia" target="_blank" data-tags="education">🎓 Universidad Pontificia Bolivariana</a>
+<a href="https://instagram.com/udea" target="_blank" data-tags="education udea">🎓 Universidad de Antioquia</a>
+<a href="https://instagram.com/unibarranquilla_" target="_blank" data-tags="education unibarranquilla_">🎓 Universidad de Barranquilla</a>
+<a href="https://instagram.com/unicartagena" target="_blank" data-tags="education unicartagena">🎓 Universidad de Cartagena</a>
+<a href="https://instagram.com/universidaddelcauca" target="_blank" data-tags="education universidaddelcauca">🎓 Universidad Del Cauca</a>
+<a href="https://instagram.com/upedagogicanacional" target="_blank" data-tags="education upedagogicanacional">🎓 Universidad Pedagógica</a>
+<a href="https://instagram.com/upbcolombia" target="_blank" data-tags="education upbcolombia">🎓 Universidad Pontificia Bolivariana</a>
 </div>
 
 <h4>Additional Museums & Cultural Sites</h4>
@@ -212,13 +212,13 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/bibliotecasmed" target="_blank" data-tags="antioquia bibliotecasmed books colombia culture education library medellin research south-america">📚 Sistema de Bibliotecas Medellín</a>
 <a href="https://instagram.com/centromemoriah" target="_blank" data-tags="centromemoriah">🕊️ Centro Nacional Memoria Histórica</a>
 <a href="https://instagram.com/fundacionlasgolondrinas" target="_blank" data-tags="california fundacionlasgolondrinas los-angeles north-america usa west-coast">🕊️ Fundación Las Golondrinas</a>
-<a href="https://instagram.com/ipcc_cartagena" target="_blank" data-tags="academic bolivar caribbean cartagena coast colombia education institute ipcc-cartagena research south-america">🏛️ Instituto Patrimonio Cartagena</a>
-<a href="https://instagram.com/museos_de_medellin" target="_blank" data-tags="museum">🏛️ Mesa de Museos Medellín</a>
-<a href="https://instagram.com/museodeantioquia" target="_blank" data-tags="museum">🏛️ Museo de Antioquia</a>
-<a href="https://instagram.com/museodebogota" target="_blank" data-tags="museum">🏛️ Museo de Bogotá</a>
-<a href="https://instagram.com/museodeloro" target="_blank" data-tags="museum">🏛️ Museo del Oro</a>
-<a href="https://instagram.com/museomyt" target="_blank" data-tags="museum">🏛️ Museo Memoria y Tolerancia</a>
-<a href="https://instagram.com/museonacionalco" target="_blank" data-tags="museum">🏛️ Museo Nacional</a>
+<a href="https://instagram.com/ipcc_cartagena" target="_blank" data-tags="academic bolivar caribbean cartagena coast colombia education institute ipcc-cartagena ipcc_cartagena research south-america">🏛️ Instituto Patrimonio Cartagena</a>
+<a href="https://instagram.com/museos_de_medellin" target="_blank" data-tags="culture museos_de_medellin museum">🏛️ Mesa de Museos Medellín</a>
+<a href="https://instagram.com/museodeantioquia" target="_blank" data-tags="culture museodeantioquia museum">🏛️ Museo de Antioquia</a>
+<a href="https://instagram.com/museodebogota" target="_blank" data-tags="culture museodebogota museum">🏛️ Museo de Bogotá</a>
+<a href="https://instagram.com/museodeloro" target="_blank" data-tags="culture museodeloro museum">🏛️ Museo del Oro</a>
+<a href="https://instagram.com/museomyt" target="_blank" data-tags="culture museomyt museum">🏛️ Museo Memoria y Tolerancia</a>
+<a href="https://instagram.com/museonacionalco" target="_blank" data-tags="culture museonacionalco museum">🏛️ Museo Nacional</a>
 </div>
 </div>
 
@@ -226,8 +226,8 @@ A curated collection of content I find inspiring, educational, or just plain int
 
 <div class="instagram-links organizations">
 <div class="link-grid">
-<a href="https://instagram.com/adr_colombia" target="_blank" data-tags="adr-colombia">🌱 Agencia Desarrollo Rural</a>
-<a href="https://instagram.com/ambiente_bogota" target="_blank" data-tags="ambiente-bogota andean bogota colombia south-america">🌳 Ambiente Bogotá</a>
+<a href="https://instagram.com/adr_colombia" target="_blank" data-tags="adr-colombia adr_colombia">🌱 Agencia Desarrollo Rural</a>
+<a href="https://instagram.com/ambiente_bogota" target="_blank" data-tags="ambiente-bogota ambiente_bogota andean bogota colombia south-america">🌳 Ambiente Bogotá</a>
 <a href="https://instagram.com/amchamcolombia" target="_blank" data-tags="amchamcolombia american american-chamber andean bogota business co colombia colombian commerce latin-america south-america spanish-speaking united-states usa">🇺🇸 AmCham Colombia</a>
 <a href="https://instagram.com/primatesapc" target="_blank" data-tags="primatesapc">🐵 Asociación Primatológica</a>
 <a href="https://instagram.com/asuntosambientalesctg" target="_blank" data-tags="asuntosambientalesctg bolivar caribbean cartagena coast colombia south-america">🌳 Asuntos Ambientales Cartagena</a>
@@ -236,23 +236,23 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/hannsseidelcol" target="_blank" data-tags="bogota colombia democracy development foundation germany hannsseidelcol">🇩🇪 Hanns Seidel Stiftung</a>
 <a href="https://instagram.com/hiascolombia" target="_blank" data-tags="andean bogota co colombia colombian hias hiascolombia humanitarian latin-america migration ngo refugees south-america spanish-speaking">🤲 HIAS Colombia</a>
 <a href="https://instagram.com/icnunal" target="_blank" data-tags="academic education icnunal institute research">🌿 Instituto Ciencias Naturales</a>
-<a href="https://instagram.com/instituto_humboldt" target="_blank" data-tags="academic education institute instituto-humboldt research">🌿 Instituto Humboldt</a>
-<a href="https://instagram.com/koica_colombia" target="_blank" data-tags="aid andean asia bogota co colombia colombian cooperation development east-asia koica-colombia korea korean latin-america south-america spanish-speaking">🇰🇷 KOICA Colombia</a>
+<a href="https://instagram.com/instituto_humboldt" target="_blank" data-tags="academic education institute instituto-humboldt instituto_humboldt research">🌿 Instituto Humboldt</a>
+<a href="https://instagram.com/koica_colombia" target="_blank" data-tags="aid andean asia bogota co colombia colombian cooperation development east-asia koica-colombia koica_colombia korea korean latin-america south-america spanish-speaking">🇰🇷 KOICA Colombia</a>
 <a href="https://instagram.com/ochacolombia" target="_blank" data-tags="andean bogota co colombia colombian crisis-response humanitarian latin-america ocha ochacolombia south-america spanish-speaking un">🇺🇳 OCHA Colombia</a>
-<a href="https://instagram.com/ocha_venezuela" target="_blank" data-tags="california caracas caribbean crisis-response humanitarian latin-america los-angeles north-america ocha ocha-venezuela south-america spanish-speaking un usa ve venezuela venezuelan west-coast">🇺🇳 OCHA Venezuela</a>
+<a href="https://instagram.com/ocha_venezuela" target="_blank" data-tags="california caracas caribbean crisis-response humanitarian latin-america los-angeles north-america ocha ocha-venezuela ocha_venezuela south-america spanish-speaking un usa ve venezuela venezuelan west-coast">🇺🇳 OCHA Venezuela</a>
 <a href="https://instagram.com/oeicolombia" target="_blank" data-tags="andean bogota co colombia colombian cooperation education ibero-american latin-america oei oeicolombia south-america spanish-speaking">🌎 OEI Colombia</a>
 <a href="https://instagram.com/onumujerescol" target="_blank" data-tags="andean bogota co colombia colombian gender-equality latin-america ngo onumujerescol south-america spanish-speaking un united-nations women">🇺🇳 ONU Mujeres Colombia</a>
 <a href="https://instagram.com/onumujeresmx" target="_blank" data-tags="gender-equality mexico mexico-city ngo onumujeresmx un united-nations women">🇺🇳 ONU Mujeres México</a>
 <a href="https://instagram.com/supersolidaria" target="_blank" data-tags="supersolidaria">🤝 Superintendencia Solidaria</a>
-<a href="https://instagram.com/supertransporte_oficial" target="_blank" data-tags="supertransporte-oficial">🚗 SuperTransporte</a>
-<a href="https://instagram.com/unfpa_colombia" target="_blank" data-tags="andean bogota california co colombia colombian health latin-america los-angeles north-america population reproductive-health south-america spanish-speaking un unfpa unfpa-colombia usa west-coast">🇺🇳 UNFPA Colombia</a>
-<a href="https://instagram.com/unicef_colombia" target="_blank" data-tags="andean co colombia colombian latin-america south-america spanish-speaking unicef-colombia">🇺🇳 UNICEF Colombia</a>
+<a href="https://instagram.com/supertransporte_oficial" target="_blank" data-tags="supertransporte-oficial supertransporte_oficial">🚗 SuperTransporte</a>
+<a href="https://instagram.com/unfpa_colombia" target="_blank" data-tags="andean bogota california co colombia colombian health latin-america los-angeles north-america population reproductive-health south-america spanish-speaking un unfpa unfpa-colombia unfpa_colombia usa west-coast">🇺🇳 UNFPA Colombia</a>
+<a href="https://instagram.com/unicef_colombia" target="_blank" data-tags="andean co colombia colombian latin-america south-america spanish-speaking unicef-colombia unicef_colombia">🇺🇳 UNICEF Colombia</a>
 <a href="https://instagram.com/ueencolombia" target="_blank" data-tags="andean co colombia colombian eu europe european-union latin-america south-america spanish-speaking ueencolombia">🇪🇺 Unión Europea en Colombia</a>
-<a href="https://instagram.com/wwf_colombia" target="_blank" data-tags="andean co colombia colombian latin-america south-america spanish-speaking wwf-colombia">🐼 WWF Colombia</a>
+<a href="https://instagram.com/wwf_colombia" target="_blank" data-tags="andean co colombia colombian latin-america south-america spanish-speaking wwf-colombia wwf_colombia">🐼 WWF Colombia</a>
 <a href="https://instagram.com/zoologicodecali" target="_blank" data-tags="cali colombia pacific south-america valle-del-cauca zoologicodecali">🦁 Zoológico de Cali</a>
 <a href="https://instagram.com/aimexico" target="_blank" data-tags="amnesty human-rights mexico ngo civil-rights justice">⚖️ Amnistía Internacional<span class="location"> • México</span></a>
 <a href="https://instagram.com/cruzrojacol" target="_blank" data-tags="red-cross colombia humanitarian emergency medical ngo">❤️ Cruz Roja Colombiana<span class="location"> • Red Cross</span></a>
-<a href="https://instagram.com/civix_colombia" target="_blank" data-tags="andean bogota civic civix-colombia co colombia colombian democracy governance latin-america south-america spanish-speaking technology">🏛️ CIVIX Colombia</a>
+<a href="https://instagram.com/civix_colombia" target="_blank" data-tags="andean bogota civic civix-colombia civix_colombia co colombia colombian democracy governance latin-america south-america spanish-speaking technology">🏛️ CIVIX Colombia</a>
 <a href="https://instagram.com/parquescolombia" target="_blank" data-tags="parquescolombia">🏞️ Parques Nacionales</a>
 <a href="https://instagram.com/transparenciacolombia" target="_blank" data-tags="andean bogota co colombia colombian corruption governance latin-america ngo south-america spanish-speaking transparenciacolombia transparency">👁️ Transparencia por Colombia</a>
 </div>
@@ -280,7 +280,7 @@ A curated collection of content I find inspiring, educational, or just plain int
 <div class="link-grid">
 <a href="https://instagram.com/somoslagranja" target="_blank" data-tags="california caribbean dairy latin-america local-brand los-angeles milk north-america somoslagranja south-america spanish-speaking usa ve venezuela venezuelan west-coast yogurt">🥛 Alimentos La Granja</a>
 <a href="https://instagram.com/alimentosmunchy" target="_blank" data-tags="alimentosmunchy california caribbean chips latin-america local-brand los-angeles north-america popcorn snacks south-america spanish-speaking usa ve venezuela venezuelan west-coast">🍿 Alimentos Munchy</a>
-<a href="https://instagram.com/bonobon_vzla" target="_blank" data-tags="arcor bonobon-vzla california candy caribbean chocolate latin-america los-angeles north-america south-america spanish-speaking sweets usa ve venezuela venezuelan wafer west-coast">🍬 Bonobon</a>
+<a href="https://instagram.com/bonobon_vzla" target="_blank" data-tags="arcor bonobon-vzla bonobon_vzla california candy caribbean chocolate latin-america los-angeles north-america south-america spanish-speaking sweets usa ve venezuela venezuelan wafer west-coast">🍬 Bonobon</a>
 <a href="https://instagram.com/chiskesitos" target="_blank" data-tags="california caribbean cheese chiskesitos food latin-america local-brand los-angeles north-america snacks south-america spanish-speaking usa ve venezuela venezuelan west-coast">🧀 ChisKesitos</a>
 <a href="https://instagram.com/danibiskoficialve" target="_blank" data-tags="biscuits california caribbean cookies danibiskoficialve latin-america local-brand los-angeles north-america snacks south-america spanish-speaking usa ve venezuela venezuelan west-coast">🍪 Danibisk</a>
 <a href="https://instagram.com/trolligomitas" target="_blank" data-tags="california candy caribbean gummy international latin-america los-angeles north-america south-america spanish-speaking sweets trolli trolligomitas usa ve venezuela venezuelan west-coast">🍬 Gomitas Trolli</a>
@@ -288,7 +288,7 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/cerealesmaizoritos" target="_blank" data-tags="breakfast california caribbean cereal cerealesmaizoritos corn latin-america local-brand los-angeles north-america south-america spanish-speaking usa ve venezuela venezuelan west-coast">🥣 Maizoritos</a>
 <a href="https://instagram.com/migurtve" target="_blank" data-tags="california caribbean dairy latin-america local-brand los-angeles migurtve north-america probiotics south-america spanish-speaking usa ve venezuela venezuelan west-coast yogurt">🥛 MiGurt</a>
 <a href="https://instagram.com/monaca.ve" target="_blank" data-tags="california caribbean corn-flour flour harina-pan latin-america local-brand los-angeles monaca.ve north-america south-america spanish-speaking usa ve venezuela venezuelan west-coast">🌾 Molinos Nacionales MONACA</a>
-<a href="https://instagram.com/osole_foods" target="_blank" data-tags="food">🍴 Osole Foods</a>
+<a href="https://instagram.com/osole_foods" target="_blank" data-tags="food osole_foods">🍴 Osole Foods</a>
 <a href="https://instagram.com/parmalatve" target="_blank" data-tags="california caribbean dairy international latin-america los-angeles milk north-america parmalat parmalatve south-america spanish-speaking usa ve venezuela venezuelan west-coast yogurt">🥛 Parmalat</a>
 <a href="https://instagram.com/pastascaprive" target="_blank" data-tags="california caribbean food italian latin-america local-brand los-angeles north-america pasta pastascaprive south-america spanish-speaking usa ve venezuela venezuelan west-coast">🍝 Pastas Capri</a>
 <a href="https://instagram.com/pastassindoni" target="_blank" data-tags="california caribbean food italian latin-america local-brand los-angeles north-america pasta pastassindoni south-america spanish-speaking usa ve venezuela venezuelan west-coast">🍝 Pastas Sindoni</a>
@@ -314,7 +314,7 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/chinaembajada" target="_blank" data-tags="asia china chinaembajada chinese east-asia">🇩🇴 China in Rep. Dom.</a>
 <a href="https://instagram.com/embajadaecuador.china" target="_blank" data-tags="andean asia china chinese east-asia ecuador ecuadorian embajadaecuador.china latin-america south-america">🇪🇨 Ecuador in China</a>
 <a href="https://instagram.com/embapartaiwan" target="_blank" data-tags="embapartaiwan landlocked latin-america paraguay paraguayan south-america">🇵🇾 Paraguay in Taiwan</a>
-<a href="https://instagram.com/embajada_del_peru_en_china" target="_blank" data-tags="andean asia china chinese east-asia embajada-del-peru-en-china latin-america pacific peru peruvian south-america spanish-speaking">🇵🇪 Peru in China</a>
+<a href="https://instagram.com/embajada_del_peru_en_china" target="_blank" data-tags="andean asia china chinese east-asia embajada-del-peru-en-china embajada_del_peru_en_china latin-america pacific peru peruvian south-america spanish-speaking">🇵🇪 Peru in China</a>
 <a href="https://instagram.com/embavechina" target="_blank" data-tags="asia california caribbean china chinese east-asia embavechina latin-america los-angeles north-america south-america spanish-speaking usa ve venezuela venezuelan west-coast">🇻🇪 Venezuela in China</a>
 </div>
     
@@ -323,17 +323,17 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/infopresidencia" target="_blank" data-tags="andean bogota casa-narino co colombia colombian executive government infopresidencia latin-america politics president south-america spanish-speaking">🇨🇴 Presidencia de Colombia</a>
 <a href="https://instagram.com/consejosuperiorjudicatura" target="_blank" data-tags="colombia justice judiciary courts government bogota legal">⚖️ Consejo Superior Judicatura<span class="location"> • Judicial Council</span></a>
 <a href="https://instagram.com/cortesupremaj" target="_blank" data-tags="cortesupremaj">⚖️ Corte Suprema</a>
-<a href="https://instagram.com/minagriculturacol" target="_blank" data-tags="cultural">🌾 MinAgricultura</a>
+<a href="https://instagram.com/minagriculturacol" target="_blank" data-tags="cultural minagriculturacol">🌾 MinAgricultura</a>
 <a href="https://instagram.com/minambientecol" target="_blank" data-tags="andean co colombia colombian latin-america minambientecol south-america spanish-speaking">🌳 MinAmbiente Colombia</a>
-<a href="https://instagram.com/minciencias_co" target="_blank" data-tags="administration bogota colombia government innovation minciencias-co ministry public-sector research science technology">🔬 Minciencias</a>
-<a href="https://instagram.com/mincultura" target="_blank" data-tags="cultural">🎨 MinCultura Colombia</a>
+<a href="https://instagram.com/minciencias_co" target="_blank" data-tags="administration bogota colombia government innovation minciencias-co minciencias_co ministry public-sector research science technology">🔬 Minciencias</a>
+<a href="https://instagram.com/mincultura" target="_blank" data-tags="cultural mincultura">🎨 MinCultura Colombia</a>
 <a href="https://instagram.com/mineducacioncol" target="_blank" data-tags="mineducacioncol">🎓 MinEducación</a>
 <a href="https://instagram.com/minigualdadcol" target="_blank" data-tags="colombia gender-equality women lgbti rights government bogota ministry">⚖️ MinIgualdad<span class="location"> • Gender Equality Ministry</span></a>
 <a href="https://instagram.com/minjusticiaco" target="_blank" data-tags="colombia justice law legal-system government bogota ministry prisons">⚖️ MinJusticia<span class="location"> • Justice Ministry</span></a>
 <a href="https://instagram.com/ministeriominasyenergia" target="_blank" data-tags="colombia energy mining oil gas government bogota ministry petroleum">⚡ MinMinas y Energía<span class="location"> • Energy & Mining</span></a>
 <a href="https://instagram.com/minsaludcol" target="_blank" data-tags="minsaludcol">🏥 MinSalud</a>
 <a href="https://instagram.com/mintrabajocol" target="_blank" data-tags="mintrabajocol">💼 MinTrabajo</a>
-<a href="https://instagram.com/mintransporteco" target="_blank" data-tags="government">🚗 Ministerio de Transporte</a>
+<a href="https://instagram.com/mintransporteco" target="_blank" data-tags="government mintransporteco">🚗 Ministerio de Transporte</a>
 </div>
 
 <h4>Security Forces & Defense</h4>
@@ -344,7 +344,7 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/fuerzaaereacol" target="_blank" data-tags="fuerzaaereacol">✈️ Fuerza Aérea</a>
 <a href="https://instagram.com/policiabmanga" target="_blank" data-tags="bucaramanga colombia policiabmanga santander south-america">👮 Policía Bucaramanga</a>
 <a href="https://instagram.com/policiacucuta" target="_blank" data-tags="policiacucuta">👮 Policía Cúcuta</a>
-<a href="https://instagram.com/policiamedellin_" target="_blank" data-tags="antioquia colombia medellin policiamedellin- south-america">👮 Policía Medellín</a>
+<a href="https://instagram.com/policiamedellin_" target="_blank" data-tags="antioquia colombia medellin policiamedellin- policiamedellin_ south-america">👮 Policía Medellín</a>
 <a href="https://instagram.com/policiadecolombia" target="_blank" data-tags="policiadecolombia">👮 Policía Nacional</a>
 </div>
 
@@ -354,7 +354,7 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/alcaldiabarranquilla" target="_blank" data-tags="alcaldiabarranquilla atlantico barranquilla california caribbean colombia los-angeles north-america south-america usa west-coast">🏛️ Alcaldía de Barranquilla</a>
 <a href="https://instagram.com/alcaldiacartagena" target="_blank" data-tags="alcaldiacartagena bolivar caribbean cartagena coast colombia south-america">🏛️ Alcaldía Cartagena</a>
 <a href="https://instagram.com/gerenciasocialbaq" target="_blank" data-tags="atlantico barranquilla california caribbean colombia gerenciasocialbaq los-angeles north-america south-america usa west-coast">🤝 Gerencia Social Barranquilla</a>
-<a href="https://instagram.com/sed_barranquilla" target="_blank" data-tags="california los-angeles north-america sed-barranquilla usa west-coast">🎓 Secretaría Educación Bqlla</a>
+<a href="https://instagram.com/sed_barranquilla" target="_blank" data-tags="california los-angeles north-america sed-barranquilla sed_barranquilla usa west-coast">🎓 Secretaría Educación Bqlla</a>
 <a href="https://instagram.com/seceducacionctg" target="_blank" data-tags="bolivar caribbean cartagena coast colombia seceducacionctg south-america">🎓 Sec Educación Cartagena</a>
 <a href="https://instagram.com/transmetrobaq" target="_blank" data-tags="atlantico barranquilla california caribbean colombia los-angeles north-america south-america transmetrobaq usa west-coast">🚌 Transmetro Barranquilla</a>
 </div>
@@ -362,15 +362,15 @@ A curated collection of content I find inspiring, educational, or just plain int
 <h4>Andean Region</h4>
 <div class="link-grid">
 <a href="https://instagram.com/alcaldiadecaldas" target="_blank" data-tags="alcaldiadecaldas caldas coffee-region colombia government manizales municipal south-america">🏛️ Alcaldía de Caldas</a>
-<a href="https://instagram.com/bogota_turismo" target="_blank" data-tags="andean bogota bogota-turismo colombia south-america">✈️ IDT Bogotá</a>
+<a href="https://instagram.com/bogota_turismo" target="_blank" data-tags="andean bogota bogota-turismo bogota_turismo colombia south-america">✈️ IDT Bogotá</a>
 <a href="https://instagram.com/consejeriapaz" target="_blank" data-tags="andean bogota colombia consejeriapaz south-america">☮️ Consejería de Paz Bogotá</a>
-<a href="https://instagram.com/educacion_bogota" target="_blank" data-tags="andean bogota colombia educacion-bogota education government south-america">🎓 Educación</a>
+<a href="https://instagram.com/educacion_bogota" target="_blank" data-tags="andean bogota colombia educacion-bogota educacion_bogota education government south-america">🎓 Educación</a>
 <a href="https://instagram.com/educacionmed" target="_blank" data-tags="antioquia colombia educacionmed medellin south-america">🎓 Secretaría Educación Medellín</a>
 <a href="https://instagram.com/elmetrobogota" target="_blank" data-tags="andean bogota colombia elmetrobogota south-america">🚇 Metro de Bogotá</a>
 <a href="https://instagram.com/integracionsocialbog" target="_blank" data-tags="andean bogota colombia government integracionsocialbog social-services south-america">🤲 Integración Social</a>
 <a href="https://instagram.com/participacionbogota" target="_blank" data-tags="andean bogota colombia government participacionbogota participation south-america">🤝 Participación</a>
-<a href="https://instagram.com/popayancultural" target="_blank" data-tags="cultural">🎨 Popayán Cultural</a>
-<a href="https://instagram.com/secculturayturismopopayan" target="_blank" data-tags="cultural">🎭 Cultura y Turismo Popayán</a>
+<a href="https://instagram.com/popayancultural" target="_blank" data-tags="cultural popayancultural">🎨 Popayán Cultural</a>
+<a href="https://instagram.com/secculturayturismopopayan" target="_blank" data-tags="cultural secculturayturismopopayan">🎭 Cultura y Turismo Popayán</a>
 <a href="https://instagram.com/secdeportepopayan" target="_blank" data-tags="cauca colombia popayan secdeportepopayan south-america">⚽ Deporte Popayán</a>
 <a href="https://instagram.com/stransparenciaoficial" target="_blank" data-tags="accountability anti-corruption bogota colombia government stransparenciaoficial transparency">🔍 Secretaría de Transparencia</a>
 <a href="https://instagram.com/transmilenio" target="_blank" data-tags="transmilenio">🚌 TransMilenio</a>
@@ -380,7 +380,7 @@ A curated collection of content I find inspiring, educational, or just plain int
 <div class="link-grid">
 <a href="https://instagram.com/alcaldiacucuta" target="_blank" data-tags="alcaldiacucuta">🏛️ Alcaldía de Cúcuta</a>
 <a href="https://instagram.com/alcaldiadeibague" target="_blank" data-tags="alcaldiadeibague colombia ibague south-america tolima">🏛️ Alcaldía de Ibagué</a>
-<a href="https://instagram.com/caliculturacol" target="_blank" data-tags="cultural">🎭 Cultura Cali</a>
+<a href="https://instagram.com/caliculturacol" target="_blank" data-tags="caliculturacol cultural">🎭 Cultura Cali</a>
 <a href="https://instagram.com/dagmaoficial" target="_blank" data-tags="dagmaoficial">🌳 DAGMA Oficial</a>
 <a href="https://instagram.com/educacioncali" target="_blank" data-tags="cali colombia educacioncali education government pacific south-america valle-del-cauca">🎓 Educación</a>
 <a href="https://instagram.com/seguridadcali" target="_blank" data-tags="cali colombia pacific seguridadcali south-america valle-del-cauca">🚓 Seguridad Cali</a>
@@ -396,9 +396,9 @@ A curated collection of content I find inspiring, educational, or just plain int
 
 <a href="https://instagram.com/centromemoriabogota" target="_blank" data-tags="andean bogota centromemoriabogota colombia south-america">🕊️ Centro Memoria Bogotá</a>
 
-<a href="https://instagram.com/cne_colombia" target="_blank" data-tags="bogota cne-colombia colombia democracy elections electoral government voting">🗳️ Consejo Nacional Electoral</a>
+<a href="https://instagram.com/cne_colombia" target="_blank" data-tags="bogota cne-colombia cne_colombia colombia democracy elections electoral government voting">🗳️ Consejo Nacional Electoral</a>
 
-<a href="https://instagram.com/bogotaescivica" target="_blank" data-tags="cultural">🏛️ Cultura Ciudadana</a>
+<a href="https://instagram.com/bogotaescivica" target="_blank" data-tags="bogotaescivica cultural">🏛️ Cultura Ciudadana</a>
 
 <a href="https://instagram.com/defensoriacol" target="_blank" data-tags="defensoriacol">🛡️ Defensoría del Pueblo</a>
 
@@ -412,13 +412,13 @@ A curated collection of content I find inspiring, educational, or just plain int
 
 <a href="https://instagram.com/gobertolima" target="_blank" data-tags="gobertolima lima pacific peru south-america">🏛️ Gobernación Tolima</a>
 
-<a href="https://instagram.com/gobiernbta" target="_blank" data-tags="andean bogota colombia gobiernbta south-america">🏛️ Gobierno Bogotá</a>
+<a href="https://instagram.com/gobiernbta" target="_blank" data-tags="andean bogota colombia gobiernbta government south-america">🏛️ Gobierno Bogotá</a>
 
 <a href="https://instagram.com/habitatbogota" target="_blank" data-tags="andean bogota colombia government habitatbogota housing south-america">🏘️ Habitat</a>
 
 <a href="https://instagram.com/mindefensaco" target="_blank" data-tags="mindefensaco">🛡️ MinDefensa</a>
 
-<a href="https://instagram.com/mininterior" target="_blank" data-tags="government">🏛️ Ministerio del Interior</a>
+<a href="https://instagram.com/mininterior" target="_blank" data-tags="government mininterior">🏛️ Ministerio del Interior</a>
 </div>
 </div>
 
@@ -436,7 +436,7 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/caracoltv" target="_blank" data-tags="caracoltv">📺 Caracol Televisión</a>
 <a href="https://instagram.com/cnnee" target="_blank" data-tags="cnn cnnee communication journalism latin-america media news spanish television usa">📺 CNN en Español</a>
 <a href="https://instagram.com/conversecol" target="_blank" data-tags="andean co colombia colombian conversecol latin-america south-america spanish-speaking">👟 Converse Colombia</a>
-<a href="https://instagram.com/crocscolombia_oficial" target="_blank" data-tags="andean co colombia colombian crocscolombia-oficial latin-america south-america spanish-speaking">👟 Crocs Colombia</a>
+<a href="https://instagram.com/crocscolombia_oficial" target="_blank" data-tags="andean co colombia colombian crocscolombia-oficial crocscolombia_oficial latin-america south-america spanish-speaking">👟 Crocs Colombia</a>
 <a href="https://instagram.com/cucutanoticias" target="_blank" data-tags="colombia communication cucuta cucutanoticias journalism local media news norte-santander">📰 Cúcuta Noticias</a>
 <a href="https://instagram.com/disneyplusla" target="_blank" data-tags="california disney disneyplusla entertainment family latin-america los-angeles movies north-america streaming usa west-coast">📺 Disney+ Latinoamérica</a>
 <a href="https://instagram.com/drogueriascafam" target="_blank" data-tags="drogueriascafam">💊 Droguerías Cafam</a>
@@ -447,19 +447,19 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/hbolatam" target="_blank" data-tags="broadcasting california communication entertainment hbo hbolatam latin-america los-angeles media north-america series streaming tv usa warner west-coast">📺 HBO Latinoamérica</a>
 <a href="https://instagram.com/somoshermo" target="_blank" data-tags="somoshermo">🏭 Hermo S.A.</a>
 <a href="https://instagram.com/historylatam" target="_blank" data-tags="california documentary education history-channel historylatam latin-america los-angeles north-america television usa west-coast">📺 History Latinoamérica</a>
-<a href="https://instagram.com/hpcolombia_" target="_blank" data-tags="andean co colombia colombian hpcolombia- latin-america south-america spanish-speaking">💻 HP Colombia</a>
-<a href="https://instagram.com/hyundai_col" target="_blank" data-tags="andean co colombia colombian hyundai-col latin-america south-america spanish-speaking">🚗 Hyundai Colombia</a>
-<a href="https://instagram.com/istore_ve" target="_blank" data-tags="business california caribbean commerce istore-ve latin-america los-angeles north-america retail shopping south-america spanish-speaking usa ve venezuela venezuelan west-coast">📱 iStore Venezuela</a>
+<a href="https://instagram.com/hpcolombia_" target="_blank" data-tags="andean co colombia colombian hpcolombia- hpcolombia_ latin-america south-america spanish-speaking">💻 HP Colombia</a>
+<a href="https://instagram.com/hyundai_col" target="_blank" data-tags="andean co colombia colombian hyundai-col hyundai_col latin-america south-america spanish-speaking">🚗 Hyundai Colombia</a>
+<a href="https://instagram.com/istore_ve" target="_blank" data-tags="business california caribbean commerce istore-ve istore_ve latin-america los-angeles north-america retail shopping south-america spanish-speaking usa ve venezuela venezuelan west-coast">📱 iStore Venezuela</a>
 <a href="https://instagram.com/jsomonline" target="_blank" data-tags="jsomonline">💼 JSOM</a>
 <a href="https://instagram.com/lenovocolombia" target="_blank" data-tags="andean co colombia colombian latin-america lenovocolombia south-america spanish-speaking">💻 Lenovo Colombia</a>
-<a href="https://instagram.com/microsoft_contacto" target="_blank" data-tags="andean co colombia colombian latin-america microsoft-contacto south-america spanish-speaking">💻 Microsoft Colombia</a>
+<a href="https://instagram.com/microsoft_contacto" target="_blank" data-tags="andean co colombia colombian latin-america microsoft-contacto microsoft_contacto south-america spanish-speaking">💻 Microsoft Colombia</a>
 <a href="https://instagram.com/minisocolombiaoficial" target="_blank" data-tags="andean co colombia colombian latin-america minisocolombiaoficial south-america spanish-speaking">🏪 Miniso Colombia</a>
 <a href="https://instagram.com/nayibbukele" target="_blank" data-tags="britain british central-america commonwealth el-salvador europe government latin-america leader nayibbukele politics president salvadoran san-salvador uk">🇸🇻 Nayib Bukele</a>
 <a href="https://instagram.com/netflixcolombia" target="_blank" data-tags="andean bogota co colombia colombian entertainment latin-america movies netflix netflixcolombia south-america spanish-speaking streaming tv">📺 Netflix Colombia</a>
 <a href="https://instagram.com/netflixes" target="_blank" data-tags="entertainment espana eu europe iberian mediterranean movies netflix netflixes spain spanish spanish-speaking streaming tv">📺 Netflix España</a>
 <a href="https://instagram.com/netflixfamilia" target="_blank" data-tags="california entertainment family latin-america los-angeles movies netflix netflixfamilia north-america streaming tv usa west-coast">📺 Netflix Familia</a>
 <a href="https://instagram.com/netflixlat" target="_blank" data-tags="california entertainment latin-america los-angeles movies netflix netflixlat north-america streaming tv usa west-coast">📺 Netflix Latinoamérica</a>
-<a href="https://instagram.com/oster_col" target="_blank" data-tags="andean co colombia colombian latin-america oster-col south-america spanish-speaking">🔌 Oster Colombia</a>
+<a href="https://instagram.com/oster_col" target="_blank" data-tags="andean co colombia colombian latin-america oster-col oster_col south-america spanish-speaking">🔌 Oster Colombia</a>
 <a href="https://instagram.com/oxxocolombia" target="_blank" data-tags="andean co colombia colombian latin-america oxxocolombia south-america spanish-speaking">🏪 OXXO Colombia</a>
 <a href="https://instagram.com/paramountplusmx" target="_blank" data-tags="paramountplusmx">📺 Paramount+ México</a>
 <a href="https://instagram.com/primevideolat" target="_blank" data-tags="amazon california entertainment latin-america los-angeles movies north-america prime-video primevideolat streaming tv usa west-coast">📺 Prime Video LATAM</a>
@@ -527,13 +527,13 @@ A curated collection of content I find inspiring, educational, or just plain int
 
 <a href="https://instagram.com/heinzcolombia" target="_blank" data-tags="andean co colombia colombian heinzcolombia latin-america south-america spanish-speaking">🍅 Heinz Colombia</a>
 
-<a href="https://instagram.com/holafood___" target="_blank" data-tags="food">🍜 HolaFood</a>
+<a href="https://instagram.com/holafood___" target="_blank" data-tags="food holafood___">🍜 HolaFood</a>
 
 <a href="https://instagram.com/kfc.colombia" target="_blank" data-tags="andean co colombia colombian kfc.colombia latin-america south-america spanish-speaking">🍗 KFC Colombia</a>
 
 <a href="https://instagram.com/lccolombia" target="_blank" data-tags="andean co colombia colombian latin-america lccolombia south-america spanish-speaking">🍕 Little Caesars Colombia</a>
 
-<a href="https://instagram.com/machan_colombia_1102" target="_blank" data-tags="andean co colombia colombian latin-america machan-colombia-1102 south-america spanish-speaking">🇯🇵 Machan Colombia</a>
+<a href="https://instagram.com/machan_colombia_1102" target="_blank" data-tags="andean co colombia colombian latin-america machan-colombia-1102 machan_colombia_1102 south-america spanish-speaking">🇯🇵 Machan Colombia</a>
 
 <a href="https://instagram.com/madeinbucara" target="_blank" data-tags="bucaramanga co colombia colombian food local madeinbucara santander south-america">🇨🇴 Made In Bucara</a>
 
@@ -569,15 +569,15 @@ A curated collection of content I find inspiring, educational, or just plain int
 
 <a href="https://instagram.com/colcafe" target="_blank" data-tags="colcafe dining food hospitality restaurant">☕ Colcafé</a>
 
-<a href="https://instagram.com/dunkin_co" target="_blank" data-tags="andean co colombia colombian dunkin-co latin-america south-america spanish-speaking">☕ Dunkin' Colombia</a>
+<a href="https://instagram.com/dunkin_co" target="_blank" data-tags="andean co colombia colombian dunkin-co dunkin_co latin-america south-america spanish-speaking">☕ Dunkin' Colombia</a>
 
-<a href="https://instagram.com/nescafe_col" target="_blank" data-tags="andean co colombia colombian dining food hospitality latin-america nescafe-col restaurant south-america spanish-speaking">☕ Nescafé Colombia</a>
+<a href="https://instagram.com/nescafe_col" target="_blank" data-tags="andean co colombia colombian dining food hospitality latin-america nescafe-col nescafe_col restaurant south-america spanish-speaking">☕ Nescafé Colombia</a>
 
-<a href="https://instagram.com/hecho_enbogota" target="_blank" data-tags="andean bogota colombia crafts hecho-enbogota local products south-america">🏙️ Hecho en Bogotá</a>
+<a href="https://instagram.com/hecho_enbogota" target="_blank" data-tags="andean bogota colombia crafts hecho-enbogota hecho_enbogota local products south-america">🏙️ Hecho en Bogotá</a>
 
 <a href="https://instagram.com/mimedellinsaborea" target="_blank" data-tags="antioquia colombia food medellin mimedellinsaborea restaurant south-america">🍽️ Mi Medellín Saborea</a>
 
-<a href="https://instagram.com/popayan_moderna" target="_blank" data-tags="cauca colombia lifestyle popayan popayan-moderna south-america">🏛️ Popayán Moderna</a>
+<a href="https://instagram.com/popayan_moderna" target="_blank" data-tags="cauca colombia lifestyle popayan popayan-moderna popayan_moderna south-america">🏛️ Popayán Moderna</a>
 </div>
 </div>
 
@@ -586,12 +586,12 @@ A curated collection of content I find inspiring, educational, or just plain int
 <div class="instagram-links travel">
 <h4>Travel Bloggers & Content Creators</h4>
 <div class="link-grid">
-<a href="https://instagram.com/bicitour_medellin" target="_blank" data-tags="antioquia bicitour-medellin bicycle colombia medellin south-america tours">🚴 Bicitour Medellín</a>
+<a href="https://instagram.com/bicitour_medellin" target="_blank" data-tags="antioquia bicitour-medellin bicitour_medellin bicycle colombia medellin south-america tours">🚴 Bicitour Medellín</a>
 <a href="https://instagram.com/bogotacomidas" target="_blank" data-tags="andean bogota bogotacomidas colombia cuisine food gastronomy restaurants south-america">🍴 Bogotá Comidas</a>
 <a href="https://instagram.com/bogotaplan" target="_blank" data-tags="andean bogota bogotaplan california colombia culture events los-angeles north-america south-america usa west-coast">🎭 Bogotá Plan</a>
 <a href="https://instagram.com/expoartesano" target="_blank" data-tags="andean artisan co colombia colombian crafts expoartesano fair latin-america south-america spanish-speaking">🎨 Expoartesano</a>
-<a href="https://instagram.com/foodinbogota" target="_blank" data-tags="food">🍴 Food in Bogotá</a>
-<a href="https://instagram.com/_losbuenossomosmas" target="_blank" data-tags="-losbuenossomosmas andean co colombia colombian latin-america lifestyle positive south-america spanish-speaking">💛 Los Buenos Somos Más</a>
+<a href="https://instagram.com/foodinbogota" target="_blank" data-tags="food foodinbogota">🍴 Food in Bogotá</a>
+<a href="https://instagram.com/_losbuenossomosmas" target="_blank" data-tags="-losbuenossomosmas _losbuenossomosmas andean co colombia colombian latin-america lifestyle positive south-america spanish-speaking">💛 Los Buenos Somos Más</a>
 <a href="https://instagram.com/nomadafrustrada" target="_blank" data-tags="digital-nomad nomadafrustrada travel worldwide">🌍 Nómada Frustrada</a>
 <a href="https://instagram.com/viajandoempelota" target="_blank" data-tags="backpacking california latin-america los-angeles north-america travel usa viajandoempelota west-coast">🎒 Viajando Empelota</a>
 <a href="https://instagram.com/vivatailandia" target="_blank" data-tags="asia bangkok california los-angeles north-america thailand travel usa vivatailandia west-coast">🇹🇭 Viva Tailandia</a>
@@ -599,9 +599,9 @@ A curated collection of content I find inspiring, educational, or just plain int
 <a href="https://instagram.com/cucutaturismo" target="_blank" data-tags="colombia cucuta norte-santander tourism">✈️ Cúcuta Turismo<span class="location"> • Cúcuta</span></a>
 <a href="https://instagram.com/visitarmedellin" target="_blank" data-tags="colombia medellin antioquia tourism">✈️ Visitar Medellín<span class="location"> • Medellín</span></a>
 <a href="https://instagram.com/teamobogota" target="_blank" data-tags="colombia bogota lifestyle love">❤️ Te Amo Bogotá<span class="location"> • Bogotá</span></a>
-<a href="https://instagram.com/medellinenelmapa_" target="_blank" data-tags="antioquia colombia guide maps medellin medellinenelmapa- south-america">🗺️ Medellín en el Mapa</a>
+<a href="https://instagram.com/medellinenelmapa_" target="_blank" data-tags="antioquia colombia guide maps medellin medellinenelmapa- medellinenelmapa_ south-america">🗺️ Medellín en el Mapa</a>
 <a href="https://instagram.com/medellinenvideos" target="_blank" data-tags="antioquia colombia medellin medellinenvideos south-america videos">📽️ Medellín en Videos</a>
-<a href="https://instagram.com/medellin_guru" target="_blank" data-tags="antioquia colombia guide medellin medellin-guru south-america travel">🏙️ Medellín Guru</a>
+<a href="https://instagram.com/medellin_guru" target="_blank" data-tags="antioquia colombia guide medellin medellin-guru medellin_guru south-america travel">🏙️ Medellín Guru</a>
 <a href="https://instagram.com/visitbogota.co" target="_blank" data-tags="andean bogota colombia official south-america tourism visitbogota.co">🏙️ Visit Bogotá</a>
 </div>
 </div>
@@ -611,10 +611,10 @@ A curated collection of content I find inspiring, educational, or just plain int
 <div class="instagram-links education">
 <h4>Teachers & Educators</h4>
 <div class="link-grid">
-<a href="https://instagram.com/coreano_paso_a_paso" target="_blank" data-tags="asia coreano-paso-a-paso culture east-asia education k-pop korea korean language-learning">🇰🇷 Aprende Coreano</a>
+<a href="https://instagram.com/coreano_paso_a_paso" target="_blank" data-tags="asia coreano-paso-a-paso coreano_paso_a_paso culture east-asia education k-pop korea korean language-learning">🇰🇷 Aprende Coreano</a>
 <a href="https://instagram.com/javiermoralesfotografo" target="_blank" data-tags="cartagena colombia creative javiermoralesfotografo photography visual-arts weddings">📸 Javier Morales</a>
 <a href="https://instagram.com/ohayolily" target="_blank" data-tags="asia california chinese education japanese language-learning los-angeles north-america ohayolily polyglot usa west-coast">🇯🇵 Lily 丽丽</a>
-<a href="https://instagram.com/limn_ai" target="_blank" data-tags="ai artificial-intelligence education future limn-ai research technology">🤖 Tobias Rees</a>
+<a href="https://instagram.com/limn_ai" target="_blank" data-tags="ai artificial-intelligence education future limn-ai limn_ai research technology">🤖 Tobias Rees</a>
 <a href="https://instagram.com/carter.cote" target="_blank" data-tags="carter.cote content-creator education life student university">👨‍🎓 Carter Cote</a>
 <a href="https://instagram.com/jdoviedoar" target="_blank" data-tags="bogota colombia dane data education government jdoviedoar statistics">👨‍💼 Juan Daniel Oviedo</a>
 <a href="https://instagram.com/laprofemonica" target="_blank" data-tags="california colombia education language-learning laprofemonica los-angeles north-america pedagogy spanish teacher usa west-coast">👩‍🏫 La Profe Mónica</a>
