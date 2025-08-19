@@ -68,7 +68,8 @@
       "Bash(true)",
       "Bash(do grep -l \"^# \" \"$file\")",
       "Bash(do sed -i '/^# /d' \"$file\")",
-      "Bash(do echo \"Testing $url:\")"
+      "Bash(do echo \"Testing $url:\")",
+      "Bash(sed:*)"
     ],
     "defaultMode": "acceptEdits"
   }

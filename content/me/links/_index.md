@@ -15,8 +15,8 @@ A curated collection of content I find inspiring, educational, or just plain int
 ### 🏛️ Embassies & Diplomatic Missions
 
 <div class="instagram-links diplomatic">
-    <h4>Mexico Embassies Worldwide</h4>
-    <div class="link-grid">
+<h4>Mexico Embassies Worldwide</h4>
+<div class="link-grid">
         <a href="https://instagram.com/embamexjp" target="_blank">🇯🇵 Mexico in Japan</a>
         <a href="https://instagram.com/embamexperu" target="_blank">🇵🇪 Mexico in Peru</a>
         <a href="https://instagram.com/emba_mexbol" target="_blank">🇧🇴 Mexico in Bolivia</a>
@@ -31,10 +31,10 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/embamexlibano" target="_blank">🇱🇧 Mexico in Lebanon</a>
         <a href="https://instagram.com/embamexvenezuela" target="_blank">🇻🇪 Mexico in Venezuela</a>
         <a href="https://instagram.com/consulmexsea" target="_blank">🇺🇸 Mexican Consulate Seattle</a>
-    </div>
+</div>
     
-    <h4>Foreign Embassies in Mexico</h4>
-    <div class="link-grid">
+<h4>Foreign Embassies in Mexico</h4>
+<div class="link-grid">
         <a href="https://instagram.com/embmexenjordania" target="_blank">🇯🇴 Jordan Embassy</a>
         <a href="https://instagram.com/elperuenmex" target="_blank">🇵🇪 Peru Embassy</a>
         <a href="https://instagram.com/belgicaenmexico" target="_blank">🇧🇪 Belgium Embassy</a>
@@ -54,10 +54,10 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/casadesuiza" target="_blank">🇨🇭 Switzerland Embassy</a>
         <a href="https://instagram.com/alemaniamexi" target="_blank">🇩🇪 Germany Embassy</a>
         <a href="https://instagram.com/franciaenmexico" target="_blank">🇫🇷 France Embassy</a>
-    </div>
+</div>
     
-    <h4>Venezuela Diplomatic Network</h4>
-    <div class="link-grid">
+<h4>Venezuela Diplomatic Network</h4>
+<div class="link-grid">
         <a href="https://instagram.com/embavenmexico" target="_blank">🇲🇽 Venezuela in Mexico</a>
         <a href="https://instagram.com/embavenitalia" target="_blank">🇮🇹 Venezuela in Italy</a>
         <a href="https://instagram.com/embavefrancia" target="_blank">🇫🇷 Venezuela in France</a>
@@ -70,10 +70,10 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/embafrancia" target="_blank">🇫🇷 France in Venezuela</a>
         <a href="https://instagram.com/brenvenezuela" target="_blank">🇧🇷 Brazil in Venezuela</a>
         <a href="https://instagram.com/plenvenezuela" target="_blank">🇻🇪 Venezuela Embassy</a>
-    </div>
+</div>
     
-    <h4>Colombia Diplomatic Network</h4>
-    <div class="link-grid">
+<h4>Colombia Diplomatic Network</h4>
+<div class="link-grid">
         <a href="https://instagram.com/embcolindia" target="_blank">🇮🇳 Colombia in India</a>
         <a href="https://instagram.com/embcolombiaenarg" target="_blank">🇦🇷 Colombia in Argentina</a>
         <a href="https://instagram.com/embcolombiaenrd" target="_blank">🇩🇴 Colombia in Rep. Dom.</a>
@@ -122,10 +122,10 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/embsuizacolombia" target="_blank">🇨🇭 Switzerland in Colombia</a>
         <a href="https://instagram.com/denmarkinfrance" target="_blank">🇩🇰 Denmark in France</a>
         <a href="https://instagram.com/denmarkincolombia" target="_blank">🇩🇰 Denmark in Colombia</a>
-    </div>
+</div>
     
-    <h4>Other Consulates & Missions</h4>
-    <div class="link-grid">
+<h4>Other Consulates & Missions</h4>
+<div class="link-grid">
         <a href="https://instagram.com/consvemedellin" target="_blank">🇨🇴 Venezuela Consulate Medellín</a>
         <a href="https://instagram.com/consulveneriohacha" target="_blank">🇨🇴 Venezuela Consulate Riohacha</a>
         <a href="https://instagram.com/consuladocolantofa" target="_blank">🇨🇱 Colombia Consulate Antofagasta</a>
@@ -135,13 +135,13 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/embavene_col" target="_blank">🇻🇪 Venezuela in Colombia</a>
         <a href="https://instagram.com/embavecolombia" target="_blank">🇻🇪 Venezuela Embassy Colombia</a>
         <a href="https://instagram.com/embavenez_india" target="_blank">🇮🇳 Venezuela in India</a>
-    </div>
+</div>
 </div>
 
 ### 🎨 Cultural & Educational Organizations
 
 <div class="instagram-links cultural">
-    <div class="link-grid">
+<div class="link-grid">
         <a href="https://instagram.com/comhaltascolombia" target="_blank">🎵 Comhaltas Colombia</a>
         <a href="https://instagram.com/museomyt" target="_blank">🏛️ Museo Memoria y Tolerancia</a>
         <a href="https://instagram.com/somamexico" target="_blank">🎨 SOMA Mexico</a>
@@ -192,13 +192,13 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/archivohistoricobaq" target="_blank">📚 Archivo Histórico Barranquilla</a>
         <a href="https://instagram.com/unibarranquilla_" target="_blank">🎓 Universidad de Barranquilla</a>
         <a href="https://instagram.com/upbcolombia" target="_blank">🎓 Universidad Pontificia Bolivariana</a>
-    </div>
+</div>
 </div>
 
 ### 🤝 International Organizations
 
 <div class="instagram-links organizations">
-    <div class="link-grid">
+<div class="link-grid">
         <a href="https://instagram.com/onumujeresmx" target="_blank">🇺🇳 ONU Mujeres México</a>
         <a href="https://instagram.com/aimexico" target="_blank">⚖️ Amnistía Internacional México</a>
         <a href="https://instagram.com/hiascolombia" target="_blank">🤲 HIAS Colombia</a>
@@ -228,14 +228,14 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/asuntosambientalesctg" target="_blank">🌳 Asuntos Ambientales Cartagena</a>
         <a href="https://instagram.com/supersolidaria" target="_blank">🤝 Superintendencia Solidaria</a>
         <a href="https://instagram.com/supertransporte_oficial" target="_blank">🚗 SuperTransporte</a>
-    </div>
+</div>
 </div>
 
 ### 🍔 Food & Beverage Brands - Venezuela
 
 <div class="instagram-links food-brands">
-    <h4>International Brands</h4>
-    <div class="link-grid">
+<h4>International Brands</h4>
+<div class="link-grid">
         <a href="https://instagram.com/doritosvzla" target="_blank">🌮 Doritos</a>
         <a href="https://instagram.com/jacksvenezuela" target="_blank">🍿 Jack's</a>
         <a href="https://instagram.com/pepsicovzla" target="_blank">🥤 PepsiCo</a>
@@ -246,10 +246,10 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/nescafeve" target="_blank">☕ Nescafé</a>
         <a href="https://instagram.com/oreo.venezuela" target="_blank">🍪 Oreo</a>
         <a href="https://instagram.com/papajohnsve" target="_blank">🍕 Papa John's</a>
-    </div>
+</div>
     
-    <h4>Local Venezuelan Brands</h4>
-    <div class="link-grid">
+<h4>Local Venezuelan Brands</h4>
+<div class="link-grid">
         <a href="https://instagram.com/chiskesitos" target="_blank">🧀 ChisKesitos</a>
         <a href="https://instagram.com/primorvzla" target="_blank">🍴 Primor</a>
         <a href="https://instagram.com/savoynestle" target="_blank">🍫 Savoy</a>
@@ -270,14 +270,14 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/parmalatve" target="_blank">🥛 Parmalat</a>
         <a href="https://instagram.com/cafe.sellorojo" target="_blank">☕ Café Sello Rojo</a>
         <a href="https://instagram.com/trolligomitas" target="_blank">🍬 Gomitas Trolli</a>
-    </div>
+</div>
 </div>
 
 ### 🏛️ Government & Municipal Organizations
 
 <div class="instagram-links government">
-    <h4>China Diplomatic Network</h4>
-    <div class="link-grid">
+<h4>China Diplomatic Network</h4>
+<div class="link-grid">
         <a href="https://instagram.com/arginchina" target="_blank">🇦🇷 Argentina in China</a>
         <a href="https://instagram.com/embajadaecuador.china" target="_blank">🇪🇨 Ecuador in China</a>
         <a href="https://instagram.com/chinaembajada" target="_blank">🇩🇴 China in Rep. Dom.</a>
@@ -287,10 +287,10 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/embchinachile" target="_blank">🇨🇳 China in Chile</a>
         <a href="https://instagram.com/embajada_del_peru_en_china" target="_blank">🇵🇪 Peru in China</a>
         <a href="https://instagram.com/embachilechina" target="_blank">🇨🇱 Chile in China</a>
-    </div>
+</div>
     
-    <h4>Colombian Cities & Departments</h4>
-    <div class="link-grid">
+<h4>Colombian Cities & Departments</h4>
+<div class="link-grid">
         <a href="https://instagram.com/alcaldiadebucaramanga" target="_blank">🏛️ Alcaldía Bucaramanga</a>
         <a href="https://instagram.com/alcaldiadecaldas" target="_blank">🏛️ Alcaldía de Caldas</a>
         <a href="https://instagram.com/educacioncali" target="_blank">🎓 Educación Cali</a>
@@ -356,13 +356,13 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/minigualdadcol" target="_blank">⚖️ Ministerio de Igualdad</a>
         <a href="https://instagram.com/minagriculturacol" target="_blank">🌾 Ministerio de Agricultura</a>
         <a href="https://instagram.com/infopresidencia" target="_blank">🇨🇴 Presidencia de Colombia</a>
-    </div>
+</div>
 </div>
 
 ### 🏢 Other Brands & Services
 
 <div class="instagram-links other-brands">
-    <div class="link-grid">
+<div class="link-grid">
         <a href="https://instagram.com/vaselinevzla" target="_blank">💧 Vaseline Venezuela</a>
         <a href="https://instagram.com/tigovenezuela" target="_blank">📱 Tigo Venezuela</a>
         <a href="https://instagram.com/spotifymexico" target="_blank">🎵 Spotify México</a>
@@ -412,14 +412,14 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/caracolmedellin" target="_blank">📻 Caracol Radio Medellín</a>
         <a href="https://instagram.com/senalcolombiatv" target="_blank">📺 Señal Colombia</a>
         <a href="https://instagram.com/forbescolombia" target="_blank">📰 Forbes Colombia</a>
-    </div>
+</div>
 </div>
 
 ### 🍴 Food & Local Experiences
 
 <div class="instagram-links local-food">
-    <h4>Colombian Food & Restaurants</h4>
-    <div class="link-grid">
+<h4>Colombian Food & Restaurants</h4>
+<div class="link-grid">
         <a href="https://instagram.com/cochibacon" target="_blank">🥓 Cochi Bacon</a>
         <a href="https://instagram.com/mimedellinsaborea" target="_blank">🍽️ Mi Medellín Saborea</a>
         <a href="https://instagram.com/elclubgastronomico" target="_blank">🍷 El Club Gastronómico</a>
@@ -467,14 +467,14 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/chocolatesjet" target="_blank">🍫 Chocolates Jet</a>
         <a href="https://instagram.com/alimentosdoria" target="_blank">🍝 Alimentos Doria</a>
         <a href="https://instagram.com/mcdonaldscol" target="_blank">🍔 McDonald's Colombia</a>
-    </div>
+</div>
 </div>
 
 ### ✈️ Travel & Lifestyle
 
 <div class="instagram-links travel">
-    <h4>Travel Bloggers & Content Creators</h4>
-    <div class="link-grid">
+<h4>Travel Bloggers & Content Creators</h4>
+<div class="link-grid">
         <a href="https://instagram.com/colombianfamily" target="_blank">👨‍👩‍👧‍👦 Colombian Family</a>
         <a href="https://instagram.com/viajandoempelota" target="_blank">🎒 Viajando Empelota</a>
         <a href="https://instagram.com/nomadafrustrada" target="_blank">🌍 Nómada Frustrada</a>
@@ -492,14 +492,14 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/cucutaturismo" target="_blank">✈️ Cúcuta Turismo</a>
         <a href="https://instagram.com/bicitour_medellin" target="_blank">🚴 Bicitour Medellín</a>
         <a href="https://instagram.com/expoartesano" target="_blank">🎨 Expoartesano</a>
-    </div>
+</div>
 </div>
 
 ### 👩‍🏫 Education & Teaching
 
 <div class="instagram-links education">
-    <h4>Teachers & Educators</h4>
-    <div class="link-grid">
+<h4>Teachers & Educators</h4>
+<div class="link-grid">
         <a href="https://instagram.com/espeak.english" target="_blank">🗣️ E-Speak English</a>
         <a href="https://instagram.com/laprofemonica" target="_blank">👩‍🏫 La Profe Mónica</a>
         <a href="https://instagram.com/jdoviedoar" target="_blank">👨‍💼 Juan Daniel Oviedo</a>
@@ -508,32 +508,32 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/limn_ai" target="_blank">🤖 Tobias Rees</a>
         <a href="https://instagram.com/carter.cote" target="_blank">👨‍🎓 Carter Cote</a>
         <a href="https://instagram.com/javiermoralesfotografo" target="_blank">📸 Javier Morales Fotógrafo</a>
-    </div>
+</div>
 </div>
 
 ## YouTube Picks
 
 <div class="youtube-grid">
-    <!-- YouTube embeds will be added here -->
-    <p style="padding: 2rem; text-align: center; color: var(--color-text-secondary);">
+<!-- YouTube embeds will be added here -->
+<p style="padding: 2rem; text-align: center; color: var(--color-text-secondary);">
         YouTube content coming soon. Will feature educational videos, language learning resources, and tech tutorials.
-    </p>
+</p>
 </div>
 
 ## Web Discoveries
 
 <div class="web-links">
-    <p style="padding: 2rem; text-align: center; color: var(--color-text-secondary);">
+<p style="padding: 2rem; text-align: center; color: var(--color-text-secondary);">
         Web resources and articles coming soon. Will include the best finds from around the web on education, technology, and language learning.
-    </p>
+</p>
 </div>
 
 ## Podcasts & Audio
 
 <div class="podcast-list">
-    <p style="padding: 2rem; text-align: center; color: var(--color-text-secondary);">
+<p style="padding: 2rem; text-align: center; color: var(--color-text-secondary);">
         Podcast recommendations coming soon. Will feature episodes on education, EdTech, and language acquisition.
-    </p>
+</p>
 </div>
 
 <!-- Instagram embed script -->
