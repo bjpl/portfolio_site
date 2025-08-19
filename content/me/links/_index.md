@@ -72,7 +72,40 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/plenvenezuela" target="_blank">🇻🇪 Venezuela Embassy</a>
     </div>
     
-    <h4>Consulates & Other Missions</h4>
+    <h4>Colombia Diplomatic Network</h4>
+    <div class="link-grid">
+        <a href="https://instagram.com/embcolindia" target="_blank">🇮🇳 Colombia in India</a>
+        <a href="https://instagram.com/embcolombiaenarg" target="_blank">🇦🇷 Colombia in Argentina</a>
+        <a href="https://instagram.com/embcolombiaenrd" target="_blank">🇩🇴 Colombia in Rep. Dom.</a>
+        <a href="https://instagram.com/embajadadecolombiaen" target="_blank">🌍 Colombia Embassy</a>
+        <a href="https://instagram.com/colombianembassyuk" target="_blank">🇬🇧 Colombia in UK</a>
+        <a href="https://instagram.com/embcoltailandia" target="_blank">🇹🇭 Colombia in Thailand</a>
+        <a href="https://instagram.com/embcolghana" target="_blank">🇬🇭 Colombia in Ghana</a>
+        <a href="https://instagram.com/consuladocollondres" target="_blank">🇬🇧 Colombia Consulate London</a>
+        <a href="https://instagram.com/embajadacolpan" target="_blank">🇵🇦 Colombia in Panama</a>
+        <a href="https://instagram.com/del_colombiaunesco" target="_blank">🇺🇳 Colombia UNESCO</a>
+        <a href="https://instagram.com/embcolnl" target="_blank">🇳🇱 Colombia in Netherlands</a>
+        <a href="https://instagram.com/consuladocolmex" target="_blank">🇲🇽 Colombia Consulate Mexico</a>
+        <a href="https://instagram.com/embacolombiaenvzla" target="_blank">🇻🇪 Colombia in Venezuela</a>
+        <a href="https://instagram.com/emcoles" target="_blank">🇸🇻 Colombia in El Salvador</a>
+        <a href="https://instagram.com/ukincolombia" target="_blank">🇬🇧 UK in Colombia</a>
+        <a href="https://instagram.com/irelandcolombia" target="_blank">🇮🇪 Ireland in Colombia</a>
+        <a href="https://instagram.com/colombiaembassyus" target="_blank">🇺🇸 Colombia in USA</a>
+        <a href="https://instagram.com/embcolombiamex" target="_blank">🇲🇽 Colombia in Mexico</a>
+        <a href="https://instagram.com/embajadacolombitalia" target="_blank">🇮🇹 Colombia in Italy</a>
+        <a href="https://instagram.com/embajadacolesp" target="_blank">🇪🇸 Colombia in Spain</a>
+        <a href="https://instagram.com/embajadaespcol" target="_blank">🇪🇸 Spain in Colombia</a>
+        <a href="https://instagram.com/embcolecuador" target="_blank">🇪🇨 Colombia in Ecuador</a>
+        <a href="https://instagram.com/consuladocolboston" target="_blank">🇺🇸 Colombia Consulate Boston</a>
+        <a href="https://instagram.com/consuladocolombiaatlanta" target="_blank">🇺🇸 Colombia Consulate Atlanta</a>
+        <a href="https://instagram.com/embajadacolkor" target="_blank">🇰🇷 Colombia in Korea</a>
+        <a href="https://instagram.com/consuladocolombiafrance" target="_blank">🇫🇷 Colombia Consulate France</a>
+        <a href="https://instagram.com/embcolaustria" target="_blank">🇦🇹 Colombia in Austria</a>
+        <a href="https://instagram.com/consuladocollosangeles" target="_blank">🇺🇸 Colombia Consulate LA</a>
+        <a href="https://instagram.com/embajadacolombia_eau" target="_blank">🇦🇪 Colombia in UAE</a>
+    </div>
+    
+    <h4>Other Consulates & Missions</h4>
     <div class="link-grid">
         <a href="https://instagram.com/consvemedellin" target="_blank">🇨🇴 Venezuela Consulate Medellín</a>
         <a href="https://instagram.com/consulveneriohacha" target="_blank">🇨🇴 Venezuela Consulate Riohacha</a>
@@ -80,6 +113,9 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/spainintheusa" target="_blank">🇺🇸 Spain in USA</a>
         <a href="https://instagram.com/euintheus" target="_blank">🇺🇸 EU in USA</a>
         <a href="https://instagram.com/uemexico" target="_blank">🇲🇽 EU in Mexico</a>
+        <a href="https://instagram.com/embavene_col" target="_blank">🇻🇪 Venezuela in Colombia</a>
+        <a href="https://instagram.com/embavecolombia" target="_blank">🇻🇪 Venezuela Embassy Colombia</a>
+        <a href="https://instagram.com/embavenez_india" target="_blank">🇮🇳 Venezuela in India</a>
     </div>
 </div>
 
@@ -92,6 +128,17 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/somamexico" target="_blank">🎨 SOMA Mexico</a>
         <a href="https://instagram.com/museodelamujercdmx" target="_blank">👩 Museo de la Mujer CDMX</a>
         <a href="https://instagram.com/agnmex" target="_blank">📚 Archivo General de la Nación</a>
+        <a href="https://instagram.com/museohnunal" target="_blank">🦖 Museo Historia Natural</a>
+        <a href="https://instagram.com/upedagogicanacional" target="_blank">🎓 Universidad Pedagógica</a>
+        <a href="https://instagram.com/universidaddelcauca" target="_blank">🎓 Universidad Del Cauca</a>
+        <a href="https://instagram.com/unicaucaposgrados" target="_blank">🎓 Centro Posgrados Cauca</a>
+        <a href="https://instagram.com/berlitzcolombia" target="_blank">🗣️ Berlitz Colombia</a>
+        <a href="https://instagram.com/fiteatrocali" target="_blank">🎭 Festival Teatro Cali</a>
+        <a href="https://instagram.com/iicbogota" target="_blank">🇮🇹 Istituto Italiano Bogotá</a>
+        <a href="https://instagram.com/museodeloro" target="_blank">🏛️ Museo del Oro</a>
+        <a href="https://instagram.com/embajada_corea" target="_blank">🇰🇷 Embajada de Corea</a>
+        <a href="https://instagram.com/coreacolombia" target="_blank">🇰🇷 Centro Cultural Coreano</a>
+        <a href="https://instagram.com/descubriendo.china" target="_blank">🇨🇳 Descubriendo China</a>
     </div>
 </div>
 
@@ -103,6 +150,8 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/aimexico" target="_blank">⚖️ Amnistía Internacional México</a>
         <a href="https://instagram.com/hiascolombia" target="_blank">🤲 HIAS Colombia</a>
         <a href="https://instagram.com/ocha_venezuela" target="_blank">🇺🇳 OCHA Venezuela</a>
+        <a href="https://instagram.com/amchamcolombia" target="_blank">🇺🇸 AmCham Colombia</a>
+        <a href="https://instagram.com/koica_colombia" target="_blank">🇰🇷 KOICA Colombia</a>
     </div>
 </div>
 
@@ -148,6 +197,42 @@ A curated collection of content I find inspiring, educational, or just plain int
     </div>
 </div>
 
+### 🏛️ Government & Municipal Organizations
+
+<div class="instagram-links government">
+    <h4>China Diplomatic Network</h4>
+    <div class="link-grid">
+        <a href="https://instagram.com/arginchina" target="_blank">🇦🇷 Argentina in China</a>
+        <a href="https://instagram.com/embajadaecuador.china" target="_blank">🇪🇨 Ecuador in China</a>
+        <a href="https://instagram.com/chinaembajada" target="_blank">🇩🇴 China in Rep. Dom.</a>
+        <a href="https://instagram.com/chinaembpa" target="_blank">🇵🇦 China in Panama</a>
+        <a href="https://instagram.com/embavechina" target="_blank">🇻🇪 Venezuela in China</a>
+        <a href="https://instagram.com/embapartaiwan" target="_blank">🇵🇾 Paraguay in Taiwan</a>
+    </div>
+    
+    <h4>Colombian Cities & Departments</h4>
+    <div class="link-grid">
+        <a href="https://instagram.com/alcaldiadebucaramanga" target="_blank">🏛️ Alcaldía Bucaramanga</a>
+        <a href="https://instagram.com/alcaldiadecaldas" target="_blank">🏛️ Alcaldía de Caldas</a>
+        <a href="https://instagram.com/educacioncali" target="_blank">🎓 Educación Cali</a>
+        <a href="https://instagram.com/educacion_bogota" target="_blank">🎓 Educación Bogotá</a>
+        <a href="https://instagram.com/habitatbogota" target="_blank">🏘️ Habitat Bogotá</a>
+        <a href="https://instagram.com/participacionbogota" target="_blank">🤝 Participación Bogotá</a>
+        <a href="https://instagram.com/integracionsocialbog" target="_blank">🤲 Integración Social Bogotá</a>
+        <a href="https://instagram.com/bogotaescivica" target="_blank">🏛️ Cultura Ciudadana Bogotá</a>
+        <a href="https://instagram.com/secdeportepopayan" target="_blank">⚽ Deporte Popayán</a>
+        <a href="https://instagram.com/secculturayturismopopayan" target="_blank">🎭 Cultura y Turismo Popayán</a>
+        <a href="https://instagram.com/policiabmanga" target="_blank">👮 Policía Bucaramanga</a>
+        <a href="https://instagram.com/gobertolima" target="_blank">🏛️ Gobernación Tolima</a>
+        <a href="https://instagram.com/gobernacionrisaralda" target="_blank">🏛️ Gobernación Risaralda</a>
+        <a href="https://instagram.com/dagmaoficial" target="_blank">🌳 DAGMA Oficial</a>
+        <a href="https://instagram.com/gobiernbta" target="_blank">🏛️ Gobierno Bogotá</a>
+        <a href="https://instagram.com/caliculturacol" target="_blank">🎭 Cultura Cali</a>
+        <a href="https://instagram.com/popayancultural" target="_blank">🎨 Popayán Cultural</a>
+        <a href="https://instagram.com/alcaldiapopayan" target="_blank">🏛️ Alcaldía Popayán</a>
+    </div>
+</div>
+
 ### 🏢 Other Brands & Services
 
 <div class="instagram-links other-brands">
@@ -158,6 +243,61 @@ A curated collection of content I find inspiring, educational, or just plain int
         <a href="https://instagram.com/alcaldiadeccs" target="_blank">🏛️ Alcaldía de Caracas</a>
         <a href="https://instagram.com/somoshermo" target="_blank">🏭 Hermo S.A.</a>
         <a href="https://instagram.com/istore_ve" target="_blank">📱 iStore Venezuela</a>
+        <a href="https://instagram.com/productosramo" target="_blank">🍪 Productos Ramo</a>
+        <a href="https://instagram.com/bluradio" target="_blank">📻 Blu Radio</a>
+        <a href="https://instagram.com/mayorcamegaplaz" target="_blank">🛍️ Centro Comercial Mayor</a>
+        <a href="https://instagram.com/bodegaschinas" target="_blank">🏪 Bodegas Chinas</a>
+        <a href="https://instagram.com/jsomonline" target="_blank">💼 JSOM</a>
+        <a href="https://instagram.com/conversecol" target="_blank">👟 Converse Colombia</a>
+    </div>
+</div>
+
+### 🍴 Food & Local Experiences
+
+<div class="instagram-links local-food">
+    <h4>Colombian Food & Restaurants</h4>
+    <div class="link-grid">
+        <a href="https://instagram.com/cochibacon" target="_blank">🥓 Cochi Bacon</a>
+        <a href="https://instagram.com/mimedellinsaborea" target="_blank">🍽️ Mi Medellín Saborea</a>
+        <a href="https://instagram.com/elclubgastronomico" target="_blank">🍷 El Club Gastronómico</a>
+        <a href="https://instagram.com/entrearbolescali" target="_blank">🌳 Entre Árboles Cali</a>
+        <a href="https://instagram.com/unjardinenelcielo" target="_blank">🌄 Un Jardín en el Cielo</a>
+        <a href="https://instagram.com/madeinbucara" target="_blank">🇨🇴 Made In Bucara</a>
+        <a href="https://instagram.com/eatbucaramanga" target="_blank">🍴 Eat Bucaramanga</a>
+        <a href="https://instagram.com/quehacerbga" target="_blank">📍 Qué Hacer Bucaramanga</a>
+        <a href="https://instagram.com/hecho_enbogota" target="_blank">🏙️ Hecho en Bogotá</a>
+        <a href="https://instagram.com/popayan_moderna" target="_blank">🏛️ Popayán Moderna</a>
+        <a href="https://instagram.com/lccolombia" target="_blank">🍕 Little Caesars Colombia</a>
+        <a href="https://instagram.com/nestlecolombia" target="_blank">🍫 Nestlé Colombia</a>
+        <a href="https://instagram.com/bimbocolombia" target="_blank">🍞 Bimbo Colombia</a>
+        <a href="https://instagram.com/papas.margarita" target="_blank">🥔 Papas Margarita</a>
+        <a href="https://instagram.com/subwaycol" target="_blank">🥖 Subway Colombia</a>
+        <a href="https://instagram.com/burgerkingcol" target="_blank">🍔 Burger King Colombia</a>
+    </div>
+</div>
+
+### ✈️ Travel & Lifestyle
+
+<div class="instagram-links travel">
+    <h4>Travel Bloggers & Content Creators</h4>
+    <div class="link-grid">
+        <a href="https://instagram.com/colombianfamily" target="_blank">👨‍👩‍👧‍👦 Colombian Family</a>
+        <a href="https://instagram.com/viajandoempelota" target="_blank">🎒 Viajando Empelota</a>
+        <a href="https://instagram.com/nomadafrustrada" target="_blank">🌍 Nómada Frustrada</a>
+        <a href="https://instagram.com/vivatailandia" target="_blank">🇹🇭 Viva Tailandia</a>
+        <a href="https://instagram.com/_losbuenossomosmas" target="_blank">💛 Los Buenos Somos Más</a>
+    </div>
+</div>
+
+### 👩‍🏫 Education & Teaching
+
+<div class="instagram-links education">
+    <h4>Teachers & Educators</h4>
+    <div class="link-grid">
+        <a href="https://instagram.com/espeak.english" target="_blank">🗣️ E-Speak English</a>
+        <a href="https://instagram.com/laprofemonica" target="_blank">👩‍🏫 La Profe Mónica</a>
+        <a href="https://instagram.com/jdoviedoar" target="_blank">👨‍💼 Juan Daniel Oviedo</a>
+        <a href="https://instagram.com/coreano_paso_a_paso" target="_blank">🇰🇷 Aprende Coreano</a>
     </div>
 </div>
 

@@ -103,7 +103,11 @@ document.addEventListener('DOMContentLoaded', function() {
         { name: 'Diplomatic', class: 'diplomatic' },
         { name: 'Cultural', class: 'cultural' },
         { name: 'Organizations', class: 'organizations' },
-        { name: 'Food & Brands', class: 'food-brands' },
+        { name: 'Government', class: 'government' },
+        { name: 'Food Brands', class: 'food-brands' },
+        { name: 'Local Food', class: 'local-food' },
+        { name: 'Travel', class: 'travel' },
+        { name: 'Education', class: 'education' },
         { name: 'Other', class: 'other-brands' }
     ];
     
