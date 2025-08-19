@@ -271,6 +271,18 @@
     gap: 1.25rem;
 }
 
+/* Accessibility Improvements */
+.link-grid a:focus {
+    outline: 3px solid #667eea;
+    outline-offset: 2px;
+}
+
+.pill:focus,
+.search-input-modern:focus-visible {
+    outline: 3px solid #667eea;
+    outline-offset: 2px;
+}
+
 .link-grid a {
     background: var(--gradient-card);
     border: 1px solid rgba(0, 0, 0, 0.06);

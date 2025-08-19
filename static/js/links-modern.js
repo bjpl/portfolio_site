@@ -371,6 +371,12 @@
     }
 
     function updateStats() {
+        console.log('Updating stats:', {
+            totalLinks: state.stats.totalLinks,
+            categories: state.stats.categories.size,
+            countries: state.stats.countries.size
+        });
+        
         if (statsElements.totalLinks) {
             animateNumber(statsElements.totalLinks, state.stats.totalLinks);
         }
@@ -421,22 +427,15 @@
                 header.appendChild(chevron);
             }
             
-            header.addEventListener('click', () => {
+            header.addEventListener('click', (e) => {
+                e.preventDefault();
                 header.classList.toggle('collapsed');
                 const grid = header.nextElementSibling;
                 if (grid && grid.classList.contains('link-grid')) {
                     if (header.classList.contains('collapsed')) {
-                        grid.style.maxHeight = '0';
-                        grid.style.overflow = 'hidden';
-                        grid.style.opacity = '0';
-                        grid.style.marginTop = '0';
-                        grid.style.transition = 'all 0.3s ease';
+                        grid.style.display = 'none';
                     } else {
-                        grid.style.maxHeight = 'none';
-                        grid.style.overflow = 'visible';
-                        grid.style.opacity = '1';
-                        grid.style.marginTop = '1rem';
-                        grid.style.transition = 'all 0.3s ease';
+                        grid.style.display = 'grid';
                     }
                 }
             });
@@ -590,6 +589,46 @@ window.addEventListener('load', function() {
     console.log('Running fallback setup...');
     const searchInput = document.getElementById('search-input');
     const categoryFilters = document.getElementById('category-filters');
+    
+    // Update stats immediately in fallback
+    const allLinks = document.querySelectorAll('.link-grid a');
+    const totalLinksElement = document.getElementById('total-links');
+    const totalCategoriesElement = document.getElementById('total-categories');
+    const totalCountriesElement = document.getElementById('total-countries');
+    
+    if (totalLinksElement && totalLinksElement.textContent === '0') {
+        totalLinksElement.textContent = allLinks.length;
+    }
+    
+    // Count unique categories
+    const categories = new Set();
+    document.querySelectorAll('.instagram-links').forEach(section => {
+        const classes = section.className.split(' ');
+        classes.forEach(cls => {
+            if (cls !== 'instagram-links' && cls !== 'loading') {
+                categories.add(cls);
+            }
+        });
+    });
+    
+    if (totalCategoriesElement && totalCategoriesElement.textContent === '0') {
+        totalCategoriesElement.textContent = categories.size;
+    }
+    
+    // Estimate countries from tags
+    const countries = new Set();
+    allLinks.forEach(link => {
+        const tags = (link.getAttribute('data-tags') || '').split(' ');
+        tags.forEach(tag => {
+            if (tag.match(/^(mexico|colombia|venezuela|usa|canada|brazil|argentina|chile|peru|spain|france|germany|italy|uk|japan|china|india)/i)) {
+                countries.add(tag);
+            }
+        });
+    });
+    
+    if (totalCountriesElement && totalCountriesElement.textContent === '0') {
+        totalCountriesElement.textContent = countries.size > 0 ? countries.size : '30+';
+    }
     
     // Setup search
     if (searchInput && !searchInput.hasAttribute('data-fallback')) {
