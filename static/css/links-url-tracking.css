@@ -1,0 +1,161 @@
+/* Links URL Tracking UI */
+
+/* Missing URL Indicators */
+.social-icon.disabled::before {
+    content: '!';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 12px;
+    height: 12px;
+    background: #FF4A4A;
+    color: white;
+    font-size: 10px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.2s ease;
+}
+
+.link-item-wrapper:hover .social-icon.disabled::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Missing URLs Counter */
+.missing-urls-counter {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #FF4A4A;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    box-shadow: 0 2px 8px rgba(255, 74, 74, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 100;
+}
+
+.missing-urls-counter span {
+    font-weight: 600;
+}
+
+/* URL Progress Bars */
+.url-progress {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    z-index: 100;
+}
+
+.url-progress-bar {
+    height: 6px;
+    background: #eef2ff;
+    border-radius: 3px;
+    margin: 8px 0;
+    overflow: hidden;
+}
+
+.url-progress-bar div {
+    height: 100%;
+    background: #667eea;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.url-progress-label {
+    font-size: 12px;
+    color: #6b7280;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Filter Tabs */
+.url-filter-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.url-filter-tab {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #e5e7eb;
+    user-select: none;
+}
+
+.url-filter-tab.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.url-filter-tab:hover:not(.active) {
+    background: #f9fafb;
+    border-color: #667eea;
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .url-progress {
+    background: #1e293b;
+}
+
+[data-theme="dark"] .url-progress-bar {
+    background: #334155;
+}
+
+[data-theme="dark"] .url-progress-label {
+    color: #e5e7eb;
+}
+
+[data-theme="dark"] .url-filter-tab {
+    border-color: #334155;
+    color: #e5e7eb;
+}
+
+[data-theme="dark"] .url-filter-tab:hover:not(.active) {
+    background: #334155;
+    border-color: #667eea;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .url-progress {
+        top: auto;
+        bottom: 80px;
+        right: 16px;
+        left: 16px;
+        min-width: 0;
+    }
+
+    .missing-urls-counter {
+        bottom: 16px;
+        right: 16px;
+        font-size: 11px;
+        padding: 6px 12px;
+    }
+
+    .url-filter-tabs {
+        margin: 16px;
+        flex-wrap: wrap;
+    }
+
+    .url-filter-tab {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
