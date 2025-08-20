@@ -1,6 +1,7 @@
 ---
 title: "Links"
 description: "A curated collection of useful links and resources"
+layout: "links"
 ---
 
 <div class="instagram-links govdip">
