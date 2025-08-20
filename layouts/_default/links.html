@@ -16,6 +16,7 @@
 
 <script src="/js/links-page.js" defer></script>
 <script src="/js/links-url-tracking.js" defer></script>
+<script src="/js/links-recently-viewed.js" defer></script>
 
 <link rel="stylesheet" href="/css/links-hover-menu.css">
 <link rel="stylesheet" href="/css/links-url-tracking.css">
@@ -173,7 +174,7 @@
     margin: 1rem 0;
 }
 
-.link-grid a {
+.link-item-wrapper {
     display: flex;
     align-items: center;
     padding: 0.75rem 1rem;
@@ -188,6 +189,7 @@
     overflow: visible;
     white-space: nowrap;
     text-overflow: ellipsis;
+    cursor: pointer;
 }
 
 /* Clean location indicator */
@@ -447,7 +449,7 @@
 }
 
 /* Better hover states */
-.link-grid a:hover {
+.link-item-wrapper:hover {
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     border-color: var(--color-primary);
@@ -466,6 +468,35 @@
     font-weight: 400;
     margin-left: auto;
     padding-left: 0.5rem;
+}
+
+/* Recently Viewed Section */
+.recently-viewed {
+    margin-bottom: 2rem !important;
+}
+
+.recently-viewed h3 {
+    color: var(--color-text-primary);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid #667eea;
+}
+
+.recently-viewed .time-ago {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-left: auto;
+    padding-left: 1rem;
+}
+
+.recently-viewed .link-item-wrapper {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), transparent);
+}
+
+.recently-viewed .link-item-wrapper:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(102, 126, 234, 0.05));
+    border-color: #667eea;
 }
 </style>
 {{ end }}
