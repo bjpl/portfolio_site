@@ -392,6 +392,7 @@
             'bloomberglineacolombia': 'https://www.bloomberglinea.com/',
             'forbescolombia': 'https://www.forbes.com/colombia/',
             'minagriculturacol': 'https://www.minagricultura.gov.co/',
+            'gobvalle': 'https://www.valledelcauca.gov.co/',
             'minciencias': 'https://www.minciencias.gov.co/',
             'minciencias_co': 'https://www.minciencias.gov.co/',
             'minjusticia': 'https://www.minjusticia.gov.co/',
