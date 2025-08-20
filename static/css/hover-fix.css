@@ -1,0 +1,93 @@
+/* Emergency hover menu fix - override everything */
+
+/* Make hover menu visible */
+.hover-menu {
+    position: absolute !important;
+    top: 50% !important;
+    right: 10px !important;
+    transform: translateY(-50%) !important;
+    display: flex !important;
+    gap: 6px !important;
+    z-index: 1000 !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* Show on hover */
+.link-item-wrapper:hover .hover-menu {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Basic icon styling */
+.social-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    text-decoration: none !important;
+    transition: transform 0.2s ease !important;
+}
+
+.social-icon:hover {
+    transform: scale(1.1) !important;
+}
+
+.social-icon svg {
+    width: 16px !important;
+    height: 16px !important;
+    fill: currentColor !important;
+}
+
+.social-icon.instagram {
+    color: #E4405F !important;
+}
+
+.social-icon.instagram:hover {
+    background: #E4405F !important;
+    color: white !important;
+}
+
+.social-icon.website {
+    color: #3B82F6 !important;
+}
+
+.social-icon.website:hover {
+    background: #3B82F6 !important;
+    color: white !important;
+}
+
+.social-icon.youtube {
+    color: #FF0000 !important;
+}
+
+.social-icon.youtube:hover {
+    background: #FF0000 !important;
+    color: white !important;
+}
+
+.social-icon.disabled {
+    opacity: 0.3 !important;
+    pointer-events: none !important;
+}
+
+/* Ensure link wrapper has proper positioning */
+.link-item-wrapper {
+    position: relative !important;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .hover-menu {
+        position: static !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        margin-left: auto !important;
+        transform: none !important;
+    }
+}
