@@ -25,40 +25,47 @@ document.addEventListener('DOMContentLoaded', function() {
         if (searchInput) {
             searchInput.addEventListener('input', function(e) {
                 const searchTerm = e.target.value.toLowerCase();
-                const allLinks = document.querySelectorAll('.link-grid a');
-                const sections = document.querySelectorAll('.instagram-links, .cultural, .organizations, .food-brands, .other-brands');
+                const allLinks = document.querySelectorAll('.link-item-wrapper');
+                const sections = document.querySelectorAll('.instagram-links');
                 
                 let visibleCount = 0;
                 let totalCount = allLinks.length;
                 
                 // Show/hide links based on search
-                allLinks.forEach(link => {
-                    const text = link.textContent.toLowerCase();
-                    const href = link.getAttribute('href').toLowerCase();
-                    const tags = (link.getAttribute('data-tags') || '').toLowerCase();
+                allLinks.forEach(wrapper => {
+                    const text = wrapper.querySelector('.link-display')?.textContent.toLowerCase() || '';
+                    const instagramHref = wrapper.querySelector('.social-icon.instagram')?.href.toLowerCase() || '';
+                    const websiteHref = wrapper.querySelector('.social-icon.website')?.href.toLowerCase() || '';
+                    const youtubeHref = wrapper.querySelector('.social-icon.youtube')?.href.toLowerCase() || '';
+                    const tags = (wrapper.getAttribute('data-tags') || '').toLowerCase();
                     
                     // Remove previous match indicators
-                    link.classList.remove('tag-match', 'text-match');
+                    wrapper.classList.remove('tag-match', 'text-match');
                     
                     if (searchTerm === '') {
-                        link.style.display = '';
+                        wrapper.style.display = '';
                         visibleCount++;
-                    } else if (text.includes(searchTerm) || href.includes(searchTerm)) {
-                        link.style.display = '';
-                        link.classList.add('text-match');
+                    } else if (
+                        text.includes(searchTerm) || 
+                        instagramHref.includes(searchTerm) ||
+                        websiteHref.includes(searchTerm) ||
+                        youtubeHref.includes(searchTerm)
+                    ) {
+                        wrapper.style.display = '';
+                        wrapper.classList.add('text-match');
                         visibleCount++;
                     } else if (tags.includes(searchTerm)) {
-                        link.style.display = '';
-                        link.classList.add('tag-match');
+                        wrapper.style.display = '';
+                        wrapper.classList.add('tag-match');
                         visibleCount++;
                     } else {
-                        link.style.display = 'none';
+                        wrapper.style.display = 'none';
                     }
                 });
                 
                 // Hide empty sections
                 sections.forEach(section => {
-                    const visibleLinks = section.querySelectorAll('.link-grid a:not([style*="display: none"])');
+                    const visibleLinks = section.querySelectorAll('.link-item-wrapper:not([style*="display: none"])');
                     if (visibleLinks.length === 0 && searchTerm !== '') {
                         section.style.display = 'none';
                     } else {
@@ -147,13 +154,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Show/hide sections
                 const allSections = document.querySelectorAll('.instagram-links');
+                const recentlyViewed = document.querySelector('.recently-viewed');
                 
                 if (cat.class === '') {
-                    // Show all
-                    allSections.forEach(s => s.style.display = '');
+                    // Show all except recently viewed
+                    allSections.forEach(s => {
+                        if (!s.classList.contains('recently-viewed')) {
+                            s.style.display = '';
+                        }
+                    });
                 } else {
                     // Show only selected category
                     allSections.forEach(section => {
+                        if (section === recentlyViewed) return;
                         if (section.classList.contains(cat.class)) {
                             section.style.display = '';
                         } else {
@@ -176,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add link counter for each section
     document.querySelectorAll('.link-grid').forEach(grid => {
-        const linkCount = grid.querySelectorAll('a').length;
+        const linkCount = grid.querySelectorAll('.link-item-wrapper').length;
         const header = grid.previousElementSibling;
         if (header && (header.tagName === 'H4' || header.tagName === 'H3')) {
             const counter = document.createElement('span');
@@ -187,24 +200,85 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Add copy link functionality
-    document.querySelectorAll('.link-grid a').forEach(link => {
-        link.addEventListener('contextmenu', function(e) {
+    document.querySelectorAll('.link-item-wrapper').forEach(wrapper => {
+        wrapper.addEventListener('contextmenu', function(e) {
             e.preventDefault();
-            const url = link.getAttribute('href');
-            navigator.clipboard.writeText(url).then(() => {
-                // Show copied notification
-                const notification = document.createElement('div');
-                notification.className = 'copy-notification';
-                notification.textContent = 'Link copied!';
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.remove();
-                }, 2000);
-            });
+            
+            // Get all available URLs
+            const instagramUrl = wrapper.querySelector('.social-icon.instagram')?.href;
+            const websiteUrl = wrapper.querySelector('.social-icon.website')?.href;
+            const youtubeUrl = wrapper.querySelector('.social-icon.youtube')?.href;
+            
+            // Create menu to choose which URL to copy
+            const menu = document.createElement('div');
+            menu.className = 'copy-menu';
+            menu.style.cssText = `
+                position: fixed;
+                z-index: 1000;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                padding: 8px 0;
+                min-width: 160px;
+            `;
+            menu.style.left = e.pageX + 'px';
+            menu.style.top = e.pageY + 'px';
+            
+            // Add menu items
+            const addMenuItem = (text, url) => {
+                if (!url) return;
+                const item = document.createElement('div');
+                item.style.cssText = `
+                    padding: 8px 16px;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                `;
+                item.textContent = `Copy ${text}`;
+                item.addEventListener('mouseenter', () => {
+                    item.style.background = '#f3f4f6';
+                });
+                item.addEventListener('mouseleave', () => {
+                    item.style.background = 'transparent';
+                });
+                item.addEventListener('click', () => {
+                    navigator.clipboard.writeText(url).then(() => {
+                        menu.remove();
+                        showNotification('Link copied!');
+                    });
+                });
+                menu.appendChild(item);
+            };
+            
+            addMenuItem('Instagram URL', instagramUrl);
+            addMenuItem('Website URL', websiteUrl);
+            addMenuItem('YouTube URL', youtubeUrl);
+            
+            // Add click outside listener
+            const closeMenu = (e) => {
+                if (!menu.contains(e.target)) {
+                    menu.remove();
+                    document.removeEventListener('click', closeMenu);
+                }
+            };
+            document.addEventListener('click', closeMenu);
+            
+            document.body.appendChild(menu);
         });
     });
 });
+
+// Show notification
+function showNotification(text) {
+    const notification = document.createElement('div');
+    notification.className = 'copy-notification';
+    notification.textContent = text;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 2000);
+}
 
 // Add smooth scroll for internal links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
