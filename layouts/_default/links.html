@@ -100,15 +100,23 @@
 }
 
 .filter-btn {
-    padding: var(--space-sm) var(--space-lg);
+    padding: 0.5rem 1rem;
     background: var(--color-surface);
     color: var(--color-text-secondary);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-full);
-    font-size: var(--text-sm);
+    border: 1.5px solid var(--color-border);
+    border-radius: 9999px;
+    font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px;
+    height: 36px;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
 }
 
 .filter-btn:hover {
@@ -117,10 +125,52 @@
     transform: translateY(-2px);
 }
 
+.filter-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.filter-btn:hover::before {
+    opacity: 0.05;
+}
+
 .filter-btn.active {
     background: var(--color-primary);
     color: white;
     border-color: var(--color-primary);
+}
+
+.filter-btn.active::before {
+    opacity: 0;
+}
+
+.filter-btn:active::before {
+    opacity: 0.1;
+}
+
+@keyframes ripple {
+    from {
+        transform: scale(0);
+        opacity: 0.4;
+    }
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.filter-btn .ripple {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: currentColor;
+    border-radius: 50%;
+    animation: ripple 0.6s ease-out;
+    opacity: 0;
 }
 
 /* Instagram Links Styling */
@@ -378,9 +428,38 @@
     border-color: var(--color-border);
 }
 
+[data-theme="dark"] .filter-container {
+    background: transparent;
+}
+
 [data-theme="dark"] .filter-btn {
+    background: var(--color-surface-alt);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .filter-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
     background: var(--color-surface);
-    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .filter-btn.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .filter-btn::before {
+    background: currentColor;
+}
+
+[data-theme="dark"] .filter-btn:hover::before {
+    opacity: 0.1;
+}
+
+[data-theme="dark"] .filter-btn:active::before {
+    opacity: 0.2;
 }
 
 /* Responsive */
@@ -433,10 +512,34 @@
         flex-wrap: wrap;
     }
     
+    .filter-container {
+        margin: 1rem -0.75rem;
+        padding: 0.75rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    
+    .filter-container::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .filter-buttons {
+        padding: 0 0.75rem;
+        justify-content: flex-start;
+    }
+    
     .filter-btn {
-        min-width: 80px;
-        font-size: 0.85rem;
-        padding: 0.4rem 0.8rem;
+        min-width: auto;
+        font-size: 0.813rem;
+        padding: 0.375rem 0.875rem;
+        height: 32px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    .filter-btn:active::before {
+        opacity: 0.15;
     }
 }
 

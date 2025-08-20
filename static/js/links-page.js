@@ -147,7 +147,17 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.textContent = cat.name;
             if (cat.class === '') btn.classList.add('active');
             
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function(e) {
+                // Create ripple effect
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple';
+                ripple.style.left = (e.offsetX - 5) + 'px';
+                ripple.style.top = (e.offsetY - 5) + 'px';
+                btn.appendChild(ripple);
+                
+                // Clean up ripple
+                setTimeout(() => ripple.remove(), 600);
+
                 // Remove active class from all buttons
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
