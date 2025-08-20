@@ -350,52 +350,8 @@
     }
 
     function initLinkPreviews() {
-        // Create preview container
-        const preview = document.createElement('div');
-        preview.className = 'link-preview';
-        preview.innerHTML = `
-            <div class="link-preview-header">
-                <div class="link-preview-avatar">📱</div>
-                <div>
-                    <div class="link-preview-title"></div>
-                    <div class="link-preview-username"></div>
-                </div>
-            </div>
-            <div class="link-preview-stats">
-                <div class="preview-stat">
-                    <div class="preview-stat-value">--</div>
-                    <div class="preview-stat-label">Links</div>
-                </div>
-                <div class="preview-stat">
-                    <div class="preview-stat-value">--</div>
-                    <div class="preview-stat-label">Tags</div>
-                </div>
-                <div class="preview-stat">
-                    <div class="preview-stat-value">--</div>
-                    <div class="preview-stat-label">Category</div>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(preview);
-        
-        // Add hover listeners
-        let hoverTimeout;
-        document.addEventListener('mouseover', (e) => {
-            const link = e.target.closest('.link-item, a[data-tags]');
-            if (!link) return;
-            
-            clearTimeout(hoverTimeout);
-            hoverTimeout = setTimeout(() => {
-                showLinkPreview(link, preview, e);
-            }, 500);
-        });
-        
-        document.addEventListener('mouseout', (e) => {
-            clearTimeout(hoverTimeout);
-            if (!e.target.closest('.link-item, a[data-tags]')) {
-                preview.classList.remove('show');
-            }
-        });
+        // Disabled - using inline hover icons instead
+        return;
     }
 
     function showLinkPreview(link, preview, event) {
