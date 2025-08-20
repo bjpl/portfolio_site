@@ -33,8 +33,6 @@
         // Initialize link preview system
         initLinkPreviews();
         
-        // Track recently viewed
-        initRecentlyViewed();
         
         // Load saved preferences
         loadUserPreferences();
@@ -383,54 +381,6 @@
         preview.classList.add('show');
     }
 
-    function initRecentlyViewed() {
-        const recentLinks = JSON.parse(localStorage.getItem('recentlyViewedLinks') || '[]');
-        
-        if (recentLinks.length > 0) {
-            const recentSection = document.createElement('div');
-            recentSection.className = 'recently-viewed';
-            recentSection.innerHTML = `
-                <h3>Recently Viewed</h3>
-                <div class="recent-links"></div>
-            `;
-            
-            const contentWrapper = document.querySelector('#content-wrapper');
-            if (contentWrapper && contentWrapper.firstChild) {
-                contentWrapper.insertBefore(recentSection, contentWrapper.firstChild);
-            }
-            
-            // Add recent links
-            const container = recentSection.querySelector('.recent-links');
-            recentLinks.slice(0, 10).forEach(item => {
-                const link = document.createElement('a');
-                link.href = item.url;
-                link.className = 'recent-link';
-                link.textContent = item.text;
-                link.target = '_blank';
-                container.appendChild(link);
-            });
-        }
-        
-        // Track link clicks
-        document.addEventListener('click', (e) => {
-            const link = e.target.closest('a[href*="instagram.com"]');
-            if (!link) return;
-            
-            const recentLinks = JSON.parse(localStorage.getItem('recentlyViewedLinks') || '[]');
-            const newItem = {
-                url: link.href,
-                text: link.textContent.trim(),
-                timestamp: Date.now()
-            };
-            
-            // Remove duplicates and add to front
-            const filtered = recentLinks.filter(item => item.url !== newItem.url);
-            filtered.unshift(newItem);
-            
-            // Keep only last 20
-            localStorage.setItem('recentlyViewedLinks', JSON.stringify(filtered.slice(0, 20)));
-        });
-    }
 
     function saveUserPreferences() {
         localStorage.setItem('linksUIPreferences', JSON.stringify(uiState));
