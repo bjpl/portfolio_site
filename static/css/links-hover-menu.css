@@ -82,8 +82,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
@@ -120,8 +120,8 @@
 }
 
 .social-icon svg {
-    width: 14px;
-    height: 14px;
+    width: 24px;
+    height: 24px;
     fill: currentColor;
     position: relative;
     z-index: 1;
@@ -210,14 +210,14 @@
     }
     
     .social-icon {
-        width: 26px;
-        height: 26px;
+        width: 44px;
+        height: 44px;
         opacity: 0.7;
     }
     
     .social-icon svg {
-        width: 14px;
-        height: 14px;
+        width: 24px;
+        height: 24px;
     }
 
     .link-item-wrapper:hover .social-icon {

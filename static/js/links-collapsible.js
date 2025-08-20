@@ -234,12 +234,12 @@ document.addEventListener('DOMContentLoaded', () => {
         controls.className = 'section-controls';
         controls.innerHTML = `
             <div class="control-group">
-                <button class="control-btn expand-all">Expand All</button>
-                <button class="control-btn collapse-all">Collapse All</button>
+                <button class="control-btn expand-all" role="button" aria-label="Expand all sections">Expand All</button>
+                <button class="control-btn collapse-all" role="button" aria-label="Collapse all sections">Collapse All</button>
             </div>
             <div class="control-group">
-                <button class="control-btn expand-category" style="display:none">Expand Category</button>
-                <button class="control-btn collapse-category" style="display:none">Collapse Category</button>
+                <button class="control-btn expand-category" role="button" aria-label="Expand current category" style="display:none">Expand Category</button>
+                <button class="control-btn collapse-category" role="button" aria-label="Collapse current category" style="display:none">Collapse Category</button>
             </div>
         `;
         

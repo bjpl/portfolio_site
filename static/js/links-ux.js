@@ -393,23 +393,6 @@
         });
     }
 
-    // Recently Viewed
-    function addToRecentlyViewed(link) {
-        const data = {
-            href: link.href,
-            text: link.textContent,
-            timestamp: Date.now()
-        };
-        
-        uxState.recentlyViewed = uxState.recentlyViewed.filter(item => item.href !== data.href);
-        uxState.recentlyViewed.unshift(data);
-        
-        if (uxState.recentlyViewed.length > 10) {
-            uxState.recentlyViewed.pop();
-        }
-        
-        saveUserPreferences();
-    }
 
     // Utility Functions
     function loadUserPreferences() {
