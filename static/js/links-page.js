@@ -84,20 +84,48 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Collapsible sections are now handled by links-collapsible.js
+    // Add collapsible functionality
+    const sections = document.querySelectorAll('.instagram-links');
+    
+    sections.forEach(section => {
+        // Add collapse functionality to main sections
+        const h3 = section.querySelector('h3');
+        const content = section.querySelectorAll('h4, .link-grid');
+        let isExpanded = true;
+
+        h3.innerHTML = `<span class="collapse-icon">▼</span>${h3.innerHTML}`;
+        
+        h3.addEventListener('click', () => {
+            isExpanded = !isExpanded;
+            h3.querySelector('.collapse-icon').textContent = isExpanded ? '▼' : '▶';
+            content.forEach(el => el.style.display = isExpanded ? '' : 'none');
+        });
+
+        // Add collapse functionality to subsections
+        const h4s = section.querySelectorAll('h4');
+        h4s.forEach(h4 => {
+            const subContent = h4.nextElementSibling;
+            let isSubExpanded = true;
+
+            h4.innerHTML = `<span class="collapse-icon">▼</span>${h4.innerHTML}`;
+            
+            h4.addEventListener('click', (e) => {
+                e.stopPropagation();
+                isSubExpanded = !isSubExpanded;
+                h4.querySelector('.collapse-icon').textContent = isSubExpanded ? '▼' : '▶';
+                subContent.style.display = isSubExpanded ? '' : 'none';
+            });
+        });
+    });
     
     // Add category filter buttons
     const categories = [
         { name: 'All', class: '' },
-        { name: 'Diplomatic', class: 'diplomatic' },
-        { name: 'Cultural', class: 'cultural' },
-        { name: 'Organizations', class: 'organizations' },
-        { name: 'Government', class: 'government' },
-        { name: 'Food Brands', class: 'food-brands' },
-        { name: 'Local Food', class: 'local-food' },
-        { name: 'Travel', class: 'travel' },
-        { name: 'Education', class: 'education' },
-        { name: 'Other', class: 'other-brands' }
+        { name: 'Government & Diplomatic', class: 'govdip' },
+        { name: 'Education & Research', class: 'education' },
+        { name: 'Culture & Arts', class: 'culture' },
+        { name: 'Food & Dining', class: 'food' },
+        { name: 'Travel & Tourism', class: 'travel' }
     ];
     
     const filterContainer = document.createElement('div');

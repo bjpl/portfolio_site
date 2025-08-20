@@ -31,6 +31,22 @@
     background: var(--color-surface);
 }
 
+/* Dark mode */
+[data-theme="dark"] .instagram-links {
+    background: var(--color-surface);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .link-item-wrapper {
+    background: var(--color-surface-alt);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .link-item-wrapper:hover {
+    border-color: var(--color-primary);
+    background: var(--color-surface);
+}
+
 /* Category-specific colors */
 .govdip h3, .govdip h4 {
     border-color: #4361ee;
@@ -70,6 +86,59 @@
 .travel .link-grid a:hover {
     background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(8, 145, 178, 0.05));
     border-color: #06b6d4;
+}
+
+/* Instagram Links Styling */
+.instagram-links {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--color-surface);
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.instagram-links h3 {
+    font-size: 1.5rem;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 3px solid var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+}
+
+.instagram-links h4 {
+    font-size: 1.1rem;
+    color: var(--color-text-primary);
+    margin: 1.5rem 0 1rem 0;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+}
+
+.collapse-icon {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    transition: transform 0.3s ease;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.link-counter {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    font-weight: 400;
+    margin-left: var(--space-sm);
 }
 
 /* Mobile View */
