@@ -28,8 +28,9 @@
             clearBtn.setAttribute('aria-label', 'Clear search');
             searchContainer.appendChild(clearBtn);
             
+            const debouncedSearch = debounce(handleSearch, 300);
             searchInput.addEventListener('input', (e) => {
-                debounce(handleSearch, 300)(e);
+                debouncedSearch(e);
                 // Update container state
                 if (e.target.value) {
                     searchContainer.classList.add('has-value');
@@ -204,6 +205,10 @@
     function setupCollapsibleSections() {
         // Fix duplicate collapse icons and setup click handlers
         document.querySelectorAll('.instagram-links h3, .instagram-links h4').forEach(header => {
+            // Skip if already initialized
+            if (header.dataset.collapsibleInit) return;
+            header.dataset.collapsibleInit = 'true';
+            
             // Remove any duplicate collapse icons
             const icons = header.querySelectorAll('.collapse-icon');
             if (icons.length > 1) {
@@ -218,7 +223,7 @@
                 icon = document.createElement('span');
                 icon.className = 'collapse-icon';
                 icon.textContent = '▼';
-                header.insertBefore(icon, header.firstChild);
+                header.appendChild(icon);
             }
             
             // Add click handler
@@ -231,9 +236,23 @@
     }
     
     function toggleSection(header, icon) {
-        const content = header.tagName === 'H3' ? 
-                       header.parentElement.querySelector('.links-section-content') :
-                       header.nextElementSibling;
+        // Find the content to toggle - should be the next sibling which is the link-grid
+        let content = header.nextElementSibling;
+        
+        // If next sibling is not a link-grid, search for it
+        if (!content || !content.classList.contains('link-grid')) {
+            // Try to find link-grid within parent
+            const parent = header.parentElement;
+            const allGrids = parent.querySelectorAll('.link-grid');
+            
+            // Find the grid that comes after this header
+            for (let grid of allGrids) {
+                if (grid.previousElementSibling === header) {
+                    content = grid;
+                    break;
+                }
+            }
+        }
         
         if (!content) return;
         
