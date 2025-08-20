@@ -221,6 +221,12 @@
             'upbcolombia': 'https://www.upb.edu.co/',
             'universidadelcauca': 'https://www.unicauca.edu.co/',
             'upedagogicanacional': 'https://www.upn.edu.co/',
+            'unibarranquilla_': 'https://www.unibarranquilla.edu.co/',
+            
+            // Colombian Consulates
+            'consuladocolombiaatlanta': 'https://atlanta.consulado.gov.co/',
+            'consuladocolboston': 'https://boston.consulado.gov.co/',
+            'consuladocollosangeles': 'https://losangeles.consulado.gov.co/',
             
             // Embassy Additional URLs
             'ukrembassymex': 'https://mexico.mfa.gov.ua/',
@@ -231,6 +237,7 @@
             'caracolradio': 'https://caracol.com.co/',
             'cnnee': 'https://cnnespanol.cnn.com/',
             'bluradio': 'https://www.bluradio.com/',
+            'elpaiscali': 'https://www.elpais.com.co/',
             
             // Colombian Government
             'alcaldiabogota': 'https://bogota.gov.co/',
@@ -1604,6 +1611,9 @@
             
             // Educational Institution YouTube Channels
             'udea': 'https://www.youtube.com/user/UniversidadAntioquia',
+            
+            // Media Organization YouTube Channels
+            'caracolradio': 'https://www.youtube.com/caracolradiooficial',
             
             // Additional YouTube Channels - Brands
             'cocacolave': 'https://www.youtube.com/@CocaColaVenezuela',
