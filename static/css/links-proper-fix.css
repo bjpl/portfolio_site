@@ -57,8 +57,10 @@ a.link-item-wrapper:hover {
     right: 16px !important;
     transform: translateY(-50%) !important;
     
-    /* Container dimensions */
-    width: 100px !important;
+    /* Container dimensions - auto width for variable icon count */
+    width: auto !important;
+    min-width: 36px !important;
+    max-width: 110px !important;
     height: 36px !important;
     
     /* Flex layout for icons */
