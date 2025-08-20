@@ -17,6 +17,7 @@
 <script src="/js/links-page.js" defer></script>
 <script src="/js/links-url-tracking.js" defer></script>
 <script src="/js/links-recently-viewed.js" defer></script>
+<script src="/js/links-collapsible.js" defer></script>
 
 <link rel="stylesheet" href="/css/links-hover-menu.css">
 <link rel="stylesheet" href="/css/links-url-tracking.css">
@@ -171,6 +172,107 @@
     border-radius: 50%;
     animation: ripple 0.6s ease-out;
     opacity: 0;
+}
+
+/* Collapsible Section Styling */
+.collapsible-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+    padding: 0.75rem 0;
+    border-bottom: 2px solid var(--color-border);
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+}
+
+.collapsible-header:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.collapse-icon {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    transition: transform 0.3s ease;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.collapsible-header:hover .collapse-icon {
+    color: var(--color-primary);
+}
+
+.collapsible-content {
+    transition: height 0.3s ease;
+}
+
+/* Section Controls */
+.section-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    justify-content: flex-end;
+}
+
+.control-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: 1.5px solid var(--color-border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* Dark Mode */
+[data-theme="dark"] .collapsible-header {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .collapsible-header:hover {
+    border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .collapse-icon {
+    color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .control-btn {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .control-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .collapsible-header {
+        padding: 0.625rem 0;
+    }
+    
+    .section-controls {
+        margin: 0.75rem 0;
+        justify-content: center;
+    }
+    
+    .control-btn {
+        padding: 0.3125rem 0.625rem;
+        font-size: 0.8125rem;
+    }
 }
 
 /* Instagram Links Styling */

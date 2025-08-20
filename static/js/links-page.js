@@ -84,37 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Make sections collapsible
-    const sectionHeaders = document.querySelectorAll('.instagram-links h4, .instagram-links h3');
-    
-    sectionHeaders.forEach(header => {
-        // Skip the main section title
-        if (header.tagName === 'H3') return;
-        
-        // Add collapse indicator
-        header.style.cursor = 'pointer';
-        header.style.userSelect = 'none';
-        header.innerHTML = `<span class="collapse-icon">▼</span> ${header.innerHTML}`;
-        
-        // Get the next sibling (link-grid)
-        const linkGrid = header.nextElementSibling;
-        if (linkGrid && linkGrid.classList.contains('link-grid')) {
-            // Add click handler
-            header.addEventListener('click', function() {
-                const icon = header.querySelector('.collapse-icon');
-                
-                if (linkGrid.style.display === 'none') {
-                    linkGrid.style.display = '';
-                    icon.textContent = '▼';
-                    icon.style.transform = 'rotate(0deg)';
-                } else {
-                    linkGrid.style.display = 'none';
-                    icon.textContent = '▶';
-                    icon.style.transform = 'rotate(0deg)';
-                }
-            });
-        }
-    });
+    // Collapsible sections are now handled by links-collapsible.js
     
     // Add category filter buttons
     const categories = [
