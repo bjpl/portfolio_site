@@ -358,6 +358,22 @@
     margin: 1rem 0;
 }
 
+@media (max-width: 768px) {
+    .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 0.625rem;
+        margin: 0.75rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.5rem;
+        margin: 0.625rem 0;
+    }
+}
+
 .link-item-wrapper {
     display: flex;
     align-items: center;
