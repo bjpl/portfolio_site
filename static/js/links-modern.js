@@ -497,6 +497,15 @@
                 header.appendChild(chevron);
             }
             
+            // Start with sections collapsed by default (except the first one)
+            if (index > 0) {
+                header.classList.add('collapsed');
+                const grid = header.nextElementSibling;
+                if (grid && grid.classList.contains('link-grid')) {
+                    grid.style.display = 'none';
+                }
+            }
+            
             header.addEventListener('click', (e) => {
                 e.preventDefault();
                 header.classList.toggle('collapsed');

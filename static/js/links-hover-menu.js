@@ -17,15 +17,33 @@
         </svg>`
     };
 
+    // Track initialization state
+    let initialized = false;
+    
     // Initialize hover menus on page load
-    document.addEventListener('DOMContentLoaded', initializeHoverMenus);
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!initialized) {
+            initializeHoverMenus();
+        }
+    });
     
     // Also try immediate initialization in case DOM is already ready
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        setTimeout(initializeHoverMenus, 100);
+        setTimeout(() => {
+            if (!initialized) {
+                initializeHoverMenus();
+            }
+        }, 100);
     }
 
     function initializeHoverMenus() {
+        // Prevent multiple initializations
+        if (initialized) {
+            console.log('⚠️ Hover menu already initialized, skipping...');
+            return;
+        }
+        initialized = true;
+        
         console.log('🚀 Initializing hover menu system...');
         
         // Process all link grids
@@ -39,18 +57,13 @@
             
             links.forEach(link => {
                 // Skip if already processed
-                if (link.parentElement.classList.contains('link-item-wrapper')) {
+                if (link.parentElement.classList.contains('link-item-wrapper') || 
+                    link.dataset.processed === 'true') {
                     return;
                 }
                 
-                // Create wrapper
-                const wrapper = document.createElement('div');
-                wrapper.className = 'link-item-wrapper';
-                
-                // Clone the link as a div for display
-                const linkDisplay = document.createElement('div');
-                linkDisplay.className = 'link-item';
-                linkDisplay.innerHTML = link.innerHTML;
+                // Mark as processed immediately
+                link.dataset.processed = 'true';
                 
                 // Extract data from original link
                 const instagramUrl = link.href;
@@ -69,12 +82,18 @@
                     youtube: getYoutubeUrl(username, linkText, tags)
                 });
                 
-                // Assemble the wrapper
-                wrapper.appendChild(linkDisplay);
-                wrapper.appendChild(hoverMenu);
+                // Create wrapper that preserves the original link
+                const wrapper = document.createElement('div');
+                wrapper.className = 'link-item-wrapper';
                 
-                // Replace original link with wrapper
-                link.parentNode.replaceChild(wrapper, link);
+                // Move the original link into the wrapper
+                const parent = link.parentNode;
+                parent.replaceChild(wrapper, link);
+                
+                // Add the original link back as-is
+                link.classList.add('link-item');
+                wrapper.appendChild(link);
+                wrapper.appendChild(hoverMenu);
                 processedCount++;
             });
         });
@@ -676,6 +695,69 @@
     }
 
     // Re-initialize on dynamic content changes
-    window.reinitializeHoverMenus = initializeHoverMenus;
+    window.reinitializeHoverMenus = () => {
+        // Reset and reinitialize only if needed
+        if (initialized) {
+            console.log('⚠️ Hover menus already initialized, checking for new links only...');
+            
+            // Only process new unprocessed links
+            const linkGrids = document.querySelectorAll('.link-grid');
+            let newLinksCount = 0;
+            
+            linkGrids.forEach(grid => {
+                const unprocessedLinks = grid.querySelectorAll('a:not([data-processed="true"])');
+                if (unprocessedLinks.length > 0) {
+                    console.log(`Found ${unprocessedLinks.length} new unprocessed links`);
+                    newLinksCount += unprocessedLinks.length;
+                    
+                    unprocessedLinks.forEach(link => {
+                        // Mark as processed immediately
+                        link.dataset.processed = 'true';
+                        
+                        // Skip if already wrapped
+                        if (link.parentElement.classList.contains('link-item-wrapper')) {
+                            return;
+                        }
+                        
+                        // Extract data from original link
+                        const instagramUrl = link.href;
+                        const linkText = link.textContent.trim();
+                        const tags = link.getAttribute('data-tags') || '';
+                        
+                        // Extract username from Instagram URL
+                        const username = instagramUrl.includes('instagram.com/') 
+                            ? instagramUrl.split('instagram.com/')[1].replace('/', '') 
+                            : '';
+                        
+                        // Create hover menu
+                        const hoverMenu = createHoverMenu({
+                            instagram: instagramUrl,
+                            website: getWebsiteUrl(username, linkText, tags),
+                            youtube: getYoutubeUrl(username, linkText, tags)
+                        });
+                        
+                        // Create wrapper that preserves the original link
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'link-item-wrapper';
+                        
+                        // Move the original link into the wrapper
+                        const parent = link.parentNode;
+                        parent.replaceChild(wrapper, link);
+                        
+                        // Add the original link back as-is
+                        link.classList.add('link-item');
+                        wrapper.appendChild(link);
+                        wrapper.appendChild(hoverMenu);
+                    });
+                }
+            });
+            
+            if (newLinksCount > 0) {
+                console.log(`✅ Processed ${newLinksCount} new links`);
+            }
+        } else {
+            initializeHoverMenus();
+        }
+    };
 
 })();

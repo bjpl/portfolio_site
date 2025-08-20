@@ -6,7 +6,7 @@
     display: block;
 }
 
-.link-item {
+a.link-item {
     position: relative;
     display: block;
     padding: 0.875rem 1rem;
@@ -20,7 +20,7 @@
     cursor: pointer;
 }
 
-.link-item:hover {
+a.link-item:hover {
     transform: translateY(-4px);
     box-shadow: 
         0 12px 24px rgba(102, 126, 234, 0.15),

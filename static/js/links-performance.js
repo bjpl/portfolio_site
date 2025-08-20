@@ -105,25 +105,9 @@
     }
 
     function optimizeHoverMenus() {
-        // Defer hover menu creation until first interaction
-        let menusInitialized = false;
-        
-        const initMenusOnDemand = () => {
-            if (!menusInitialized) {
-                menusInitialized = true;
-                // Trigger the existing hover menu initialization
-                if (window.reinitializeHoverMenus) {
-                    window.reinitializeHoverMenus();
-                }
-                // Remove the listener after first initialization
-                document.removeEventListener('mousemove', initMenusOnDemand);
-                document.removeEventListener('touchstart', initMenusOnDemand);
-            }
-        };
-
-        // Initialize on first user interaction
-        document.addEventListener('mousemove', initMenusOnDemand, { once: true });
-        document.addEventListener('touchstart', initMenusOnDemand, { once: true });
+        // Hover menus are already initialized by links-hover-menu.js
+        // Just ensure they're not duplicated
+        console.log('✓ Hover menus handled by links-hover-menu.js');
     }
 
     function implementProgressiveRendering() {
