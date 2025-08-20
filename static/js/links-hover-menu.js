@@ -22,6 +22,7 @@
     
     // Initialize hover menus on page load
     document.addEventListener('DOMContentLoaded', () => {
+        console.log('🔄 DOMContentLoaded event fired');
         if (!initialized) {
             initializeHoverMenus();
         }
@@ -29,11 +30,12 @@
     
     // Also try immediate initialization in case DOM is already ready
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        console.log('🔄 Document already ready, scheduling initialization');
         setTimeout(() => {
             if (!initialized) {
                 initializeHoverMenus();
             }
-        }, 100);
+        }, 500);
     }
 
     function initializeHoverMenus() {
@@ -52,20 +54,19 @@
         let processedCount = 0;
         
         linkGrids.forEach(grid => {
-            const links = grid.querySelectorAll('a');
+            const links = grid.querySelectorAll('a.link-item-wrapper');
             console.log(`Processing grid with ${links.length} links`);
             
             links.forEach(link => {
                 // Skip if already processed
-                if (link.parentElement.classList.contains('link-item-wrapper') || 
-                    link.dataset.processed === 'true') {
+                if (link.dataset.processed === 'true') {
                     return;
                 }
                 
                 // Mark as processed immediately
                 link.dataset.processed = 'true';
                 
-                // Extract data from original link
+                // Extract data from link
                 const instagramUrl = link.href;
                 const linkText = link.textContent.trim();
                 const tags = link.getAttribute('data-tags') || '';
@@ -81,13 +82,17 @@
                         .trim();
                 }
                 
-                // Create wrapper that contains both text and icons
+                // Create wrapper div to replace the link
                 const wrapper = document.createElement('div');
                 wrapper.className = 'link-item-wrapper';
+                wrapper.setAttribute('data-tags', tags);
                 
-                // Create the display element with text
-                const displayElement = document.createElement('div');
+                // Create the display element with text as a clickable link
+                const displayElement = document.createElement('a');
                 displayElement.className = 'link-display';
+                displayElement.href = instagramUrl;
+                displayElement.target = '_blank';
+                displayElement.rel = 'noopener';
                 displayElement.innerHTML = link.innerHTML; // Preserve any flags/emojis
                 
                 // Create hover menu
@@ -105,8 +110,6 @@
                 wrapper.appendChild(displayElement);
                 wrapper.appendChild(hoverMenu);
                 
-                // Preserve data attributes
-                wrapper.setAttribute('data-tags', tags);
                 processedCount++;
             });
         });

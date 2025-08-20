@@ -1,0 +1,7 @@
+{{ $url := .Get "url" }}
+{{ $text := .Get "text" }}
+{{ $tags := .Get "tags" }}
+
+<a href="{{ $url }}" target="_blank" rel="noopener" class="link-item-wrapper" {{ if $tags }}data-tags="{{ $tags }}"{{ end }}>
+    {{ $text }}
+</a>

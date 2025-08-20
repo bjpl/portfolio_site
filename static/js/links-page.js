@@ -33,10 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Show/hide links based on search
                 allLinks.forEach(wrapper => {
-                    const text = wrapper.querySelector('.link-display')?.textContent.toLowerCase() || '';
-                    const instagramHref = wrapper.querySelector('.social-icon.instagram')?.href.toLowerCase() || '';
-                    const websiteHref = wrapper.querySelector('.social-icon.website')?.href.toLowerCase() || '';
-                    const youtubeHref = wrapper.querySelector('.social-icon.youtube')?.href.toLowerCase() || '';
+                    const text = wrapper.textContent.toLowerCase() || '';
+                    const href = wrapper.href?.toLowerCase() || '';
                     const tags = (wrapper.getAttribute('data-tags') || '').toLowerCase();
                     
                     // Remove previous match indicators
@@ -47,9 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         visibleCount++;
                     } else if (
                         text.includes(searchTerm) || 
-                        instagramHref.includes(searchTerm) ||
-                        websiteHref.includes(searchTerm) ||
-                        youtubeHref.includes(searchTerm)
+                        href.includes(searchTerm)
                     ) {
                         wrapper.style.display = '';
                         wrapper.classList.add('text-match');
@@ -90,15 +86,18 @@ document.addEventListener('DOMContentLoaded', function() {
     sections.forEach(section => {
         // Add collapse functionality to main sections
         const h3 = section.querySelector('h3');
-        const content = section.querySelectorAll('h4, .link-grid');
+        const content = section.querySelector('.links-section-content');
         let isExpanded = true;
-
-        h3.innerHTML = `<span class="collapse-icon">▼</span>${h3.innerHTML}`;
         
         h3.addEventListener('click', () => {
             isExpanded = !isExpanded;
-            h3.querySelector('.collapse-icon').textContent = isExpanded ? '▼' : '▶';
-            content.forEach(el => el.style.display = isExpanded ? '' : 'none');
+            const icon = h3.querySelector('.collapse-icon');
+            if (icon) {
+                icon.textContent = isExpanded ? '▼' : '▶';
+            }
+            if (content) {
+                content.style.display = isExpanded ? '' : 'none';
+            }
         });
 
         // Add collapse functionality to subsections
@@ -106,14 +105,17 @@ document.addEventListener('DOMContentLoaded', function() {
         h4s.forEach(h4 => {
             const subContent = h4.nextElementSibling;
             let isSubExpanded = true;
-
-            h4.innerHTML = `<span class="collapse-icon">▼</span>${h4.innerHTML}`;
             
             h4.addEventListener('click', (e) => {
                 e.stopPropagation();
                 isSubExpanded = !isSubExpanded;
-                h4.querySelector('.collapse-icon').textContent = isSubExpanded ? '▼' : '▶';
-                subContent.style.display = isSubExpanded ? '' : 'none';
+                const icon = h4.querySelector('.collapse-icon');
+                if (icon) {
+                    icon.textContent = isSubExpanded ? '▼' : '▶';
+                }
+                if (subContent) {
+                    subContent.style.display = isSubExpanded ? '' : 'none';
+                }
             });
         });
     });
