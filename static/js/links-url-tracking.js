@@ -3,21 +3,21 @@
 // Track initialization state
 let initialized = false;
 
-// Initialize URL tracking UI on page load
-document.addEventListener('DOMContentLoaded', () => {
-    if (!initialized) {
-        initializeUrlTracking();
-    }
-});
+// URL tracking UI disabled for cleaner design
+// document.addEventListener('DOMContentLoaded', () => {
+//     if (!initialized) {
+//         initializeUrlTracking();
+//     }
+// });
 
-// Also try immediate initialization in case DOM is already ready
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    setTimeout(() => {
-        if (!initialized) {
-            initializeUrlTracking();
-        }
-    }, 100);
-}
+// // Also try immediate initialization in case DOM is already ready
+// if (document.readyState === 'complete' || document.readyState === 'interactive') {
+//     setTimeout(() => {
+//         if (!initialized) {
+//             initializeUrlTracking();
+//         }
+//     }, 100);
+// }
 
 function initializeUrlTracking() {
     // Prevent multiple initializations

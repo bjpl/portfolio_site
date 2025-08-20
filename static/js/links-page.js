@@ -121,17 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Add link counter for each section
-    document.querySelectorAll('.link-grid').forEach(grid => {
-        const linkCount = grid.querySelectorAll('.link-item-wrapper').length;
-        const header = grid.previousElementSibling;
-        if (header && (header.tagName === 'H4' || header.tagName === 'H3')) {
-            const counter = document.createElement('span');
-            counter.className = 'link-counter';
-            counter.textContent = `(${linkCount})`;
-            header.appendChild(counter);
-        }
-    });
+    // Removed link counters for cleaner design
     
     // Add copy link functionality
     document.querySelectorAll('.link-item-wrapper').forEach(wrapper => {
