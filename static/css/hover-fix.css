@@ -1,6 +1,6 @@
 /* Emergency hover menu fix - override everything */
 
-/* Make hover menu visible */
+/* Hide hover menu by default */
 .hover-menu {
     position: absolute !important;
     top: 50% !important;
@@ -9,15 +9,17 @@
     display: flex !important;
     gap: 6px !important;
     z-index: 1000 !important;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease, visibility 0.2s ease;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.2s ease, visibility 0.2s ease !important;
+    pointer-events: none !important;
 }
 
-/* Show on hover */
+/* Show ONLY on hover */
 .link-item-wrapper:hover .hover-menu {
     opacity: 1 !important;
     visibility: visible !important;
+    pointer-events: auto !important;
 }
 
 /* Basic icon styling */
@@ -81,13 +83,17 @@
     position: relative !important;
 }
 
-/* Mobile */
+/* Mobile - keep hidden by default, show on touch */
 @media (max-width: 768px) {
     .hover-menu {
-        position: static !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+    
+    /* Show on touch/hover on mobile */
+    .link-item-wrapper:active .hover-menu,
+    .link-item-wrapper:focus-within .hover-menu {
         opacity: 1 !important;
         visibility: visible !important;
-        margin-left: auto !important;
-        transform: none !important;
     }
 }
