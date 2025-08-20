@@ -79,7 +79,8 @@
       "Bash(html5validator:*)",
       "Bash(pip install:*)",
       "Bash(git checkout:*)",
-      "Bash(git ls-tree:*)"
+      "Bash(git ls-tree:*)",
+      "Bash(git restore:*)"
     ],
     "defaultMode": "acceptEdits"
   }

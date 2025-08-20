@@ -51,6 +51,14 @@
         // Process all link grids
         const linkGrids = document.querySelectorAll('.link-grid');
         console.log(`Found ${linkGrids.length} link grids`);
+        
+        // Debug: Check what links exist
+        const debugLinks = document.querySelectorAll('.link-grid a');
+        console.log(`Total links in grids: ${debugLinks.length}`);
+        if (debugLinks.length > 0) {
+            console.log('First link:', debugLinks[0].className, debugLinks[0].href);
+        }
+        
         let processedCount = 0;
         
         linkGrids.forEach(grid => {
@@ -115,6 +123,12 @@
         });
         
         console.log(`✅ Processed ${processedCount} links with hover menus`);
+        
+        // Final check
+        const finalMenus = document.querySelectorAll('.hover-menu');
+        console.log(`Final hover menu count: ${finalMenus.length}`);
+        const finalIcons = document.querySelectorAll('.social-icon');
+        console.log(`Final social icon count: ${finalIcons.length}`);
     }
 
     function createHoverMenu(urls) {
