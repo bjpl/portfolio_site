@@ -92,23 +92,15 @@
             menu.appendChild(instagramLink);
         }
         
-        // Website icon
+        // Website icon - only show if URL exists
         if (urls.website) {
             const websiteLink = createSocialIcon('website', urls.website, 'Visit Website');
             menu.appendChild(websiteLink);
-        } else {
-            const websiteLink = createSocialIcon('website', '#', 'No website');
-            websiteLink.classList.add('disabled');
-            menu.appendChild(websiteLink);
         }
         
-        // YouTube icon
+        // YouTube icon - only show if URL exists
         if (urls.youtube) {
             const youtubeLink = createSocialIcon('youtube', urls.youtube, 'Watch on YouTube');
-            menu.appendChild(youtubeLink);
-        } else {
-            const youtubeLink = createSocialIcon('youtube', '#', 'No YouTube');
-            youtubeLink.classList.add('disabled');
             menu.appendChild(youtubeLink);
         }
         
@@ -137,25 +129,118 @@
     function getWebsiteUrl(username, linkText, tags) {
         // Map known organizations to their websites
         const websiteMap = {
-            // Embassies
+            // Mexican Embassies
             'embamexcol': 'https://embamex.sre.gob.mx/colombia/',
             'embamexeua': 'https://embamex.sre.gob.mx/eua/',
             'embamexcan': 'https://embamex.sre.gob.mx/canada/',
+            'embamexchi': 'https://embamex.sre.gob.mx/chile/',
+            'embamexgua': 'https://embamex.sre.gob.mx/guatemala/',
+            'embamex_italia': 'https://embamex.sre.gob.mx/italia/',
+            'embamexjp': 'https://embamex.sre.gob.mx/japon/',
+            'embamexlibano': 'https://embamex.sre.gob.mx/libano/',
+            'embamexperu': 'https://embamex.sre.gob.mx/peru/',
+            'embamexesp': 'https://embamex.sre.gob.mx/espana/',
+            'embamexur': 'https://embamex.sre.gob.mx/uruguay/',
+            'embamexvenezuela': 'https://embamex.sre.gob.mx/venezuela/',
+            
+            // Colombian Government
+            'alcaldiabogota': 'https://bogota.gov.co/',
+            'presidenciacol': 'https://www.presidencia.gov.co/',
+            'infopresidencia': 'https://www.presidencia.gov.co/',
+            'mincultura': 'https://www.mincultura.gov.co/',
+            'mineducacion': 'https://www.mineducacion.gov.co/',
+            'minsaludcol': 'https://www.minsalud.gov.co/',
+            'mintrabajocol': 'https://www.mintrabajo.gov.co/',
+            'mindefensa': 'https://www.mindefensa.gov.co/',
+            'minhacienda': 'https://www.minhacienda.gov.co/',
+            'minticscolombia': 'https://www.mintic.gov.co/',
+            'mintransporteco': 'https://www.mintransporte.gov.co/',
+            'mincomercio': 'https://www.mincit.gov.co/',
+            'minvivienda': 'https://www.minvivienda.gov.co/',
+            'minagricultura': 'https://www.minagricultura.gov.co/',
+            'minambiente': 'https://www.minambiente.gov.co/',
+            'minciencias': 'https://www.minciencias.gov.co/',
+            'minjusticia': 'https://www.minjusticia.gov.co/',
+            'mininterior': 'https://www.mininterior.gov.co/',
+            
+            // Mexican Government
+            'gobmexico': 'https://www.gob.mx/',
+            'presidenciamx': 'https://www.gob.mx/presidencia',
+            'sremx': 'https://www.gob.mx/sre',
+            'sepgobmx': 'https://www.gob.mx/sep',
+            'saludmexico': 'https://www.gob.mx/salud',
+            'hacienda_mexico': 'https://www.gob.mx/hacienda',
+            'sct_mx': 'https://www.gob.mx/sct',
+            'semarnat_mexico': 'https://www.gob.mx/semarnat',
+            'sedena': 'https://www.gob.mx/sedena',
+            'semar': 'https://www.gob.mx/semar',
             
             // Museums
             'museonacional': 'https://museonacional.gov.co/',
             'banrepcultural': 'https://www.banrepcultural.org/',
             'mambo': 'https://mambogota.com/',
-            
-            // Government
-            'alcaldiabogota': 'https://bogota.gov.co/',
-            'presidenciacol': 'https://www.presidencia.gov.co/',
-            'mincultura': 'https://www.mincultura.gov.co/',
+            'museodeloro': 'https://www.banrepcultural.org/bogota/museo-del-oro',
+            'museobotero': 'https://www.banrepcultural.org/bogota/museo-botero',
+            'malba': 'https://www.malba.org.ar/',
+            'museodelprado': 'https://www.museodelprado.es/',
+            'museoreinasofia': 'https://www.museoreinasofia.es/',
             
             // Universities
             'uniandes': 'https://uniandes.edu.co/',
             'uninorte': 'https://www.uninorte.edu.co/',
             'univalle': 'https://www.univalle.edu.co/',
+            'unal': 'https://unal.edu.co/',
+            'javeriana': 'https://www.javeriana.edu.co/',
+            'unam': 'https://www.unam.mx/',
+            'ipn': 'https://www.ipn.mx/',
+            'itesm': 'https://tec.mx/',
+            
+            // Airlines
+            'avianca': 'https://www.avianca.com/',
+            'aeromexico': 'https://www.aeromexico.com/',
+            'latamairlines': 'https://www.latam.com/',
+            'volaris': 'https://www.volaris.com/',
+            'vivaaerobus': 'https://www.vivaaerobus.com/',
+            'copa': 'https://www.copaair.com/',
+            
+            // Banks
+            'bancolombia': 'https://www.bancolombia.com/',
+            'bancodebogota': 'https://www.bancodebogota.com/',
+            'davivienda': 'https://www.davivienda.com/',
+            'banorte': 'https://www.banorte.com/',
+            'bbvamexico': 'https://www.bbva.mx/',
+            'santandermexico': 'https://www.santander.com.mx/',
+            'citibanamex': 'https://www.banamex.com/',
+            
+            // Metro Systems
+            'metrodebogota': 'https://www.metrodebogota.gov.co/',
+            'transmilenio': 'https://www.transmilenio.gov.co/',
+            'metrocdmx': 'https://www.metro.cdmx.gob.mx/',
+            'metromedellin': 'https://www.metrodemedellin.gov.co/',
+            
+            // Tourism
+            'colombiatravel': 'https://colombia.travel/',
+            'visitmexico': 'https://www.visitmexico.com/',
+            'procolombia': 'https://www.colombia.co/',
+            
+            // Cities
+            'cdmx': 'https://www.cdmx.gob.mx/',
+            'guadalajaramx': 'https://guadalajara.gob.mx/',
+            'monterreymx': 'https://www.monterrey.gob.mx/',
+            
+            // News Media
+            'eltiempo': 'https://www.eltiempo.com/',
+            'elespectador': 'https://www.elespectador.com/',
+            'semana': 'https://www.semana.com/',
+            'eluniversal': 'https://www.eluniversal.com.mx/',
+            'reforma': 'https://www.reforma.com/',
+            'milenio': 'https://www.milenio.com/',
+            'excelsior': 'https://www.excelsior.com.mx/',
+            
+            // Other Embassies
+            'usembassymex': 'https://mx.usembassy.gov/',
+            'franciaenmexico': 'https://mx.ambafrance.org/',
+            'ukinmexico': 'https://www.gov.uk/world/mexico',
             
             // Add more mappings as needed
         };
