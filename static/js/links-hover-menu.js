@@ -1452,6 +1452,8 @@
             'canalrcn': 'https://www.youtube.com/@CanalRCN',
             'noticiasrcn': 'https://www.youtube.com/@NoticiasRCN',
             'noticiascaracol': 'https://www.youtube.com/@NoticiasCaracol',
+            'wradio': 'https://www.youtube.com/@WRadioColombia',
+            'noticiasunocolombia': 'https://www.youtube.com/@NoticiasUnoColombia',
             'elespectador': 'https://www.youtube.com/@ElEspectador',
             'america': 'https://www.youtube.com/@ClubAmerica',
             'anfp': 'https://www.youtube.com/@ANFPChile',
