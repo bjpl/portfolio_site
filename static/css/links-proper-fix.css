@@ -1,0 +1,316 @@
+/* Proper fix for links page - maintains link functionality */
+
+/* ==============================================
+   LINK WRAPPER - Keep links clickable
+   ============================================== */
+a.link-item-wrapper {
+    /* Display as block for proper sizing */
+    display: block !important;
+    position: relative !important;
+    
+    /* Fixed dimensions */
+    width: 100% !important;
+    height: 56px !important;
+    line-height: 32px !important;
+    
+    /* Padding with space for hover menu */
+    padding: 12px 16px !important;
+    padding-right: 130px !important;
+    
+    /* Text handling */
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    
+    /* Visual design */
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    
+    /* Text appearance */
+    color: #374151 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    
+    /* Transitions */
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+a.link-item-wrapper:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    border-color: #6366f1 !important;
+    color: #4f46e5 !important;
+    background: #fafbff !important;
+}
+
+/* ==============================================
+   HOVER MENU - Absolute positioned
+   ============================================== */
+.hover-menu {
+    /* Absolute positioning inside link */
+    position: absolute !important;
+    top: 50% !important;
+    right: 16px !important;
+    transform: translateY(-50%) !important;
+    
+    /* Container dimensions */
+    width: 100px !important;
+    height: 36px !important;
+    
+    /* Flex layout for icons */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    padding: 5px !important;
+    
+    /* Visual design */
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+    
+    /* Initially hidden */
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    
+    /* Smooth transition */
+    transition: all 0.2s ease !important;
+    
+    /* High z-index */
+    z-index: 1000 !important;
+}
+
+/* Show on hover */
+a.link-item-wrapper:hover .hover-menu {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* ==============================================
+   SOCIAL ICONS
+   ============================================== */
+.social-icon {
+    /* Reset styles */
+    all: unset !important;
+    
+    /* Icon dimensions */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 26px !important;
+    height: 26px !important;
+    flex-shrink: 0 !important;
+    
+    /* Visual styling */
+    background: white !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    text-decoration: none !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 1001 !important;
+}
+
+.social-icon:hover {
+    transform: scale(1.15) !important;
+}
+
+/* Icon SVGs */
+.social-icon svg {
+    width: 16px !important;
+    height: 16px !important;
+    fill: currentColor !important;
+    pointer-events: none !important;
+}
+
+/* Platform-specific colors */
+.social-icon.instagram {
+    color: #E4405F !important;
+}
+
+.social-icon.instagram:hover {
+    background: #E4405F !important;
+    color: white !important;
+}
+
+.social-icon.instagram:hover svg {
+    fill: white !important;
+}
+
+.social-icon.website {
+    color: #3B82F6 !important;
+}
+
+.social-icon.website:hover {
+    background: #3B82F6 !important;
+    color: white !important;
+}
+
+.social-icon.website:hover svg {
+    fill: white !important;
+}
+
+.social-icon.youtube {
+    color: #FF0000 !important;
+}
+
+.social-icon.youtube:hover {
+    background: #FF0000 !important;
+    color: white !important;
+}
+
+.social-icon.youtube:hover svg {
+    fill: white !important;
+}
+
+.social-icon.disabled {
+    opacity: 0.3 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+/* ==============================================
+   GRID LAYOUT
+   ============================================== */
+.link-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+    gap: 14px !important;
+    margin: 24px 0 !important;
+    padding: 10px !important;
+}
+
+/* ==============================================
+   RESPONSIVE DESIGN
+   ============================================== */
+@media (max-width: 768px) {
+    .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+        gap: 12px !important;
+    }
+    
+    a.link-item-wrapper {
+        height: 52px !important;
+        padding: 10px 14px !important;
+        padding-right: 120px !important;
+    }
+    
+    .hover-menu {
+        width: 94px !important;
+        height: 34px !important;
+        right: 12px !important;
+        gap: 5px !important;
+        padding: 4px !important;
+    }
+    
+    .social-icon {
+        width: 24px !important;
+        height: 24px !important;
+    }
+    
+    .social-icon svg {
+        width: 14px !important;
+        height: 14px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .link-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+        padding: 0 !important;
+    }
+    
+    a.link-item-wrapper {
+        height: 50px !important;
+        padding: 8px 12px !important;
+        padding-right: 115px !important;
+        font-size: 13px !important;
+    }
+    
+    .hover-menu {
+        width: 90px !important;
+        height: 32px !important;
+        right: 10px !important;
+        gap: 4px !important;
+        padding: 3px !important;
+    }
+    
+    .social-icon {
+        width: 22px !important;
+        height: 22px !important;
+    }
+    
+    .social-icon svg {
+        width: 13px !important;
+        height: 13px !important;
+    }
+}
+
+/* ==============================================
+   DARK MODE SUPPORT
+   ============================================== */
+[data-theme="dark"] a.link-item-wrapper {
+    background: #1f2937 !important;
+    border-color: #374151 !important;
+    color: #e5e7eb !important;
+}
+
+[data-theme="dark"] a.link-item-wrapper:hover {
+    background: #111827 !important;
+    border-color: #6366f1 !important;
+    color: #a5b4fc !important;
+}
+
+[data-theme="dark"] .hover-menu {
+    background: rgba(31, 41, 55, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .social-icon {
+    background: #374151 !important;
+}
+
+[data-theme="dark"] .social-icon:hover {
+    background: #4b5563 !important;
+}
+
+/* ==============================================
+   ANIMATION
+   ============================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+a.link-item-wrapper {
+    animation: fadeIn 0.3s ease backwards;
+}
+
+/* Stagger animation */
+a.link-item-wrapper:nth-child(1) { animation-delay: 0.02s; }
+a.link-item-wrapper:nth-child(2) { animation-delay: 0.04s; }
+a.link-item-wrapper:nth-child(3) { animation-delay: 0.06s; }
+a.link-item-wrapper:nth-child(4) { animation-delay: 0.08s; }
+a.link-item-wrapper:nth-child(5) { animation-delay: 0.10s; }
+a.link-item-wrapper:nth-child(6) { animation-delay: 0.12s; }
+a.link-item-wrapper:nth-child(7) { animation-delay: 0.14s; }
+a.link-item-wrapper:nth-child(8) { animation-delay: 0.16s; }
+a.link-item-wrapper:nth-child(9) { animation-delay: 0.18s; }
+a.link-item-wrapper:nth-child(n+10) { animation-delay: 0.20s; }

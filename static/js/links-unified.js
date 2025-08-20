@@ -109,6 +109,10 @@
             link.href = url;
             link.target = '_blank';
             link.rel = 'noopener noreferrer';
+            // Prevent parent link from being triggered
+            link.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
         }
         
         // Add SVG icon
@@ -158,6 +162,11 @@
             
             // Add hover menu to the existing link
             link.appendChild(hoverMenu);
+            
+            // Prevent hover menu clicks from triggering the parent link
+            hoverMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
         });
     }
     
