@@ -191,12 +191,29 @@
             'casadesuiza': 'https://www.eda.admin.ch/mexico',
             'ukinmexico': 'https://www.gov.uk/world/mexico',
             'usembassymex': 'https://mx.usembassy.gov/',
+            'consulmexsea': 'https://consulmex.sre.gob.mx/seattle/',
+            'embmexenjordania': 'https://embamex.sre.gob.mx/jordania/',
+            'qatarembassymex': 'https://mexico.embassy.qa/',
             
             // Venezuelan Embassies
             'embafrancia': 'https://francia.embajada.gob.ve/',
             'embavenitalia': 'https://italia.embajada.gob.ve/',
             'embavenmexico': 'https://mexico.embajada.gob.ve/',
             'plenvenezuela': 'https://www.mppre.gob.ve/',
+            
+            // Cultural Institutions
+            'elmamm': 'https://www.elmamm.org/',
+            'museodelamujercdmx': 'https://museodelamujer.org.mx/',
+            'museohnunal': 'http://data.sedema.cdmx.gob.mx/museodehistorianatural/',
+            'coreacolombia': 'https://coreacolombia.com/',
+            'culturaenbta': 'https://culturarecreacionydeporte.gov.co/es',
+            
+            // Food & Beverage Brands
+            'papajohnsve': 'https://papajohns.com.ve/',
+            'burgerkingcol': 'https://www.bk.com.co/',
+            
+            // Tourism Organizations
+            'bogota_turismo': 'https://www.idt.gov.co/',
             
             // Colombian Government
             'alcaldiabogota': 'https://bogota.gov.co/',
