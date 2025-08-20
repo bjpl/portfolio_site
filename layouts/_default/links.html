@@ -9,15 +9,45 @@
         </header>
         
         <div class="page-content">
+            <!-- Search and Filter Section -->
+            <div class="search-container">
+                <input type="text" class="search-input" id="linkSearch" placeholder="🔍 Search 131 links...">
+                <div class="search-stats" id="searchStats"></div>
+            </div>
+            
+            <div class="filter-container">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">
+                        All <span class="filter-count">(131)</span>
+                    </button>
+                    <button class="filter-btn" data-filter="govdip">
+                        🏛️ Government <span class="filter-count"></span>
+                    </button>
+                    <button class="filter-btn" data-filter="education">
+                        🎓 Education <span class="filter-count"></span>
+                    </button>
+                    <button class="filter-btn" data-filter="culture">
+                        🎨 Culture <span class="filter-count"></span>
+                    </button>
+                    <button class="filter-btn" data-filter="food">
+                        🍔 Food <span class="filter-count"></span>
+                    </button>
+                    <button class="filter-btn" data-filter="travel">
+                        ✈️ Travel <span class="filter-count"></span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Links Content -->
             {{ .Content | safeHTML }}
         </div>
     </div>
 </div>
 
 <script src="/js/links-hover-menu.js" defer></script>
+<script src="/js/links-search-filter.js" defer></script>
 <script src="/js/links-page.js" defer></script>
 <script src="/js/links-url-tracking.js" defer></script>
-<script src="/js/links-collapsible.js" defer></script>
 
 <link rel="stylesheet" href="/css/links-hover-menu.css">
 <link rel="stylesheet" href="/css/links-url-tracking.css">
