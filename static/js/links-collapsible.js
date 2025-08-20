@@ -1,9 +1,8 @@
-// Collapsible Section Functionality
+// Collapsible Section System
 class CollapsibleSection {
     constructor(header, options = {}) {
         this.header = header;
         this.content = header.nextElementSibling;
-        this.isMain = header.tagName === 'H3';
         this.options = {
             saveState: true,
             animate: true,
@@ -11,17 +10,77 @@ class CollapsibleSection {
             storagePrefix: 'section_state_',
             ...options
         };
+
+        // Determine section type and level
+        this.type = this.determineSectionType();
+        this.parent = this.findParentSection();
+        this.children = [];
         
-        this.init();
+        if (this.isValidSection()) {
+            this.init();
+        }
+    }
+    
+    determineSectionType() {
+        // Main section headers
+        if (this.header.tagName === 'H3') {
+            return 'main';
+        }
+        
+        // Category headers (e.g., "Embassies", "Government", etc.)
+        if (this.header.tagName === 'H4' && this.header.closest('.instagram-links')) {
+            const section = this.header.closest('.instagram-links');
+            if (section.classList.contains('diplomatic')) return 'diplomatic';
+            if (section.classList.contains('cultural')) return 'cultural';
+            if (section.classList.contains('organizations')) return 'organizations';
+            if (section.classList.contains('government')) return 'government';
+            if (section.classList.contains('food-brands')) return 'food-brands';
+            if (section.classList.contains('local-food')) return 'local-food';
+            if (section.classList.contains('travel')) return 'travel';
+            if (section.classList.contains('education')) return 'education';
+            if (section.classList.contains('other-brands')) return 'other-brands';
+            return 'category';
+        }
+        
+        return 'subcategory';
+    }
+    
+    isValidSection() {
+        return (
+            this.content?.classList.contains('link-grid') ||
+            this.content?.classList.contains('subcategory-content')
+        );
+    }
+    
+    findParentSection() {
+        let current = this.header.parentElement;
+        while (current) {
+            const parentHeader = current.previousElementSibling;
+            if (parentHeader?.tagName === 'H3' || parentHeader?.tagName === 'H4') {
+                return parentHeader._collapsible;
+            }
+            current = current.parentElement;
+        }
+        return null;
     }
     
     init() {
-        if (this.isMain) return;
-        if (!this.content?.classList.contains('link-grid')) return;
+        // Register this instance with parent
+        if (this.parent) {
+            this.parent.children.push(this);
+        }
+        
+        // Store instance on header element
+        this.header._collapsible = this;
         
         // Add styling
         this.header.classList.add('collapsible-header');
         this.content.classList.add('collapsible-content');
+        
+        // Add category class if applicable
+        if (this.type !== 'main') {
+            this.header.classList.add(`collapsible-${this.type}`);
+        }
         
         // Create header content
         const icon = document.createElement('span');
@@ -39,7 +98,12 @@ class CollapsibleSection {
         this.updateState(false);
         
         // Add event listeners
-        this.header.addEventListener('click', () => this.toggle());
+        this.header.addEventListener('click', (e) => {
+            // Don't trigger if clicking a link
+            if (e.target.tagName === 'A') return;
+            this.toggle();
+        });
+        
         this.header.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -49,7 +113,9 @@ class CollapsibleSection {
     }
     
     getStorageKey() {
-        return this.options.storagePrefix + this.header.textContent.trim().toLowerCase().replace(/[^a-z0-9]/g, '_');
+        return this.options.storagePrefix + 
+               this.type + '_' + 
+               this.header.textContent.trim().toLowerCase().replace(/[^a-z0-9]/g, '_');
     }
     
     saveState() {
@@ -62,6 +128,15 @@ class CollapsibleSection {
         this.isExpanded = !this.isExpanded;
         this.updateState(true);
         this.saveState();
+        
+        // Update children based on parent state
+        if (!this.isExpanded) {
+            this.children.forEach(child => {
+                if (child.isExpanded) {
+                    child.toggle();
+                }
+            });
+        }
     }
     
     updateState(animate = true) {
@@ -123,9 +198,11 @@ class CollapsibleSection {
         if (!this.isExpanded) {
             this.toggle();
         }
+        this.children.forEach(child => child.expandAll());
     }
     
     collapseAll() {
+        this.children.forEach(child => child.collapseAll());
         if (this.isExpanded) {
             this.toggle();
         }
@@ -135,19 +212,41 @@ class CollapsibleSection {
 // Initialize collapsible sections
 document.addEventListener('DOMContentLoaded', () => {
     // Ensure content elements have IDs for ARIA
-    document.querySelectorAll('.link-grid').forEach((grid, index) => {
+    document.querySelectorAll('.link-grid, .subcategory-content').forEach((grid, index) => {
         if (!grid.id) {
-            grid.id = 'link-grid-' + index;
+            grid.id = 'content-' + index;
         }
     });
     
-    // Initialize sections
+    // Initialize sections in order (main sections first, then categories, then subcategories)
     const sections = [];
-    document.querySelectorAll('.instagram-links h4, .instagram-links h3').forEach(header => {
+    
+    // Main sections (h3)
+    document.querySelectorAll('.instagram-links > h3').forEach(header => {
         const section = new CollapsibleSection(header, {
             saveState: true,
             animate: true,
             defaultExpanded: true
+        });
+        sections.push(section);
+    });
+    
+    // Category sections (h4)
+    document.querySelectorAll('.instagram-links > h4').forEach(header => {
+        const section = new CollapsibleSection(header, {
+            saveState: true,
+            animate: true,
+            defaultExpanded: true
+        });
+        sections.push(section);
+    });
+    
+    // Subcategory sections
+    document.querySelectorAll('.link-grid > h4').forEach(header => {
+        const section = new CollapsibleSection(header, {
+            saveState: true,
+            animate: true,
+            defaultExpanded: false
         });
         sections.push(section);
     });
@@ -160,19 +259,51 @@ document.addEventListener('DOMContentLoaded', () => {
         const controls = document.createElement('div');
         controls.className = 'section-controls';
         controls.innerHTML = `
-            <button class="control-btn expand-all">Expand All</button>
-            <button class="control-btn collapse-all">Collapse All</button>
+            <div class="control-group">
+                <button class="control-btn expand-all">Expand All</button>
+                <button class="control-btn collapse-all">Collapse All</button>
+            </div>
+            <div class="control-group">
+                <button class="control-btn expand-category" style="display:none">Expand Category</button>
+                <button class="control-btn collapse-category" style="display:none">Collapse Category</button>
+            </div>
         `;
         
+        // Global expand/collapse
         controls.querySelector('.expand-all').addEventListener('click', () => {
-            sections.forEach(section => section.expandAll());
+            sections.filter(s => s.type === 'main').forEach(section => section.expandAll());
         });
         
         controls.querySelector('.collapse-all').addEventListener('click', () => {
-            sections.forEach(section => section.collapseAll());
+            sections.filter(s => s.type === 'main').forEach(section => section.collapseAll());
+        });
+        
+        // Category expand/collapse
+        const categoryControls = controls.querySelectorAll('.control-group:last-child button');
+        const updateCategoryControls = () => {
+            const activeFilter = document.querySelector('.filter-btn.active');
+            const category = activeFilter?.textContent.toLowerCase().replace(/\s+/g, '-');
+            
+            if (category && category !== 'all') {
+                categoryControls.forEach(btn => btn.style.display = '');
+                controls.querySelector('.expand-category').onclick = () => {
+                    sections.filter(s => s.type === category).forEach(section => section.expandAll());
+                };
+                controls.querySelector('.collapse-category').onclick = () => {
+                    sections.filter(s => s.type === category).forEach(section => section.collapseAll());
+                };
+            } else {
+                categoryControls.forEach(btn => btn.style.display = 'none');
+            }
+        };
+        
+        // Listen for filter changes
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', updateCategoryControls);
         });
         
         container.insertAdjacentElement('beforebegin', controls);
+        updateCategoryControls();
     };
     
     addExpandCollapseAll();
