@@ -161,29 +161,27 @@
     position: relative;
     display: flex;
     align-items: center;
-    padding: 1rem 1.25rem;
-    padding-right: 3.5rem; /* Space for hover menu */
+    padding: 0.875rem 1rem;
+    padding-right: 110px; /* Precise space for 3 icons */
     background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
     color: #374151;
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 0.925rem;
     font-weight: 500;
-    line-height: 1.4;
-    transition: all 0.2s ease;
-    min-height: 56px;
+    line-height: 1.5;
+    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 50px;
     cursor: pointer;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow: visible;
 }
 
 .link-item-wrapper:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-color: #6366f1;
-    background: #fafbff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.04);
+    border-color: rgba(99, 102, 241, 0.2);
+    background: linear-gradient(to right, rgba(99, 102, 241, 0.02), white);
 }
 
 /* Link text display */
