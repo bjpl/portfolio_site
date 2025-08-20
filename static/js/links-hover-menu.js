@@ -118,21 +118,22 @@
         const menu = document.createElement('div');
         menu.className = 'hover-menu compact-icons';
         
-        // Always show all three icons in a compact row
-        // Instagram icon
-        const instagramLink = createSocialIcon('instagram', urls.instagram || '#', 'View on Instagram');
-        if (!urls.instagram) instagramLink.classList.add('disabled');
+        // Only show icons for available URLs
+        // Instagram icon (always available as it's the primary link)
+        const instagramLink = createSocialIcon('instagram', urls.instagram, 'View on Instagram');
         menu.appendChild(instagramLink);
         
-        // Website icon
-        const websiteLink = createSocialIcon('website', urls.website || '#', 'Visit Website');
-        if (!urls.website) websiteLink.classList.add('disabled');
-        menu.appendChild(websiteLink);
+        // Website icon (optional)
+        if (urls.website) {
+            const websiteLink = createSocialIcon('website', urls.website, 'Visit Website');
+            menu.appendChild(websiteLink);
+        }
         
-        // YouTube icon
-        const youtubeLink = createSocialIcon('youtube', urls.youtube || '#', 'Watch on YouTube');
-        if (!urls.youtube) youtubeLink.classList.add('disabled');
-        menu.appendChild(youtubeLink);
+        // YouTube icon (optional)
+        if (urls.youtube) {
+            const youtubeLink = createSocialIcon('youtube', urls.youtube, 'Watch on YouTube');
+            menu.appendChild(youtubeLink);
+        }
         
         return menu;
     }
@@ -145,14 +146,6 @@
         link.rel = 'noopener noreferrer';
         link.setAttribute('data-tooltip', tooltip);
         link.innerHTML = icons[type];
-        
-        // Prevent click if disabled
-        if (url === '#') {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-            });
-        }
-        
         return link;
     }
 
