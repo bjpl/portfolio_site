@@ -357,6 +357,124 @@
             'fecoljudos': 'https://www.fedejudo.com/',
             'fedboxeo': 'https://www.fedeboxeo.com/',
             
+            // Major Brands & Companies
+            'cocacolave': 'https://www.coca-cola.com.ve/',
+            'cocacolacol': 'https://www.coca-cola.com.co/',
+            'pepsiven': 'https://www.pepsico.com.ve/',
+            'pepsicovzla': 'https://www.pepsico.com.ve/',
+            'savoynestle': 'https://www.nestle.com.ve/',
+            'nestle': 'https://www.nestle.com/',
+            'microsoft_contacto': 'https://www.microsoft.com/es-co/',
+            'netflixcolombia': 'https://www.netflix.com/co/',
+            'netflixes': 'https://www.netflix.com/es/',
+            'netflixfamilia': 'https://www.netflix.com/',
+            'netflixlat': 'https://www.netflix.com/',
+            'paramountplusmx': 'https://www.paramountplus.com/mx/',
+            'disneyplus': 'https://www.disneyplus.com/',
+            'hbomax': 'https://www.hbomax.com/',
+            'primevideo': 'https://www.primevideo.com/',
+            'spotify': 'https://www.spotify.com/',
+            'spotifycolombia': 'https://www.spotify.com/co/',
+            'deezer': 'https://www.deezer.com/',
+            'applemusic': 'https://music.apple.com/',
+            
+            // Media Organizations
+            'caracolradio': 'https://caracol.com.co/',
+            'caracolmedellin': 'https://caracol.com.co/',
+            'caracoltv': 'https://www.caracoltv.com/',
+            'rcnradio': 'https://www.rcnradio.com/',
+            'rcntv': 'https://www.canalrcn.com/',
+            'bluradio': 'https://www.bluradio.com/',
+            'larepublica': 'https://www.larepublica.co/',
+            'portafolio': 'https://www.portafolio.co/',
+            'dinero': 'https://www.dinero.com/',
+            'lafm': 'https://www.lafm.com.co/',
+            'wradio': 'https://www.wradio.com.co/',
+            
+            // Libraries & Archives
+            'bibliotecaluisangelarango': 'https://www.banrepcultural.org/bogota/biblioteca-luis-angel-arango',
+            'bibliotecanal': 'https://www.bibliotecanacional.gov.co/',
+            'bibliotecaepm': 'https://www.epm.com.co/site/bibliotecaepm/',
+            'bibliotecapiloto': 'https://www.bibliotecapiloto.gov.co/',
+            
+            // Regional Governments
+            'alcaldiadebucaramanga': 'https://www.bucaramanga.gov.co/',
+            'gobernacionrisaralda': 'https://www.risaralda.gov.co/',
+            'policiabmanga': 'https://www.policia.gov.co/',
+            'alcaldiadepasto': 'https://www.pasto.gov.co/',
+            'alcaldiadeibague': 'https://www.ibague.gov.co/',
+            'alcaldiadepereira': 'https://www.pereira.gov.co/',
+            'alcaldiadecucuta': 'https://www.cucuta.gov.co/',
+            'alcaldiadevillavicencio': 'https://www.villavicencio.gov.co/',
+            'alcaldiademonteria': 'https://www.monteria.gov.co/',
+            'alcaldiadevalledupar': 'https://www.valledupar.gov.co/',
+            'alcaldiadeneiva': 'https://www.neiva.gov.co/',
+            
+            // Food & Beverage Brands
+            'frisby': 'https://www.frisby.com.co/',
+            'kokoriko': 'https://www.kokoriko.com.co/',
+            'crepes': 'https://www.crepesywaffles.com.co/',
+            'crepesywaffles': 'https://www.crepesywaffles.com.co/',
+            'juanvaldez': 'https://www.juanvaldezcafe.com/',
+            'omacolcafe': 'https://www.oma.com.co/',
+            'tacobell': 'https://www.tacobell.com/',
+            'mcdonalds': 'https://www.mcdonalds.com/',
+            'burgerking': 'https://www.burgerking.com/',
+            'subway': 'https://www.subway.com/',
+            'dominos': 'https://www.dominos.com.co/',
+            'papajohns': 'https://www.papajohns.com.co/',
+            'pizzahut': 'https://www.pizzahut.com.co/',
+            
+            // Retail & Shopping
+            'exito': 'https://www.exito.com/',
+            'carulla': 'https://www.carulla.com/',
+            'olimpica': 'https://www.olimpica.com/',
+            'jumbo': 'https://www.tiendasjumbo.co/',
+            'metro': 'https://www.tiendasmetro.co/',
+            'makro': 'https://www.makro.com.co/',
+            'pricesmart': 'https://www.pricesmart.com/',
+            'homecenter': 'https://www.homecenter.com.co/',
+            'easy': 'https://www.easy.com.co/',
+            'alkosto': 'https://www.alkosto.com/',
+            'ktronix': 'https://www.ktronix.com/',
+            'falabella': 'https://www.falabella.com.co/',
+            
+            // Telecommunications
+            'clarocolombia': 'https://www.claro.com.co/',
+            'movistar': 'https://www.movistar.co/',
+            'tigocolombia': 'https://www.tigo.com.co/',
+            'virgin': 'https://www.virginmobile.co/',
+            'wom': 'https://www.wom.co/',
+            'etb': 'https://www.etb.com.co/',
+            'une': 'https://www.une.com.co/',
+            'directv': 'https://www.directv.com.co/',
+            
+            // Financial Services
+            'grupoaval': 'https://www.grupoaval.com/',
+            'bancodebogota': 'https://www.bancodebogota.com/',
+            'bancolombia': 'https://www.bancolombia.com/',
+            'davivienda': 'https://www.davivienda.com/',
+            'bbva': 'https://www.bbva.com.co/',
+            'scotiabank': 'https://www.scotiabank.com.co/',
+            'citibank': 'https://www.citibank.com.co/',
+            'bancopular': 'https://www.bancopopular.com.co/',
+            'bancodeoccidente': 'https://www.bancodeoccidente.com.co/',
+            'avvillas': 'https://www.avvillas.com.co/',
+            'bancoomeva': 'https://www.bancoomeva.com.co/',
+            'bancocajasocial': 'https://www.bancocajasocial.com/',
+            
+            // Energy & Utilities
+            'ecopetrol': 'https://www.ecopetrol.com.co/',
+            'isagen': 'https://www.isagen.com.co/',
+            'epm': 'https://www.epm.com.co/',
+            'codensa': 'https://www.enel.com.co/',
+            'gasnatural': 'https://www.grupovanti.com/',
+            'aguasdebogota': 'https://www.acueducto.com.co/',
+            'empresaspublicasdecali': 'https://www.emcali.com.co/',
+            'essa': 'https://www.essa.com.co/',
+            'edeq': 'https://www.edeq.com.co/',
+            'chec': 'https://www.chec.com.co/',
+            
             // Add more mappings as needed
         };
         
@@ -682,7 +800,82 @@
             'vivelatino': 'https://www.youtube.com/@ViveLatino',
             'volaris': 'https://www.youtube.com/@volarisoficial',
             'wradio': 'https://www.youtube.com/@WRadioColombia',
-            'yucatan': 'https://www.youtube.com/@GobiernoYucatan'
+            'yucatan': 'https://www.youtube.com/@GobiernoYucatan',
+            
+            // Additional YouTube Channels - Brands
+            'cocacolave': 'https://www.youtube.com/@CocaColaVenezuela',
+            'cocacolacol': 'https://www.youtube.com/@CocaColaColombia',
+            'pepsiven': 'https://www.youtube.com/@PepsiVenezuela',
+            'pepsicovzla': 'https://www.youtube.com/@PepsiCoVenezuela',
+            'nestle': 'https://www.youtube.com/@nestle',
+            'microsoft_contacto': 'https://www.youtube.com/@MicrosoftLatam',
+            'netflixcolombia': 'https://www.youtube.com/@NetflixLatam',
+            'netflixes': 'https://www.youtube.com/@NetflixEspana',
+            'netflixfamilia': 'https://www.youtube.com/@NetflixFamily',
+            'netflixlat': 'https://www.youtube.com/@NetflixLatam',
+            'paramountplusmx': 'https://www.youtube.com/@ParamountPlusLA',
+            
+            // Additional YouTube - Media
+            'caracolradio': 'https://www.youtube.com/@CaracolRadio',
+            'caracoltv': 'https://www.youtube.com/@CaracolTV',
+            'rcnradio': 'https://www.youtube.com/@RCNRadio',
+            'rcntv': 'https://www.youtube.com/@CanalRCN',
+            'bluradio': 'https://www.youtube.com/@BluRadioCo',
+            
+            // Additional YouTube - Food Brands
+            'frisby': 'https://www.youtube.com/@FrisbyColombia',
+            'kokoriko': 'https://www.youtube.com/@KokorikoColombia',
+            'crepesywaffles': 'https://www.youtube.com/@CrepesWaffles',
+            'juanvaldez': 'https://www.youtube.com/@JuanValdezCafe',
+            'dominos': 'https://www.youtube.com/@DominosPizzaColombia',
+            'papajohns': 'https://www.youtube.com/@PapaJohnsColombia',
+            
+            // Additional YouTube - Retail
+            'exito': 'https://www.youtube.com/@almacenesexito',
+            'carulla': 'https://www.youtube.com/@Carulla',
+            'olimpica': 'https://www.youtube.com/@OlimpicaColombia',
+            'jumbo': 'https://www.youtube.com/@JumboColombia',
+            'homecenter': 'https://www.youtube.com/@HomecenterCo',
+            'alkosto': 'https://www.youtube.com/@AlkostoColombia',
+            'falabella': 'https://www.youtube.com/@FalabellaColombia',
+            
+            // Additional YouTube - Telecoms
+            'clarocolombia': 'https://www.youtube.com/@ClaroColombia',
+            'movistar': 'https://www.youtube.com/@MovistarColombia',
+            'tigocolombia': 'https://www.youtube.com/@TigoColombia',
+            'directv': 'https://www.youtube.com/@DIRECTVLatam',
+            
+            // Additional YouTube - Banks
+            'grupoaval': 'https://www.youtube.com/@GrupoAval',
+            'bbva': 'https://www.youtube.com/@BBVAColombia',
+            'scotiabank': 'https://www.youtube.com/@ScotiabankColombia',
+            
+            // Additional YouTube - Energy
+            'ecopetrol': 'https://www.youtube.com/@Ecopetrol',
+            'isagen': 'https://www.youtube.com/@ISAGEN',
+            'epm': 'https://www.youtube.com/@EPMMedellin',
+            
+            // Additional YouTube - Government Agencies
+            'dane': 'https://www.youtube.com/@DANEColombia',
+            'dian': 'https://www.youtube.com/@DIANColombia',
+            'invima': 'https://www.youtube.com/@INVIMAColombia',
+            'icbf': 'https://www.youtube.com/@ICBFColombia',
+            'sena': 'https://www.youtube.com/@SENAColombia',
+            'colpensiones': 'https://www.youtube.com/@Colpensiones',
+            'supersociedades': 'https://www.youtube.com/@Supersociedades',
+            'superindustria': 'https://www.youtube.com/@SICColombia',
+            'aerocivil': 'https://www.youtube.com/@AerocivilColombia',
+            
+            // Additional YouTube - Regional
+            'alcaldiadebucaramanga': 'https://www.youtube.com/@AlcaldiaBucaramanga',
+            'alcaldiadepasto': 'https://www.youtube.com/@AlcaldiaPasto',
+            'alcaldiadeibague': 'https://www.youtube.com/@AlcaldiaIbague',
+            'alcaldiadepereira': 'https://www.youtube.com/@AlcaldiaPereira',
+            'alcaldiadecucuta': 'https://www.youtube.com/@AlcaldiaCucuta',
+            'alcaldiadevillavicencio': 'https://www.youtube.com/@AlcaldiaVillavicencio',
+            'alcaldiademonteria': 'https://www.youtube.com/@AlcaldiaMonteria',
+            'alcaldiadevalledupar': 'https://www.youtube.com/@AlcaldiaValledupar',
+            'alcaldiadeneiva': 'https://www.youtube.com/@AlcaldiaNeiva'
         };
         
         // Check if we have a known YouTube channel
