@@ -219,6 +219,12 @@
             'udea': 'https://www.udea.edu.co/',
             'unicartagena': 'https://www.unicartagena.edu.co/',
             'upbcolombia': 'https://www.upb.edu.co/',
+            'universidadelcauca': 'https://www.unicauca.edu.co/',
+            'upedagogicanacional': 'https://www.upn.edu.co/',
+            
+            // Embassy Additional URLs
+            'ukrembassymex': 'https://mexico.mfa.gov.ua/',
+            'ueenvenezuela': 'https://www.eeas.europa.eu/delegations/venezuela_en',
             
             // Media Organizations
             'elespectador': 'https://www.elespectador.com/',
@@ -1595,6 +1601,9 @@
             'volaris': 'https://www.youtube.com/@volarisoficial',
             'wradio': 'https://www.youtube.com/@WRadioColombia',
             'yucatan': 'https://www.youtube.com/@GobiernoYucatan',
+            
+            // Educational Institution YouTube Channels
+            'udea': 'https://www.youtube.com/user/UniversidadAntioquia',
             
             // Additional YouTube Channels - Brands
             'cocacolave': 'https://www.youtube.com/@CocaColaVenezuela',
