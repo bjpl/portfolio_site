@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Hover Menu</title>
+    <link rel="stylesheet" href="/css/links-final-fix.css">
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 14px;
+            margin: 24px 0;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Testing Hover Menus</h1>
+    
+    <div class="link-grid">
+        <a href="https://instagram.com/potus" target="_blank" rel="noopener" class="link-item-wrapper">
+            🇺🇸 President Biden • Washington DC
+        </a>
+        <a href="https://instagram.com/nasa" target="_blank" rel="noopener" class="link-item-wrapper">
+            🚀 NASA • Space Exploration
+        </a>
+        <a href="https://instagram.com/harvard" target="_blank" rel="noopener" class="link-item-wrapper">
+            🎓 Harvard University • Cambridge
+        </a>
+    </div>
+    
+    <script src="/js/links-unified.js"></script>
+    
+    <script>
+        // Debug logging
+        setTimeout(() => {
+            const hoverMenus = document.querySelectorAll('.hover-menu');
+            console.log('Hover menus found:', hoverMenus.length);
+            
+            const links = document.querySelectorAll('.link-item-wrapper');
+            console.log('Links found:', links.length);
+            
+            links.forEach((link, i) => {
+                console.log(`Link ${i}:`, link.innerHTML);
+            });
+        }, 1000);
+    </script>
+</body>
+</html>
