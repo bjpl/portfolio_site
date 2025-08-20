@@ -72,6 +72,13 @@
   to = "/admin/:splat"
   status = 200
 
+# Domain Redirects
+[[redirects]]
+  from = "https://vocal-pony-24e3de.netlify.app/*"
+  to = "https://vocal-pony-24e3de.netlify.app/:splat"
+  status = 301
+  force = true
+
 # Legacy URL Redirects
 [[redirects]]
   from = "/learn/*"
@@ -99,7 +106,7 @@
   package = "netlify-plugin-submit-sitemap"
 
   [plugins.inputs]
-    baseUrl = "https://yourdomain.com"
+    baseUrl = "https://vocal-pony-24e3de.netlify.app"
     sitemapPath = "/sitemap.xml"
 
 # Development Settings
