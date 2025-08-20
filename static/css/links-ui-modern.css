@@ -3,13 +3,11 @@
 :root {
     --link-card-bg: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
     --link-card-hover: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    --category-gradient-diplomatic: linear-gradient(135deg, #4361ee 0%, #3f37c9 100%);
-    --category-gradient-cultural: linear-gradient(135deg, #b5179e 0%, #7209b7 100%);
-    --category-gradient-government: linear-gradient(135deg, #00b4d8 0%, #0077b6 100%);
-    --category-gradient-food: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
-    --category-gradient-travel: linear-gradient(135deg, #7209b7 0%, #560bad 100%);
-    --category-gradient-education: linear-gradient(135deg, #3f37c9 0%, #4361ee 100%);
-    --category-gradient-organizations: linear-gradient(135deg, #06ffa5 0%, #00b4d8 100%);
+    --category-gradient-govdip: linear-gradient(135deg, #4361ee 0%, #3f37c9 100%);
+    --category-gradient-education: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    --category-gradient-culture: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+    --category-gradient-food: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    --category-gradient-travel: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
 }
 
 /* Enhanced Section Headers */
