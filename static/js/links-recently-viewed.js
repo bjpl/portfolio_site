@@ -104,8 +104,10 @@ document.addEventListener('DOMContentLoaded', function() {
             menu.className = 'hover-menu compact-icons';
 
             // Add Instagram icon (always present)
-            const instagramLink = createSocialIcon('instagram', link.instagram, 'View on Instagram');
-            menu.appendChild(instagramLink);
+            if (link.instagram) {
+                const instagramLink = createSocialIcon('instagram', link.instagram, 'View on Instagram');
+                menu.appendChild(instagramLink);
+            }
 
             // Add Website icon if available
             if (link.website) {
@@ -126,6 +128,15 @@ document.addEventListener('DOMContentLoaded', function() {
             menu.appendChild(time);
 
             wrapper.appendChild(menu);
+            
+            // Add click handler to open Instagram URL
+            wrapper.addEventListener('click', (e) => {
+                // Don't trigger if clicking a social icon
+                if (!e.target.closest('.social-icon')) {
+                    window.open(link.instagram, '_blank');
+                }
+            });
+            
             linkGrid.appendChild(wrapper);
         });
     }
@@ -178,10 +189,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return 'just now';
     }
 
-    // Add click handlers to all link wrappers
-    document.querySelectorAll('.link-item-wrapper').forEach(wrapper => {
-        wrapper.addEventListener('click', () => {
-            addToRecentlyViewed(wrapper);
+    // Add click handlers to all main link wrappers (not recently viewed)
+    document.querySelectorAll('.instagram-links:not(.recently-viewed) .link-item-wrapper').forEach(wrapper => {
+        wrapper.addEventListener('click', (e) => {
+            // Don't track if clicking social icon
+            if (!e.target.closest('.social-icon')) {
+                addToRecentlyViewed(wrapper);
+            }
         });
     });
 
