@@ -10,14 +10,16 @@
     position: relative;
     display: flex;
     align-items: center;
-    padding: 0.875rem 1rem;
-    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-    border: 1.5px solid #e5e7eb;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--color-surface);
+    border: 1.5px solid var(--color-border);
     border-radius: 10px;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     width: 100%;
     box-sizing: border-box;
+    gap: 1rem;
 }
 
 .link-item-wrapper:hover {
@@ -32,7 +34,7 @@
 /* Link display text */
 .link-display {
     flex: 1;
-    color: #374151;
+    color: var(--color-text-primary);
     font-size: 0.9rem;
     white-space: nowrap;
     overflow: hidden;
@@ -40,16 +42,18 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    min-width: 0;
+    opacity: 1;
 }
 
 /* Hover menu - inline compact icons */
 .hover-menu {
     display: flex;
     gap: 4px;
-    opacity: 0;
-    transition: opacity 0.2s ease;
     margin-left: auto;
     padding-left: 0.75rem;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
 }
 
 /* Show icons on hover */
@@ -193,10 +197,18 @@
 }
 
 /* Dark mode support */
-[data-theme="dark"] .link-item {
-    background: linear-gradient(145deg, #1e293b, #334155);
-    border-color: rgba(255, 255, 255, 0.1);
-    color: #e5e7eb;
+[data-theme="dark"] .link-item-wrapper {
+    background: var(--color-surface-alt);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .link-item-wrapper:hover {
+    background: var(--color-surface);
+    border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .link-display {
+    color: var(--color-text-primary);
 }
 
 [data-theme="dark"] .hover-menu {
