@@ -1609,7 +1609,65 @@
     function getYoutubeUrl(username, linkText, tags) {
         // Map known organizations to their YouTube channels
                 const youtubeMap = {
-            'aeromexico': 'https://www.youtube.com/@aeromexico',
+                // Government & Environmental
+                'ambiente_bogota': 'https://www.youtube.com/@AmbienteBogota',
+                'aviacionpolicialcolombia': 'https://www.youtube.com/policiadecolombia',
+                'cne_colombia': 'https://www.youtube.com/@CNE_Colombia',
+                'dagmaoficial': 'https://www.youtube.com/@DagmaCaliOficial',
+
+                // Embassies & International
+                'alemaniaencolombia': 'https://www.youtube.com/@GermanyinColombia',
+
+                // Cultural & Museums
+                'goetheinstitut_kolumbien': 'https://www.youtube.com/@goetheinstitut',
+                'museodebogota': 'https://www.youtube.com/@MuseodeBogota',
+
+                // Media & Communications
+                'elmetrobogota': 'https://www.youtube.com/@elmetrobogota',
+                'medellinenvideos': 'https://www.youtube.com/@MedellinEnVideos',
+                'senalcolombiatv': 'https://www.youtube.com/@SenalColombiaTV',
+
+                // Food & Beverage Brands
+                'bonyurt': 'https://www.youtube.com/@Bonyurt',
+                'chocolatecorona': 'https://www.youtube.com/@ChocolateCorona',
+                'chocoramoficial': 'https://www.youtube.com/@ChocoramoOficial',
+                'fritolay_col': 'https://www.youtube.com/@FritoLayColombia',
+                'gruponutresa': 'https://www.youtube.com/@GrupoNutresa',
+                'harina_pan': 'https://www.youtube.com/@HarinaPan',
+                'maggicolombia': 'https://www.youtube.com/@MaggiColombia',
+                'nescafe_col': 'https://www.youtube.com/@NescafeColombia',
+                'saltin_noel': 'https://www.youtube.com/@SaltinNoelColombia',
+                'supercoco_col': 'https://www.youtube.com/@SuperCocoColombia',
+                'yupi_colombia': 'https://www.youtube.com/@YupiColombia',
+
+                // Technology & Retail
+                'alkosto_col': 'https://www.youtube.com/@alkosto',
+                'arturo_calle': 'https://www.youtube.com/@arturocalleoficial',
+                'avon_colombia': 'https://www.youtube.com/@AVONColombia',
+                'berlitzcolombia': 'https://www.youtube.com/@BerlitzColombia',
+                'carulla': 'https://www.youtube.com/@CarullaColombia',
+                'crocscolombia_oficial': 'https://www.youtube.com/@CrocsColombia',
+                'cruzrojacol': 'https://www.youtube.com/@CruzRojaColombiana',
+                'disneyplusla': 'https://www.youtube.com/@DisneyPlusLA',
+                'drogueriascafam': 'https://www.youtube.com/@CafamOficial',
+                'exito': 'https://www.youtube.com/@ExitoOficial',
+                'falabella_co': 'https://www.youtube.com/@FalabellaCO',
+                'frisby_col': 'https://www.youtube.com/@FrisbyColombia',
+                'homecenter_co': 'https://www.youtube.com/@HomecenterColombia',
+                'hpcolombia_': 'https://www.youtube.com/@hpcolombia',
+                'lenovocolombia': 'https://www.youtube.com/@LenovoColombia',
+                'olympica_co': 'https://www.youtube.com/@SupertiendasOlimpica',
+                'panamericana_col': 'https://www.youtube.com/@PanamericanaColombia',
+                'patprimo_col': 'https://www.youtube.com/@PatPrimoOficial',
+                'servientrega_col': 'https://www.youtube.com/@Servientrega',
+                'sodimac_co': 'https://www.youtube.com/@SodimacColombia',
+                'studio_f': 'https://www.youtube.com/@StudioFColombia',
+                'tennis_co': 'https://www.youtube.com/@TennisColombia',
+                'totto_col': 'https://www.youtube.com/@TottoOficial',
+                'tuboleta_col': 'https://www.youtube.com/@TuBoletaColombia',
+            
+                // Other Organizations
+                'aeromexico': 'https://www.youtube.com/@aeromexico',
             'afa': 'https://www.youtube.com/@AFASeleccion',
             'agn': 'https://www.youtube.com/@AGNMexico',
             'agnargentina': 'https://www.youtube.com/@AGNArgentina',
