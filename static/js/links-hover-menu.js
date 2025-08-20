@@ -215,6 +215,17 @@
             // Tourism Organizations
             'bogota_turismo': 'https://www.idt.gov.co/',
             
+            // Educational Institutions
+            'udea': 'https://www.udea.edu.co/',
+            'unicartagena': 'https://www.unicartagena.edu.co/',
+            'upbcolombia': 'https://www.upb.edu.co/',
+            
+            // Media Organizations
+            'elespectador': 'https://www.elespectador.com/',
+            'caracolradio': 'https://caracol.com.co/',
+            'cnnee': 'https://cnnespanol.cnn.com/',
+            'bluradio': 'https://www.bluradio.com/',
+            
             // Colombian Government
             'alcaldiabogota': 'https://bogota.gov.co/',
             'presidenciacol': 'https://www.presidencia.gov.co/',
@@ -232,6 +243,7 @@
             'minagricultura': 'https://www.minagricultura.gov.co/',
             'minambiente': 'https://www.minambiente.gov.co/',
             'minciencias': 'https://www.minciencias.gov.co/',
+            'minciencias_co': 'https://www.minciencias.gov.co/',
             'minjusticia': 'https://www.minjusticia.gov.co/',
             'mininterior': 'https://www.mininterior.gov.co/',
             
