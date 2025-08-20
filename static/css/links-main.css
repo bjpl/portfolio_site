@@ -150,10 +150,10 @@
 /* === LINK GRID === */
 .link-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 0.875rem;
-    margin: 1rem 0;
-    padding: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0;
+    padding: 0.75rem;
 }
 
 /* Link items */
@@ -161,17 +161,22 @@
     position: relative;
     display: flex;
     align-items: center;
-    padding: 0.75rem 1rem;
+    padding: 1rem 1.25rem;
+    padding-right: 3.5rem; /* Space for hover menu */
     background: white;
     border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    border-radius: 10px;
     color: #374151;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 500;
+    line-height: 1.4;
     transition: all 0.2s ease;
-    min-height: 48px;
+    min-height: 56px;
     cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .link-item-wrapper:hover {
@@ -179,6 +184,18 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-color: #6366f1;
     background: #fafbff;
+}
+
+/* Link text display */
+.link-display,
+.link-item-wrapper a:first-child {
+    flex: 1;
+    color: inherit;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 0.5rem;
 }
 
 /* Search match highlight */
@@ -191,24 +208,25 @@
 .hover-menu {
     position: absolute;
     top: 50%;
-    right: 10px;
+    right: 8px;
     transform: translateY(-50%);
     display: flex;
-    gap: 6px;
+    gap: 8px;
     opacity: 0;
     visibility: hidden;
     transition: all 0.2s ease;
     z-index: 10;
-    background: white;
-    padding: 4px;
-    border-radius: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.98);
+    padding: 6px;
+    border-radius: 24px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(10px);
 }
 
 .link-item-wrapper:hover .hover-menu {
     opacity: 1;
     visibility: visible;
-    right: 12px;
+    right: 10px;
 }
 
 /* Social icons */
@@ -216,29 +234,61 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: white;
     border: 1px solid #e5e7eb;
     transition: all 0.15s ease;
     text-decoration: none;
+    flex-shrink: 0;
 }
 
 .social-icon:hover {
-    transform: scale(1.1);
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.social-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
 }
 
 .social-icon.instagram {
     color: #E4405F;
+    background: rgba(228, 64, 95, 0.08);
+    border-color: rgba(228, 64, 95, 0.2);
+}
+
+.social-icon.instagram:hover {
+    background: #E4405F;
+    color: white;
+    border-color: #E4405F;
 }
 
 .social-icon.website {
     color: #6366f1;
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.social-icon.website:hover {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
 }
 
 .social-icon.youtube {
     color: #FF0000;
+    background: rgba(255, 0, 0, 0.08);
+    border-color: rgba(255, 0, 0, 0.2);
+}
+
+.social-icon.youtube:hover {
+    background: #FF0000;
+    color: white;
+    border-color: #FF0000;
 }
 
 .social-icon.disabled {
@@ -247,11 +297,42 @@
     pointer-events: none;
 }
 
+/* Tooltip for social icons */
+.social-icon::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    background: #1f2937;
+    color: white;
+    font-size: 11px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    margin-bottom: 4px;
+    pointer-events: none;
+}
+
+.social-icon:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
     .link-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 0.625rem;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 0.875rem;
+    }
+    
+    .link-item-wrapper {
+        padding: 0.875rem 1rem;
+        padding-right: 1rem; /* Remove extra padding on mobile */
+        min-height: 48px;
     }
     
     .filter-buttons {
@@ -264,19 +345,34 @@
         min-width: auto;
     }
     
+    /* Show hover menu inline on mobile */
     .hover-menu {
         position: static;
         opacity: 1;
         visibility: visible;
-        margin-top: 0.5rem;
+        margin-left: auto;
+        margin-top: 0;
         transform: none;
+        display: inline-flex;
+        padding: 2px;
+        gap: 4px;
+    }
+    
+    .social-icon {
+        width: 28px;
+        height: 28px;
     }
 }
 
 @media (max-width: 480px) {
     .link-grid {
         grid-template-columns: 1fr;
-        gap: 0.5rem;
+        gap: 0.625rem;
+    }
+    
+    .link-item-wrapper {
+        padding: 0.75rem 0.875rem;
+        font-size: 0.875rem;
     }
 }
 
