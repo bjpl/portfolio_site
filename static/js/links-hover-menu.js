@@ -71,9 +71,15 @@
                 const tags = link.getAttribute('data-tags') || '';
                 
                 // Extract username from Instagram URL
-                const username = instagramUrl.includes('instagram.com/') 
-                    ? instagramUrl.split('instagram.com/')[1].replace('/', '') 
-                    : '';
+                let username = '';
+                if (instagramUrl.includes('instagram.com/')) {
+                    username = instagramUrl.split('instagram.com/')[1]
+                        .replace('/', '')
+                        .replace(/\?.*$/, '') // Remove query params
+                        .replace(/#.*$/, '') // Remove hash
+                        .toLowerCase() // Normalize to lowercase
+                        .trim();
+                }
                 
                 // Create wrapper that contains both text and icons
                 const wrapper = document.createElement('div');
@@ -166,6 +172,31 @@
             'embamexesp': 'https://embamex.sre.gob.mx/espana/',
             'embamexur': 'https://embamex.sre.gob.mx/uruguay/',
             'embamexvenezuela': 'https://embamex.sre.gob.mx/venezuela/',
+            'emba_mexbol': 'https://embamex.sre.gob.mx/bolivia/',
+            
+            // Foreign Embassies in Mexico
+            'belgicaenmexico': 'https://diplomatie.belgium.be/en/mexico',
+            'brasilnomexico': 'https://www.gov.br/mre/pt-br/embaixada-mexico',
+            'embachilemexico': 'https://chile.gob.cl/mexico',
+            'embacumex': 'http://www.cubadiplomatica.cu/mexico',
+            'rdenmexico': 'https://www.embajadadominicana.org.mx/',
+            'finlandiaenmexico': 'https://finlandabroad.fi/web/mex/frontpage',
+            'franciaenmexico': 'https://mx.ambafrance.org/',
+            'alemaniamexi': 'https://mexiko.diplo.de/',
+            'indiainmex': 'https://www.indiainmexico.gov.in/',
+            'irishembmexico': 'https://www.ireland.ie/en/mexico/',
+            'japanemb_mexico': 'https://www.mx.emb-japan.go.jp/',
+            'embpanamamex': 'https://www.embajadadepanama.com.mx/',
+            'elperuenmex': 'https://www.embajadadelperu.org.mx/',
+            'casadesuiza': 'https://www.eda.admin.ch/mexico',
+            'ukinmexico': 'https://www.gov.uk/world/mexico',
+            'usembassymex': 'https://mx.usembassy.gov/',
+            
+            // Venezuelan Embassies
+            'embafrancia': 'https://francia.embajada.gob.ve/',
+            'embavenitalia': 'https://italia.embajada.gob.ve/',
+            'embavenmexico': 'https://mexico.embajada.gob.ve/',
+            'plenvenezuela': 'https://www.mppre.gob.ve/',
             
             // Colombian Government
             'alcaldiabogota': 'https://bogota.gov.co/',
@@ -1316,6 +1347,22 @@
             'embamexperu': 'https://www.youtube.com/@embamexperu',
             'embamexur': 'https://www.youtube.com/@embamexur',
             'embamexvenezuela': 'https://www.youtube.com/@embamexvenezuela',
+            'emba_mexbol': 'https://www.youtube.com/@embamexbol',
+            'belgicaenmexico': 'https://www.youtube.com/@BelgicaEnMexico',
+            'brasilnomexico': 'https://www.youtube.com/@BrasilnoMexico',
+            'embachilemexico': 'https://www.youtube.com/@EmbajadaChileMexico',
+            'embacumex': 'https://www.youtube.com/@EmbajadaCubaenMexico',
+            'rdenmexico': 'https://www.youtube.com/@RDenMexico',
+            'finlandiaenmexico': 'https://www.youtube.com/@FinlandiaEnMexico',
+            'alemaniamexi': 'https://www.youtube.com/@AlemaniaEnMexico',
+            'indiainmex': 'https://www.youtube.com/@IndiaInMexico',
+            'irishembmexico': 'https://www.youtube.com/@IrishEmbMexico',
+            'japanemb_mexico': 'https://www.youtube.com/@JapanEmbMexico',
+            'embpanamamex': 'https://www.youtube.com/@EmbajadaPanamaMexico',
+            'elperuenmex': 'https://www.youtube.com/@ElPeruEnMexico',
+            'casadesuiza': 'https://www.youtube.com/@CasadeSuiza',
+            'ukinmexico': 'https://www.youtube.com/@UKinMexico',
+            'usembassymex': 'https://www.youtube.com/@USEmbassyMexico',
             'estereopicnic': 'https://www.youtube.com/@EsteroPicnic',
             'excelsior': 'https://www.youtube.com/@ExcelsiorMex',
             'exito': 'https://www.youtube.com/@almacenesexito',
