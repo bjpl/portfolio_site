@@ -75,6 +75,15 @@
                     ? instagramUrl.split('instagram.com/')[1].replace('/', '') 
                     : '';
                 
+                // Create wrapper that contains both text and icons
+                const wrapper = document.createElement('div');
+                wrapper.className = 'link-item-wrapper';
+                
+                // Create the display element with text
+                const displayElement = document.createElement('div');
+                displayElement.className = 'link-display';
+                displayElement.innerHTML = link.innerHTML; // Preserve any flags/emojis
+                
                 // Create hover menu
                 const hoverMenu = createHoverMenu({
                     instagram: instagramUrl,
@@ -82,18 +91,16 @@
                     youtube: getYoutubeUrl(username, linkText, tags)
                 });
                 
-                // Create wrapper that preserves the original link
-                const wrapper = document.createElement('div');
-                wrapper.className = 'link-item-wrapper';
-                
-                // Move the original link into the wrapper
+                // Replace the original link with our wrapper
                 const parent = link.parentNode;
                 parent.replaceChild(wrapper, link);
                 
-                // Add the original link back as-is
-                link.classList.add('link-item');
-                wrapper.appendChild(link);
+                // Add elements to wrapper
+                wrapper.appendChild(displayElement);
                 wrapper.appendChild(hoverMenu);
+                
+                // Preserve data attributes
+                wrapper.setAttribute('data-tags', tags);
                 processedCount++;
             });
         });
