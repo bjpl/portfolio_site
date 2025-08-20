@@ -10,9 +10,9 @@ const urlMappingsComplete = {
     // Colombian Government - Municipal
     'alcaldiabarranquilla': { website: 'https://www.barranquilla.gov.co/', youtube: null },
     'alcaldiabogota': { website: 'https://bogota.gov.co/', youtube: 'https://www.youtube.com/@AlcaldiaBogota' },
-    'alcaldiacartagena': { website: 'https://www.cartagena.gov.co/', youtube: null },
+    'alcaldiacartagena': { website: 'https://www.cartagena.gov.co/', youtube: 'https://www.youtube.com/@AlcaldiaCartagena' },
     'alcaldiacucuta': { website: 'https://www.cucuta.gov.co/', youtube: null },
-    'alcaldiadebucaramanga': { website: 'https://www.bucaramanga.gov.co/', youtube: null },
+    'alcaldiadebucaramanga': { website: 'https://www.bucaramanga.gov.co/', youtube: 'https://www.youtube.com/@AlcaldiaBucaramanga' },
     'alcaldiadecaldas': { website: 'https://www.caldas-antioquia.gov.co/', youtube: null },
     'alcaldiapopayan': { website: 'https://www.popayan.gov.co/', youtube: null },
     
@@ -35,23 +35,23 @@ const urlMappingsComplete = {
     'bibliotecasmed': { website: 'https://bibliotecasmedellin.gov.co/', youtube: 'https://www.youtube.com/@SistemadeBibliotecasMedellin' },
     
     // Museums
-    'centromemoriabogota': { website: 'https://centromemoria.gov.co/', youtube: null },
+    'centromemoriabogota': { website: 'https://centromemoria.gov.co/', youtube: 'https://www.youtube.com/@CentroMemoriaBogota' },
     'centromemoriah': { website: 'https://centromemoriah.gov.co/', youtube: null },
     'elmamm': { website: 'https://www.elmamm.org/', youtube: null },
-    'mambogota': { website: 'https://mam.org.co/', youtube: null },
+    'mambogota': { website: 'https://mam.org.co/', youtube: 'https://www.youtube.com/@MAMBOMuseo' },
     'museodeantioquia': { website: 'https://museodeantioquia.co/', youtube: 'https://www.youtube.com/@MuseodeAntioquia' },
-    'museodebogota': { website: 'https://www.museodebogota.gov.co/', youtube: null },
+    'museodebogota': { website: 'https://www.museodebogota.gov.co/', youtube: 'https://www.youtube.com/@MuseoBogota' },
     'museodelamujercdmx': { website: 'https://museodelamujer.org.mx/', youtube: null },
     'museodeloro': { website: 'https://www.banrepcultural.org/bogota/museo-del-oro', youtube: 'https://www.youtube.com/@MuseodelOroBogota' },
-    'museonacionalco': { website: 'https://museonacional.gov.co/', youtube: null },
+    'museonacionalco': { website: 'https://museonacional.gov.co/', youtube: 'https://www.youtube.com/@MuseoNacionalColombia' },
     'museos_de_medellin': { website: null, youtube: null },
     
     // Theaters & Cultural Centers
     'fiteatrocali': { website: null, youtube: null },
-    'fteatronacional': { website: 'https://teatronacional.co/', youtube: null },
-    'teatrometropolitano': { website: 'https://teatrometropolitano.com/', youtube: null },
+    'fteatronacional': { website: 'https://teatronacional.co/', youtube: 'https://www.youtube.com/@TeatroNacionalColombia' },
+    'teatrometropolitano': { website: 'https://teatrometropolitano.com/', youtube: 'https://www.youtube.com/@TeatroMetropolitano' },
     'ipcc_cartagena': { website: null, youtube: null },
-    'plazamayormed': { website: 'https://plazamayor.com.co/', youtube: null },
+    'plazamayormed': { website: 'https://plazamayor.com.co/', youtube: 'https://www.youtube.com/@PlazaMayorMedellin' },
     
     // Tourism
     'bicitour_medellin': { website: null, youtube: null },
@@ -63,7 +63,7 @@ const urlMappingsComplete = {
     'medellin_guru': { website: 'https://medellinguru.com/', youtube: null },
     'medellinenelmapa_': { website: null, youtube: null },
     'visitarmedellin': { website: 'https://www.medellin.travel/', youtube: null },
-    'visitbogota.co': { website: 'https://visitbogota.co/', youtube: null },
+    'visitbogota.co': { website: 'https://visitbogota.co/', youtube: 'https://www.youtube.com/@VisitBogota' },
     'nomadafrustrada': { website: null, youtube: null },
     'viajandoempelota': { website: null, youtube: null },
     
@@ -97,20 +97,20 @@ const urlMappingsComplete = {
     
     // Botanical Gardens & Parks
     'jardinbotanicocartagena': { website: null, youtube: null },
-    'jardinbotanicodebogota': { website: 'https://www.jbb.gov.co/', youtube: null },
+    'jardinbotanicodebogota': { website: 'https://www.jbb.gov.co/', youtube: 'https://www.youtube.com/@JardinBotanicoBogota' },
     'jardinbotanicomedellin': { website: 'https://www.botanicomedellin.org/', youtube: 'https://www.youtube.com/@jardinbotanicomedellin' },
     'parquescolombia': { website: null, youtube: null },
     
     // Planetariums
-    'planetariobog': { website: 'https://www.planetariodebogota.gov.co/', youtube: null },
-    'planetariomed': { website: 'https://www.planetariomedellin.org/', youtube: null },
+    'planetariobog': { website: 'https://www.planetariodebogota.gov.co/', youtube: 'https://www.youtube.com/@PlanetarioBogota' },
+    'planetariomed': { website: 'https://www.planetariomedellin.org/', youtube: 'https://www.youtube.com/@PlanetarioMedellin' },
     
     // Cultural Institutes
-    'goetheinstitut_kolumbien': { website: 'https://www.goethe.de/colombia', youtube: null },
-    'icanh_co': { website: 'https://www.icanh.gov.co/', youtube: null },
+    'goetheinstitut_kolumbien': { website: 'https://www.goethe.de/colombia', youtube: 'https://www.youtube.com/@GoetheKolumbien' },
+    'icanh_co': { website: 'https://www.icanh.gov.co/', youtube: 'https://www.youtube.com/@ICANHCOLOMBIA' },
     'icnunal': { website: 'http://ciencias.bogota.unal.edu.co/icn/', youtube: null },
     'iicbogota': { website: null, youtube: null },
-    'instituto_humboldt': { website: 'https://www.humboldt.org.co/', youtube: null },
+    'instituto_humboldt': { website: 'https://www.humboldt.org.co/', youtube: 'https://www.youtube.com/@InstitutoHumboldt' },
     
     // Korean/Asian
     'coreacolombia': { website: null, youtube: null },
@@ -153,7 +153,7 @@ const urlMappingsComplete = {
     
     // Others
     'afbarranquilla': { website: 'https://www.alianzafrancesa.org.co/barranquilla', youtube: null },
-    'afbogota': { website: 'https://www.alianzafrancesa.org.co/', youtube: null },
+    'afbogota': { website: 'https://www.alianzafrancesa.org.co/', youtube: 'https://www.youtube.com/@AlianzaFrancesaBogota' },
     'colombianfamily': { website: null, youtube: null },
     'comhaltascolombia': { website: null, youtube: null },
     'espeak.english': { website: null, youtube: null },
