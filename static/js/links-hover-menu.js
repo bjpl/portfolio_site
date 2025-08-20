@@ -103,25 +103,23 @@
 
     function createHoverMenu(urls) {
         const menu = document.createElement('div');
-        menu.className = 'hover-menu';
+        menu.className = 'hover-menu compact-icons';
         
-        // Instagram icon (always available)
-        if (urls.instagram) {
-            const instagramLink = createSocialIcon('instagram', urls.instagram, 'View on Instagram');
-            menu.appendChild(instagramLink);
-        }
+        // Always show all three icons in a compact row
+        // Instagram icon
+        const instagramLink = createSocialIcon('instagram', urls.instagram || '#', 'View on Instagram');
+        if (!urls.instagram) instagramLink.classList.add('disabled');
+        menu.appendChild(instagramLink);
         
-        // Website icon - only show if URL exists
-        if (urls.website) {
-            const websiteLink = createSocialIcon('website', urls.website, 'Visit Website');
-            menu.appendChild(websiteLink);
-        }
+        // Website icon
+        const websiteLink = createSocialIcon('website', urls.website || '#', 'Visit Website');
+        if (!urls.website) websiteLink.classList.add('disabled');
+        menu.appendChild(websiteLink);
         
-        // YouTube icon - only show if URL exists
-        if (urls.youtube) {
-            const youtubeLink = createSocialIcon('youtube', urls.youtube, 'Watch on YouTube');
-            menu.appendChild(youtubeLink);
-        }
+        // YouTube icon
+        const youtubeLink = createSocialIcon('youtube', urls.youtube || '#', 'Watch on YouTube');
+        if (!urls.youtube) youtubeLink.classList.add('disabled');
+        menu.appendChild(youtubeLink);
         
         return menu;
     }

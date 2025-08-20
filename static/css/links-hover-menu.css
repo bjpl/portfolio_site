@@ -28,24 +28,30 @@ a.link-item:hover {
     border-color: #667eea;
 }
 
-/* Hover menu */
+/* Hover menu - compact single row */
 .hover-menu {
     position: absolute;
     top: 50%;
-    right: 10px;
-    transform: translateY(-50%) scale(0.8);
+    right: 8px;
+    transform: translateY(-50%) scale(0.9);
     display: flex;
-    gap: 8px;
+    gap: 4px;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 10;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(12px);
-    padding: 6px;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 4px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     pointer-events: none;
+}
+
+/* Compact icons mode */
+.hover-menu.compact-icons {
+    gap: 2px;
+    padding: 3px;
 }
 
 .link-item-wrapper:hover .hover-menu {
@@ -67,20 +73,32 @@ a.link-item:hover {
     z-index: -1;
 }
 
-/* Social media icons */
+/* Social media icons - compact */
 .social-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     background: white;
-    border: 1.5px solid #e5e7eb;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
     position: relative;
     overflow: hidden;
+}
+
+/* Disabled state for unavailable links */
+.social-icon.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.social-icon.disabled:hover {
+    transform: none;
+    box-shadow: none;
 }
 
 .social-icon::before {
@@ -94,9 +112,9 @@ a.link-item:hover {
 }
 
 .social-icon:hover {
-    transform: scale(1.15) rotate(5deg);
+    transform: scale(1.1);
     border-color: currentColor;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .social-icon:hover::before {
@@ -108,12 +126,12 @@ a.link-item:hover {
 }
 
 .social-icon svg {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     fill: currentColor;
     position: relative;
     z-index: 1;
-    transition: transform 0.25s ease;
+    transition: transform 0.2s ease;
 }
 
 .social-icon:hover svg {
