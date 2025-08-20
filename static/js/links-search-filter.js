@@ -19,13 +19,38 @@
         
         // Setup search
         const searchInput = document.getElementById('linkSearch');
+        const searchContainer = document.querySelector('.search-container');
+        
         if (searchInput) {
-            searchInput.addEventListener('input', debounce(handleSearch, 300));
-            searchInput.addEventListener('focus', () => {
-                searchInput.parentElement.classList.add('focused');
+            // Create clear button
+            const clearBtn = document.createElement('button');
+            clearBtn.className = 'clear-search';
+            clearBtn.setAttribute('aria-label', 'Clear search');
+            searchContainer.appendChild(clearBtn);
+            
+            searchInput.addEventListener('input', (e) => {
+                debounce(handleSearch, 300)(e);
+                // Update container state
+                if (e.target.value) {
+                    searchContainer.classList.add('has-value');
+                } else {
+                    searchContainer.classList.remove('has-value');
+                }
             });
+            
+            searchInput.addEventListener('focus', () => {
+                searchContainer.classList.add('focused');
+            });
+            
             searchInput.addEventListener('blur', () => {
-                searchInput.parentElement.classList.remove('focused');
+                searchContainer.classList.remove('focused');
+            });
+            
+            // Clear button functionality
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                searchInput.dispatchEvent(new Event('input'));
+                searchInput.focus();
             });
         }
         
@@ -33,11 +58,21 @@
         const filterButtons = document.querySelectorAll('.filter-btn');
         filterButtons.forEach(btn => {
             btn.addEventListener('click', handleFilter);
+            
+            // Add ripple effect
+            btn.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                ripple.style.left = (e.offsetX - 5) + 'px';
+                ripple.style.top = (e.offsetY - 5) + 'px';
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
         });
         
         // Update placeholder with actual count
         if (searchInput) {
-            searchInput.placeholder = `🔍 Search ${allLinks.length} links...`;
+            searchInput.placeholder = `Search ${allLinks.length} links...`;
         }
     }
     
