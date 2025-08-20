@@ -1,84 +1,8 @@
 // Links Page Interactive Features
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Add search functionality
-    const searchContainer = document.querySelector('.page-content');
-    if (searchContainer) {
-        // Create search bar
-        const searchBar = document.createElement('div');
-        searchBar.className = 'search-container';
-        searchBar.innerHTML = `
-            <input type="text" id="link-search" class="search-input" placeholder="Search by country, city, or keyword... (e.g., 'Bogota', 'Mexico', 'Embassy', 'Medellin')">
-            <div class="search-stats"></div>
-        `;
-        
-        // Insert search bar after page header
-        const pageHeader = document.querySelector('.page-header');
-        if (pageHeader) {
-            pageHeader.insertAdjacentElement('afterend', searchBar);
-        }
-        
-        // Search functionality
-        const searchInput = document.getElementById('link-search');
-        const searchStats = document.querySelector('.search-stats');
-        
-        if (searchInput) {
-            searchInput.addEventListener('input', function(e) {
-                const searchTerm = e.target.value.toLowerCase();
-                const allLinks = document.querySelectorAll('.link-item-wrapper');
-                const sections = document.querySelectorAll('.instagram-links');
-                
-                let visibleCount = 0;
-                let totalCount = allLinks.length;
-                
-                // Show/hide links based on search
-                allLinks.forEach(wrapper => {
-                    const text = wrapper.textContent.toLowerCase() || '';
-                    const href = wrapper.href?.toLowerCase() || '';
-                    const tags = (wrapper.getAttribute('data-tags') || '').toLowerCase();
-                    
-                    // Remove previous match indicators
-                    wrapper.classList.remove('tag-match', 'text-match');
-                    
-                    if (searchTerm === '') {
-                        wrapper.style.display = '';
-                        visibleCount++;
-                    } else if (
-                        text.includes(searchTerm) || 
-                        href.includes(searchTerm)
-                    ) {
-                        wrapper.style.display = '';
-                        wrapper.classList.add('text-match');
-                        visibleCount++;
-                    } else if (tags.includes(searchTerm)) {
-                        wrapper.style.display = '';
-                        wrapper.classList.add('tag-match');
-                        visibleCount++;
-                    } else {
-                        wrapper.style.display = 'none';
-                    }
-                });
-                
-                // Hide empty sections
-                sections.forEach(section => {
-                    const visibleLinks = section.querySelectorAll('.link-item-wrapper:not([style*="display: none"])');
-                    if (visibleLinks.length === 0 && searchTerm !== '') {
-                        section.style.display = 'none';
-                    } else {
-                        section.style.display = '';
-                    }
-                });
-                
-                // Update search stats
-                if (searchTerm !== '') {
-                    searchStats.textContent = `Showing ${visibleCount} of ${totalCount} links`;
-                    searchStats.style.display = 'block';
-                } else {
-                    searchStats.style.display = 'none';
-                }
-            });
-        }
-    }
+    // Search functionality is now handled by links-search-filter.js
+    // Removed duplicate search bar creation
     
     // Add collapsible functionality
     const sections = document.querySelectorAll('.instagram-links');

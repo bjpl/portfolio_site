@@ -162,50 +162,8 @@
             }
         });
         
-        // Update section headers with counts
-        document.querySelectorAll('.instagram-links').forEach(section => {
-            const h3 = section.querySelector('h3');
-            const linkCount = section.querySelectorAll('.link-item-wrapper').length;
-            
-            if (h3 && !h3.querySelector('.link-counter')) {
-                const counter = document.createElement('span');
-                counter.className = 'link-counter';
-                counter.textContent = `${linkCount}`;
-                counter.style.cssText = `
-                    background: rgba(99, 102, 241, 0.1);
-                    color: var(--color-primary);
-                    padding: 2px 8px;
-                    border-radius: 999px;
-                    font-size: 0.875rem;
-                    font-weight: 600;
-                    margin-left: auto;
-                `;
-                h3.appendChild(counter);
-            }
-            
-            // Also add counts to h4 subsections
-            section.querySelectorAll('h4').forEach(h4 => {
-                const nextEl = h4.nextElementSibling;
-                if (nextEl && nextEl.classList.contains('link-grid')) {
-                    const subCount = nextEl.querySelectorAll('.link-item-wrapper').length;
-                    if (!h4.querySelector('.link-counter')) {
-                        const subCounter = document.createElement('span');
-                        subCounter.className = 'link-counter';
-                        subCounter.textContent = `${subCount}`;
-                        subCounter.style.cssText = `
-                            background: rgba(99, 102, 241, 0.05);
-                            color: var(--color-text-secondary);
-                            padding: 2px 6px;
-                            border-radius: 999px;
-                            font-size: 0.75rem;
-                            font-weight: 500;
-                            margin-left: auto;
-                        `;
-                        h4.appendChild(subCounter);
-                    }
-                }
-            });
-        });
+        // Removed section header counts per user request
+        // Clean minimalist design without counters
     }
     
     function setupCollapsibleSections() {
