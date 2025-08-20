@@ -4,10 +4,12 @@
 .hover-menu {
     position: absolute !important;
     top: 50% !important;
-    right: 10px !important;
+    right: 12px !important;
     transform: translateY(-50%) !important;
     display: flex !important;
-    gap: 6px !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 5px !important;
     z-index: 1000 !important;
     opacity: 0 !important;
     visibility: hidden !important;
@@ -16,10 +18,15 @@
 }
 
 /* Show ONLY on hover */
-.link-item-wrapper:hover .hover-menu {
+.link-item-wrapper:hover .hover-menu,
+.link-item-wrapper.test-hover .hover-menu {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(8px) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
 }
 
 /* Basic icon styling */
@@ -27,50 +34,58 @@
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 32px !important;
-    height: 32px !important;
-    border-radius: 50% !important;
-    background: white !important;
-    border: 1px solid #e5e7eb !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
     text-decoration: none !important;
-    transition: transform 0.2s ease !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
 
 .social-icon:hover {
-    transform: scale(1.1) !important;
+    transform: translateY(-2px) scale(1.05) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12) !important;
 }
 
 .social-icon svg {
-    width: 16px !important;
-    height: 16px !important;
+    width: 18px !important;
+    height: 18px !important;
     fill: currentColor !important;
 }
 
 .social-icon.instagram {
     color: #E4405F !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(228, 64, 95, 0.05)) !important;
 }
 
 .social-icon.instagram:hover {
-    background: #E4405F !important;
+    background: linear-gradient(135deg, #FD5949, #D6249F) !important;
     color: white !important;
+    border-color: transparent !important;
 }
 
 .social-icon.website {
     color: #3B82F6 !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(59, 130, 246, 0.05)) !important;
 }
 
 .social-icon.website:hover {
-    background: #3B82F6 !important;
+    background: linear-gradient(135deg, #3B82F6, #8B5CF6) !important;
     color: white !important;
+    border-color: transparent !important;
 }
 
 .social-icon.youtube {
     color: #FF0000 !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 0, 0, 0.05)) !important;
 }
 
 .social-icon.youtube:hover {
-    background: #FF0000 !important;
+    background: linear-gradient(135deg, #FF0000, #CC0000) !important;
     color: white !important;
+    border-color: transparent !important;
 }
 
 .social-icon.disabled {
@@ -78,9 +93,13 @@
     pointer-events: none !important;
 }
 
-/* Ensure link wrapper has proper positioning */
+/* Ensure link wrapper has proper positioning and spacing */
 .link-item-wrapper {
     position: relative !important;
+    padding-right: 120px !important; /* Space for 3 icons with good spacing */
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
 /* Mobile - keep hidden by default, show on touch */
