@@ -30,15 +30,11 @@ class CollapsibleSection {
         // Category headers (e.g., "Embassies", "Government", etc.)
         if (this.header.tagName === 'H4' && this.header.closest('.instagram-links')) {
             const section = this.header.closest('.instagram-links');
-            if (section.classList.contains('diplomatic')) return 'diplomatic';
-            if (section.classList.contains('cultural')) return 'cultural';
-            if (section.classList.contains('organizations')) return 'organizations';
-            if (section.classList.contains('government')) return 'government';
-            if (section.classList.contains('food-brands')) return 'food-brands';
-            if (section.classList.contains('local-food')) return 'local-food';
-            if (section.classList.contains('travel')) return 'travel';
+            if (section.classList.contains('govdip')) return 'govdip';
             if (section.classList.contains('education')) return 'education';
-            if (section.classList.contains('other-brands')) return 'other-brands';
+            if (section.classList.contains('culture')) return 'culture';
+            if (section.classList.contains('food')) return 'food';
+            if (section.classList.contains('travel')) return 'travel';
             return 'category';
         }
         
