@@ -4,8 +4,8 @@
     
     console.log('Links Enhanced script starting...');
     
-    // Comprehensive URL mappings - expanded list
-    const urlMappings = {
+    // Use complete mappings if available, otherwise use built-in
+    const urlMappings = (typeof urlMappingsComplete !== 'undefined') ? urlMappingsComplete : {
         // Government & Diplomacy
         'potus': { website: 'https://www.whitehouse.gov/', youtube: 'https://www.youtube.com/@WhiteHouse' },
         'vp': { website: 'https://www.whitehouse.gov/', youtube: 'https://www.youtube.com/@WhiteHouse' },
