@@ -1,0 +1,330 @@
+/* Modern Hover Menu Design */
+
+/* Reset hover menu from other styles */
+.hover-menu {
+    all: unset;
+    position: absolute !important;
+    top: 50% !important;
+    right: 12px !important;
+    transform: translateY(-50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    z-index: 100 !important;
+}
+
+/* Show on hover with smooth animation */
+.link-item-wrapper:hover .hover-menu {
+    opacity: 1 !important;
+    visibility: visible !important;
+    right: 16px !important;
+}
+
+/* Modern social icon design */
+.social-icon {
+    all: unset;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        0 1px 2px rgba(0, 0, 0, 0.06) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+    position: relative !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Hover effect with smooth scale */
+.social-icon:hover {
+    transform: translateY(-2px) scale(1.05) !important;
+    box-shadow: 
+        0 8px 16px rgba(0, 0, 0, 0.1),
+        0 3px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Icon SVG styling */
+.social-icon svg {
+    width: 20px !important;
+    height: 20px !important;
+    z-index: 2 !important;
+    position: relative !important;
+}
+
+/* Instagram - Gradient background on hover */
+.social-icon.instagram {
+    color: #E4405F !important;
+}
+
+.social-icon.instagram::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+    border-radius: 10px !important;
+}
+
+.social-icon.instagram:hover::before {
+    opacity: 1 !important;
+}
+
+.social-icon.instagram:hover {
+    color: white !important;
+    border-color: transparent !important;
+}
+
+.social-icon.instagram:hover svg {
+    fill: white !important;
+}
+
+/* Website - Clean blue */
+.social-icon.website {
+    color: #4F46E5 !important;
+}
+
+.social-icon.website::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+    border-radius: 10px !important;
+}
+
+.social-icon.website:hover::before {
+    opacity: 1 !important;
+}
+
+.social-icon.website:hover {
+    color: white !important;
+    border-color: transparent !important;
+}
+
+.social-icon.website:hover svg {
+    fill: white !important;
+}
+
+/* YouTube - Classic red */
+.social-icon.youtube {
+    color: #FF0000 !important;
+}
+
+.social-icon.youtube::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%) !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+    border-radius: 10px !important;
+}
+
+.social-icon.youtube:hover::before {
+    opacity: 1 !important;
+}
+
+.social-icon.youtube:hover {
+    color: white !important;
+    border-color: transparent !important;
+}
+
+.social-icon.youtube:hover svg {
+    fill: white !important;
+}
+
+/* Disabled state */
+.social-icon.disabled {
+    opacity: 0.3 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    filter: grayscale(100%) !important;
+}
+
+/* Ripple effect on click */
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.social-icon::after {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, transparent 70%) !important;
+    transform: scale(0) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.social-icon:active::after {
+    animation: ripple 0.6s ease-out !important;
+}
+
+/* Entrance animation for icons */
+@keyframes slideInIcon {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.link-item-wrapper:hover .social-icon {
+    animation: slideInIcon 0.3s ease-out backwards !important;
+}
+
+.link-item-wrapper:hover .social-icon:nth-child(1) {
+    animation-delay: 0.05s !important;
+}
+
+.link-item-wrapper:hover .social-icon:nth-child(2) {
+    animation-delay: 0.1s !important;
+}
+
+.link-item-wrapper:hover .social-icon:nth-child(3) {
+    animation-delay: 0.15s !important;
+}
+
+/* Alternative minimal style - floating pills */
+.hover-menu.minimal {
+    gap: 6px !important;
+}
+
+.hover-menu.minimal .social-icon {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 16px !important;
+    background: white !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Alternative style - glass morphism */
+.hover-menu.glass {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    padding: 4px !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        inset 0 2px 4px rgba(255, 255, 255, 0.5) !important;
+}
+
+.hover-menu.glass .social-icon {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .social-icon {
+    background: rgba(30, 30, 30, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .social-icon:hover {
+    box-shadow: 
+        0 8px 16px rgba(0, 0, 0, 0.3),
+        0 3px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="dark"] .hover-menu.glass {
+    background: rgba(30, 30, 30, 0.7) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .hover-menu {
+        position: static !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        margin-left: auto !important;
+        gap: 3px !important;
+    }
+    
+    .social-icon {
+        width: 30px !important;
+        height: 30px !important;
+        border-radius: 8px !important;
+    }
+    
+    .social-icon svg {
+        width: 16px !important;
+        height: 16px !important;
+    }
+    
+    /* No animations on mobile */
+    .link-item-wrapper:hover .social-icon {
+        animation: none !important;
+    }
+}
+
+/* Micro-interactions */
+.social-icon {
+    will-change: transform, box-shadow !important;
+}
+
+/* Smooth transitions for all states */
+.social-icon,
+.social-icon::before,
+.social-icon::after,
+.social-icon svg {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Optional: Tooltip on hover */
+.social-icon[data-tooltip] {
+    position: relative !important;
+}
+
+.social-icon[data-tooltip]::after {
+    all: unset;
+    content: attr(data-tooltip) !important;
+    position: absolute !important;
+    bottom: calc(100% + 8px) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    padding: 6px 10px !important;
+    background: #1a1a1a !important;
+    color: white !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    border-radius: 6px !important;
+    white-space: nowrap !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: all 0.2s ease !important;
+    pointer-events: none !important;
+    z-index: 1000 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.social-icon[data-tooltip]:hover::after {
+    opacity: 1 !important;
+    visibility: visible !important;
+    animation: none !important;
+}
