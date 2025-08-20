@@ -27,6 +27,11 @@
     
     <script src="/js/lazy-load.js" defer></script>
     
+    {{- if eq .Layout "links" -}}
+    <script src="/js/links-page.js" defer></script>
+    <link rel="stylesheet" href="/css/links-hover-menu.css">
+    {{- end -}}
+    
     {{/* Dark Mode Implementation - Guaranteed to work */}}
     <script>
         // Dark mode toggle - inline implementation
