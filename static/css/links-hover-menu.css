@@ -33,22 +33,38 @@
     position: absolute;
     top: 50%;
     right: 10px;
-    transform: translateY(-50%);
+    transform: translateY(-50%) scale(0.8);
     display: flex;
     gap: 8px;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 10;
     background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(12px);
     padding: 6px;
     border-radius: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
 }
 
 .link-item-wrapper:hover .hover-menu {
     opacity: 1;
     visibility: visible;
+    transform: translateY(-50%) scale(1);
+    pointer-events: auto;
+}
+
+/* Add a delay on hover out for better UX */
+.link-item-wrapper {
+    position: relative;
+}
+
+.link-item-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    z-index: -1;
 }
 
 /* Social media icons */
@@ -61,20 +77,47 @@
     border-radius: 50%;
     background: white;
     border: 1.5px solid #e5e7eb;
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
     position: relative;
+    overflow: hidden;
+}
+
+.social-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    border-radius: 50%;
 }
 
 .social-icon:hover {
-    transform: scale(1.1);
+    transform: scale(1.15) rotate(5deg);
     border-color: currentColor;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.social-icon:hover::before {
+    opacity: 0.1;
+}
+
+.social-icon:active {
+    transform: scale(1.05);
 }
 
 .social-icon svg {
     width: 18px;
     height: 18px;
     fill: currentColor;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.25s ease;
+}
+
+.social-icon:hover svg {
+    transform: scale(1.1);
 }
 
 /* Instagram icon */

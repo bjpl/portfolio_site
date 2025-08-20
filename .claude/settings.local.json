@@ -69,7 +69,11 @@
       "Bash(do grep -l \"^# \" \"$file\")",
       "Bash(do sed -i '/^# /d' \"$file\")",
       "Bash(do echo \"Testing $url:\")",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(do)",
+      "Bash(if ! grep -q \"''$username'':\" static/js/links-hover-menu.js)",
+      "Bash(then)",
+      "Bash(echo:*)"
     ],
     "defaultMode": "acceptEdits"
   }
