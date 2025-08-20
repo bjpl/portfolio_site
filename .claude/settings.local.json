@@ -73,7 +73,9 @@
       "Bash(do)",
       "Bash(if ! grep -q \"''$username'':\" static/js/links-hover-menu.js)",
       "Bash(then)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "WebSearch",
+      "Bash(comm:*)"
     ],
     "defaultMode": "acceptEdits"
   }
