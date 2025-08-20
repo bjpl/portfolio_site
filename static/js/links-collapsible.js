@@ -157,41 +157,15 @@ class CollapsibleSection {
         }
     }
     
-    animateContent() {
-        if (this.isExpanded) {
-            // Show content
-            this.content.style.display = '';
-            this.content.style.overflow = 'hidden';
-            const height = this.content.scrollHeight;
-            this.content.style.height = '0';
-            this.content.offsetHeight; // Force reflow
-            this.content.style.transition = 'height 0.3s ease';
-            this.content.style.height = height + 'px';
-            
-            const onTransitionEnd = () => {
-                this.content.style.height = '';
-                this.content.style.overflow = '';
-                this.content.style.transition = '';
-                this.content.removeEventListener('transitionend', onTransitionEnd);
-            };
-            this.content.addEventListener('transitionend', onTransitionEnd);
-        } else {
-            // Hide content
-            this.content.style.overflow = 'hidden';
-            this.content.style.height = this.content.scrollHeight + 'px';
-            this.content.offsetHeight; // Force reflow
-            this.content.style.transition = 'height 0.3s ease';
-            this.content.style.height = '0';
-            
-            const onTransitionEnd = () => {
-                this.content.style.display = 'none';
-                this.content.style.height = '';
-                this.content.style.overflow = '';
-                this.content.style.transition = '';
-                this.content.removeEventListener('transitionend', onTransitionEnd);
-            };
-            this.content.addEventListener('transitionend', onTransitionEnd);
-        }
+    updateState(animate = true) {
+        this.header.setAttribute('aria-expanded', this.isExpanded);
+        this.header.setAttribute('aria-controls', this.content.id);
+        this.content.setAttribute('aria-hidden', !this.isExpanded);
+        
+        const icon = this.header.querySelector('.collapse-icon');
+        icon.textContent = this.isExpanded ? '▼' : '▶';
+        
+        this.content.style.display = this.isExpanded ? '' : 'none';
     }
     
     expandAll() {

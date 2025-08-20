@@ -2,7 +2,9 @@
 
 /* Override link-grid default styles */
 .link-grid a {
-    all: unset;
+    text-decoration: none;
+    color: inherit;
+    outline: none;
 }
 
 /* Link container with hover menu */
@@ -15,7 +17,7 @@
     background: var(--color-surface);
     border: 1.5px solid var(--color-border);
     border-radius: 10px;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.2s ease;
     cursor: pointer;
     width: 100%;
     box-sizing: border-box;
@@ -85,7 +87,7 @@
     border-radius: 50%;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.2s ease;
     text-decoration: none;
     position: relative;
     overflow: hidden;
@@ -257,18 +259,3 @@
     opacity: 0.5;
 }
 
-/* Animation for menu appearance */
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-50%) translateX(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(-50%) translateX(0);
-    }
-}
-
-.link-item-wrapper:hover .hover-menu {
-    animation: slideIn 0.3s ease;
-}
