@@ -1,13 +1,13 @@
 main:
-  - name: Make
-    url: /make/
+  - name: Poetry
+    url: https://www.letratos.com
     weight: 10
-  - name: Learn
-    url: /learn/
+  - name: Tools
+    url: /tools/
     weight: 20
-  - name: Think
-    url: /think/
+  - name: Photography
+    url: /photography/
     weight: 30
-  - name: Meet
-    url: /meet/
+  - name: Me
+    url: /me/
     weight: 40
