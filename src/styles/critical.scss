@@ -1,0 +1,67 @@
+// Critical CSS - Above the fold styles
+// This should be inlined in the HTML head for fastest rendering
+
+// Essential tokens
+@use 'tokens/index' as tokens;
+
+// Critical base styles
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-sans);
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+// Critical layout
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+}
+
+// Skip link for accessibility
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+    padding: var(--space-2) var(--space-4);
+    text-decoration: none;
+    z-index: 1000;
+    
+    &:focus {
+        top: 0;
+    }
+}
+
+// Critical typography
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+h1 { font-size: var(--text-4xl); }
+h2 { font-size: var(--text-3xl); }
+
+// Critical links
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+// Basic responsive for mobile-first
+@media (max-width: 768px) {
+    h1 { font-size: var(--text-3xl); }
+    h2 { font-size: var(--text-2xl); }
+}

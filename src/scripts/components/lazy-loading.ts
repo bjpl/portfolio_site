@@ -5,24 +5,24 @@
  * Efficiently loads images, videos, and iframes as they enter the viewport
  */
 
+export interface LazyLoaderOptions {
+  rootMargin?: string;
+  threshold?: number | number[];
+  loadingClass?: string;
+  loadedClass?: string;
+  errorClass?: string;
+  preloadOffset?: number;
+  enableNativeLazyLoading?: boolean;
+  loadInBackground?: boolean;
+  onLoad?: (element: Element) => void;
+  onError?: (element: Element, error: Error) => void;
+}
+
 export class LazyLoader {
   private observer: IntersectionObserver | null = null;
   private loadedElements: Set<Element> = new Set();
   private pendingElements: Map<Element, () => void> = new Map();
   private options: LazyLoaderOptions;
-
-  interface LazyLoaderOptions {
-    rootMargin?: string;
-    threshold?: number | number[];
-    loadingClass?: string;
-    loadedClass?: string;
-    errorClass?: string;
-    preloadOffset?: number;
-    enableNativeLazyLoading?: boolean;
-    loadInBackground?: boolean;
-    onLoad?: (element: Element) => void;
-    onError?: (element: Element, error: Error) => void;
-  }
 
   constructor(options: Partial<LazyLoaderOptions> = {}) {
     this.options = {

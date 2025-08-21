@@ -144,9 +144,15 @@
     </div>
 
     <script>
-        const API_BASE = 'http://localhost:3334/api';
-        const ADMIN_BASE = 'http://localhost:3334/admin';
-        const HUGO_BASE = 'http://localhost:1313';
+        const API_BASE = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3334/api'
+            : '/api';
+        const ADMIN_BASE = window.location.hostname === 'localhost'
+            ? 'http://localhost:3334/admin'
+            : '/admin';
+        const HUGO_BASE = window.location.hostname === 'localhost'
+            ? 'http://localhost:1313'
+            : window.location.origin;
 
         function updateStatus(testId, status, message) {
             const statusEl = document.getElementById(`${testId}-status`);
@@ -410,9 +416,11 @@
 
         // Auto-run basic connectivity test on load
         window.addEventListener('load', async () => {
-            console.log('Browser Integration Test Loaded');
-            console.log('CMS Server:', API_BASE);
-            console.log('Hugo Server:', HUGO_BASE);
+            if (window.location.hostname === 'localhost') {
+                console.log('Browser Integration Test Loaded');
+                console.log('CMS Server:', API_BASE);
+                console.log('Hugo Server:', HUGO_BASE);
+            }
             
             // Check server availability
             try {
@@ -420,12 +428,12 @@
                 const hugoCheck = await fetch(HUGO_BASE);
                 
                 if (cmsCheck.ok && hugoCheck.ok) {
-                    console.log('✓ Both servers are running');
+                    if (window.location.hostname === 'localhost') console.log('✓ Both servers are running');
                 } else {
-                    console.error('✗ Server connectivity issue');
+                    if (window.location.hostname === 'localhost') console.error('✗ Server connectivity issue');
                 }
             } catch (error) {
-                console.error('✗ Cannot connect to servers:', error);
+                if (window.location.hostname === 'localhost') console.error('✗ Cannot connect to servers:', error);
             }
         });
     </script>

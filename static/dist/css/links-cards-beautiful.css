@@ -1,0 +1,344 @@
+/* Beautiful Card and Typography Design */
+
+/* ========================================
+   GRID LAYOUT - PERFECT SPACING
+   ======================================== */
+.link-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+    gap: 1.25rem !important;
+    margin: 2rem 0 !important;
+    padding: 0.5rem !important;
+}
+
+/* Responsive grid adjustments */
+@media (max-width: 1024px) {
+    .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+        gap: 1rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
+        gap: 0.875rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .link-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
+        padding: 0 !important;
+    }
+}
+
+/* ========================================
+   CARD DESIGN - BEAUTIFUL CONTAINERS
+   ======================================== */
+.link-item-wrapper {
+    /* Layout */
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    min-height: 60px !important;
+    padding: 1rem 1.25rem !important;
+    padding-right: 125px !important; /* Space for hover menu */
+    
+    /* Visual Design */
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 1) 0%, 
+        rgba(249, 250, 251, 0.8) 100%) !important;
+    border: 1px solid rgba(0, 0, 0, 0.04) !important;
+    border-radius: 14px !important;
+    
+    /* Shadows for depth */
+    box-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.02),
+        0 2px 4px rgba(0, 0, 0, 0.02),
+        0 4px 8px rgba(0, 0, 0, 0.02),
+        inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
+    
+    /* Transitions */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+    overflow: visible !important;
+}
+
+/* Card hover state */
+.link-item-wrapper:hover {
+    transform: translateY(-2px) !important;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 1) 0%, 
+        rgba(249, 250, 251, 1) 100%) !important;
+    border-color: rgba(99, 102, 241, 0.15) !important;
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.03),
+        0 4px 8px rgba(0, 0, 0, 0.04),
+        0 8px 16px rgba(0, 0, 0, 0.05),
+        0 12px 24px rgba(99, 102, 241, 0.08),
+        inset 0 1px 2px rgba(255, 255, 255, 1) !important;
+}
+
+/* ========================================
+   TYPOGRAPHY - BEAUTIFUL TEXT
+   ======================================== */
+.link-display,
+.link-item-wrapper > a:first-child:not(.social-icon) {
+    /* Text styling */
+    flex: 1 !important;
+    color: #1f2937 !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.5 !important;
+    
+    /* Text overflow */
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    padding-right: 1rem !important;
+    
+    /* No underline */
+    text-decoration: none !important;
+    
+    /* Smooth transition */
+    transition: color 0.2s ease !important;
+}
+
+/* Text hover color */
+.link-item-wrapper:hover .link-display,
+.link-item-wrapper:hover > a:first-child:not(.social-icon) {
+    color: #4f46e5 !important;
+}
+
+/* ========================================
+   SECTION HEADERS - ELEGANT DIVIDERS
+   ======================================== */
+.instagram-links h3,
+.instagram-links h4,
+.links-category h4 {
+    /* Typography */
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+    color: #1f2937 !important;
+    
+    /* Layout */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin: 2rem 0 1.25rem !important;
+    padding: 1rem 1.25rem !important;
+    
+    /* Visual design */
+    background: linear-gradient(90deg, 
+        rgba(99, 102, 241, 0.04) 0%, 
+        transparent 100%) !important;
+    border-left: 3px solid !important;
+    border-radius: 0 12px 12px 0 !important;
+    
+    /* Interaction */
+    cursor: pointer !important;
+    user-select: none !important;
+    transition: all 0.25s ease !important;
+}
+
+/* Header hover state */
+.instagram-links h3:hover,
+.instagram-links h4:hover,
+.links-category h4:hover {
+    background: linear-gradient(90deg, 
+        rgba(99, 102, 241, 0.08) 0%, 
+        transparent 100%) !important;
+    padding-left: 1.5rem !important;
+}
+
+/* ========================================
+   CATEGORY-SPECIFIC COLORS
+   ======================================== */
+.govdip h3, .govdip h4 {
+    border-left-color: #3b82f6 !important;
+}
+
+.education h3, .education h4 {
+    border-left-color: #8b5cf6 !important;
+}
+
+.culture h3, .culture h4 {
+    border-left-color: #ec4899 !important;
+}
+
+.food h3, .food h4 {
+    border-left-color: #f97316 !important;
+}
+
+.travel h3, .travel h4 {
+    border-left-color: #06b6d4 !important;
+}
+
+/* Category-specific card hover colors */
+.govdip .link-item-wrapper:hover {
+    border-color: rgba(59, 130, 246, 0.2) !important;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 1) 0%, 
+        rgba(219, 234, 254, 0.2) 100%) !important;
+}
+
+.education .link-item-wrapper:hover {
+    border-color: rgba(139, 92, 246, 0.2) !important;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 1) 0%, 
+        rgba(233, 213, 255, 0.2) 100%) !important;
+}
+
+.culture .link-item-wrapper:hover {
+    border-color: rgba(236, 72, 153, 0.2) !important;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 1) 0%, 
+        rgba(252, 231, 243, 0.2) 100%) !important;
+}
+
+.food .link-item-wrapper:hover {
+    border-color: rgba(249, 115, 22, 0.2) !important;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 1) 0%, 
+        rgba(255, 237, 213, 0.2) 100%) !important;
+}
+
+.travel .link-item-wrapper:hover {
+    border-color: rgba(6, 182, 212, 0.2) !important;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 1) 0%, 
+        rgba(207, 250, 254, 0.2) 100%) !important;
+}
+
+/* ========================================
+   SEARCH MATCH HIGHLIGHTING
+   ======================================== */
+.link-item-wrapper.search-match {
+    background: linear-gradient(135deg, 
+        rgba(254, 249, 195, 0.2) 0%, 
+        rgba(255, 255, 255, 1) 100%) !important;
+    border-color: rgba(250, 204, 21, 0.3) !important;
+    animation: highlightPulse 1.5s ease infinite !important;
+}
+
+@keyframes highlightPulse {
+    0%, 100% {
+        box-shadow: 
+            0 1px 2px rgba(0, 0, 0, 0.02),
+            0 2px 4px rgba(0, 0, 0, 0.02),
+            0 4px 8px rgba(0, 0, 0, 0.02),
+            0 0 0 0 rgba(250, 204, 21, 0) !important;
+    }
+    50% {
+        box-shadow: 
+            0 1px 2px rgba(0, 0, 0, 0.02),
+            0 2px 4px rgba(0, 0, 0, 0.02),
+            0 4px 8px rgba(0, 0, 0, 0.02),
+            0 0 0 3px rgba(250, 204, 21, 0.1) !important;
+    }
+}
+
+/* ========================================
+   DARK MODE SUPPORT
+   ======================================== */
+[data-theme="dark"] .link-item-wrapper {
+    background: linear-gradient(135deg, 
+        rgba(31, 41, 55, 0.95) 0%, 
+        rgba(17, 24, 39, 0.95) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.1),
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.03) !important;
+}
+
+[data-theme="dark"] .link-item-wrapper:hover {
+    background: linear-gradient(135deg, 
+        rgba(31, 41, 55, 1) 0%, 
+        rgba(17, 24, 39, 1) 100%) !important;
+    border-color: rgba(99, 102, 241, 0.3) !important;
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.15),
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        0 8px 16px rgba(0, 0, 0, 0.25),
+        0 12px 24px rgba(99, 102, 241, 0.15),
+        inset 0 1px 2px rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-theme="dark"] .link-display,
+[data-theme="dark"] .link-item-wrapper > a:first-child:not(.social-icon) {
+    color: #e5e7eb !important;
+}
+
+[data-theme="dark"] .link-item-wrapper:hover .link-display,
+[data-theme="dark"] .link-item-wrapper:hover > a:first-child:not(.social-icon) {
+    color: #a5b4fc !important;
+}
+
+[data-theme="dark"] .instagram-links h3,
+[data-theme="dark"] .instagram-links h4,
+[data-theme="dark"] .links-category h4 {
+    color: #e5e7eb !important;
+    background: linear-gradient(90deg, 
+        rgba(99, 102, 241, 0.08) 0%, 
+        transparent 100%) !important;
+}
+
+/* ========================================
+   ENTRANCE ANIMATION
+   ======================================== */
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.link-item-wrapper {
+    animation: cardFadeIn 0.4s cubic-bezier(0.23, 1, 0.32, 1) backwards !important;
+}
+
+/* Stagger the animations */
+.link-item-wrapper:nth-child(1) { animation-delay: 0.02s !important; }
+.link-item-wrapper:nth-child(2) { animation-delay: 0.04s !important; }
+.link-item-wrapper:nth-child(3) { animation-delay: 0.06s !important; }
+.link-item-wrapper:nth-child(4) { animation-delay: 0.08s !important; }
+.link-item-wrapper:nth-child(5) { animation-delay: 0.10s !important; }
+.link-item-wrapper:nth-child(6) { animation-delay: 0.12s !important; }
+.link-item-wrapper:nth-child(7) { animation-delay: 0.14s !important; }
+.link-item-wrapper:nth-child(8) { animation-delay: 0.16s !important; }
+.link-item-wrapper:nth-child(9) { animation-delay: 0.18s !important; }
+.link-item-wrapper:nth-child(n+10) { animation-delay: 0.20s !important; }
+
+/* ========================================
+   PERFORMANCE
+   ======================================== */
+.link-item-wrapper,
+.link-display {
+    will-change: transform, box-shadow !important;
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+.link-item-wrapper:focus-visible {
+    outline: 2px solid #4f46e5 !important;
+    outline-offset: 3px !important;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .link-item-wrapper {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+    }
+}

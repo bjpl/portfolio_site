@@ -5,6 +5,11 @@ import { defineConfig } from 'vite';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+    'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || 'http://localhost:3334/api'),
+    'import.meta.env.VITE_SITE_URL': JSON.stringify(process.env.VITE_SITE_URL || 'http://localhost:1313')
+  },
   build: {
     outDir: 'static/dist',
     assetsDir: '',
@@ -13,11 +18,17 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'src/scripts/main.ts'),
-        styles: path.resolve(__dirname, 'src/styles/main.scss')
+        styles: path.resolve(__dirname, 'src/styles/main.scss'),
+        critical: path.resolve(__dirname, 'src/styles/critical.scss')
       },
       output: {
-        entryFileNames: 'js/[name].[hash].js',
-        chunkFileNames: 'js/[name].[hash].js',
+        manualChunks: {
+          'vendor': ['fuse.js'],
+          'search': ['./src/scripts/search/search-engine.ts', './src/scripts/search/search-ui.ts'],
+          'lazy': ['./src/scripts/components/lazy-loading.ts']
+        },
+        entryFileNames: 'js/[name]-[hash].js',
+        chunkFileNames: 'js/[name]-[hash].js',
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             return 'css/[name].[hash][extname]';
@@ -26,6 +37,7 @@ export default defineConfig({
         }
       }
     },
+    chunkSizeWarningLimit: 100,
     watch: {
       include: ['src/**']
     }
@@ -33,7 +45,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@import "src/styles/tokens/index";`
+        additionalData: `@use "src/styles/tokens/index" as tokens;`
       }
     }
   },
@@ -46,9 +58,11 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:1313',
-        changeOrigin: true
+        target: process.env.VITE_API_URL || 'http://localhost:3334',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api')
       }
     }
-  }
+  },
+  envPrefix: 'VITE_'
 });

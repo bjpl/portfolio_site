@@ -1,0 +1,41 @@
+{
+  "main": [
+    {
+      "name": "Teaching & Learning",
+      "url": "/teaching-learning/",
+      "weight": 10
+    },
+    {
+      "name": "Tools",
+      "url": "/tools/",
+      "weight": 20
+    },
+    {
+      "name": "Writing",
+      "url": "/writing/",
+      "weight": 30
+    },
+    {
+      "name": "Photography",
+      "url": "/photography/",
+      "weight": 40
+    },
+    {
+      "name": "About",
+      "url": "/me/",
+      "weight": 50
+    }
+  ],
+  "footer": [
+    {
+      "name": "Contact",
+      "url": "/contact/",
+      "weight": 10
+    },
+    {
+      "name": "Privacy",
+      "url": "/privacy/",
+      "weight": 20
+    }
+  ]
+}

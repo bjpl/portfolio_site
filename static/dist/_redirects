@@ -1,0 +1,16 @@
+# Netlify Redirects Configuration
+
+# Admin Panel Redirects
+/admin              /admin/login.html    200
+/admin/             /admin/login.html    200
+/admin/index        /admin/dashboard.html 200
+
+# API Redirects (if backend is not deployed)
+/api/*              /.netlify/functions/:splat 200
+
+# SPA fallback for any unmatched routes
+# This ensures client-side routing works
+/admin/*            /admin/:splat        200
+
+# Catch-all for 404s
+/*                  /index.html          404

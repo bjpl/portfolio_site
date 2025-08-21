@@ -1,0 +1,394 @@
+/* Complete Fix for Text Overflow and Hover Links */
+
+/* ========================================
+   RESET EVERYTHING FIRST
+   ======================================== */
+.link-item-wrapper,
+.link-item-wrapper *,
+.hover-menu,
+.hover-menu * {
+    box-sizing: border-box !important;
+}
+
+/* ========================================
+   LINK WRAPPER - STRICT LAYOUT
+   ======================================== */
+.link-item-wrapper {
+    /* Force flex layout */
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    position: relative !important;
+    
+    /* Fixed dimensions */
+    width: 100% !important;
+    height: 54px !important;
+    min-height: 54px !important;
+    max-height: 54px !important;
+    
+    /* Padding with space for icons */
+    padding: 12px 16px !important;
+    padding-right: 120px !important;
+    
+    /* Visual styling */
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    
+    /* Prevent overflow */
+    overflow: hidden !important;
+    
+    /* Transitions */
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+.link-item-wrapper:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    border-color: #6366f1 !important;
+    background: #fafbff !important;
+}
+
+/* ========================================
+   TEXT CONTENT - FORCE TRUNCATION
+   ======================================== */
+.link-item-wrapper > a:first-child,
+.link-item-wrapper > span:first-child,
+.link-display {
+    /* Force single line with truncation */
+    display: block !important;
+    width: calc(100% - 20px) !important;
+    max-width: calc(100% - 20px) !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    
+    /* Text styling */
+    color: #374151 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 30px !important;
+    text-decoration: none !important;
+    
+    /* Remove any margins/padding */
+    margin: 0 !important;
+    padding: 0 !important;
+    
+    /* Transition */
+    transition: color 0.2s ease !important;
+}
+
+.link-item-wrapper:hover > a:first-child,
+.link-item-wrapper:hover > span:first-child,
+.link-item-wrapper:hover .link-display {
+    color: #4f46e5 !important;
+}
+
+/* ========================================
+   HOVER MENU - ABSOLUTE POSITIONING
+   ======================================== */
+.hover-menu {
+    /* Strict positioning */
+    position: absolute !important;
+    top: 50% !important;
+    right: 12px !important;
+    transform: translateY(-50%) !important;
+    
+    /* Fixed size container */
+    width: auto !important;
+    height: 34px !important;
+    
+    /* Flex for icons */
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    padding: 4px !important;
+    
+    /* Visual design */
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    
+    /* Initially hidden */
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    
+    /* Transition */
+    transition: opacity 0.2s ease, visibility 0.2s ease !important;
+    
+    /* High z-index */
+    z-index: 1000 !important;
+}
+
+/* Show on hover */
+.link-item-wrapper:hover .hover-menu {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* ========================================
+   SOCIAL ICONS - COMPACT DESIGN
+   ======================================== */
+.social-icon {
+    /* Reset */
+    all: unset !important;
+    
+    /* Size and layout */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    min-height: 26px !important;
+    flex-shrink: 0 !important;
+    
+    /* Visual */
+    background: white !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    position: relative !important;
+}
+
+.social-icon:hover {
+    transform: scale(1.1) !important;
+    background: #f3f4f6 !important;
+}
+
+/* Icon SVGs */
+.social-icon svg {
+    width: 16px !important;
+    height: 16px !important;
+    fill: currentColor !important;
+    pointer-events: none !important;
+}
+
+/* Platform specific colors */
+.social-icon.instagram {
+    color: #E4405F !important;
+}
+
+.social-icon.instagram:hover {
+    background: #E4405F !important;
+    color: white !important;
+}
+
+.social-icon.instagram:hover svg {
+    fill: white !important;
+}
+
+.social-icon.website {
+    color: #3B82F6 !important;
+}
+
+.social-icon.website:hover {
+    background: #3B82F6 !important;
+    color: white !important;
+}
+
+.social-icon.website:hover svg {
+    fill: white !important;
+}
+
+.social-icon.youtube {
+    color: #FF0000 !important;
+}
+
+.social-icon.youtube:hover {
+    background: #FF0000 !important;
+    color: white !important;
+}
+
+.social-icon.youtube:hover svg {
+    fill: white !important;
+}
+
+.social-icon.disabled {
+    opacity: 0.3 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+/* ========================================
+   GRID LAYOUT ADJUSTMENTS
+   ======================================== */
+.link-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+    gap: 12px !important;
+    margin: 20px 0 !important;
+    padding: 8px !important;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+@media (max-width: 768px) {
+    .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+        gap: 10px !important;
+    }
+    
+    .link-item-wrapper {
+        height: 50px !important;
+        min-height: 50px !important;
+        max-height: 50px !important;
+        padding: 10px 14px !important;
+        padding-right: 115px !important;
+    }
+    
+    .hover-menu {
+        height: 32px !important;
+        padding: 3px !important;
+        gap: 3px !important;
+        right: 10px !important;
+    }
+    
+    .social-icon {
+        width: 24px !important;
+        height: 24px !important;
+        min-width: 24px !important;
+        min-height: 24px !important;
+    }
+    
+    .social-icon svg {
+        width: 14px !important;
+        height: 14px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .link-grid {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+        padding: 0 !important;
+    }
+    
+    .link-item-wrapper {
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        padding: 8px 12px !important;
+        padding-right: 110px !important;
+    }
+    
+    .link-item-wrapper > a:first-child,
+    .link-item-wrapper > span:first-child,
+    .link-display {
+        font-size: 13px !important;
+        line-height: 32px !important;
+    }
+    
+    .hover-menu {
+        height: 30px !important;
+        padding: 2px !important;
+        right: 8px !important;
+    }
+    
+    .social-icon {
+        width: 22px !important;
+        height: 22px !important;
+        min-width: 22px !important;
+        min-height: 22px !important;
+    }
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+[data-theme="dark"] .link-item-wrapper {
+    background: #1f2937 !important;
+    border-color: #374151 !important;
+}
+
+[data-theme="dark"] .link-item-wrapper:hover {
+    background: #111827 !important;
+    border-color: #6366f1 !important;
+}
+
+[data-theme="dark"] .link-item-wrapper > a:first-child,
+[data-theme="dark"] .link-item-wrapper > span:first-child,
+[data-theme="dark"] .link-display {
+    color: #e5e7eb !important;
+}
+
+[data-theme="dark"] .link-item-wrapper:hover > a:first-child,
+[data-theme="dark"] .link-item-wrapper:hover > span:first-child,
+[data-theme="dark"] .link-item-wrapper:hover .link-display {
+    color: #a5b4fc !important;
+}
+
+[data-theme="dark"] .hover-menu {
+    background: rgba(31, 41, 55, 0.98) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .social-icon {
+    background: #374151 !important;
+}
+
+[data-theme="dark"] .social-icon:hover {
+    background: #4b5563 !important;
+}
+
+/* ========================================
+   FORCE OVERRIDES
+   ======================================== */
+.link-item-wrapper,
+.link-item-wrapper *:not(.hover-menu):not(.social-icon):not(svg) {
+    position: static !important;
+}
+
+.link-item-wrapper {
+    position: relative !important;
+}
+
+.hover-menu {
+    position: absolute !important;
+}
+
+/* Ensure no text wrapping */
+.link-item-wrapper * {
+    word-wrap: normal !important;
+    word-break: keep-all !important;
+}
+
+/* ========================================
+   ANIMATION IMPROVEMENTS
+   ======================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.link-item-wrapper {
+    animation: fadeIn 0.3s ease backwards;
+}
+
+.link-item-wrapper:nth-child(1) { animation-delay: 0.02s; }
+.link-item-wrapper:nth-child(2) { animation-delay: 0.04s; }
+.link-item-wrapper:nth-child(3) { animation-delay: 0.06s; }
+.link-item-wrapper:nth-child(4) { animation-delay: 0.08s; }
+.link-item-wrapper:nth-child(5) { animation-delay: 0.10s; }
+.link-item-wrapper:nth-child(6) { animation-delay: 0.12s; }
+.link-item-wrapper:nth-child(7) { animation-delay: 0.14s; }
+.link-item-wrapper:nth-child(8) { animation-delay: 0.16s; }
+.link-item-wrapper:nth-child(9) { animation-delay: 0.18s; }
+.link-item-wrapper:nth-child(n+10) { animation-delay: 0.20s; }

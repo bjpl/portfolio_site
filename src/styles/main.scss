@@ -1,6 +1,6 @@
 // Main SCSS entry point
 
-@import 'tokens/index';
+@use 'tokens/index' as tokens;
 
 // Base styles
 * {
@@ -83,12 +83,10 @@ a {
 
 
 // Components
-@import 'components/search';
-
+@use 'components/search';
 
 // Utilities
-@import 'utilities/no-js';
-
+@use 'utilities/no-js';
 
 // Layouts
-@import 'layouts/mobile';
+@use 'layouts/mobile';

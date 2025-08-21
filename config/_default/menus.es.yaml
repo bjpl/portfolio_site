@@ -1,13 +1,11 @@
 main:
-  - name: Escribir
-    url: /es/escribir/
+  - name: Letratos
+    url: /es/photography/
     weight: 10
-  - name: Herramientas
-    url: /es/herramientas/
+    title: "Fotografía y Poesía"
+  - name: Enseñanza y Aprendizaje
+    url: /es/aprender/
     weight: 20
-  - name: Pensar
-    url: /es/think/
+  - name: Yo
+    url: /es/me/
     weight: 30
-  - name: Conocer
-    url: /es/meet/
-    weight: 40

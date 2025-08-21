@@ -119,7 +119,7 @@ async function checkHugoInstallation() {
         return true;
     } catch {
         log('Hugo: Not installed', 'error');
-        console.log(`  ${colors.yellow}→${colors.reset} Install from: https://gohugo.io/installation/`);
+        if (process.env.NODE_ENV !== 'production') console.log(`  ${colors.yellow}→${colors.reset} Install from: https://gohugo.io/installation/`);
         return false;
     }
 }
@@ -172,10 +172,10 @@ async function checkConfigFiles() {
 
 async function checkAPIEndpoints() {
     const endpoints = [
-        { url: 'http://localhost:3334/api/content', desc: 'Content API' },
-        { url: 'http://localhost:3334/api/media', desc: 'Media API' },
-        { url: 'http://localhost:3334/api/analytics/summary', desc: 'Analytics API' },
-        { url: 'http://localhost:3334/api/build', desc: 'Build API', method: 'POST' }
+        { url: `${process.env.API_URL || process.env.VITE_API_URL || 'http://localhost:3334/api'}/content`, desc: 'Content API' },
+        { url: `${process.env.API_URL || process.env.VITE_API_URL || 'http://localhost:3334/api'}/media`, desc: 'Media API' },
+        { url: `${process.env.API_URL || process.env.VITE_API_URL || 'http://localhost:3334/api'}/analytics/summary`, desc: 'Analytics API' },
+        { url: `${process.env.API_URL || process.env.VITE_API_URL || 'http://localhost:3334/api'}/build`, desc: 'Build API', method: 'POST' }
     ];
     
     log('API Endpoints:', 'header');
@@ -226,7 +226,7 @@ async function checkDiskSpace() {
         try {
             const { stdout } = await execPromise('wmic logicaldisk get size,freespace,caption');
             log('Disk space: Check output above', 'info');
-            console.log(stdout);
+            if (process.env.NODE_ENV !== 'production') console.log(stdout);
         } catch {
             log('Disk space: Unable to check', 'warning');
         }
@@ -283,7 +283,7 @@ async function runHealthCheck() {
     
     // Core Services
     console.log(`${colors.bright}Core Services:${colors.reset}`);
-    await checkServerRunning('http://localhost:3334/api/content', 'CMS Server (3334)');
+    await checkServerRunning(`${process.env.API_URL || process.env.VITE_API_URL || 'http://localhost:3334/api'}/content`, 'CMS Server');
     await checkServerRunning('http://localhost:1313', 'Hugo Server (1313)');
     await checkHugoInstallation();
     console.log();

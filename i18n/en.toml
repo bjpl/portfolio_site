@@ -1,0 +1,160 @@
+# Navigation
+[nav_home]
+other = "Home"
+
+[nav_portfolio]
+other = "Portfolio"
+
+[nav_letratos]
+other = "Letratos"
+
+[nav_teaching_learning]
+other = "Teaching & Learning"
+
+[nav_me]
+other = "Me"
+
+[nav_writing]
+other = "Writing"
+
+[nav_tools]
+other = "Tools"
+
+[nav_photography]
+other = "Photography"
+
+[nav_poetry]
+other = "Poetry"
+
+[nav_about]
+other = "About"
+
+[nav_contact]
+other = "Contact"
+
+[nav_cv]
+other = "CV"
+
+[nav_services]
+other = "Services"
+
+[nav_blog]
+other = "Blog"
+
+[nav_work]
+other = "Work"
+
+[nav_links]
+other = "Links"
+
+# Sections
+[featured_projects]
+other = "Featured Projects"
+
+[tech_stack]
+other = "Tech Stack"
+
+[what_i_do]
+other = "What I Do"
+
+[helpful_links]
+other = "Helpful Links"
+
+[recent_posts]
+other = "Recent Posts"
+
+[categories]
+other = "Categories"
+
+[tags]
+other = "Tags"
+
+# Actions
+[view_all]
+other = "View All"
+
+[view_portfolio]
+other = "View Portfolio"
+
+[view_cv]
+other = "View CV"
+
+[learn_more]
+other = "Learn More"
+
+[go_home]
+other = "Go Home"
+
+[go_back]
+other = "Go Back"
+
+[read_more]
+other = "Read More"
+
+[connect_linkedin]
+other = "Connect on LinkedIn"
+
+[toggle_theme]
+other = "Toggle theme"
+
+[choose_language]
+other = "Choose language"
+
+# Forms
+[form_name]
+other = "Name"
+
+[form_email]
+other = "Email"
+
+[form_message]
+other = "Message"
+
+[form_subject]
+other = "Subject"
+
+[form_send]
+other = "Send"
+
+[form_submit]
+other = "Submit"
+
+# Errors
+[error_404_title]
+other = "404 - Page Not Found"
+
+[error_404_message]
+other = "Page Not Found"
+
+[error_404_description]
+other = "Oops! The page you're looking for doesn't exist. It might have been moved or deleted."
+
+[error_generic]
+other = "Something went wrong"
+
+# Footer
+[copyright]
+other = "All rights reserved"
+
+[built_with]
+other = "Built with"
+
+# Metadata
+[published]
+other = "Published"
+
+[updated]
+other = "Updated"
+
+[reading_time]
+other = "min read"
+
+[author]
+other = "Author"
+
+# Languages
+[language_english]
+other = "English"
+
+[language_spanish]
+other = "Español"

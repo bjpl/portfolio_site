@@ -5,7 +5,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const http = require('http');
 
-const API_BASE = 'http://localhost:3334/api';
+const API_BASE = process.env.API_URL || process.env.VITE_API_URL || 'http://localhost:3334/api';
 const HUGO_BASE = 'http://localhost:1313';
 
 // Colors for console output
@@ -40,7 +40,7 @@ async function testServerHealth() {
     // Test CMS server
     const cmsHealth = await makeRequest(`${API_BASE}/content`);
     if (cmsHealth.ok) {
-        console.log(`${colors.green}✓ CMS Server (3334) is running${colors.reset}`);
+        if (process.env.NODE_ENV !== 'production') console.log(`${colors.green}✓ CMS Server is running${colors.reset}`);
     } else {
         console.log(`${colors.red}✗ CMS Server (3334) is not responding${colors.reset}`);
         return false;

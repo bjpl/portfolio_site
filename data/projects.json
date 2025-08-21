@@ -1,0 +1,12 @@
+{
+  "projects": [
+    {
+      "id": "portfolio-site",
+      "title": "Portfolio Website",
+      "description": "Personal portfolio and teaching resources",
+      "technologies": ["Hugo", "TypeScript", "SCSS"],
+      "link": "/",
+      "featured": true
+    }
+  ]
+}

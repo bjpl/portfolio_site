@@ -1,8 +1,13 @@
 ---
-title: "Photography"
+title: "Letratos"
 date: 2024-01-15
 draft: false
-description: "Visual stories and moments captured through my lens"
+description: "Photography portfolio"
+layout: "gallery"
+menu:
+  main:
+    name: "Letratos"
+    weight: 50
 ---
 
 # Photography

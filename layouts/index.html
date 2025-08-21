@@ -113,8 +113,10 @@
 
 
 <script>
-// API Base URL - Using port 3334 where our CMS backend runs
-const API_BASE = 'http://localhost:3334/api';
+// API Base URL - Environment-specific configuration
+const API_BASE = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3334/api'
+    : (import.meta.env?.VITE_API_URL || '/api');
 
 // Load featured projects
 async function loadFeaturedProjects() {
@@ -123,7 +125,9 @@ async function loadFeaturedProjects() {
         
         // Handle 401 errors gracefully
         if (response.status === 401) {
-            console.info('Portfolio API requires authentication, showing demo content');
+            if (process.env.NODE_ENV === 'development') {
+                console.info('Portfolio API requires authentication, showing demo content');
+            }
             loadDemoProjects();
             return;
         }
@@ -157,7 +161,9 @@ async function loadFeaturedProjects() {
             loadDemoProjects();
         }
     } catch (error) {
-        console.error('Error loading projects:', error);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Error loading projects:', error);
+        }
         loadDemoProjects();
     }
 }
@@ -221,7 +227,9 @@ async function loadSkills() {
         
         // Handle 401 errors gracefully
         if (response.status === 401) {
-            console.info('Skills API requires authentication, showing demo content');
+            if (process.env.NODE_ENV === 'development') {
+                console.info('Skills API requires authentication, showing demo content');
+            }
             loadDemoSkills();
             return;
         }
@@ -260,7 +268,9 @@ async function loadSkills() {
             loadDemoSkills();
         }
     } catch (error) {
-        console.error('Error loading skills:', error);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Error loading skills:', error);
+        }
         loadDemoSkills();
     }
 }

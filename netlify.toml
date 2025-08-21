@@ -9,6 +9,8 @@
   NODE_VERSION = "18"
   GO_VERSION = "1.21"
   BUILD_ID = "2025-08-21-v3-force-clear"
+  VITE_API_URL = "/api"
+  VITE_SITE_URL = "https://vocal-pony-24e3de.netlify.app"
   
 [context.production]
   command = "rm -rf public && hugo --minify --cleanDestinationDir --gc"
@@ -27,20 +29,18 @@
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https:; font-src 'self' data: https:;"
     Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
 
-# Force CSS refresh for color update
+# CSS caching with proper versioning
 [[headers]]
   for = "/css/main.css"
   [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
-    Pragma = "no-cache"
-    Expires = "0"
+    Cache-Control = "public, max-age=3600, must-revalidate"
+    ETag = "true"
 
 [[headers]]
   for = "/css/links-unified.css"
   [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
-    Pragma = "no-cache"
-    Expires = "0"
+    Cache-Control = "public, max-age=3600, must-revalidate"
+    ETag = "true"
 
 # Asset Optimization
 [[headers]]
@@ -70,11 +70,12 @@
 
 # Page Speed Optimization - Removed incorrect preloads
 
-# API and Admin Routes
+# API Proxy Rules for Backend Integration
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  to = "https://your-backend-url.netlify.app/.netlify/functions/:splat"
   status = 200
+  force = false
 
 [[redirects]]
   from = "/admin/*"

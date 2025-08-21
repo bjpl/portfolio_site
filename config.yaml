@@ -18,7 +18,7 @@ languages:
 menu:
   main:
     - name: "Letratos"
-      url: "/poetry/"
+      url: "/photography/"
       weight: 10
       title: "Photography & Poetry"
     - name: "Teaching & Learning"
@@ -30,7 +30,7 @@ menu:
 
 params:
   description: "Professional portfolio showcasing web development, design, and creative projects"
-  author: "Brandon Lambert"
+  author: "Brandon JP Lambert"
   keywords: ["portfolio", "web development", "design", "programming", "creative", "full stack"]
   og_image: "/images/og-default.jpg"
   twitter_username: ""
@@ -41,7 +41,7 @@ params:
     email: "contact@brandonjplambert.com"
 
 # SEO and Analytics
-googleAnalytics: ""  # Add your GA tracking ID here (e.g., "G-XXXXXXXXXX")
+googleAnalytics: "G-PLACEHOLDER123"  # Replace with your actual GA tracking ID
 enableRobotsTXT: true
 sitemap:
   changefreq: "weekly"

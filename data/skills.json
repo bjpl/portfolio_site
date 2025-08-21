@@ -1,0 +1,16 @@
+{
+  "categories": [
+    {
+      "name": "Teaching & Learning",
+      "skills": ["Curriculum Design", "Educational Technology", "Assessment", "Online Learning"]
+    },
+    {
+      "name": "Technical",
+      "skills": ["Web Development", "Hugo", "JavaScript", "TypeScript", "SCSS"]
+    },
+    {
+      "name": "Research",
+      "skills": ["Data Analysis", "Academic Writing", "Literature Review", "Qualitative Methods"]
+    }
+  ]
+}
