@@ -18,17 +18,14 @@ languages:
 menu:
   main:
     - name: "Poetry"
-      url: "https://www.letratos.com"
+      url: "/poetry/"
       weight: 10
-    - name: "Tools"
-      url: "/tools/"
+    - name: "Teaching & Learning"
+      url: "/teaching-learning/"
       weight: 20
-    - name: "Photography"
-      url: "/photography/"
-      weight: 30
     - name: "Me"
       url: "/me/"
-      weight: 40
+      weight: 30
 
 params:
   description: "Professional portfolio showcasing web development, design, and creative projects"
