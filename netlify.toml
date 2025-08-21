@@ -23,7 +23,7 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:;"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https:; font-src 'self' data: https:;"
     Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
 
 # Asset Optimization
@@ -52,14 +52,7 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000"
 
-# Page Speed Optimization
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Link = '''
-    </css/style.min.css>; rel=preload; as=style,
-    </js/main.min.js>; rel=preload; as=script
-    '''
+# Page Speed Optimization - Removed incorrect preloads
 
 # API and Admin Routes
 [[redirects]]
