@@ -1,7 +1,7 @@
-// Design tokens index
+// Enhanced Design tokens index with comprehensive dark mode support
 
 :root {
-    // Colors
+    // Core Colors
     --color-bg: #ffffff;
     --color-text: #1a1a1a;
     --color-primary: #0066ff;
@@ -9,14 +9,67 @@
     --color-border: #e5e5e5;
     --color-surface: #f8f8f8;
     
-    // Dark theme
+    // Extended Color Palette
+    --color-accent: #f59e0b;
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+    --color-info: #3b82f6;
+    
+    // Surface Variations
+    --color-surface-1: #f8f8f8;
+    --color-surface-2: #f1f1f1;
+    --color-surface-3: #e5e5e5;
+    
+    // Text Variations
+    --color-text-secondary: #6b7280;
+    --color-text-muted: #9ca3af;
+    
+    // Interactive States
+    --color-hover: rgba(0, 102, 255, 0.1);
+    --color-active: rgba(0, 102, 255, 0.2);
+    --color-focus: rgba(0, 102, 255, 0.3);
+    
+    // Shadows
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    
+    // Enhanced Dark theme
     [data-theme="dark"] & {
-        --color-bg: #1a1a1a;
-        --color-text: #ffffff;
-        --color-primary: #4d94ff;
-        --color-secondary: #ff4d94;
-        --color-border: #333333;
-        --color-surface: #2a2a2a;
+        // Core Colors
+        --color-bg: #0f0f0f;
+        --color-text: #f5f5f5;
+        --color-primary: #60a5fa;
+        --color-secondary: #f472b6;
+        --color-border: #404040;
+        --color-surface: #1a1a1a;
+        
+        // Extended Palette
+        --color-accent: #fbbf24;
+        --color-success: #34d399;
+        --color-warning: #fbbf24;
+        --color-error: #f87171;
+        --color-info: #60a5fa;
+        
+        // Surface Variations
+        --color-surface-1: #262626;
+        --color-surface-2: #404040;
+        --color-surface-3: #525252;
+        
+        // Text Variations
+        --color-text-secondary: #a1a1aa;
+        --color-text-muted: #71717a;
+        
+        // Interactive States
+        --color-hover: rgba(96, 165, 250, 0.1);
+        --color-active: rgba(96, 165, 250, 0.2);
+        --color-focus: rgba(96, 165, 250, 0.3);
+        
+        // Enhanced shadows for dark mode
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+        --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
     }
     
     // Typography
@@ -48,8 +101,14 @@
     --container-width: 1200px;
     --header-height: 4rem;
     
-    // Animation
+    // Animation and Transitions
     --transition-fast: 150ms ease-in-out;
     --transition-base: 300ms ease-in-out;
     --transition-slow: 500ms ease-in-out;
+    
+    // Theme transition (can be disabled during initial load)
+    --theme-transition: background-color var(--transition-base), 
+                       color var(--transition-base), 
+                       border-color var(--transition-base),
+                       box-shadow var(--transition-base);
 }

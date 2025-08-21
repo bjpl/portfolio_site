@@ -1,0 +1,272 @@
+// Dark Mode Utility Classes
+// Helper classes for dark mode specific styling
+
+// Visibility utilities
+.light-mode-only {
+  display: block;
+  
+  [data-theme="dark"] & {
+    display: none !important;
+  }
+}
+
+.dark-mode-only {
+  display: none;
+  
+  [data-theme="dark"] & {
+    display: block !important;
+  }
+}
+
+// Inline visibility utilities
+.light-mode-inline {
+  display: inline;
+  
+  [data-theme="dark"] & {
+    display: none !important;
+  }
+}
+
+.dark-mode-inline {
+  display: none;
+  
+  [data-theme="dark"] & {
+    display: inline !important;
+  }
+}
+
+// Flex visibility utilities
+.light-mode-flex {
+  display: flex;
+  
+  [data-theme="dark"] & {
+    display: none !important;
+  }
+}
+
+.dark-mode-flex {
+  display: none;
+  
+  [data-theme="dark"] & {
+    display: flex !important;
+  }
+}
+
+// Grid visibility utilities
+.light-mode-grid {
+  display: grid;
+  
+  [data-theme="dark"] & {
+    display: none !important;
+  }
+}
+
+.dark-mode-grid {
+  display: none;
+  
+  [data-theme="dark"] & {
+    display: grid !important;
+  }
+}
+
+// Image filter utilities
+.dark-mode-invert {
+  [data-theme="dark"] & {
+    filter: invert(1) hue-rotate(180deg);
+  }
+}
+
+.dark-mode-dim {
+  [data-theme="dark"] & {
+    filter: brightness(0.8) contrast(1.1);
+    
+    &:hover {
+      filter: brightness(1) contrast(1);
+    }
+  }
+}
+
+.dark-mode-brighten {
+  [data-theme="dark"] & {
+    filter: brightness(1.2);
+  }
+}
+
+// No dark mode filter
+.no-dark-filter {
+  [data-theme="dark"] & {
+    filter: none !important;
+  }
+}
+
+// Text color utilities
+.text-theme-primary {
+  color: var(--color-primary);
+}
+
+.text-theme-secondary {
+  color: var(--color-secondary);
+}
+
+.text-theme-muted {
+  color: var(--color-text-muted);
+}
+
+// Background utilities
+.bg-theme-surface {
+  background-color: var(--color-surface);
+}
+
+.bg-theme-surface-1 {
+  background-color: var(--color-surface-1);
+}
+
+.bg-theme-surface-2 {
+  background-color: var(--color-surface-2);
+}
+
+// Border utilities
+.border-theme {
+  border-color: var(--color-border);
+}
+
+.border-theme-primary {
+  border-color: var(--color-primary);
+}
+
+// Shadow utilities
+.shadow-theme-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.shadow-theme-base {
+  box-shadow: var(--shadow-base);
+}
+
+.shadow-theme-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+// Theme transition utilities
+.theme-transition {
+  transition: var(--theme-transition);
+}
+
+.theme-transition-fast {
+  transition: background-color var(--transition-fast), 
+              color var(--transition-fast), 
+              border-color var(--transition-fast);
+}
+
+.theme-transition-slow {
+  transition: background-color var(--transition-slow), 
+              color var(--transition-slow), 
+              border-color var(--transition-slow);
+}
+
+// Disable transitions (useful for preventing flash)
+.no-theme-transition {
+  transition: none !important;
+}
+
+// Interactive state utilities
+.hover-theme {
+  &:hover {
+    background-color: var(--color-hover);
+  }
+}
+
+.active-theme {
+  &:active,
+  &.active {
+    background-color: var(--color-active);
+  }
+}
+
+.focus-theme {
+  &:focus-visible {
+    box-shadow: 0 0 0 3px var(--color-focus);
+    outline: none;
+  }
+}
+
+// Logo and branding utilities
+.brand-logo {
+  [data-theme="dark"] & {
+    filter: brightness(0.9) contrast(1.1);
+  }
+}
+
+.brand-icon {
+  color: var(--color-text);
+  
+  [data-theme="dark"] & {
+    filter: brightness(1.2);
+  }
+}
+
+// Code and syntax highlighting utilities
+.code-theme {
+  background-color: var(--color-surface-1);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.syntax-highlight {
+  // Light mode syntax colors
+  --syntax-keyword: #0066ff;
+  --syntax-string: #10b981;
+  --syntax-comment: #6b7280;
+  --syntax-number: #f59e0b;
+  --syntax-operator: #ef4444;
+  
+  // Dark mode syntax colors
+  [data-theme="dark"] & {
+    --syntax-keyword: #60a5fa;
+    --syntax-string: #34d399;
+    --syntax-comment: #a1a1aa;
+    --syntax-number: #fbbf24;
+    --syntax-operator: #f87171;
+  }
+  
+  .keyword { color: var(--syntax-keyword); }
+  .string { color: var(--syntax-string); }
+  .comment { color: var(--syntax-comment); }
+  .number { color: var(--syntax-number); }
+  .operator { color: var(--syntax-operator); }
+}
+
+// Accessibility utilities
+.high-contrast {
+  [data-theme="dark"] & {
+    color: #ffffff;
+    background-color: #000000;
+    border-color: #666666;
+  }
+}
+
+.focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+// Animation utilities that respect prefers-reduced-motion
+.theme-animation {
+  animation-duration: var(--transition-base);
+  
+  @media (prefers-reduced-motion: reduce) {
+    animation: none !important;
+  }
+}
+
+// Print utilities (force light mode for printing)
+@media print {
+  .print-light-mode {
+    background: white !important;
+    color: black !important;
+    border-color: #cccccc !important;
+    box-shadow: none !important;
+  }
+}

@@ -1,6 +1,8 @@
 // Main SCSS entry point
 
 @use 'tokens/index' as tokens;
+@use 'animations/theme-transitions';
+@use 'core/dark-mode';
 
 // Base styles
 * {
@@ -18,7 +20,7 @@ body {
     background: var(--color-bg);
     color: var(--color-text);
     line-height: 1.6;
-    transition: background-color 0.3s, color 0.3s;
+    transition: var(--theme-transition);
 }
 
 // Container
@@ -87,6 +89,24 @@ a {
 
 // Utilities
 @use 'utilities/no-js';
+@use 'utilities/dark-mode-utilities';
 
 // Layouts
 @use 'layouts/mobile';
+
+// Enhanced animations and transitions
+.animate-theme-change {
+    transform: scale(1.02);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.content-loaded {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}

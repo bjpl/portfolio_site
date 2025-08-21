@@ -1,0 +1,423 @@
+// Core Dark Mode Styles
+// Comprehensive dark mode implementation with smooth transitions
+
+// Import color tokens
+@use '../tokens/index' as tokens;
+
+// Theme transition variables
+:root {
+  --theme-transition: background-color var(--transition-base), 
+                     color var(--transition-base), 
+                     border-color var(--transition-base),
+                     box-shadow var(--transition-base);
+}
+
+// Enhanced color tokens for dark mode
+:root {
+  // Extended light mode colors
+  --color-accent: #f59e0b;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+  
+  // Surface variations
+  --color-surface-1: #f8f8f8;
+  --color-surface-2: #f1f1f1;
+  --color-surface-3: #e5e5e5;
+  
+  // Text variations
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+  
+  // Interactive states
+  --color-hover: rgba(0, 102, 255, 0.1);
+  --color-active: rgba(0, 102, 255, 0.2);
+  --color-focus: rgba(0, 102, 255, 0.3);
+  
+  // Shadows
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+// Dark mode color overrides
+[data-theme="dark"] {
+  // Background and text
+  --color-bg: #0f0f0f;
+  --color-text: #f5f5f5;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
+  
+  // Primary colors (adjusted for better contrast)
+  --color-primary: #60a5fa;
+  --color-secondary: #f472b6;
+  --color-accent: #fbbf24;
+  
+  // Status colors
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
+  --color-info: #60a5fa;
+  
+  // Surfaces
+  --color-surface: #1a1a1a;
+  --color-surface-1: #262626;
+  --color-surface-2: #404040;
+  --color-surface-3: #525252;
+  
+  // Borders
+  --color-border: #404040;
+  
+  // Interactive states
+  --color-hover: rgba(96, 165, 250, 0.1);
+  --color-active: rgba(96, 165, 250, 0.2);
+  --color-focus: rgba(96, 165, 250, 0.3);
+  
+  // Enhanced shadows for dark mode
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+}
+
+// Apply transitions to all theme-affected elements
+* {
+  transition: var(--theme-transition);
+}
+
+// Component-specific dark mode styles
+[data-theme="dark"] {
+  
+  // Navigation styles
+  .navigation {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    
+    .nav-link {
+      color: var(--color-text);
+      
+      &:hover {
+        color: var(--color-primary);
+        background: var(--color-hover);
+      }
+      
+      &.active {
+        color: var(--color-primary);
+        background: var(--color-active);
+      }
+    }
+  }
+  
+  // Card components
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-base);
+    
+    &:hover {
+      box-shadow: var(--shadow-lg);
+      border-color: var(--color-primary);
+    }
+  }
+  
+  // Button styles
+  .btn {
+    &--primary {
+      background: var(--color-primary);
+      color: var(--color-bg);
+      border: 1px solid var(--color-primary);
+      
+      &:hover {
+        background: var(--color-primary);
+        filter: brightness(1.1);
+      }
+    }
+    
+    &--secondary {
+      background: transparent;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      
+      &:hover {
+        background: var(--color-surface);
+        border-color: var(--color-primary);
+      }
+    }
+    
+    &--ghost {
+      background: transparent;
+      color: var(--color-text);
+      
+      &:hover {
+        background: var(--color-hover);
+      }
+    }
+  }
+  
+  // Form elements
+  .form-input,
+  .form-textarea,
+  .form-select {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    
+    &:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-focus);
+    }
+    
+    &::placeholder {
+      color: var(--color-text-muted);
+    }
+  }
+  
+  // Code blocks and syntax highlighting
+  .code-block,
+  pre,
+  code {
+    background: var(--color-surface-1);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+  }
+  
+  // Inline code
+  :not(pre) > code {
+    background: var(--color-surface-1);
+    color: var(--color-accent);
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+  }
+  
+  // Tables
+  .table {
+    background: var(--color-surface);
+    
+    th {
+      background: var(--color-surface-1);
+      color: var(--color-text);
+      border-bottom: 2px solid var(--color-border);
+    }
+    
+    td {
+      border-bottom: 1px solid var(--color-border);
+    }
+    
+    // Alternating row colors
+    tbody tr:nth-child(even) {
+      background: var(--color-surface-1);
+    }
+    
+    tbody tr:hover {
+      background: var(--color-hover);
+    }
+  }
+  
+  // Tooltip styles
+  .tooltip {
+    background: var(--color-surface-2);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  // Modal and overlay styles
+  .modal {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .overlay {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  
+  // Dropdown styles
+  .dropdown {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+    
+    .dropdown-item {
+      color: var(--color-text);
+      
+      &:hover {
+        background: var(--color-hover);
+      }
+      
+      &.active {
+        background: var(--color-active);
+        color: var(--color-primary);
+      }
+    }
+  }
+  
+  // Badge and tag styles
+  .badge,
+  .tag {
+    background: var(--color-surface-1);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    
+    &--primary {
+      background: var(--color-primary);
+      color: var(--color-bg);
+    }
+    
+    &--success {
+      background: var(--color-success);
+      color: var(--color-bg);
+    }
+    
+    &--warning {
+      background: var(--color-warning);
+      color: var(--color-bg);
+    }
+    
+    &--error {
+      background: var(--color-error);
+      color: var(--color-bg);
+    }
+  }
+  
+  // Progress bars
+  .progress {
+    background: var(--color-surface-1);
+    
+    .progress-bar {
+      background: var(--color-primary);
+    }
+  }
+  
+  // Dividers and separators
+  .divider,
+  hr {
+    border-color: var(--color-border);
+  }
+  
+  // Selection styles
+  ::selection {
+    background: var(--color-primary);
+    color: var(--color-bg);
+  }
+  
+  ::-moz-selection {
+    background: var(--color-primary);
+    color: var(--color-bg);
+  }
+}
+
+// Image handling for dark mode
+[data-theme="dark"] {
+  // Logo and brand images
+  .logo,
+  .brand-image {
+    filter: brightness(0.9) contrast(1.1);
+  }
+  
+  // General image dimming
+  img:not(.no-dark-filter) {
+    filter: brightness(0.8) contrast(1.1);
+    transition: filter var(--transition-base);
+    
+    &:hover {
+      filter: brightness(1) contrast(1);
+    }
+  }
+  
+  // Icon adjustments
+  .icon {
+    filter: brightness(1.2);
+  }
+  
+  // SVG icon color inheritance
+  svg {
+    color: inherit;
+    fill: currentColor;
+  }
+}
+
+// Scrollbar styles for dark mode
+[data-theme="dark"] {
+  // Webkit scrollbars
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+    
+    &:hover {
+      background: var(--color-text-muted);
+    }
+  }
+  
+  // Firefox scrollbars
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) var(--color-surface);
+  }
+}
+
+// Focus styles for accessibility
+[data-theme="dark"] {
+  // Enhanced focus indicators
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  a:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  
+  // Skip link styles
+  .skip-link {
+    background: var(--color-primary);
+    color: var(--color-bg);
+    
+    &:focus {
+      box-shadow: var(--shadow-lg);
+    }
+  }
+}
+
+// Print styles (force light mode for printing)
+@media print {
+  [data-theme="dark"] {
+    --color-bg: #ffffff !important;
+    --color-text: #000000 !important;
+    --color-surface: #ffffff !important;
+    --color-border: #cccccc !important;
+    
+    * {
+      background: white !important;
+      color: black !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  [data-theme="dark"] {
+    --color-border: #666666;
+    --color-text: #ffffff;
+    --color-bg: #000000;
+    --color-surface: #1a1a1a;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

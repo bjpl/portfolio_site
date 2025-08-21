@@ -1,0 +1,497 @@
+/**
+ * Dark Mode Animation System
+ * Comprehensive transition and animation system for smooth theme switching
+ */
+
+/* ========================================
+   1. TRANSITION SYSTEM CUSTOM PROPERTIES
+======================================== */
+
+:root {
+  /* Timing Functions - Carefully crafted for optimal UX */
+  --transition-theme: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slower: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Advanced easing curves for specific animations */
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-elegant: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-natural: cubic-bezier(0.4, 0.0, 0.2, 1);
+  
+  /* Stagger timing for cascading animations */
+  --stagger-delay: 50ms;
+  --stagger-duration: 200ms;
+  
+  /* Animation states */
+  --animation-play-state: running;
+  --reduced-motion: 1;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-theme: all 0.1s ease;
+    --transition-fast: 50ms ease;
+    --transition-base: 100ms ease;
+    --transition-slow: 150ms ease;
+    --transition-slower: 200ms ease;
+    --reduced-motion: 0;
+  }
+}
+
+/* ========================================
+   2. GLOBAL THEME TRANSITION SYSTEM
+======================================== */
+
+/* Smooth theme transitions for all elements */
+* {
+  transition: 
+    background-color var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base),
+    backdrop-filter var(--transition-base),
+    filter var(--transition-base);
+}
+
+/* Enhanced transition control during theme switching */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition: all var(--transition-slow) var(--ease-elegant) !important;
+  transition-delay: 0ms !important;
+}
+
+/* Prevent layout shifts during theme transitions */
+.theme-transition {
+  will-change: background-color, color, border-color, box-shadow;
+}
+
+/* ========================================
+   3. THEME TOGGLE BUTTON ANIMATIONS
+======================================== */
+
+.theme-toggle {
+  position: relative;
+  overflow: hidden;
+  transform-origin: center;
+  transition: 
+    transform var(--transition-base) var(--ease-bounce),
+    background-color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+/* Icon rotation and morphing */
+.theme-toggle .icon {
+  display: inline-block;
+  transition: 
+    transform var(--transition-slow) var(--ease-elegant),
+    opacity var(--transition-fast);
+  transform-origin: center;
+}
+
+/* Smooth icon switching */
+.theme-toggle:hover .icon {
+  transform: rotate(15deg) scale(1.1);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Advanced hover effects */
+.theme-toggle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, var(--color-primary-light) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+  transition: 
+    width var(--transition-base) var(--ease-smooth),
+    height var(--transition-base) var(--ease-smooth),
+    opacity var(--transition-fast);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.theme-toggle:hover::before {
+  width: 120%;
+  height: 120%;
+  opacity: 0.3;
+}
+
+/* ========================================
+   4. RIPPLE EFFECT ANIMATION
+======================================== */
+
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
+.theme-toggle.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  opacity: 0;
+  animation: ripple 0.6s var(--ease-natural);
+  pointer-events: none;
+}
+
+/* ========================================
+   5. STAGGER ANIMATIONS FOR LISTS
+======================================== */
+
+/* Staggered fade-in for navigation items */
+.site-nav li {
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: fadeInUp var(--stagger-duration) var(--ease-elegant) forwards;
+}
+
+.site-nav li:nth-child(1) { animation-delay: calc(var(--stagger-delay) * 1); }
+.site-nav li:nth-child(2) { animation-delay: calc(var(--stagger-delay) * 2); }
+.site-nav li:nth-child(3) { animation-delay: calc(var(--stagger-delay) * 3); }
+.site-nav li:nth-child(4) { animation-delay: calc(var(--stagger-delay) * 4); }
+.site-nav li:nth-child(5) { animation-delay: calc(var(--stagger-delay) * 5); }
+.site-nav li:nth-child(6) { animation-delay: calc(var(--stagger-delay) * 6); }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered animations for content cards */
+.content-list article,
+.section-card,
+.feature-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cardFadeIn var(--transition-slow) var(--ease-elegant) forwards;
+}
+
+.content-list article:nth-child(1) { animation-delay: 100ms; }
+.content-list article:nth-child(2) { animation-delay: 200ms; }
+.content-list article:nth-child(3) { animation-delay: 300ms; }
+.content-list article:nth-child(4) { animation-delay: 400ms; }
+
+@keyframes cardFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   6. SMOOTH GRADIENT TRANSITIONS
+======================================== */
+
+/* Gradient background transitions */
+.gradient-bg {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+  transition: background var(--transition-slower) var(--ease-elegant);
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Enhanced gradient text animations */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientTextShift 4s ease-in-out infinite;
+  transition: background var(--transition-slower);
+}
+
+@keyframes gradientTextShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ========================================
+   7. ICON MORPHING ANIMATIONS
+======================================== */
+
+/* Sun to Moon morphing animation */
+.theme-icon {
+  position: relative;
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  transition: transform var(--transition-base) var(--ease-bounce);
+}
+
+.theme-icon-sun,
+.theme-icon-moon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: 
+    opacity var(--transition-base) var(--ease-elegant),
+    transform var(--transition-base) var(--ease-elegant);
+  transform-origin: center;
+}
+
+/* Light mode - show sun, hide moon */
+[data-theme="light"] .theme-icon-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+[data-theme="light"] .theme-icon-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
+/* Dark mode - show moon, hide sun */
+[data-theme="dark"] .theme-icon-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+[data-theme="dark"] .theme-icon-moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* Hover effect for theme icon */
+.theme-toggle:hover .theme-icon {
+  transform: rotate(15deg) scale(1.1);
+}
+
+/* ========================================
+   8. PAGE LOAD OPTIMIZATION
+======================================== */
+
+/* Prevent flash of incorrect theme */
+.theme-loading {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.theme-loaded {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity var(--transition-base) var(--ease-elegant);
+}
+
+/* Smooth page entrance animation */
+@keyframes pageEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-content {
+  animation: pageEntrance var(--transition-slow) var(--ease-elegant);
+}
+
+/* ========================================
+   9. ADVANCED HOVER EFFECTS
+======================================== */
+
+/* Enhanced card hover animations */
+.animated-card {
+  position: relative;
+  overflow: hidden;
+  transition: 
+    transform var(--transition-base) var(--ease-elegant),
+    box-shadow var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.animated-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left var(--transition-slower) var(--ease-elegant);
+  pointer-events: none;
+}
+
+.animated-card:hover::before {
+  left: 100%;
+}
+
+.animated-card:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+/* ========================================
+   10. SCROLL-TRIGGERED ANIMATIONS
+======================================== */
+
+/* Intersection Observer triggered animations */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 
+    opacity var(--transition-slow) var(--ease-elegant),
+    transform var(--transition-slow) var(--ease-elegant);
+}
+
+.animate-on-scroll.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Parallax effect for backgrounds */
+.parallax-bg {
+  transform: translateZ(0);
+  will-change: transform;
+  transition: transform var(--transition-fast) linear;
+}
+
+/* ========================================
+   11. DARK MODE SPECIFIC ANIMATIONS
+======================================== */
+
+/* Dark mode background glow effect */
+[data-theme="dark"] .glow-effect {
+  position: relative;
+}
+
+[data-theme="dark"] .glow-effect::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity var(--transition-slower);
+  pointer-events: none;
+  animation: gentleGlow 6s ease-in-out infinite;
+}
+
+[data-theme="dark"] .glow-effect:hover::after {
+  opacity: 1;
+}
+
+@keyframes gentleGlow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+/* Dark mode text shimmer effect */
+[data-theme="dark"] .shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--color-text-primary) 0%,
+    var(--color-primary) 50%,
+    var(--color-text-primary) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ========================================
+   12. PERFORMANCE OPTIMIZATIONS
+======================================== */
+
+/* GPU acceleration for smooth animations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Reduce animations for low-performance devices */
+@media (max-width: 768px) and (max-resolution: 150dpi) {
+  :root {
+    --transition-theme: all 0.2s ease;
+    --transition-base: 150ms ease;
+    --transition-slow: 200ms ease;
+  }
+  
+  .animate-on-scroll,
+  .stagger-animation,
+  .complex-animation {
+    animation: none !important;
+    transition: opacity 0.2s ease !important;
+  }
+}
+
+/* ========================================
+   13. ACCESSIBILITY CONSIDERATIONS
+======================================== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .theme-toggle {
+    border: 2px solid currentColor;
+  }
+  
+  .animated-card {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Focus management during theme transitions */
+.theme-transition :focus {
+  outline: 2px solid var(--color-primary) !important;
+  outline-offset: 2px !important;
+}
+
+/* Screen reader friendly animations */
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle:hover .theme-icon {
+    transform: none;
+  }
+  
+  .ripple-effect,
+  .glow-effect,
+  .shimmer-text {
+    animation: none !important;
+  }
+}
