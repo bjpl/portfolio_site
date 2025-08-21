@@ -4,14 +4,17 @@
 
 /* CSS Variables for consistency */
 :root {
-    /* Colors */
-    --primary: #3b82f6;
-    --primary-hover: #2563eb;
-    --text-primary: #1e293b;
+    /* Colors - Professional Palette */
+    --primary: #4A90E2;  /* Friendly Sky Blue */
+    --primary-hover: #3A7FD2;
+    --text-primary: #2C3E50;  /* Deep Blue-Gray */
     --text-secondary: #64748b;
     --border-light: #e2e8f0;
     --bg-white: #ffffff;
-    --bg-gray: #f8fafc;
+    --bg-gray: #F5F5F7;  /* Soft White-Gray */
+    --bg-section: #E8F4FD;  /* Pale Blue Tint */
+    --accent: #FFB84D;  /* Warm Amber */
+    --success: #7FBA00;  /* Fresh Green */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
@@ -37,13 +40,16 @@
 
 /* Dark mode variables */
 [data-theme="dark"] {
-    --primary: #60a5fa;
-    --primary-hover: #3b82f6;
+    --primary: #5BA3F5;  /* Lighter Sky Blue for dark */
+    --primary-hover: #6BB0FF;
     --text-primary: #f1f5f9;
     --text-secondary: #94a3b8;
     --border-light: #334155;
     --bg-white: #1e293b;
     --bg-gray: #0f172a;
+    --bg-section: #141923;  /* Darker section bg */
+    --accent: #FFCA6D;  /* Lighter Amber for dark */
+    --success: #8FCA00;  /* Lighter Green for dark */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.25);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
@@ -126,11 +132,13 @@
     background: var(--primary);
     color: white;
     border-color: var(--primary);
+    box-shadow: 0 2px 4px rgba(74, 144, 226, 0.2);
 }
 
 .filter-btn.active:hover {
     background: var(--primary-hover);
     border-color: var(--primary-hover);
+    box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
 }
 
 .filter-count {
@@ -181,8 +189,9 @@
 
 .link-item-wrapper:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.15);
     border-color: var(--primary);
+    background: var(--bg-section);
 }
 
 .link-item-wrapper:active {
@@ -234,17 +243,19 @@
     justify-content: center;
     width: 32px;
     height: 32px;
-    background: var(--bg-gray);
+    background: var(--bg-section);
     border-radius: var(--radius-full);
     color: var(--text-secondary);
     text-decoration: none;
     transition: all var(--transition-fast);
+    border: 1px solid transparent;
 }
 
 .social-icon:hover {
     background: var(--primary);
     color: white;
     transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
 }
 
 .social-icon:active {
@@ -275,28 +286,28 @@
    ============================================== */
 
 .govdip .category-title {
-    color: #2563eb;
-    border-color: #3b82f6;
+    color: var(--primary);
+    border-color: var(--primary);
 }
 
 .culture .category-title {
-    color: #7c3aed;
-    border-color: #8b5cf6;
+    color: var(--text-primary);
+    border-color: var(--accent);
 }
 
 .food .category-title {
-    color: #dc2626;
-    border-color: #ef4444;
+    color: var(--accent);
+    border-color: var(--accent);
 }
 
 .travel .category-title {
-    color: #ec4899;
-    border-color: #f472b6;
+    color: var(--success);
+    border-color: var(--success);
 }
 
 .education .category-title {
-    color: #8b5cf6;
-    border-color: #a78bfa;
+    color: var(--primary);
+    border-color: var(--primary);
 }
 
 /* ==============================================

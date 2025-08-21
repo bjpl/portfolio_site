@@ -4,31 +4,31 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-    /* Modern, sophisticated color palette */
-    --color-bg: #FEFEFE;
+    /* Professional color palette */
+    --color-bg: #F5F5F7;  /* Soft White-Gray - clean backgrounds */
     --color-surface: #FFFFFF;
-    --color-surface-alt: #F9FAFB;
-    --color-text-primary: #0F172A;
+    --color-surface-alt: #E8F4FD;  /* Pale Blue Tint - section backgrounds */
+    --color-text-primary: #2C3E50;  /* Deep Blue-Gray - headers and main text */
     --color-text-secondary: #475569;
     --color-text-muted: #94A3B8;
-    --color-text-accent: #334155;
+    --color-text-accent: #2C3E50;
     
-    /* Primary brand colors - sophisticated purple/indigo */
-    --color-primary: #6366F1;
-    --color-primary-hover: #4F46E5;
-    --color-primary-light: #EEF2FF;
-    --color-primary-dark: #4338CA;
+    /* Primary brand colors */
+    --color-primary: #4A90E2;  /* Friendly Sky Blue - CTAs and navigation */
+    --color-primary-hover: #3A7FD2;
+    --color-primary-light: #E8F4FD;
+    --color-primary-dark: #3A6FB0;
     
     /* Accent colors */
-    --color-accent: #8B5CF6;
-    --color-accent-light: #A78BFA;
-    --color-accent-dark: #7C3AED;
+    --color-accent: #FFB84D;  /* Warm Amber - highlights and CTAs */
+    --color-accent-light: #FFC66D;
+    --color-accent-dark: #E5A043;
     
     /* Semantic colors */
-    --color-success: #10B981;
-    --color-warning: #F59E0B;
+    --color-success: #7FBA00;  /* Fresh Green - achievements and progress */
+    --color-warning: #FFB84D;  /* Warm Amber */
     --color-error: #EF4444;
-    --color-info: #3B82F6;
+    --color-info: #4A90E2;  /* Sky Blue */
     
     /* Borders and dividers */
     --color-border: #E2E8F0;
@@ -115,21 +115,21 @@
     --color-text-accent: #D1D5DB;
     
     /* Dark mode primary colors */
-    --color-primary: #818CF8;
-    --color-primary-hover: #A5B4FC;
-    --color-primary-light: rgba(129, 140, 248, 0.15);
-    --color-primary-dark: #6366F1;
+    --color-primary: #5BA3F5;  /* Lighter Sky Blue for dark mode */
+    --color-primary-hover: #6BB0FF;
+    --color-primary-light: rgba(74, 144, 226, 0.15);
+    --color-primary-dark: #4A90E2;
     
     /* Dark mode accent colors */
-    --color-accent: #A78BFA;
-    --color-accent-light: #C4B5FD;
-    --color-accent-dark: #8B5CF6;
+    --color-accent: #FFCA6D;  /* Lighter Warm Amber for dark mode */
+    --color-accent-light: #FFD584;
+    --color-accent-dark: #FFB84D;
     
     /* Dark mode semantic colors */
-    --color-success: #34D399;
-    --color-warning: #FBBF24;
+    --color-success: #8FCA00;  /* Lighter Fresh Green */
+    --color-warning: #FFCA6D;
     --color-error: #F87171;
-    --color-info: #60A5FA;
+    --color-info: #5BA3F5;
     
     /* Dark mode borders */
     --color-border: rgba(255, 255, 255, 0.08);
@@ -288,7 +288,7 @@ a:hover {
 }
 
 .site-header {
-    background: rgba(254, 254, 254, 0.98);
+    background: rgba(245, 245, 247, 0.98);  /* Soft White-Gray */
     border-bottom: 1px solid var(--color-border-light);
     padding: var(--space-lg) 0;
     position: sticky;
@@ -360,6 +360,7 @@ a:hover {
     background: var(--color-primary-light);
     text-decoration: none;
     transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(74, 144, 226, 0.1);
 }
 
 [data-theme="dark"] .site-nav a {
@@ -395,11 +396,11 @@ a:hover {
 }
 
 .header-social-link:hover {
-    background: #0077b5;
+    background: var(--color-primary);
     color: white;
-    border-color: #0077b5;
+    border-color: var(--color-primary);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 8px rgba(74, 144, 226, 0.2);
 }
 
 [data-theme="dark"] .header-social-link {
@@ -409,9 +410,9 @@ a:hover {
 }
 
 [data-theme="dark"] .header-social-link:hover {
-    background: #0077b5;
+    background: var(--color-primary);
     color: white;
-    border-color: #0077b5;
+    border-color: var(--color-primary);
 }
 
 .admin-link {
@@ -728,14 +729,14 @@ main {
 }
 
 .footer-nav a:hover {
-    color: #3b82f6;
+    color: var(--color-primary);
 }
 
 .btn-admin-footer {
     display: inline-block;
     margin-top: 1rem;
     padding: 0.5rem 1rem;
-    background: #3b82f6;
+    background: var(--color-primary);
     color: white;
     text-decoration: none;
     border-radius: 20px;
@@ -1213,6 +1214,27 @@ button[type="submit"]:active,
     margin-top: 3rem;
 }
 
+/* Button Styles */
+.btn-primary {
+    background: var(--color-primary);
+    color: white;
+    border: 2px solid var(--color-primary);
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(74, 144, 226, 0.2);
+}
+
+.btn-primary:hover {
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+}
+
 .btn-secondary {
     background: transparent;
     color: var(--color-primary);
@@ -1228,6 +1250,27 @@ button[type="submit"]:active,
 .btn-secondary:hover {
     background: var(--color-primary);
     color: white;
+    box-shadow: 0 2px 4px rgba(74, 144, 226, 0.2);
+}
+
+.btn-accent {
+    background: var(--color-accent);
+    color: white;
+    border: 2px solid var(--color-accent);
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(255, 184, 77, 0.2);
+}
+
+.btn-accent:hover {
+    background: var(--color-accent-dark);
+    border-color: var(--color-accent-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 184, 77, 0.3);
 }
 
 /* Skeleton Loaders */
