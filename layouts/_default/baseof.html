@@ -27,7 +27,7 @@
     
     <script src="/js/lazy-load.js" defer></script>
     
-    {{- if eq .Layout "links" -}}
+    {{- if or (eq .Layout "links") (eq .RelPermalink "/me/links/") (strings.Contains .RelPermalink "/links/") -}}
     <link rel="stylesheet" href="/css/links-unified.css">
     <script src="/js/url-mappings-complete.js"></script>
     <script src="/js/links-complete.js" defer></script>
