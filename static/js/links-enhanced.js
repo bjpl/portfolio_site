@@ -132,15 +132,8 @@
             icon.rel = 'noopener noreferrer';
             icon.title = `View on ${platform.charAt(0).toUpperCase() + platform.slice(1)}`;
             
-            // Critical: Prevent parent link click
+            // Prevent parent link click (handled by hover-stable.js now)
             icon.addEventListener('click', function(e) {
-                e.stopPropagation();
-                e.stopImmediatePropagation();
-                console.log(`Clicking ${platform} link: ${url}`);
-            });
-            
-            // Also handle mousedown to be extra sure
-            icon.addEventListener('mousedown', function(e) {
                 e.stopPropagation();
             });
         } else {
@@ -184,15 +177,7 @@
             console.log(`  Added YouTube: ${urls.youtube}`);
         }
         
-        // Prevent menu clicks from triggering parent
-        menu.addEventListener('click', function(e) {
-            e.stopPropagation();
-            e.stopImmediatePropagation();
-        });
-        
-        menu.addEventListener('mousedown', function(e) {
-            e.stopPropagation();
-        });
+        // Event handling is now managed by links-hover-stable.js
         
         return menu;
     }
@@ -233,9 +218,11 @@
             if (urls.website) withWebsite++;
             if (urls.youtube) withYoutube++;
             
-            // Create and add hover menu
-            const hoverMenu = createHoverMenu(urls, username);
-            link.appendChild(hoverMenu);
+            // Only create hover menu if it doesn't exist
+            if (!link.querySelector('.hover-menu')) {
+                const hoverMenu = createHoverMenu(urls, username);
+                link.appendChild(hoverMenu);
+            }
             
             processedCount++;
         });
@@ -278,28 +265,66 @@
         }, 300));
     }
     
-    // Filter buttons
+    // Filter buttons with counts
     function initFilters() {
         const filterButtons = document.querySelectorAll('.filter-btn');
         const sections = document.querySelectorAll('.instagram-links');
+        
+        // Update filter counts
+        function updateCounts() {
+            filterButtons.forEach(button => {
+                const filter = button.dataset.filter;
+                const countSpan = button.querySelector('.filter-count');
+                if (!countSpan) return;
+                
+                if (filter === 'all') {
+                    const total = document.querySelectorAll('.link-item-wrapper').length;
+                    countSpan.textContent = `(${total})`;
+                } else {
+                    const section = document.querySelector(`.instagram-links.${filter}`);
+                    const count = section ? section.querySelectorAll('.link-item-wrapper').length : 0;
+                    countSpan.textContent = count > 0 ? `(${count})` : '';
+                }
+            });
+        }
+        
+        updateCounts();
         
         filterButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const filter = this.dataset.filter;
                 
-                // Update active state
-                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Update active state with smooth transition
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-pressed', 'false');
+                });
                 this.classList.add('active');
+                this.setAttribute('aria-pressed', 'true');
                 
-                // Apply filter
+                // Apply filter with fade animation
                 if (filter === 'all') {
-                    sections.forEach(section => section.style.display = '');
+                    sections.forEach(section => {
+                        section.style.display = '';
+                        section.style.animation = 'fadeInUp 0.4s ease';
+                    });
                 } else {
                     sections.forEach(section => {
                         const matches = section.classList.contains(filter);
-                        section.style.display = matches ? '' : 'none';
+                        if (matches) {
+                            section.style.display = '';
+                            section.style.animation = 'fadeInUp 0.4s ease';
+                        } else {
+                            section.style.display = 'none';
+                        }
                     });
                 }
+                
+                // Smooth scroll to top of content
+                document.querySelector('.filter-container')?.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
             });
         });
     }
@@ -341,6 +366,39 @@
         };
     }
     
+    // Keyboard navigation
+    function initKeyboardNav() {
+        let currentFocus = -1;
+        const links = document.querySelectorAll('.link-item-wrapper');
+        
+        document.addEventListener('keydown', function(e) {
+            if (!links.length) return;
+            
+            if (e.key === 'ArrowDown' || e.key === 'j') {
+                e.preventDefault();
+                currentFocus = Math.min(currentFocus + 1, links.length - 1);
+                links[currentFocus]?.focus();
+            } else if (e.key === 'ArrowUp' || e.key === 'k') {
+                e.preventDefault();
+                currentFocus = Math.max(currentFocus - 1, 0);
+                links[currentFocus]?.focus();
+            } else if (e.key === 'Enter' && currentFocus >= 0) {
+                links[currentFocus]?.click();
+            } else if (e.key === '/' || (e.ctrlKey && e.key === 'k')) {
+                e.preventDefault();
+                document.querySelector('.search-input')?.focus();
+            } else if (e.key === 'Escape') {
+                document.activeElement?.blur();
+                currentFocus = -1;
+            }
+        });
+        
+        // Reset focus when clicking
+        links.forEach((link, index) => {
+            link.addEventListener('focus', () => currentFocus = index);
+        });
+    }
+    
     // Initialize everything
     function init() {
         console.log('Initializing enhanced links page...');
@@ -348,6 +406,7 @@
         initSearch();
         initFilters();
         initCollapsibles();
+        initKeyboardNav();
         console.log('Enhanced links page initialized');
     }
     

@@ -1,0 +1,712 @@
+{{ define "main" }}
+<div class="links-container">
+    <div class="container">
+        <header class="page-header">
+            <h1 class="page-title">{{ .Title }}</h1>
+            {{ with .Description }}
+            <p class="page-description">{{ . }}</p>
+            {{ end }}
+        </header>
+        
+        <div class="page-content">
+            <!-- Search and Filter Section -->
+            <div class="search-container">
+                <input type="text" 
+                       class="search-input" 
+                       id="linkSearch" 
+                       placeholder="Search links..." 
+                       aria-label="Search links"
+                       autocomplete="off"
+                       spellcheck="false">
+                <div class="search-stats" id="searchStats" aria-live="polite"></div>
+            </div>
+            
+            <div class="filter-container">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">
+                        All <span class="filter-count">(131)</span>
+                    </button>
+                    <button class="filter-btn" data-filter="govdip">
+                        🏛️ Government <span class="filter-count"></span>
+                    </button>
+                    <button class="filter-btn" data-filter="education">
+                        🎓 Education <span class="filter-count"></span>
+                    </button>
+                    <button class="filter-btn" data-filter="culture">
+                        🎨 Culture <span class="filter-count"></span>
+                    </button>
+                    <button class="filter-btn" data-filter="food">
+                        🍔 Food <span class="filter-count"></span>
+                    </button>
+                    <button class="filter-btn" data-filter="travel">
+                        ✈️ Travel <span class="filter-count"></span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Links Content -->
+            {{ .Content | safeHTML }}
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced JavaScript and CSS for links page -->
+<script src="/js/url-mappings-complete.js"></script>
+<script src="/js/links-enhanced.js" defer></script>
+<script src="/js/links-hover-stable.js" defer></script>
+<link rel="stylesheet" href="/css/links-hover-final.css">
+
+<style>
+.links-container {
+    min-height: 100vh;
+    padding: 2rem 0;
+    background: var(--color-bg);
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding: 0 1rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.page-description {
+    font-size: 1rem;
+    color: #718096;
+    max-width: 40rem;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.page-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Search and Filter Styles */
+.search-container {
+    margin: 2rem auto;
+    text-align: center;
+    max-width: 800px;
+}
+
+.search-input {
+    width: 100%;
+    max-width: 500px;
+    padding: 0.625rem 1rem;
+    padding-left: 2.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 24px;
+    background: #ffffff;
+    color: #1a202c;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.search-input::placeholder {
+    color: #a0aec0;
+    font-weight: 400;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.05), 0 1px 3px rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+}
+
+.search-stats {
+    margin-top: var(--space-sm);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    display: none;
+}
+
+.filter-container {
+    margin: 1.5rem auto;
+    text-align: center;
+    max-width: 1000px;
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    justify-content: center;
+}
+
+.filter-btn {
+    padding: 0.375rem 0.875rem;
+    background: transparent;
+    color: #4a5568;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    height: 32px;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.filter-btn:hover {
+    border-color: rgba(99, 102, 241, 0.2);
+    color: #6366f1;
+    background: rgba(99, 102, 241, 0.04);
+    transform: translateY(-1px);
+}
+
+.filter-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.filter-btn:hover::before {
+    opacity: 0.05;
+}
+
+.filter-btn.active {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+}
+
+.filter-btn.active::before {
+    opacity: 0;
+}
+
+.filter-btn:active::before {
+    opacity: 0.1;
+}
+
+@keyframes ripple {
+    from {
+        transform: scale(0);
+        opacity: 0.4;
+    }
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.filter-btn .ripple {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: currentColor;
+    border-radius: 50%;
+    animation: ripple 0.6s ease-out;
+    opacity: 0;
+}
+
+/* Collapsible Section Hierarchy */
+.collapsible-main {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    border-bottom-width: 3px;
+}
+
+.collapsible-category {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    border-bottom-width: 2px;
+    padding-left: 1rem;
+}
+
+.collapsible-subcategory {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    border-bottom-width: 1px;
+    padding-left: 2rem;
+}
+
+/* Section Content Hierarchy */
+.link-grid {
+    margin-left: 1rem;
+}
+
+.subcategory-content {
+    margin-left: 2rem;
+}
+
+/* Collapsible Section Styling */
+.collapsible-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+    padding: 0.75rem 0;
+    border-bottom: 2px solid var(--color-border);
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+}
+
+.collapsible-header:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.collapse-icon {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    transition: transform 0.3s ease;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.collapsible-header:hover .collapse-icon {
+    color: var(--color-primary);
+}
+
+.collapsible-content {
+    transition: height 0.3s ease;
+}
+
+/* Section Controls */
+.section-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    justify-content: flex-end;
+}
+
+.control-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: 1.5px solid var(--color-border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* Dark Mode */
+[data-theme="dark"] .collapsible-header {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .collapsible-header:hover {
+    border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .collapse-icon {
+    color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .control-btn {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .control-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .collapsible-header {
+        padding: 0.625rem 0;
+    }
+    
+    .section-controls {
+        margin: 0.75rem 0;
+        justify-content: center;
+    }
+    
+    .control-btn {
+        padding: 0.3125rem 0.625rem;
+        font-size: 0.8125rem;
+    }
+}
+
+/* Instagram Links Styling */
+.instagram-links {
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.instagram-links h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 1rem;
+    padding: 0.625rem 0;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.instagram-links h4 {
+    font-size: 0.925rem;
+    font-weight: 600;
+    color: #4a5568;
+    margin: 1.25rem 0 0.75rem 0;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.collapse-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    margin-left: 0.5rem;
+    transition: transform 0.2s ease;
+    font-size: 0.625rem;
+    opacity: 0.4;
+    font-weight: 400;
+}
+
+.instagram-links h3:hover .collapse-icon,
+.instagram-links h4:hover .collapse-icon {
+    opacity: 0.7;
+}
+
+/* Link counter removed for cleaner design */
+
+.link-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+    .link-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin: 1rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .link-grid {
+        grid-template-columns: 1fr;
+        gap: 0.625rem;
+        margin: 0.75rem 0;
+    }
+}
+
+.link-item-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    padding-right: 125px; /* More space for hover menu */
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
+    color: #1a202c;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: visible; /* Allow hover menu to extend */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    min-height: 48px;
+    line-height: 1.4;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* Clean location indicator */
+.link-grid a .location {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-left: 0.25rem;
+}
+
+/* Hide tag tooltip - tags are searchable but not displayed */
+.link-grid a[data-tags] {
+    /* Tags are used for search only */
+}
+
+/* Visual feedback for search matches */
+.link-grid a.text-match {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), transparent);
+}
+
+.link-grid a.tag-match {
+    border-color: var(--color-accent);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), transparent);
+}
+
+/* Tag matches have no visual indicator - clean design */
+
+.link-grid a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+    transition: left var(--transition-base);
+}
+
+.link-grid a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: var(--color-primary);
+    background: var(--color-surface);
+}
+
+.link-grid a:hover::before {
+    left: 100%;
+}
+
+/* Category-specific colors - subtle accents */
+.govdip .link-item-wrapper:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.02), transparent);
+    border-color: rgba(37, 99, 235, 0.15);
+}
+
+.culture .link-item-wrapper:hover {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.02), transparent);
+    border-color: rgba(124, 58, 237, 0.15);
+}
+
+.food .link-item-wrapper:hover {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.02), transparent);
+    border-color: rgba(220, 38, 38, 0.15);
+}
+
+.travel .link-item-wrapper:hover {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.02), transparent);
+    border-color: rgba(236, 72, 153, 0.15);
+}
+
+.education .link-item-wrapper:hover {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.02), transparent);
+    border-color: rgba(139, 92, 246, 0.15);
+}
+
+/* Copy notification */
+.copy-notification {
+    position: fixed;
+    bottom: var(--space-xl);
+    right: var(--space-xl);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-success);
+    color: white;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    animation: slideIn 0.3s ease;
+    z-index: 1000;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Dark mode adjustments */
+
+[data-theme="dark"] .instagram-links {
+    background: var(--color-surface);
+}
+
+[data-theme="dark"] .link-item-wrapper {
+    background: #1a202c;
+    border-color: rgba(255, 255, 255, 0.06);
+    color: #e2e8f0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .link-item-wrapper:hover {
+    background: #2d3748;
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .search-input {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .filter-container {
+    background: transparent;
+}
+
+[data-theme="dark"] .filter-btn {
+    background: var(--color-surface-alt);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .filter-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: var(--color-surface);
+}
+
+[data-theme="dark"] .filter-btn.active {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+}
+
+[data-theme="dark"] .filter-btn::before {
+    background: currentColor;
+}
+
+[data-theme="dark"] .filter-btn:hover::before {
+    opacity: 0.1;
+}
+
+[data-theme="dark"] .filter-btn:active::before {
+    opacity: 0.2;
+}
+
+/* Smooth scroll and accessibility */
+html {
+    scroll-behavior: smooth;
+}
+
+*:focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+}
+
+::selection {
+    background: rgba(99, 102, 241, 0.15);
+    color: inherit;
+}
+
+@media (max-width: 480px) {
+    .page-content {
+        padding: 0 0.75rem;
+    }
+    
+    .instagram-links {
+        padding: 0.75rem;
+        margin: 1rem 0;
+    }
+    
+    .link-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .link-grid a {
+        padding: 0.6rem 0.8rem;
+    }
+}
+
+/* Additional improvements */
+.page-content h1 {
+    font-size: 2rem;
+    margin: 2rem 0 1rem;
+    color: var(--color-text-primary);
+}
+
+.page-content h2 {
+    font-size: 1.75rem;
+    margin: 2.5rem 0 1.5rem;
+    color: var(--color-text-primary);
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-border);
+}
+
+.page-content > p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    max-width: 800px;
+}
+
+/* Better organization for sections */
+.instagram-links + .instagram-links {
+    margin-top: 1rem;
+}
+
+/* Ensure consistent spacing */
+.link-grid:empty {
+    display: none;
+}
+
+/* Better hover states */
+.link-item-wrapper:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+    border-color: rgba(99, 102, 241, 0.2);
+    background: #fafbff;
+    z-index: 10;
+}
+
+/* Fix text overflow */
+.link-grid a {
+    min-height: 44px;
+}
+
+/* Link counter removed for cleaner design */
+
+</style>
+{{ end }}

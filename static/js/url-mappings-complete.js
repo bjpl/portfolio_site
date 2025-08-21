@@ -170,3 +170,6 @@ const urlMappingsComplete = {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = urlMappingsComplete;
 }
+
+// Make available globally for browser use
+window.urlMappings = urlMappingsComplete;

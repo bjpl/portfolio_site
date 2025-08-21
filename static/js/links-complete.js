@@ -4,8 +4,25 @@
     
     console.log('Links script starting...');
     
-    // Comprehensive URL mappings for all usernames
-    const urlMappings = {
+    // Wait for URL mappings to be available
+    function waitForMappings(callback) {
+        if (window.urlMappings) {
+            callback();
+        } else {
+            setTimeout(() => waitForMappings(callback), 50);
+        }
+    }
+    
+    // Initialize when mappings are ready
+    waitForMappings(() => {
+        console.log('URL mappings loaded, initializing links...');
+        console.log('Total mappings available:', Object.keys(window.urlMappings || {}).length);
+        initializeLinks();
+    });
+    
+    function initializeLinks() {
+    // Use URL mappings from url-mappings-complete.js
+    const urlMappings = window.urlMappings || {
         // Government & Diplomacy
         'potus': { website: 'https://www.whitehouse.gov/', youtube: 'https://www.youtube.com/@WhiteHouse' },
         'vp': { website: 'https://www.whitehouse.gov/', youtube: 'https://www.youtube.com/@WhiteHouse' },
@@ -181,6 +198,13 @@
                 youtube: urlMappings[username]?.youtube || null
             };
             
+            // Debug logging
+            console.log(`Processing @${username}:`, {
+                hasWebsite: !!urls.website,
+                hasYouTube: !!urls.youtube,
+                mappingExists: !!urlMappings[username]
+            });
+            
             // Create and add hover menu
             const hoverMenu = createHoverMenu(urls);
             link.appendChild(hoverMenu);
@@ -297,11 +321,13 @@
         console.log('Links page initialized');
     }
     
-    // Start when DOM is ready
+    // Start initialization when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         // DOM already loaded
         init();
     }
+    
+    } // End of initializeLinks function
 })();

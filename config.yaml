@@ -17,8 +17,8 @@ languages:
 
 menu:
   main:
-    - name: "Writing"
-      url: "/writing/"
+    - name: "Poetry"
+      url: "https://www.letratos.com"
       weight: 10
     - name: "Tools"
       url: "/tools/"

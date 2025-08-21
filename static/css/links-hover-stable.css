@@ -1,135 +1,108 @@
 /* Stable hover menu with proper spacing and no flashing */
 
 /* ==============================================
-   LINK WRAPPER - Keep links clickable
+   HOVER MENU STYLES ONLY - Link wrapper styled in template
    ============================================== */
-a.link-item-wrapper {
-    /* Display as block for proper sizing */
-    display: block !important;
-    position: relative !important;
-    
-    /* Fixed dimensions */
-    width: 100% !important;
-    height: 56px !important;
-    line-height: 32px !important;
-    
-    /* Padding with space for hover menu */
-    padding: 12px 16px !important;
-    padding-right: 130px !important;
-    
-    /* Text handling */
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-    
-    /* Visual design */
-    background: #ffffff !important;
-    border: 1px solid #e5e7eb !important;
-    border-radius: 12px !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-    
-    /* Text appearance */
-    color: #374151 !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    text-decoration: none !important;
-    
-    /* Transitions */
-    transition: all 0.2s ease !important;
-    cursor: pointer !important;
-}
-
-a.link-item-wrapper:hover {
-    transform: translateY(-1px) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
-    border-color: #6366f1 !important;
-    color: #4f46e5 !important;
-    background: #fafbff !important;
-}
 
 /* ==============================================
-   HOVER MENU - Stable positioning
+   HOVER MENU - Fixed spacing and hit areas
    ============================================== */
 .hover-menu {
     /* Absolute positioning inside link */
     position: absolute !important;
     top: 50% !important;
-    right: 16px !important;
+    right: 10px !important;
     transform: translateY(-50%) !important;
     
-    /* Container dimensions - auto width with padding */
-    width: auto !important;
-    height: 38px !important;
+    /* Container with fixed width for stability */
+    width: 110px !important;
+    height: 42px !important;
     
-    /* Flex layout for icons with better spacing */
+    /* Flex layout with proper spacing */
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 8px !important;  /* More space between icons */
-    padding: 6px 8px !important;  /* More padding */
+    gap: 6px !important; /* More space between icons */
+    padding: 6px 8px !important;
     
-    /* Visual design */
-    background: rgba(255, 255, 255, 0.98) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    /* Solid background for stability */
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
     border-radius: 10px !important;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
     
     /* Initially hidden */
     opacity: 0 !important;
     visibility: hidden !important;
     
-    /* Smooth transition */
-    transition: opacity 0.2s ease, visibility 0.2s ease !important;
+    /* Smooth transitions */
+    transition: opacity 0.25s ease, visibility 0.25s ease !important;
+    transition-delay: 0s !important;
     
     /* High z-index */
     z-index: 1000 !important;
     
-    /* Prevent hover menu from interfering with parent hover */
+    /* Initially no pointer events */
     pointer-events: none !important;
 }
 
-/* Show on hover - with pointer events enabled */
+/* Show on hover with proper delays */
 a.link-item-wrapper:hover .hover-menu {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
+    transition-delay: 0.15s !important; /* Slightly longer delay */
+}
+
+/* Keep menu visible when hovering */
+.hover-menu:hover {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transition-delay: 0s !important;
 }
 
 /* ==============================================
-   SOCIAL ICONS - Better spacing and stability
+   SOCIAL ICONS - Fixed spacing and hit areas
    ============================================== */
 .social-icon {
     /* Reset styles */
     all: unset !important;
     
-    /* Icon dimensions - slightly larger */
-    display: inline-flex !important;
+    /* Fixed dimensions with no overlap */
+    display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 28px !important;
-    height: 28px !important;
-    min-width: 28px !important;
-    max-width: 28px !important;
-    flex-shrink: 0 !important;
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    max-width: 30px !important;
+    flex: 0 0 30px !important;
     
-    /* Visual styling */
-    background: rgba(255, 255, 255, 0.8) !important;
-    border: 1px solid rgba(0, 0, 0, 0.05) !important;
-    border-radius: 6px !important;
+    /* Clean styling */
+    background: #f7f7f7 !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    border-radius: 8px !important;
     cursor: pointer !important;
-    transition: all 0.15s ease !important;
+    transition: all 0.2s ease !important;
     text-decoration: none !important;
     pointer-events: auto !important;
     position: relative !important;
     z-index: 1001 !important;
+    isolation: isolate !important; /* Prevent blending issues */
 }
 
-/* Hover state for icons */
+/* Hover state - no transform to prevent overlap */
 .social-icon:hover {
-    transform: scale(1.1) !important;
-    border-color: transparent !important;
+    background: #ffffff !important;
+    border-color: currentColor !important;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Active state */
+.social-icon:active {
+    transform: scale(0.95) !important;
+    box-shadow: none !important;
 }
 
 /* Icon SVGs */
@@ -139,35 +112,30 @@ a.link-item-wrapper:hover .hover-menu {
     fill: currentColor !important;
     pointer-events: none !important;
     transition: fill 0.15s ease !important;
+    opacity: 0.8 !important;
 }
 
-/* Platform-specific colors and hover states */
+.social-icon:hover svg {
+    opacity: 1 !important;
+}
+
+/* Platform-specific colors - stable */
 .social-icon.instagram {
-    color: #E4405F !important;
+    color: #E1306C !important;
 }
 
 .social-icon.instagram:hover {
-    background: #E4405F !important;
-    color: white !important;
-    box-shadow: 0 2px 8px rgba(228, 64, 95, 0.3) !important;
-}
-
-.social-icon.instagram:hover svg {
-    fill: white !important;
+    background: #fff0f4 !important;
+    border-color: #E1306C !important;
 }
 
 .social-icon.website {
-    color: #3B82F6 !important;
+    color: #4A5568 !important;
 }
 
 .social-icon.website:hover {
-    background: #3B82F6 !important;
-    color: white !important;
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
-}
-
-.social-icon.website:hover svg {
-    fill: white !important;
+    background: #f7f8fa !important;
+    border-color: #4A5568 !important;
 }
 
 .social-icon.youtube {
@@ -175,13 +143,8 @@ a.link-item-wrapper:hover .hover-menu {
 }
 
 .social-icon.youtube:hover {
-    background: #FF0000 !important;
-    color: white !important;
-    box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3) !important;
-}
-
-.social-icon.youtube:hover svg {
-    fill: white !important;
+    background: #fff0f0 !important;
+    border-color: #FF0000 !important;
 }
 
 .social-icon.disabled {
@@ -193,62 +156,54 @@ a.link-item-wrapper:hover .hover-menu {
 /* ==============================================
    HOVER STABILITY - Prevent flashing
    ============================================== */
-/* Create invisible bridge to prevent menu from disappearing */
-a.link-item-wrapper::after {
+/* Stable hover area for the entire card */
+a.link-item-wrapper {
+    isolation: isolate !important;
+}
+
+/* Extended hit area for menu stability */
+.hover-menu::after {
     content: '' !important;
     position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
-    width: 150px !important;
-    height: 100% !important;
-    z-index: 999 !important;
-    pointer-events: none !important;
+    top: -10px !important;
+    right: -10px !important;
+    bottom: -10px !important;
+    left: -10px !important;
+    z-index: -1 !important;
+    pointer-events: auto !important;
 }
 
-/* Keep hover menu visible when hovering over it */
-.hover-menu:hover {
+/* Delay hiding when mouse leaves */
+a.link-item-wrapper:not(:hover) .hover-menu {
+    transition-delay: 0.4s !important; /* Longer delay */
+}
+
+/* Keep visible if hovering menu itself */
+a.link-item-wrapper .hover-menu:hover {
     opacity: 1 !important;
     visibility: visible !important;
+    pointer-events: auto !important;
 }
 
-/* ==============================================
-   GRID LAYOUT
-   ============================================== */
-.link-grid {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
-    gap: 14px !important;
-    margin: 24px 0 !important;
-    padding: 10px !important;
-}
+/* Grid layout handled by main template - no override needed */
 
 /* ==============================================
    RESPONSIVE DESIGN
    ============================================== */
 @media (max-width: 768px) {
-    .link-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
-        gap: 12px !important;
-    }
-    
-    a.link-item-wrapper {
-        height: 52px !important;
-        padding: 10px 14px !important;
-        padding-right: 120px !important;
-    }
-    
     .hover-menu {
-        height: 36px !important;
-        right: 12px !important;
-        gap: 6px !important;
+        width: 105px !important;
+        height: 40px !important;
+        right: 8px !important;
+        gap: 5px !important;
         padding: 5px 6px !important;
     }
     
     .social-icon {
-        width: 26px !important;
-        height: 26px !important;
-        min-width: 26px !important;
-        max-width: 26px !important;
+        width: 28px !important;
+        height: 28px !important;
+        min-width: 28px !important;
+        max-width: 28px !important;
     }
     
     .social-icon svg {
@@ -258,31 +213,19 @@ a.link-item-wrapper::after {
 }
 
 @media (max-width: 480px) {
-    .link-grid {
-        grid-template-columns: 1fr !important;
-        gap: 10px !important;
-        padding: 0 !important;
-    }
-    
-    a.link-item-wrapper {
-        height: 50px !important;
-        padding: 8px 12px !important;
-        padding-right: 115px !important;
-        font-size: 13px !important;
-    }
-    
     .hover-menu {
-        height: 34px !important;
-        right: 10px !important;
-        gap: 5px !important;
+        width: 100px !important;
+        height: 38px !important;
+        right: 6px !important;
+        gap: 4px !important;
         padding: 4px 5px !important;
     }
     
     .social-icon {
-        width: 24px !important;
-        height: 24px !important;
-        min-width: 24px !important;
-        max-width: 24px !important;
+        width: 26px !important;
+        height: 26px !important;
+        min-width: 26px !important;
+        max-width: 26px !important;
     }
     
     .social-icon svg {
@@ -294,31 +237,23 @@ a.link-item-wrapper::after {
 /* ==============================================
    DARK MODE SUPPORT
    ============================================== */
-[data-theme="dark"] a.link-item-wrapper {
-    background: #1f2937 !important;
-    border-color: #374151 !important;
-    color: #e5e7eb !important;
-}
-
-[data-theme="dark"] a.link-item-wrapper:hover {
-    background: #111827 !important;
-    border-color: #6366f1 !important;
-    color: #a5b4fc !important;
-}
 
 [data-theme="dark"] .hover-menu {
-    background: rgba(31, 41, 55, 0.98) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2) !important;
+    background: rgba(31, 41, 55, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
 }
 
-[data-theme="dark"] .social-icon {
-    background: rgba(55, 65, 81, 0.8) !important;
-    border-color: rgba(255, 255, 255, 0.05) !important;
+[data-theme="dark"] .social-icon svg {
+    opacity: 0.6 !important;
 }
 
 [data-theme="dark"] .social-icon:hover {
-    border-color: transparent !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .social-icon:hover svg {
+    opacity: 0.9 !important;
 }
 
 [data-theme="dark"] .social-icon.instagram:hover {
@@ -333,32 +268,4 @@ a.link-item-wrapper::after {
     background: #FF0000 !important;
 }
 
-/* ==============================================
-   ANIMATION
-   ============================================== */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(4px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-a.link-item-wrapper {
-    animation: fadeIn 0.3s ease backwards;
-}
-
-/* Stagger animation */
-a.link-item-wrapper:nth-child(1) { animation-delay: 0.02s; }
-a.link-item-wrapper:nth-child(2) { animation-delay: 0.04s; }
-a.link-item-wrapper:nth-child(3) { animation-delay: 0.06s; }
-a.link-item-wrapper:nth-child(4) { animation-delay: 0.08s; }
-a.link-item-wrapper:nth-child(5) { animation-delay: 0.10s; }
-a.link-item-wrapper:nth-child(6) { animation-delay: 0.12s; }
-a.link-item-wrapper:nth-child(7) { animation-delay: 0.14s; }
-a.link-item-wrapper:nth-child(8) { animation-delay: 0.16s; }
-a.link-item-wrapper:nth-child(9) { animation-delay: 0.18s; }
-a.link-item-wrapper:nth-child(n+10) { animation-delay: 0.20s; }
+/* Animation handled by main template */
