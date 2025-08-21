@@ -27,13 +27,6 @@
     
     <script src="/js/lazy-load.js" defer></script>
     
-    <!-- Debug: Layout={{ .Layout }} RelPermalink={{ .RelPermalink }} -->
-    {{- if or (eq .Layout "links") (eq .RelPermalink "/me/links/") (strings.Contains .RelPermalink "/links/") -}}
-    <link rel="stylesheet" href="/css/links-unified.css">
-    <script src="/js/url-mappings-complete.js"></script>
-    <script src="/js/links-complete.js" defer></script>
-    <script src="/js/links-hover-stable.js" defer></script>
-    {{- end -}}
     
     {{/* Dark Mode Implementation - Guaranteed to work */}}
     <script>
