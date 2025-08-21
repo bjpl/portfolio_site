@@ -1,5 +1,5 @@
 [build]
-  command = "hugo --minify --cleanDestinationDir"
+  command = "rm -rf public && hugo --minify --cleanDestinationDir --gc"
   publish = "public"
   base = ""
 
@@ -8,12 +8,13 @@
   HUGO_ENV = "production"
   NODE_VERSION = "18"
   GO_VERSION = "1.21"
+  BUILD_ID = "2025-08-21-v2"
   
 [context.production]
-  command = "hugo --minify --cleanDestinationDir"
+  command = "rm -rf public && hugo --minify --cleanDestinationDir --gc"
   
 [context.branch-deploy]
-  command = "hugo --minify --cleanDestinationDir"
+  command = "rm -rf public && hugo --minify --cleanDestinationDir --gc"
 
 # Security Headers
 [[headers]]
