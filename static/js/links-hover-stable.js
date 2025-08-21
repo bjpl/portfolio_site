@@ -14,18 +14,40 @@
      * Initialize hover menus for all link items
      */
     function initHoverMenus() {
-        const linkItems = document.querySelectorAll('.link-item-wrapper');
+        // Try multiple times to ensure hover menus are created
+        let attempts = 0;
+        const maxAttempts = 10;
         
-        linkItems.forEach(link => {
-            const hoverMenu = link.querySelector('.hover-menu');
-            if (!hoverMenu) return;
+        function tryInit() {
+            const linkItems = document.querySelectorAll('.link-item-wrapper');
+            let menusFound = 0;
             
-            // Initialize state
-            hoverState.set(link, false);
+            linkItems.forEach(link => {
+                const hoverMenu = link.querySelector('.hover-menu');
+                if (!hoverMenu) return;
+                
+                menusFound++;
+                
+                // Only initialize if not already done
+                if (!hoverState.has(link)) {
+                    // Initialize state
+                    hoverState.set(link, false);
+                    
+                    // Set up event listeners
+                    setupHoverListeners(link, hoverMenu);
+                }
+            });
             
-            // Set up event listeners
-            setupHoverListeners(link, hoverMenu);
-        });
+            console.log(`Hover menus initialized: ${menusFound} found`);
+            
+            // If no menus found and we haven't exceeded attempts, try again
+            if (menusFound === 0 && attempts < maxAttempts) {
+                attempts++;
+                setTimeout(tryInit, 500);
+            }
+        }
+        
+        tryInit();
     }
     
     /**
@@ -212,4 +234,7 @@
     } else {
         init();
     }
+    
+    // Export init function for external calls
+    window.initHoverMenus = initHoverMenus;
 })();

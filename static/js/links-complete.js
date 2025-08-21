@@ -213,6 +213,12 @@
         });
         
         console.log('Finished processing links');
+        
+        // Initialize hover functionality after creating menus
+        if (typeof window.initHoverMenus === 'function') {
+            console.log('Initializing hover menu interactions');
+            setTimeout(() => window.initHoverMenus(), 100);
+        }
     }
     
     // Search functionality
