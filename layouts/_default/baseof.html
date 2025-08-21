@@ -8,8 +8,8 @@
     {{ partial "seo.html" . }}
     {{ partial "google-analytics.html" . }}
     
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/content-pages.css">
+    <link rel="stylesheet" href="/css/main.css?v={{ now.Unix }}">
+    <link rel="stylesheet" href="/css/content-pages.css?v={{ now.Unix }}">
     
     <!-- Theme Toggle (Load immediately to prevent flash) -->
     <script src="/js/theme-toggle.js"></script>
