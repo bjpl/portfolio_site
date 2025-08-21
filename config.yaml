@@ -17,9 +17,10 @@ languages:
 
 menu:
   main:
-    - name: "Poetry"
+    - name: "Letratos"
       url: "/poetry/"
       weight: 10
+      title: "Photography & Poetry"
     - name: "Teaching & Learning"
       url: "/teaching-learning/"
       weight: 20
