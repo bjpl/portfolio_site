@@ -10,13 +10,14 @@
     
     <link rel="stylesheet" href="/css/main.css?v={{ now.Unix }}">
     <link rel="stylesheet" href="/css/content-pages.css?v={{ now.Unix }}">
+    <link rel="stylesheet" href="/css/language-dropdown-fix.css?v={{ now.Unix }}">
     
     <!-- Theme Toggle (Load immediately to prevent flash) -->
     <script src="/js/theme-toggle.js"></script>
     <!-- Analytics Tracker -->
     <script src="/js/analytics-tracker.js" defer></script>
-    <!-- Enhanced Language Switcher -->
-    <script src="/js/enhanced-language-switcher.js" defer></script>
+    <!-- Fixed Language Switcher -->
+    <script src="/js/language-switcher-fix.js" defer></script>
 </head>
 <body>
     {{ partial "header.html" . }}
@@ -60,60 +61,7 @@
             }
         });
         
-        // Legacy function maintained for compatibility
-        // The enhanced language switcher will take over when loaded
-        function switchLanguage(targetLang) {
-            // If enhanced switcher is available, use it
-            if (window.languageSwitcher) {
-                window.languageSwitcher.switchLanguage(targetLang);
-                return;
-            }
-            
-            // Fallback implementation
-            const currentPath = window.location.pathname;
-            const currentLang = '{{ .Language.Lang }}';
-            
-            // Store preference
-            localStorage.setItem('preferredLanguage', targetLang);
-            
-            // Simple mapping logic
-            let targetPath = currentPath;
-            
-            if (currentLang === 'en' && targetLang === 'es') {
-                if (currentPath === '/') {
-                    targetPath = '/es/';
-                } else if (currentPath === '/photography/') {
-                    targetPath = '/es/fotografia/';
-                } else if (currentPath === '/teaching-learning/') {
-                    targetPath = '/es/ensenanza-aprendizaje/';
-                } else if (currentPath === '/me/') {
-                    targetPath = '/es/yo/';
-                } else if (currentPath === '/services/') {
-                    targetPath = '/es/servicios/';
-                } else {
-                    targetPath = '/es' + currentPath;
-                }
-            } else if (currentLang === 'es' && targetLang === 'en') {
-                if (currentPath.startsWith('/es/')) {
-                    const pathWithoutLang = currentPath.replace('/es', '');
-                    if (pathWithoutLang === '/' || pathWithoutLang === '') {
-                        targetPath = '/';
-                    } else if (pathWithoutLang === '/fotografia/') {
-                        targetPath = '/photography/';
-                    } else if (pathWithoutLang === '/ensenanza-aprendizaje/') {
-                        targetPath = '/teaching-learning/';
-                    } else if (pathWithoutLang === '/yo/') {
-                        targetPath = '/me/';
-                    } else if (pathWithoutLang === '/servicios/') {
-                        targetPath = '/services/';
-                    } else {
-                        targetPath = pathWithoutLang || '/';
-                    }
-                }
-            }
-            
-            window.location.href = targetPath;
-        }
+        // Language switching is handled by language-switcher-fix.js
     </script>
     
 </body>
