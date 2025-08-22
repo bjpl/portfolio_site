@@ -86,6 +86,8 @@ a {
 
 // Components
 @use 'components/search';
+@use 'components/language-dropdown';
+@use 'components/lang-switcher-mobile';
 
 // Utilities
 @use 'utilities/no-js';

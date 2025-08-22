@@ -24,15 +24,29 @@
                 {{ end }}
                 
                 {{/* Language Switcher */}}
-                <div class="lang-switcher">
-                    <select class="lang-switch" onchange="switchLanguage(this.value)" aria-label="Choose language">
-                        <option value="{{ .Language.Lang }}" selected>{{ .Language.LanguageName }}</option>
+                <div class="lang-switcher" role="group" aria-label="Language selection">
+                    <label for="language-select" class="sr-only">Choose language</label>
+                    <select 
+                        id="language-select"
+                        class="lang-switch" 
+                        onchange="switchLanguage(this.value)" 
+                        aria-label="Choose language"
+                        aria-describedby="lang-description"
+                    >
+                        <option value="{{ .Language.Lang }}" selected>
+                            {{ .Language.LanguageName }}
+                        </option>
                         {{ range site.Languages }}
                         {{ if ne .Lang $.Language.Lang }}
-                        <option value="{{ .Lang }}">{{ .LanguageName }}</option>
+                        <option value="{{ .Lang }}" lang="{{ .Lang }}">
+                            {{ .LanguageName }}
+                        </option>
                         {{ end }}
                         {{ end }}
                     </select>
+                    <span id="lang-description" class="sr-only">
+                        Current language: {{ .Language.LanguageName }}. Select to change language.
+                    </span>
                 </div>
                 
                 {{/* Theme Toggle */}}

@@ -15,6 +15,8 @@
     <script src="/js/theme-toggle.js"></script>
     <!-- Analytics Tracker -->
     <script src="/js/analytics-tracker.js" defer></script>
+    <!-- Enhanced Language Switcher -->
+    <script src="/js/enhanced-language-switcher.js" defer></script>
 </head>
 <body>
     {{ partial "header.html" . }}
@@ -58,71 +60,55 @@
             }
         });
         
+        // Legacy function maintained for compatibility
+        // The enhanced language switcher will take over when loaded
         function switchLanguage(targetLang) {
+            // If enhanced switcher is available, use it
+            if (window.languageSwitcher) {
+                window.languageSwitcher.switchLanguage(targetLang);
+                return;
+            }
+            
+            // Fallback implementation
             const currentPath = window.location.pathname;
             const currentLang = '{{ .Language.Lang }}';
             
-            // URL mapping for different sections
-            const urlMappings = {
-                'en': {
-                    '/': '/',
-                    '/writing/': '/writing/',
-                    '/tools/': '/tools/',
-                    '/poetry/': '/poetry/',
-                    '/photography/': '/photography/',
-                    '/teaching-learning/': '/teaching-learning/',
-                    '/me/': '/me/',
-                    '/contact/': '/contact/',
-                    '/cv/': '/cv/',
-                    '/services/': '/services/',
-                    '/admin': '/admin'
-                },
-                'es': {
-                    '/': '/es/',
-                    '/writing/': '/es/writing/',
-                    '/tools/': '/es/tools/',
-                    '/poetry/': '/es/poetry/',
-                    '/photography/': '/es/photography/',
-                    '/teaching-learning/': '/es/teaching-learning/',
-                    '/me/': '/es/me/',
-                    '/contact/': '/es/contact/',
-                    '/cv/': '/es/cv/',
-                    '/services/': '/es/servicios/',
-                    '/admin': '/admin'
-                }
-            };
-
+            // Store preference
+            localStorage.setItem('preferredLanguage', targetLang);
+            
+            // Simple mapping logic
             let targetPath = currentPath;
             
-            // If switching from English to Spanish
             if (currentLang === 'en' && targetLang === 'es') {
-                targetPath = urlMappings.es[currentPath] || '/es/';
-            }
-            // If switching from Spanish to English
-            else if (currentLang === 'es' && targetLang === 'en') {
-                // Remove /es prefix and map Spanish sections to English
+                if (currentPath === '/') {
+                    targetPath = '/es/';
+                } else if (currentPath === '/photography/') {
+                    targetPath = '/es/fotografia/';
+                } else if (currentPath === '/teaching-learning/') {
+                    targetPath = '/es/ensenanza-aprendizaje/';
+                } else if (currentPath === '/me/') {
+                    targetPath = '/es/yo/';
+                } else if (currentPath === '/services/') {
+                    targetPath = '/es/servicios/';
+                } else {
+                    targetPath = '/es' + currentPath;
+                }
+            } else if (currentLang === 'es' && targetLang === 'en') {
                 if (currentPath.startsWith('/es/')) {
                     const pathWithoutLang = currentPath.replace('/es', '');
-                    const sectionMappings = {
-                        '/writing/': '/writing/',
-                        '/tools/': '/tools/',
-                        '/think/': '/think/',
-                        '/meet/': '/meet/',
-                        '/contact/': '/contact/'
-                    };
-                    
-                    for (const [spanish, english] of Object.entries(sectionMappings)) {
-                        if (pathWithoutLang.startsWith(spanish)) {
-                            targetPath = pathWithoutLang.replace(spanish, english);
-                            break;
-                        }
-                    }
-                    
                     if (pathWithoutLang === '/' || pathWithoutLang === '') {
                         targetPath = '/';
+                    } else if (pathWithoutLang === '/fotografia/') {
+                        targetPath = '/photography/';
+                    } else if (pathWithoutLang === '/ensenanza-aprendizaje/') {
+                        targetPath = '/teaching-learning/';
+                    } else if (pathWithoutLang === '/yo/') {
+                        targetPath = '/me/';
+                    } else if (pathWithoutLang === '/servicios/') {
+                        targetPath = '/services/';
+                    } else {
+                        targetPath = pathWithoutLang || '/';
                     }
-                } else {
-                    targetPath = '/';
                 }
             }
             

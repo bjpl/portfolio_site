@@ -5,69 +5,151 @@
         {{ with .Description }}<p class="lead">{{ . }}</p>{{ end }}
     </header>
     
-    {{ .Content }}
+    {{ if .Content }}
+    <div class="page-content">
+        {{ .Content }}
+    </div>
+    {{ end }}
     
-    <div class="positions-wrapper">
-        {{ range .Pages.ByTitle }}
-        <article class="position-entry">
-            <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
-            {{ with .Description }}<p>{{ . }}</p>{{ end }}
-            <a href="{{ .Permalink }}" class="read-link">Read more →</a>
-        </article>
+    <!-- Enhanced Card Grid Layout -->
+    <div class="positions-grid">
+        {{ $theories := .Pages.ByTitle }}
+        {{ $categories := slice }}
+        
+        <!-- Group theories by category based on content -->
+        {{ range $theories }}
+            {{ $category := "" }}
+            {{ if or (in .Title "Ecological") (in .Title "Dialogic") (in .Title "Mediation") }}
+                {{ $category = "foundational" }}
+            {{ else if or (in .Title "Identity") (in .Title "Transformational") (in .Title "Person") (in .Title "Motivation") }}
+                {{ $category = "identity" }}
+            {{ else if or (in .Title "Multi-Competence") (in .Title "Translanguaging") (in .Title "Language Socialization") (in .Title "Intercultural") }}
+                {{ $category = "multilingual" }}
+            {{ else if or (in .Title "Communities") (in .Title "Collaborative") (in .Title "Institutional") }}
+                {{ $category = "social" }}
+            {{ else }}
+                {{ $category = "critical" }}
+            {{ end }}
+            
+            {{ if eq $category "foundational" }}
+                {{ if not (in $categories "foundational-section") }}
+                    {{ $categories = $categories | append "foundational-section" }}
+                    <section class="position-category">
+                        <h3 class="category-title">
+                            <span class="category-icon">🌱</span>
+                            Foundational Frameworks
+                        </h3>
+                        <div class="position-cards">
+                {{ end }}
+                        <article class="position-card">
+                            <div class="card-header">
+                                <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+                                <span class="card-badge foundational">Core</span>
+                            </div>
+                            <p class="card-description">{{ .Description | default .Summary }}</p>
+                            <div class="card-footer">
+                                <a href="{{ .Permalink }}" class="read-more" aria-label="Read more about {{ .Title }}">Explore →</a>
+                            </div>
+                        </article>
+            {{ else if eq $category "identity" }}
+                {{ if not (in $categories "identity-section") }}
+                    {{ if in $categories "foundational-section" }}
+                        </div></section>
+                    {{ end }}
+                    {{ $categories = $categories | append "identity-section" }}
+                    <section class="position-category">
+                        <h3 class="category-title">
+                            <span class="category-icon">🔄</span>
+                            Identity & Development
+                        </h3>
+                        <div class="position-cards">
+                {{ end }}
+                        <article class="position-card">
+                            <div class="card-header">
+                                <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+                                <span class="card-badge identity">Growth</span>
+                            </div>
+                            <p class="card-description">{{ .Description | default .Summary }}</p>
+                            <div class="card-footer">
+                                <a href="{{ .Permalink }}" class="read-more" aria-label="Read more about {{ .Title }}">Explore →</a>
+                            </div>
+                        </article>
+            {{ else if eq $category "multilingual" }}
+                {{ if not (in $categories "multilingual-section") }}
+                    {{ if or (in $categories "foundational-section") (in $categories "identity-section") }}
+                        </div></section>
+                    {{ end }}
+                    {{ $categories = $categories | append "multilingual-section" }}
+                    <section class="position-category">
+                        <h3 class="category-title">
+                            <span class="category-icon">🌍</span>
+                            Multilingual Perspectives
+                        </h3>
+                        <div class="position-cards">
+                {{ end }}
+                        <article class="position-card">
+                            <div class="card-header">
+                                <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+                                <span class="card-badge multilingual">Global</span>
+                            </div>
+                            <p class="card-description">{{ .Description | default .Summary }}</p>
+                            <div class="card-footer">
+                                <a href="{{ .Permalink }}" class="read-more" aria-label="Read more about {{ .Title }}">Explore →</a>
+                            </div>
+                        </article>
+            {{ else if eq $category "social" }}
+                {{ if not (in $categories "social-section") }}
+                    {{ if or (in $categories "foundational-section") (in $categories "identity-section") (in $categories "multilingual-section") }}
+                        </div></section>
+                    {{ end }}
+                    {{ $categories = $categories | append "social-section" }}
+                    <section class="position-category">
+                        <h3 class="category-title">
+                            <span class="category-icon">👥</span>
+                            Social & Institutional
+                        </h3>
+                        <div class="position-cards">
+                {{ end }}
+                        <article class="position-card">
+                            <div class="card-header">
+                                <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+                                <span class="card-badge social">Community</span>
+                            </div>
+                            <p class="card-description">{{ .Description | default .Summary }}</p>
+                            <div class="card-footer">
+                                <a href="{{ .Permalink }}" class="read-more" aria-label="Read more about {{ .Title }}">Explore →</a>
+                            </div>
+                        </article>
+            {{ else }}
+                {{ if not (in $categories "critical-section") }}
+                    {{ if or (in $categories "foundational-section") (in $categories "identity-section") (in $categories "multilingual-section") (in $categories "social-section") }}
+                        </div></section>
+                    {{ end }}
+                    {{ $categories = $categories | append "critical-section" }}
+                    <section class="position-category">
+                        <h3 class="category-title">
+                            <span class="category-icon">🎯</span>
+                            Critical Perspectives
+                        </h3>
+                        <div class="position-cards">
+                {{ end }}
+                        <article class="position-card">
+                            <div class="card-header">
+                                <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+                                <span class="card-badge critical">Analysis</span>
+                            </div>
+                            <p class="card-description">{{ .Description | default .Summary }}</p>
+                            <div class="card-footer">
+                                <a href="{{ .Permalink }}" class="read-more" aria-label="Read more about {{ .Title }}">Explore →</a>
+                            </div>
+                        </article>
+            {{ end }}
         {{ end }}
+        </div>
+        </section>
     </div>
 </div>
 
-<style>
-.positions-wrapper {
-    margin-top: 2rem;
-}
-
-.position-entry {
-    background: #fafafa;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    transition: all 0.3s ease;
-}
-
-.position-entry:hover {
-    background: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
-}
-
-.position-entry h2 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.3rem;
-}
-
-.position-entry h2 a {
-    color: #1f2937;
-    text-decoration: none;
-}
-
-.position-entry h2 a:hover {
-    color: #5b21b6;
-}
-
-.position-entry p {
-    color: #6b7280;
-    line-height: 1.6;
-    margin: 0.5rem 0;
-}
-
-.read-link {
-    color: #5b21b6;
-    text-decoration: none;
-    font-weight: 500;
-    display: inline-block;
-    margin-top: 0.5rem;
-}
-
-.read-link:hover {
-    text-decoration: underline;
-}
-</style>
+<!-- Enhanced styles for positions layout -->
+<link rel="stylesheet" href="/css/sla-positions.css">
 {{ end }}
