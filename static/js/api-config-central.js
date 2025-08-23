@@ -1,7 +1,7 @@
 /**
- * Central API Configuration
- * Single source of truth for all API endpoints and settings
- * Version: 2.0.0
+ * Universal API Configuration
+ * Single source of truth for all API endpoints and environments
+ * Version: 3.0.0 - Fixed for vocal-pony-24e3de.netlify.app
  */
 
 class CentralAPIConfig {
@@ -18,12 +18,19 @@ class CentralAPIConfig {
      * Load configuration based on environment
      */
     loadConfig() {
-        const isDev = window.location.hostname === 'localhost' || 
-                      window.location.hostname === '127.0.0.1' ||
-                      window.location.hostname.includes('localhost');
+        const hostname = window.location.hostname;
+        const protocol = window.location.protocol;
+        const port = window.location.port;
         
-        const isNetlify = window.location.hostname.includes('netlify.app') ||
-                         window.location.hostname.includes('netlify.com');
+        // Enhanced environment detection
+        const isDev = hostname === 'localhost' || 
+                      hostname === '127.0.0.1' ||
+                      hostname.startsWith('localhost') ||
+                      port === '1313' || port === '3000';
+        
+        const isNetlify = hostname.includes('netlify.app') ||
+                         hostname.includes('netlify.com') ||
+                         hostname === 'vocal-pony-24e3de.netlify.app';
 
         return {
             // Environment detection
@@ -32,20 +39,21 @@ class CentralAPIConfig {
             isNetlify: isNetlify,
             isProduction: !isDev && !isNetlify,
 
-            // API Base URLs
+            // API Base URLs - Fixed for Netlify routing
             api: {
                 development: {
                     http: 'http://localhost:3000/api',
                     ws: 'ws://localhost:3000/ws'
                 },
                 netlify: {
-                    http: '/api',
+                    // Use direct .netlify/functions path for Netlify
+                    http: '/.netlify/functions',
                     functionsPath: '/.netlify/functions',
                     ws: null // WebSocket not available on Netlify
                 },
                 production: {
                     http: '/api',
-                    ws: `wss://${window.location.host}/ws`
+                    ws: `wss://${hostname}/ws`
                 }
             },
 
@@ -53,7 +61,7 @@ class CentralAPIConfig {
             fallback: {
                 enabled: true,
                 mockResponses: true,
-                endpoints: ['/health', '/auth/login']
+                endpoints: ['/health', '/auth-login', '/auth-me']
             },
 
             // Retry configuration
@@ -65,8 +73,8 @@ class CentralAPIConfig {
 
             // Timeout configuration
             timeout: {
-                default: 10000,
-                login: 15000,
+                default: 5000,
+                login: 10000,
                 upload: 60000
             }
         };
@@ -92,11 +100,19 @@ class CentralAPIConfig {
     }
 
     /**
-     * Get full endpoint URL
+     * Get full endpoint URL with proper Netlify function mapping
      */
     getEndpointURL(endpoint, params = {}) {
         const baseURL = this.getAPIBaseURL();
-        let url = `${baseURL}${endpoint.startsWith('/') ? endpoint : '/' + endpoint}`;
+        let url;
+        
+        if (this.config.isNetlify) {
+            // Map API endpoints to Netlify functions
+            const functionName = this.mapToNetlifyFunction(endpoint);
+            url = `${baseURL}/${functionName}`;
+        } else {
+            url = `${baseURL}${endpoint.startsWith('/') ? endpoint : '/' + endpoint}`;
+        }
 
         if (Object.keys(params).length > 0) {
             const queryString = new URLSearchParams(params).toString();
@@ -104,6 +120,22 @@ class CentralAPIConfig {
         }
 
         return url;
+    }
+
+    /**
+     * Map API endpoints to Netlify function names
+     */
+    mapToNetlifyFunction(endpoint) {
+        const mappings = {
+            '/auth/login': 'auth-login',
+            '/auth/me': 'auth-me',
+            '/auth/logout': 'auth-logout',
+            '/auth/refresh': 'auth-refresh',
+            '/health': 'env-check',
+            '/contact': 'contact'
+        };
+        
+        return mappings[endpoint] || endpoint.replace(/^//, '').replace(/\//g, '-');
     }
 
     /**
@@ -139,7 +171,7 @@ class CentralAPIConfig {
     }
 
     /**
-     * Check if backend is available
+     * Check if backend is available with proper endpoint selection
      */
     async checkBackendAvailability(retryCount = 0) {
         const maxRetries = this.config.retry.attempts;
@@ -147,9 +179,19 @@ class CentralAPIConfig {
 
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000);
+            const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-            const response = await fetch(this.getEndpointURL('/health'), {
+            // Use appropriate health endpoint based on environment
+            let healthURL;
+            if (this.config.isNetlify) {
+                healthURL = '/.netlify/functions/env-check';
+            } else if (this.config.isDevelopment) {
+                healthURL = 'http://localhost:3000/api/health';
+            } else {
+                healthURL = '/api/health';
+            }
+
+            const response = await fetch(healthURL, {
                 method: 'GET',
                 signal: controller.signal,
                 cache: 'no-cache'
@@ -167,6 +209,7 @@ class CentralAPIConfig {
                 return this.checkBackendAvailability(retryCount + 1);
             }
             
+            console.warn('[API Config] Backend unavailable after all retries:', error.message);
             return false;
         }
     }
@@ -250,11 +293,16 @@ class CentralAPIConfig {
         const mockResponses = {
             '/health': { 
                 status: 'healthy', 
-                mode: 'netlify-functions',
-                environment: 'production',
-                message: 'Portfolio site API is running on Netlify Functions'
+                mode: 'demo',
+                environment: this.config.environment,
+                message: 'Demo mode - backend service unavailable'
             },
-            '/auth/login': { error: 'Authentication service temporarily unavailable.' },
+            '/auth-login': { 
+                error: 'Authentication service unavailable. Redirecting to demo mode...'
+            },
+            '/auth-me': { 
+                error: 'Token validation unavailable. Please login again.'
+            },
             '/content/projects': {
                 success: true,
                 data: [],
@@ -262,7 +310,10 @@ class CentralAPIConfig {
             }
         };
 
-        const mockResponse = mockResponses[endpoint];
+        // Handle both /auth/login and /auth-login formats
+        const normalizedEndpoint = endpoint.replace('/auth/login', '/auth-login');
+        const mockResponse = mockResponses[normalizedEndpoint] || mockResponses[endpoint];
+        
         if (mockResponse) {
             if (mockResponse.error) {
                 throw new Error(mockResponse.error);
@@ -270,7 +321,7 @@ class CentralAPIConfig {
             return Promise.resolve(mockResponse);
         }
 
-        throw new Error(`Backend unavailable and no fallback for ${endpoint}`);
+        throw new Error(`Service unavailable for ${endpoint}. Please try again later.`);
     }
 
     /**

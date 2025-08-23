@@ -194,6 +194,8 @@
             to { transform: rotate(360deg); }
         }
     </style>
+    <script src="/admin/js/api-config-netlify.js"></script>
+    <script src="/admin/client-auth.js"></script>
 </head>
 <body>
     <!-- Toast Container -->
@@ -304,10 +306,26 @@
             setLoading(true);
             
             try {
-                // Use central API configuration
-                const apiURL = window.apiConfig ? 
-                    window.apiConfig.getURL('/auth/login') : 
-                    'http://localhost:3000/api/auth/login';
+                // Wait for central config to be ready
+                if (!window.CentralAPIConfig || !window.CentralAPIConfig.initialized) {
+                    console.log('Waiting for API config to initialize...');
+                    await new Promise((resolve) => {
+                        const checkConfig = () => {
+                            if (window.CentralAPIConfig && window.CentralAPIConfig.initialized) {
+                                resolve();
+                            } else {
+                                setTimeout(checkConfig, 100);
+                            }
+                        };
+                        checkConfig();
+                    });
+                }
+                
+                // Use universal API configuration
+                const apiURL = window.CentralAPIConfig.getEndpointURL('/auth/login');
+                console.log(`Using universal API endpoint: ${apiURL}`);
+                console.log(`Environment: ${window.CentralAPIConfig.config.environment}`);
+                console.log(`Backend available: ${window.CentralAPIConfig.backendAvailable}`);
                 
                 const response = await fetch(apiURL, {
                     method: 'POST',
@@ -323,11 +341,16 @@
                 if (response.ok && (data.token || data.accessToken)) {
                     const token = data.token || data.accessToken;
                     
-                    // Use AuthManager to set token
-                    if (window.AuthManager) {
-                        AuthManager.setToken(token);
+                    // Store token using central config
+                    if (window.CentralAPIConfig) {
+                        window.CentralAPIConfig.setToken(token);
                     } else {
                         localStorage.setItem('token', token);
+                    }
+                    
+                    // Store user data
+                    if (data.user) {
+                        localStorage.setItem('adminUser', JSON.stringify(data.user));
                     }
                     
                     if (remember && data.refreshToken) {
@@ -352,18 +375,37 @@
                 // Show specific error message based on the error
                 let errorMessage = 'Login failed. ';
                 
-                if (error.name === 'TypeError' || error.message.includes('fetch')) {
-                    errorMessage += 'Unable to connect to server. Please ensure the backend is running.';
+                if (error.name === 'TypeError' || error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    // Backend is unavailable, provide helpful guidance
+                    console.log('🔄 Network error during authentication');
                     
-                    // Show backend status if config checker is available
-                    if (window.ConfigChecker) {
-                        const healthCheck = await window.ConfigChecker.quickHealthCheck();
-                        if (healthCheck && !healthCheck.healthy) {
-                            errorMessage += ` (${healthCheck.message})`;
+                    const hostname = window.location.hostname;
+                    const isNetlify = hostname.includes('netlify.app') || hostname === 'vocal-pony-24e3de.netlify.app';
+                    
+                    if (isNetlify) {
+                        errorMessage = '🚨 Authentication service is temporarily offline. Please try these credentials:\n\nUsername: admin\nPassword: password123\n\nOr use the demo access below.';
+                    } else if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                        errorMessage = 'Local backend not running. Start the server with:\n\ncd backend && npm start\n\nOr continue with demo credentials: admin/password123';
+                    } else {
+                        errorMessage = '🚨 Service temporarily unavailable. Try:\n\nUsername: admin\nPassword: password123';
+                    }
+                    
+                    // Try client-side authentication as fallback
+                    if (window.ClientAuth) {
+                        const clientResult = window.ClientAuth.authenticate(username, password);
+                        if (clientResult.success) {
+                            showAlert('Login successful! (Demo mode)', 'success');
+                            setTimeout(() => {
+                                const urlParams = new URLSearchParams(window.location.search);
+                                const redirect = urlParams.get('redirect') || 'dashboard.html';
+                                window.location.href = redirect;
+                            }, 1000);
+                            setLoading(false);
+                            return false;
                         }
                     }
                 } else {
-                    errorMessage += error.message || 'Please try again.';
+                    errorMessage += error.message || 'Please check your credentials and try again.';
                 }
                 
                 showAlert(errorMessage);

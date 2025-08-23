@@ -38,6 +38,9 @@
       "Bash(ping:*)",
       "Bash(ren:*)"
     ],
-    "deny": []
+    "deny": [],
+    "additionalDirectories": [
+      "C:\\c\\Users\\brand\\Development\\Project_Workspace"
+    ]
   }
 }

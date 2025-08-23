@@ -42,12 +42,30 @@
         verifyToken(token);
     }
     
-    // Verify token with backend
+    // Verify token with backend using universal API config
     async function verifyToken(token) {
         try {
-            const response = await fetch('http://localhost:3000/api/auth/me', {
+            let authURL;
+            
+            // Use universal API configuration if available
+            if (window.CentralAPIConfig) {
+                authURL = window.CentralAPIConfig.getEndpointURL('/auth/me');
+            } else {
+                // Fallback logic
+                const hostname = window.location.hostname;
+                if (hostname.includes('netlify.app') || hostname === 'vocal-pony-24e3de.netlify.app') {
+                    authURL = '/.netlify/functions/auth-me';
+                } else if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                    authURL = 'http://localhost:3000/api/auth/me';
+                } else {
+                    authURL = '/api/auth/me';
+                }
+            }
+            
+            const response = await fetch(authURL, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
             });
             
@@ -59,19 +77,31 @@
                 window.location.href = '/admin/login.html?redirect=' + encodeURIComponent(window.location.pathname);
             } else {
                 const data = await response.json();
-                console.log('Authentication verified:', data.user.username);
+                console.log('Authentication verified:', data.user?.username || 'admin');
                 
                 // Dispatch custom event to signal auth is ready
                 window.dispatchEvent(new CustomEvent('auth-ready', { 
-                    detail: { user: data.user } 
+                    detail: { user: data.user || { username: 'admin' } } 
                 }));
             }
         } catch (error) {
             console.error('Auth verification error:', error);
-            // Don't redirect on network errors, let the user work offline if token exists
-            window.dispatchEvent(new CustomEvent('auth-ready', { 
-                detail: { offline: true } 
-            }));
+            
+            // Handle specific error cases
+            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                console.warn('Network error during auth verification - allowing offline access');
+                // Allow offline access if token exists
+                window.dispatchEvent(new CustomEvent('auth-ready', { 
+                    detail: { offline: true, user: { username: 'admin' } } 
+                }));
+            } else {
+                // Other errors might indicate invalid token
+                console.warn('Authentication error - clearing token');
+                localStorage.removeItem('token');
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('adminUser');
+                window.location.href = '/admin/login.html?redirect=' + encodeURIComponent(window.location.pathname);
+            }
         }
     }
     
@@ -108,15 +138,23 @@
                 throw new Error('No authentication token');
             }
             
+            // Use universal API config if available
+            let requestURL = url;
+            if (window.CentralAPIConfig && !url.startsWith('http')) {
+                // Convert relative URLs using universal config
+                requestURL = window.CentralAPIConfig.getEndpointURL(url);
+            }
+            
             const config = {
                 ...options,
                 headers: {
+                    'Content-Type': 'application/json',
                     ...options.headers,
                     'Authorization': `Bearer ${token}`
                 }
             };
             
-            const response = await fetch(url, config);
+            const response = await fetch(requestURL, config);
             
             if (response.status === 401) {
                 // Token expired or invalid

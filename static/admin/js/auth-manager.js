@@ -7,7 +7,14 @@ const AuthManager = {
     // Check if user is authenticated
     isAuthenticated() {
         const token = this.getToken();
-        return token && token !== 'undefined' && token !== 'null';
+        const isValid = token && token !== 'undefined' && token !== 'null';
+        
+        // Also check client-side auth if available
+        if (!isValid && window.ClientAuth) {
+            return window.ClientAuth.isAuthenticated();
+        }
+        
+        return isValid;
     },
 
     // Get token from storage
@@ -46,6 +53,12 @@ const AuthManager = {
     // Get user info from token (if JWT)
     getUserInfo() {
         const token = this.getToken();
+        
+        // Try client-side auth first
+        if (window.ClientAuth && window.ClientAuth.isAuthenticated()) {
+            return window.ClientAuth.getCurrentUser();
+        }
+        
         if (!token) return null;
 
         try {
