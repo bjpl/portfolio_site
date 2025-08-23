@@ -1,0 +1,388 @@
+# Advanced CI/CD Pipeline with Zero-Downtime Deployment
+name: Advanced CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop, staging]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options: [development, staging, production]
+      deployment_strategy:
+        description: 'Deployment strategy'
+        required: true
+        default: 'rolling'
+        type: choice
+        options: [rolling, blue-green, canary]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Security and dependency scanning
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Docker Scout vulnerability scan
+        uses: docker/scout-action@v1
+        with:
+          command: cves
+          image: local://portfolio-app:latest
+          only-severities: critical,high
+          write-comment: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  # Build and test matrix
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [development, staging, production]
+        node-version: [18, 20]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix={{branch}}-
+            type=raw,value=${{ matrix.environment }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            NODE_ENV=${{ matrix.environment }}
+            NODE_VERSION=${{ matrix.node-version }}
+
+      - name: Run security tests
+        run: |
+          docker run --rm -v $PWD:/workspace \
+            securecodewarrior/docker-security-scanner \
+            scan /workspace
+
+      - name: Run integration tests
+        run: |
+          docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+          docker-compose -f docker-compose.test.yml down
+
+  # Performance testing
+  performance-test:
+    name: Performance Test
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start application
+        run: |
+          docker-compose up -d
+          sleep 30
+
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli
+          lhci autorun
+
+      - name: Run load tests with k6
+        run: |
+          docker run --rm -v $PWD/tests/performance:/scripts \
+            loadimpact/k6 run /scripts/load-test.js
+
+      - name: Upload performance results
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results
+          path: |
+            lighthouse-report.html
+            k6-results.json
+
+  # Zero-downtime deployment strategies
+  deploy:
+    name: Deploy (${{ github.event.inputs.deployment_strategy || 'rolling' }})
+    runs-on: ubuntu-latest
+    needs: [security-scan, build-and-test, performance-test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: ${{ github.event.inputs.environment || 'production' }}
+      url: https://portfolio.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Kubernetes
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.28.0'
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --region us-east-1 --name portfolio-cluster
+
+      - name: Rolling Deployment
+        if: github.event.inputs.deployment_strategy == 'rolling' || github.event.inputs.deployment_strategy == ''
+        run: |
+          envsubst < infrastructure/k8s/deployment.yml | kubectl apply -f -
+          kubectl rollout status deployment/portfolio-app
+          kubectl rollout history deployment/portfolio-app
+
+      - name: Blue-Green Deployment
+        if: github.event.inputs.deployment_strategy == 'blue-green'
+        run: |
+          # Deploy to green environment
+          envsubst < infrastructure/k8s/deployment-green.yml | kubectl apply -f -
+          kubectl rollout status deployment/portfolio-app-green
+          
+          # Run health checks
+          kubectl wait --for=condition=ready pod -l app=portfolio-app-green --timeout=300s
+          
+          # Switch traffic
+          kubectl patch service portfolio-app -p '{"spec":{"selector":{"version":"green"}}}'
+          
+          # Clean up blue environment
+          kubectl delete deployment portfolio-app-blue --ignore-not-found=true
+
+      - name: Canary Deployment
+        if: github.event.inputs.deployment_strategy == 'canary'
+        run: |
+          # Deploy canary version (10% traffic)
+          envsubst < infrastructure/k8s/deployment-canary.yml | kubectl apply -f -
+          kubectl rollout status deployment/portfolio-app-canary
+          
+          # Wait for metrics analysis (5 minutes)
+          sleep 300
+          
+          # Check error rate and response time
+          ERROR_RATE=$(kubectl exec -n monitoring prometheus-0 -- \
+            promtool query instant 'rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) * 100')
+          
+          if (( $(echo "$ERROR_RATE < 5" | bc -l) )); then
+            # Promote canary to full deployment
+            kubectl patch deployment portfolio-app --patch-file infrastructure/k8s/canary-promote.yml
+            kubectl delete deployment portfolio-app-canary
+          else
+            # Rollback canary
+            kubectl delete deployment portfolio-app-canary
+            exit 1
+          fi
+
+      - name: Verify deployment
+        run: |
+          kubectl get pods -l app=portfolio-app
+          kubectl get services
+          
+          # Health check
+          EXTERNAL_IP=$(kubectl get service portfolio-app -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          curl -f http://$EXTERNAL_IP/api/health
+
+      - name: Run smoke tests
+        run: |
+          npm run test:smoke
+
+  # Backup and disaster recovery
+  backup-verification:
+    name: Backup Verification
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Test backup restoration
+        run: |
+          # Create test database
+          docker run -d --name test-postgres \
+            -e POSTGRES_DB=test_restore \
+            -e POSTGRES_USER=test \
+            -e POSTGRES_PASSWORD=test \
+            postgres:15-alpine
+          
+          # Wait for database
+          sleep 30
+          
+          # Download latest backup
+          aws s3 cp s3://portfolio-backups/latest.sql ./latest-backup.sql
+          
+          # Restore backup
+          docker exec -i test-postgres \
+            psql -U test -d test_restore < latest-backup.sql
+          
+          # Verify restoration
+          docker exec test-postgres \
+            psql -U test -d test_restore -c "SELECT COUNT(*) FROM users;"
+          
+          # Cleanup
+          docker stop test-postgres
+          docker rm test-postgres
+
+  # Infrastructure provisioning
+  infrastructure:
+    name: Infrastructure as Code
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[infrastructure]')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Terraform Init
+        run: |
+          cd infrastructure/terraform
+          terraform init
+
+      - name: Terraform Plan
+        run: |
+          cd infrastructure/terraform
+          terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        run: |
+          cd infrastructure/terraform
+          terraform apply tfplan
+
+  # Monitoring and alerting setup
+  monitoring-setup:
+    name: Setup Monitoring
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy monitoring stack
+        run: |
+          kubectl apply -f infrastructure/k8s/monitoring/
+          
+          # Wait for Prometheus
+          kubectl wait --for=condition=ready pod -l app=prometheus --timeout=300s
+          
+          # Wait for Grafana
+          kubectl wait --for=condition=ready pod -l app=grafana --timeout=300s
+          
+          # Import dashboards
+          ./infrastructure/scripts/import-dashboards.sh
+
+      - name: Configure alerts
+        run: |
+          kubectl apply -f monitoring/prometheus/rules/
+          kubectl rollout restart deployment/prometheus
+
+  # Post-deployment verification
+  post-deployment:
+    name: Post-Deployment Verification
+    runs-on: ubuntu-latest
+    needs: [deploy, monitoring-setup]
+    if: always()
+    steps:
+      - name: Run end-to-end tests
+        run: |
+          npm run test:e2e
+
+      - name: Performance regression test
+        run: |
+          # Compare with baseline metrics
+          ./infrastructure/scripts/performance-comparison.sh
+
+      - name: Security scan of running application
+        run: |
+          # OWASP ZAP scan
+          docker run -t owasp/zap2docker-stable zap-baseline.py \
+            -t https://portfolio.example.com
+
+      - name: Notification
+        if: always()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: |
+            Deployment Status: ${{ job.status }}
+            Strategy: ${{ github.event.inputs.deployment_strategy || 'rolling' }}
+            Environment: ${{ github.event.inputs.environment || 'production' }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

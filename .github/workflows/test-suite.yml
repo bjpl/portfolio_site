@@ -1,0 +1,492 @@
+name: Comprehensive Test Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+env:
+  NODE_VERSION: '18'
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+jobs:
+  # Unit and Integration Tests
+  unit-integration-tests:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: portfolio_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:6
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd backend && npm ci
+
+      - name: Setup test environment
+        run: |
+          cp .env.test.example .env.test
+          cd backend && cp .env.test.example .env.test
+
+      - name: Run backend unit tests
+        run: |
+          cd backend
+          npm run test:unit
+        env:
+          NODE_ENV: test
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: portfolio_test
+          DB_USER: postgres
+          DB_PASS: postgres
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+
+      - name: Run backend integration tests
+        run: |
+          cd backend
+          npm run test:integration
+        env:
+          NODE_ENV: test
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: portfolio_test
+          DB_USER: postgres
+          DB_PASS: postgres
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+
+      - name: Run frontend unit tests
+        run: npm run test:unit
+
+      - name: Generate coverage report
+        run: |
+          cd backend
+          npm run test:coverage
+          cd ..
+          npm run test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./backend/coverage/lcov.info,./coverage/lcov.info
+          fail_ci_if_error: true
+
+      - name: Archive test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: unit-integration-test-results
+          path: |
+            backend/coverage/
+            coverage/
+            backend/test-results.xml
+            test-results.xml
+
+  # End-to-End Tests
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: unit-integration-tests
+    
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd backend && npm ci
+          npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Build application
+        run: |
+          npm run build
+          cd backend && npm run build
+
+      - name: Start application
+        run: |
+          cd backend && npm start &
+          npm run serve &
+          sleep 30
+        env:
+          NODE_ENV: test
+          PORT: 3001
+
+      - name: Wait for application to be ready
+        run: |
+          npx wait-on http://localhost:3000 http://localhost:3001 --timeout 60000
+
+      - name: Run E2E tests
+        run: npx playwright test --project=${{ matrix.browser }}
+        env:
+          PLAYWRIGHT_BROWSER: ${{ matrix.browser }}
+
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: e2e-test-results-${{ matrix.browser }}
+          path: |
+            test-results/
+            playwright-report/
+
+  # Performance Tests
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    needs: unit-integration-tests
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd backend && npm ci
+
+      - name: Build and start application
+        run: |
+          npm run build
+          cd backend && npm start &
+          npm run serve &
+          sleep 30
+        env:
+          NODE_ENV: production
+
+      - name: Wait for application to be ready
+        run: npx wait-on http://localhost:3000 http://localhost:3001 --timeout 60000
+
+      - name: Run performance tests
+        run: node tests/performance/load-testing.js
+
+      - name: Upload performance results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: performance-test-results
+          path: tests/results/
+
+      - name: Performance regression check
+        run: |
+          node scripts/performance-check.js
+        continue-on-error: true
+
+  # Security Tests
+  security-tests:
+    name: Security Tests
+    runs-on: ubuntu-latest
+    needs: unit-integration-tests
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd backend && npm ci
+
+      - name: Run security audit
+        run: |
+          npm audit --audit-level moderate
+          cd backend && npm audit --audit-level moderate
+
+      - name: Run dependency check
+        uses: securecodewarrior/github-action-add-sarif@v1
+        with:
+          sarif-file: security-scan-results.sarif
+        continue-on-error: true
+
+      - name: Start application for security tests
+        run: |
+          cd backend && npm start &
+          sleep 15
+        env:
+          NODE_ENV: test
+
+      - name: Run security tests
+        run: node tests/security/security-testing.js
+
+      - name: Upload security results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: security-test-results
+          path: tests/results/
+
+  # Visual Regression Tests
+  visual-regression-tests:
+    name: Visual Regression Tests
+    runs-on: ubuntu-latest
+    needs: unit-integration-tests
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd backend && npm ci
+
+      - name: Build and start application
+        run: |
+          npm run build
+          cd backend && npm start &
+          npm run serve &
+          sleep 30
+
+      - name: Wait for application to be ready
+        run: npx wait-on http://localhost:3000 http://localhost:3001 --timeout 60000
+
+      - name: Download baseline images
+        run: |
+          mkdir -p tests/results/visual/baseline
+          # Download from artifact storage or S3
+          # aws s3 sync s3://bucket/visual-baselines tests/results/visual/baseline
+
+      - name: Run visual regression tests
+        run: node tests/visual/visual-regression.js
+
+      - name: Upload visual test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: visual-test-results
+          path: tests/results/visual/
+
+      - name: Comment on PR with visual changes
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            try {
+              const reportPath = path.join('tests/results/visual/', fs.readdirSync('tests/results/visual/').find(f => f.includes('visual-report') && f.endsWith('.json')));
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              
+              const failedTests = report.results.filter(r => r.status === 'failed');
+              
+              if (failedTests.length > 0) {
+                const body = `## 🎨 Visual Regression Test Results
+                
+                **${failedTests.length} visual changes detected:**
+                
+                ${failedTests.map(test => `- **${test.name}**: ${test.diffPercentage}% difference`).join('\\n')}
+                
+                Please review the visual changes and update baselines if intentional.`;
+                
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: body
+                });
+              }
+            } catch (error) {
+              console.log('Could not read visual test results');
+            }
+
+  # Accessibility Tests
+  accessibility-tests:
+    name: Accessibility Tests
+    runs-on: ubuntu-latest
+    needs: unit-integration-tests
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd backend && npm ci
+
+      - name: Build and start application
+        run: |
+          npm run build
+          cd backend && npm start &
+          npm run serve &
+          sleep 30
+
+      - name: Wait for application to be ready
+        run: npx wait-on http://localhost:3000 --timeout 60000
+
+      - name: Run accessibility tests
+        run: |
+          npx pa11y-ci --sitemap http://localhost:3000/sitemap.xml --reporter json > accessibility-results.json
+        continue-on-error: true
+
+      - name: Upload accessibility results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: accessibility-test-results
+          path: accessibility-results.json
+
+  # Test Summary
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [unit-integration-tests, e2e-tests, performance-tests, security-tests, visual-regression-tests, accessibility-tests]
+    if: always()
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Generate comprehensive test report
+        run: |
+          echo "# Test Suite Results" > test-summary.md
+          echo "" >> test-summary.md
+          echo "## Unit & Integration Tests: ${{ needs.unit-integration-tests.result }}" >> test-summary.md
+          echo "## E2E Tests: ${{ needs.e2e-tests.result }}" >> test-summary.md
+          echo "## Performance Tests: ${{ needs.performance-tests.result }}" >> test-summary.md
+          echo "## Security Tests: ${{ needs.security-tests.result }}" >> test-summary.md
+          echo "## Visual Regression Tests: ${{ needs.visual-regression-tests.result }}" >> test-summary.md
+          echo "## Accessibility Tests: ${{ needs.accessibility-tests.result }}" >> test-summary.md
+
+      - name: Comment test summary on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('test-summary.md', 'utf8');
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
+
+      - name: Upload comprehensive test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: comprehensive-test-results
+          path: |
+            test-summary.md
+            */
+
+  # Deployment Tests (if tests pass)
+  deployment-tests:
+    name: Deployment Tests
+    runs-on: ubuntu-latest
+    needs: test-summary
+    if: github.ref == 'refs/heads/main' && needs.test-summary.result == 'success'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd backend && npm ci
+
+      - name: Build for production
+        run: |
+          npm run build
+          cd backend && npm run build
+
+      - name: Run deployment smoke tests
+        run: |
+          # Test production build
+          npm run serve &
+          sleep 10
+          curl -f http://localhost:3000 || exit 1
+          curl -f http://localhost:3000/health || exit 1
+
+      - name: Test Docker build
+        run: |
+          docker build -t portfolio-test .
+          docker run -d -p 8080:3000 --name portfolio-test portfolio-test
+          sleep 10
+          curl -f http://localhost:8080 || exit 1
+          docker stop portfolio-test
+          docker rm portfolio-test
+
+      - name: Notify deployment readiness
+        run: |
+          echo "🚀 All tests passed! Ready for deployment."

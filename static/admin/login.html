@@ -249,6 +249,10 @@
     </div>
     
     
+    <!-- Load central configuration first -->
+    <script src="../js/api-config-central.js"></script>
+    <script src="../js/config-checker.js"></script>
+    
     <!-- Load unified scripts -->
     <script src="js/toast.js"></script>
     <script src="js/auth-manager.js"></script>
@@ -300,12 +304,16 @@
             setLoading(true);
             
             try {
-                // Try backend first if available
-                const response = await fetch('http://localhost:3001/api/auth/login', {
+                // Use central API configuration
+                const apiURL = window.apiConfig ? 
+                    window.apiConfig.getURL('/auth/login') : 
+                    'http://localhost:3001/api/auth/login';
+                
+                const response = await fetch(apiURL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        emailOrUsername: username,
+                        email: username,  // Backend expects 'email' field
                         password: password
                     })
                 });
@@ -339,7 +347,26 @@
                     throw new Error(data.error || 'Invalid credentials');
                 }
             } catch (error) {
-                showAlert('Unable to connect to server. Please ensure the backend is running on port 3000.');
+                console.error('Login error:', error);
+                
+                // Show specific error message based on the error
+                let errorMessage = 'Login failed. ';
+                
+                if (error.name === 'TypeError' || error.message.includes('fetch')) {
+                    errorMessage += 'Unable to connect to server. Please ensure the backend is running.';
+                    
+                    // Show backend status if config checker is available
+                    if (window.ConfigChecker) {
+                        const healthCheck = await window.ConfigChecker.quickHealthCheck();
+                        if (healthCheck && !healthCheck.healthy) {
+                            errorMessage += ` (${healthCheck.message})`;
+                        }
+                    }
+                } else {
+                    errorMessage += error.message || 'Please try again.';
+                }
+                
+                showAlert(errorMessage);
                 setLoading(false);
             }
             

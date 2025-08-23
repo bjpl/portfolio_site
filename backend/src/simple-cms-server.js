@@ -17,6 +17,9 @@ const sharp = require('sharp');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Import authentication addon
+const { addAuthEndpoints } = require('./auth-addon');
+
 // Root directory for Hugo content
 const HUGO_ROOT = path.join(__dirname, '../../');
 const CONTENT_DIR = path.join(HUGO_ROOT, 'content');
@@ -481,6 +484,9 @@ async function getContentFiles(dir, baseDir = dir) {
 }
 
 // ============= SERVER START =============
+
+// Add authentication endpoints
+addAuthEndpoints(app);
 
 app.listen(PORT, () => {
     console.log(`

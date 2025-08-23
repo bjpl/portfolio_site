@@ -13,7 +13,7 @@ const APIConfig = {
         
         // Check if backend is running locally
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            return 'http://localhost:3001/api';
+            return 'http://localhost:3000/api';
         }
         
         // Default to relative API path
@@ -23,7 +23,7 @@ const APIConfig = {
     // Get WebSocket URL
     getWebSocketURL() {
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            return 'ws://localhost:3001/ws';
+            return 'ws://localhost:3000/ws';
         }
         
         // Use wss for production

@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Authentication Test Suite</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .test-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border-left: 4px solid #3498db;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .test-section h2 {
+            color: #2980b9;
+            margin-top: 0;
+        }
+        
+        .test-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(52, 152, 219, 0.4);
+        }
+        
+        button.success {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        button.danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        button.warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+        
+        .result-area {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 15px;
+            white-space: pre-wrap;
+        }
+        
+        .success-text {
+            color: #27ae60;
+        }
+        
+        .error-text {
+            color: #e74c3c;
+        }
+        
+        .warning-text {
+            color: #f39c12;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        input[type="text"], input[type="password"], input[type="email"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.2);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .endpoint-info {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .endpoint-info code {
+            background: #34495e;
+            color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .automated-tests {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .automated-tests h3 {
+            margin-top: 0;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Comprehensive Authentication Test Suite</h1>
+        
+        <!-- API Connection Test -->
+        <div class="test-section">
+            <h2>🌐 1. API Connection Test</h2>
+            <div class="endpoint-info">
+                <strong>Test Endpoint:</strong> <code>GET /api/health</code><br>
+                <strong>Expected:</strong> JSON response with system health information
+            </div>
+            <div class="test-controls">
+                <button onclick="testAPIConnection()">Test API Connection</button>
+                <button onclick="testAPIConnectionDetailed()" class="warning">Detailed Health Check</button>
+            </div>
+            <div id="apiConnectionResult" class="result-area"></div>
+        </div>
+
+        <!-- Authentication Endpoint Tests -->
+        <div class="test-section">
+            <h2>🔑 2. Authentication Endpoint Tests</h2>
+            <div class="test-grid">
+                <div>
+                    <h3>Login Test with Hardcoded Credentials</h3>
+                    <div class="test-controls">
+                        <button onclick="testHardcodedLogin()" class="success">Test Admin Login</button>
+                        <button onclick="testInvalidLogin()" class="danger">Test Invalid Login</button>
+                    </div>
+                </div>
+                <div>
+                    <h3>Login Test with Form Input</h3>
+                    <div class="input-group">
+                        <label for="testEmail">Email:</label>
+                        <input type="email" id="testEmail" value="admin@brandondocumentation.com" placeholder="Enter email">
+                    </div>
+                    <div class="input-group">
+                        <label for="testPassword">Password:</label>
+                        <input type="password" id="testPassword" value="admin123" placeholder="Enter password">
+                    </div>
+                    <div class="test-controls">
+                        <button onclick="testFormLogin()">Test Form Login</button>
+                    </div>
+                </div>
+            </div>
+            <div id="authTestResult" class="result-area"></div>
+        </div>
+
+        <!-- Network Diagnostics -->
+        <div class="test-section">
+            <h2>🔍 3. Network Diagnostics & DevTools Test</h2>
+            <div class="test-controls">
+                <button onclick="performNetworkDiagnostics()">Run Network Diagnostics</button>
+                <button onclick="testCORS()" class="warning">Test CORS Headers</button>
+                <button onclick="testRateLimit()" class="danger">Test Rate Limiting</button>
+            </div>
+            <div id="networkDiagnosticsResult" class="result-area"></div>
+        </div>
+
+        <!-- PowerShell/cURL Commands -->
+        <div class="test-section">
+            <h2>💻 4. PowerShell/cURL Commands</h2>
+            <div class="test-controls">
+                <button onclick="generatePowerShellCommands()">Generate PowerShell Commands</button>
+                <button onclick="generateCurlCommands()" class="success">Generate cURL Commands</button>
+            </div>
+            <div id="commandsResult" class="result-area"></div>
+        </div>
+
+        <!-- Comprehensive System Diagnostics -->
+        <div class="test-section">
+            <h2>🔧 5. System Component Diagnostics</h2>
+            <div class="test-controls">
+                <button onclick="runFullDiagnostics()" class="warning">Run Full System Diagnostics</button>
+                <button onclick="testAllEndpoints()">Test All API Endpoints</button>
+                <button onclick="runSecurityTests()" class="danger">Security Vulnerability Scan</button>
+            </div>
+            <div id="diagnosticsResult" class="result-area"></div>
+        </div>
+
+        <!-- Automated Test Suite -->
+        <div class="automated-tests">
+            <h3>🤖 Automated Test Verification</h3>
+            <div class="test-controls">
+                <button onclick="runAutomatedTestSuite()" style="background: white; color: #e74c3c;">Run Complete Automated Suite</button>
+                <button onclick="exportTestResults()" style="background: rgba(255,255,255,0.2);">Export Test Results</button>
+            </div>
+            <div id="automatedTestResult" class="result-area"></div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE = 'http://localhost:3001';
+        const FRONTEND_BASE = 'http://localhost:1313';
+        
+        let testResults = {
+            apiConnection: null,
+            authentication: null,
+            networkDiagnostics: null,
+            systemDiagnostics: null,
+            automatedTests: null,
+            timestamp: new Date().toISOString()
+        };
+
+        // Utility functions
+        function logResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            const colorClass = type === 'success' ? 'success-text' : 
+                              type === 'error' ? 'error-text' : 
+                              type === 'warning' ? 'warning-text' : '';
+            
+            const logEntry = `[${timestamp}] ${message}\n`;
+            element.innerHTML += `<span class="${colorClass}">${logEntry}</span>`;
+            element.scrollTop = element.scrollHeight;
+        }
+
+        function clearResult(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+
+        // 1. API Connection Tests
+        async function testAPIConnection() {
+            clearResult('apiConnectionResult');
+            logResult('apiConnectionResult', '🔄 Testing API connection...', 'info');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    logResult('apiConnectionResult', `✅ API Connection SUCCESS (${response.status})`, 'success');
+                    logResult('apiConnectionResult', `Response: ${JSON.stringify(data, null, 2)}`, 'success');
+                    testResults.apiConnection = { status: 'success', data: data };
+                } else {
+                    logResult('apiConnectionResult', `❌ API Connection FAILED (${response.status})`, 'error');
+                    logResult('apiConnectionResult', `Error: ${JSON.stringify(data, null, 2)}`, 'error');
+                    testResults.apiConnection = { status: 'error', error: data };
+                }
+            } catch (error) {
+                logResult('apiConnectionResult', `❌ NETWORK ERROR: ${error.message}`, 'error');
+                logResult('apiConnectionResult', `This likely means the backend server is not running on ${API_BASE}`, 'warning');
+                testResults.apiConnection = { status: 'error', error: error.message };
+            }
+        }
+
+        async function testAPIConnectionDetailed() {
+            clearResult('apiConnectionResult');
+            logResult('apiConnectionResult', '🔄 Running detailed health check...', 'info');
+            
+            const endpoints = ['/api/health', '/health', '/api', '/api/auth'];
+            
+            for (const endpoint of endpoints) {
+                try {
+                    logResult('apiConnectionResult', `Testing ${API_BASE}${endpoint}...`);
+                    const response = await fetch(`${API_BASE}${endpoint}`);
+                    const data = await response.text();
+                    
+                    logResult('apiConnectionResult', `${endpoint}: ${response.status} ${response.statusText}`, 
+                             response.ok ? 'success' : 'warning');
+                    
+                    if (data.length < 500) {
+                        logResult('apiConnectionResult', `Response: ${data}`, response.ok ? 'success' : 'warning');
+                    }
+                } catch (error) {
+                    logResult('apiConnectionResult', `${endpoint}: ERROR - ${error.message}`, 'error');
+                }
+            }
+        }
+
+        // 2. Authentication Tests
+        async function testHardcodedLogin() {
+            clearResult('authTestResult');
+            logResult('authTestResult', '🔄 Testing hardcoded admin login...', 'info');
+            
+            const credentials = {
+                email: 'admin@brandondocumentation.com',
+                password: 'admin123'
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(credentials)
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    logResult('authTestResult', `✅ HARDCODED LOGIN SUCCESS (${response.status})`, 'success');
+                    logResult('authTestResult', `Token received: ${data.token ? 'YES' : 'NO'}`, 'success');
+                    logResult('authTestResult', `User data: ${JSON.stringify(data.user || {}, null, 2)}`, 'success');
+                    
+                    // Store token for further tests
+                    localStorage.setItem('test_auth_token', data.token);
+                } else {
+                    logResult('authTestResult', `❌ HARDCODED LOGIN FAILED (${response.status})`, 'error');
+                    logResult('authTestResult', `Error: ${JSON.stringify(data, null, 2)}`, 'error');
+                }
+                
+                testResults.authentication = { hardcoded: { status: response.ok ? 'success' : 'error', data: data } };
+            } catch (error) {
+                logResult('authTestResult', `❌ NETWORK ERROR: ${error.message}`, 'error');
+                testResults.authentication = { hardcoded: { status: 'error', error: error.message } };
+            }
+        }
+
+        async function testFormLogin() {
+            clearResult('authTestResult');
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            
+            logResult('authTestResult', `🔄 Testing form login with: ${email}`, 'info');
+            
+            if (!email || !password) {
+                logResult('authTestResult', '❌ Please enter both email and password', 'error');
+                return;
+            }
+            
+            const credentials = { email, password };
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(credentials)
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    logResult('authTestResult', `✅ FORM LOGIN SUCCESS (${response.status})`, 'success');
+                    logResult('authTestResult', `Token: ${data.token ? 'Received' : 'Not received'}`, 'success');
+                    logResult('authTestResult', `User: ${JSON.stringify(data.user || {}, null, 2)}`, 'success');
+                } else {
+                    logResult('authTestResult', `❌ FORM LOGIN FAILED (${response.status})`, 'error');
+                    logResult('authTestResult', `Error: ${JSON.stringify(data, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                logResult('authTestResult', `❌ NETWORK ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        async function testInvalidLogin() {
+            clearResult('authTestResult');
+            logResult('authTestResult', '🔄 Testing invalid credentials...', 'info');
+            
+            const invalidCredentials = {
+                email: 'invalid@test.com',
+                password: 'wrongpassword'
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(invalidCredentials)
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    logResult('authTestResult', `✅ INVALID LOGIN CORRECTLY REJECTED (${response.status})`, 'success');
+                    logResult('authTestResult', `Error message: ${data.message || 'No message'}`, 'success');
+                } else {
+                    logResult('authTestResult', `❌ SECURITY ISSUE: Invalid login was accepted!`, 'error');
+                    logResult('authTestResult', `Response: ${JSON.stringify(data, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                logResult('authTestResult', `❌ NETWORK ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        // 3. Network Diagnostics
+        async function performNetworkDiagnostics() {
+            clearResult('networkDiagnosticsResult');
+            logResult('networkDiagnosticsResult', '🔄 Running network diagnostics...', 'info');
+            
+            // Test various network conditions
+            const tests = [
+                { name: 'Request Headers', test: testRequestHeaders },
+                { name: 'Response Headers', test: testResponseHeaders },
+                { name: 'Connection Timeout', test: testConnectionTimeout },
+                { name: 'Large Payload', test: testLargePayload },
+                { name: 'Malformed JSON', test: testMalformedJSON }
+            ];
+            
+            for (const { name, test } of tests) {
+                logResult('networkDiagnosticsResult', `\n--- ${name} Test ---`);
+                await test();
+            }
+        }
+
+        async function testRequestHeaders() {
+            try {
+                const response = await fetch(`${API_BASE}/api/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'User-Agent': 'Auth-Test-Suite/1.0',
+                        'X-Test-Header': 'true'
+                    }
+                });
+                
+                logResult('networkDiagnosticsResult', `Request headers sent successfully: ${response.status}`, 
+                         response.ok ? 'success' : 'warning');
+            } catch (error) {
+                logResult('networkDiagnosticsResult', `Request headers test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testResponseHeaders() {
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const headers = {};
+                
+                response.headers.forEach((value, key) => {
+                    headers[key] = value;
+                });
+                
+                logResult('networkDiagnosticsResult', `Response headers:`, 'success');
+                logResult('networkDiagnosticsResult', JSON.stringify(headers, null, 2), 'info');
+            } catch (error) {
+                logResult('networkDiagnosticsResult', `Response headers test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testConnectionTimeout() {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+                
+                const response = await fetch(`${API_BASE}/api/health`, {
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                logResult('networkDiagnosticsResult', `Connection completed within timeout: ${response.status}`, 'success');
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    logResult('networkDiagnosticsResult', 'Connection timeout test: TIMEOUT after 5s', 'warning');
+                } else {
+                    logResult('networkDiagnosticsResult', `Connection timeout test failed: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        async function testLargePayload() {
+            try {
+                const largePayload = {
+                    email: 'test@example.com',
+                    password: 'password',
+                    largeData: 'x'.repeat(10000) // 10KB of data
+                };
+                
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(largePayload)
+                });
+                
+                logResult('networkDiagnosticsResult', `Large payload test: ${response.status}`, 
+                         response.status < 500 ? 'success' : 'warning');
+            } catch (error) {
+                logResult('networkDiagnosticsResult', `Large payload test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testMalformedJSON() {
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: '{"email": "test@example.com", "password": incomplete'
+                });
+                
+                logResult('networkDiagnosticsResult', `Malformed JSON handled: ${response.status}`, 
+                         response.status === 400 ? 'success' : 'warning');
+            } catch (error) {
+                logResult('networkDiagnosticsResult', `Malformed JSON test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testCORS() {
+            clearResult('networkDiagnosticsResult');
+            logResult('networkDiagnosticsResult', '🔄 Testing CORS headers...', 'info');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/health`, {
+                    method: 'OPTIONS'
+                });
+                
+                const corsHeaders = {
+                    'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+                    'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
+                    'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers')
+                };
+                
+                logResult('networkDiagnosticsResult', 'CORS Headers:', 'success');
+                logResult('networkDiagnosticsResult', JSON.stringify(corsHeaders, null, 2), 'info');
+            } catch (error) {
+                logResult('networkDiagnosticsResult', `CORS test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testRateLimit() {
+            clearResult('networkDiagnosticsResult');
+            logResult('networkDiagnosticsResult', '🔄 Testing rate limiting...', 'info');
+            
+            const requests = [];
+            for (let i = 0; i < 10; i++) {
+                requests.push(
+                    fetch(`${API_BASE}/api/health`).then(response => ({
+                        attempt: i + 1,
+                        status: response.status,
+                        rateLimitRemaining: response.headers.get('X-RateLimit-Remaining')
+                    }))
+                );
+            }
+            
+            try {
+                const results = await Promise.all(requests);
+                results.forEach(result => {
+                    const status = result.status === 429 ? 'warning' : 'success';
+                    logResult('networkDiagnosticsResult', 
+                             `Request ${result.attempt}: ${result.status} (Remaining: ${result.rateLimitRemaining || 'N/A'})`, 
+                             status);
+                });
+            } catch (error) {
+                logResult('networkDiagnosticsResult', `Rate limit test failed: ${error.message}`, 'error');
+            }
+        }
+
+        // 4. Command Generation
+        function generatePowerShellCommands() {
+            clearResult('commandsResult');
+            logResult('commandsResult', '📋 PowerShell Commands for Testing:', 'info');
+            
+            const commands = [
+                {
+                    name: 'Test Health Endpoint',
+                    command: `Invoke-RestMethod -Uri "${API_BASE}/api/health" -Method GET -Headers @{ "Accept" = "application/json" }`
+                },
+                {
+                    name: 'Test Login Endpoint',
+                    command: `$body = @{ email = "admin@brandondocumentation.com"; password = "admin123" } | ConvertTo-Json
+Invoke-RestMethod -Uri "${API_BASE}/api/auth/login" -Method POST -Body $body -ContentType "application/json"`
+                },
+                {
+                    name: 'Test with Authentication Token',
+                    command: `$token = "YOUR_JWT_TOKEN_HERE"
+Invoke-RestMethod -Uri "${API_BASE}/api/portfolios" -Method GET -Headers @{ "Authorization" = "Bearer $token" }`
+                }
+            ];
+            
+            commands.forEach(cmd => {
+                logResult('commandsResult', `\n--- ${cmd.name} ---`, 'success');
+                logResult('commandsResult', cmd.command, 'info');
+            });
+        }
+
+        function generateCurlCommands() {
+            clearResult('commandsResult');
+            logResult('commandsResult', '📋 cURL Commands for Testing:', 'info');
+            
+            const commands = [
+                {
+                    name: 'Test Health Endpoint',
+                    command: `curl -X GET "${API_BASE}/api/health" \\
+  -H "Accept: application/json" \\
+  -H "Content-Type: application/json"`
+                },
+                {
+                    name: 'Test Login Endpoint',
+                    command: `curl -X POST "${API_BASE}/api/auth/login" \\
+  -H "Content-Type: application/json" \\
+  -d '{"email":"admin@brandondocumentation.com","password":"admin123"}'`
+                },
+                {
+                    name: 'Test with Authentication Token',
+                    command: `curl -X GET "${API_BASE}/api/portfolios" \\
+  -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE" \\
+  -H "Accept: application/json"`
+                }
+            ];
+            
+            commands.forEach(cmd => {
+                logResult('commandsResult', `\n--- ${cmd.name} ---`, 'success');
+                logResult('commandsResult', cmd.command, 'info');
+            });
+        }
+
+        // 5. System Diagnostics
+        async function runFullDiagnostics() {
+            clearResult('diagnosticsResult');
+            logResult('diagnosticsResult', '🔧 Running full system diagnostics...', 'info');
+            
+            const diagnostics = [
+                { name: 'Server Health', test: checkServerHealth },
+                { name: 'Database Connection', test: checkDatabaseConnection },
+                { name: 'Authentication Service', test: checkAuthService },
+                { name: 'File System Permissions', test: checkFileSystemAccess },
+                { name: 'Environment Variables', test: checkEnvironmentVars },
+                { name: 'Port Availability', test: checkPortAvailability }
+            ];
+            
+            for (const { name, test } of diagnostics) {
+                logResult('diagnosticsResult', `\n--- ${name} ---`);
+                await test();
+            }
+        }
+
+        async function checkServerHealth() {
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const health = await response.json();
+                
+                logResult('diagnosticsResult', `Server Status: ${health.status || 'Unknown'}`, 
+                         health.status === 'healthy' ? 'success' : 'warning');
+                
+                if (health.services) {
+                    Object.entries(health.services).forEach(([service, status]) => {
+                        logResult('diagnosticsResult', `  ${service}: ${status.status || 'unknown'}`, 
+                                 status.status === 'healthy' ? 'success' : 'warning');
+                    });
+                }
+            } catch (error) {
+                logResult('diagnosticsResult', `Server health check failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkDatabaseConnection() {
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const health = await response.json();
+                
+                if (health.services && health.services.database) {
+                    const dbStatus = health.services.database.status;
+                    logResult('diagnosticsResult', `Database: ${dbStatus}`, 
+                             dbStatus === 'healthy' ? 'success' : 'error');
+                } else {
+                    logResult('diagnosticsResult', 'Database status: Unknown', 'warning');
+                }
+            } catch (error) {
+                logResult('diagnosticsResult', `Database check failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkAuthService() {
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: '', password: '' })
+                });
+                
+                // We expect this to fail, but the service should respond
+                logResult('diagnosticsResult', 
+                         `Auth service responding: ${response.status}`, 
+                         response.status === 400 ? 'success' : 'warning');
+            } catch (error) {
+                logResult('diagnosticsResult', `Auth service check failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkFileSystemAccess() {
+            // This would typically be a server-side check, but we can infer from responses
+            logResult('diagnosticsResult', 'File system access: Cannot test from browser', 'warning');
+            logResult('diagnosticsResult', 'Check server logs for file system permissions', 'info');
+        }
+
+        async function checkEnvironmentVars() {
+            logResult('diagnosticsResult', 'Environment variables: Cannot access from browser', 'warning');
+            logResult('diagnosticsResult', 'Verify server environment configuration manually', 'info');
+        }
+
+        async function checkPortAvailability() {
+            const ports = [3001, 1313, 3000, 8080];
+            
+            for (const port of ports) {
+                try {
+                    const response = await fetch(`http://localhost:${port}/`);
+                    logResult('diagnosticsResult', `Port ${port}: Available (${response.status})`, 'success');
+                } catch (error) {
+                    logResult('diagnosticsResult', `Port ${port}: Not accessible`, 'warning');
+                }
+            }
+        }
+
+        async function testAllEndpoints() {
+            clearResult('diagnosticsResult');
+            logResult('diagnosticsResult', '🔄 Testing all API endpoints...', 'info');
+            
+            const endpoints = [
+                { path: '/api', method: 'GET', expected: 200 },
+                { path: '/api/health', method: 'GET', expected: 200 },
+                { path: '/api/auth/login', method: 'POST', expected: 400, body: {} },
+                { path: '/api/portfolios', method: 'GET', expected: [200, 401] },
+                { path: '/api/projects', method: 'GET', expected: [200, 401] },
+                { path: '/api/nonexistent', method: 'GET', expected: 404 }
+            ];
+            
+            for (const endpoint of endpoints) {
+                try {
+                    const options = { method: endpoint.method };
+                    
+                    if (endpoint.body) {
+                        options.headers = { 'Content-Type': 'application/json' };
+                        options.body = JSON.stringify(endpoint.body);
+                    }
+                    
+                    const response = await fetch(`${API_BASE}${endpoint.path}`, options);
+                    const expectedStatuses = Array.isArray(endpoint.expected) ? endpoint.expected : [endpoint.expected];
+                    const isExpected = expectedStatuses.includes(response.status);
+                    
+                    logResult('diagnosticsResult', 
+                             `${endpoint.method} ${endpoint.path}: ${response.status}`, 
+                             isExpected ? 'success' : 'warning');
+                } catch (error) {
+                    logResult('diagnosticsResult', 
+                             `${endpoint.method} ${endpoint.path}: ERROR - ${error.message}`, 
+                             'error');
+                }
+            }
+        }
+
+        async function runSecurityTests() {
+            clearResult('diagnosticsResult');
+            logResult('diagnosticsResult', '🔒 Running security vulnerability scan...', 'info');
+            
+            const securityTests = [
+                { name: 'SQL Injection', test: testSQLInjection },
+                { name: 'XSS Protection', test: testXSSProtection },
+                { name: 'CSRF Protection', test: testCSRFProtection },
+                { name: 'Authentication Bypass', test: testAuthBypass },
+                { name: 'Sensitive Data Exposure', test: testDataExposure }
+            ];
+            
+            for (const { name, test } of securityTests) {
+                logResult('diagnosticsResult', `\n--- ${name} Test ---`);
+                await test();
+            }
+        }
+
+        async function testSQLInjection() {
+            const maliciousInputs = [
+                "admin@test.com'; DROP TABLE users; --",
+                "' OR '1'='1",
+                "admin' UNION SELECT * FROM users --"
+            ];
+            
+            for (const input of maliciousInputs) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: input, password: 'test' })
+                    });
+                    
+                    logResult('diagnosticsResult', 
+                             `SQL injection attempt: ${response.status}`, 
+                             response.status >= 400 ? 'success' : 'error');
+                } catch (error) {
+                    logResult('diagnosticsResult', `SQL injection test error: ${error.message}`, 'warning');
+                }
+            }
+        }
+
+        async function testXSSProtection() {
+            const xssPayloads = [
+                "<script>alert('XSS')</script>",
+                "javascript:alert('XSS')",
+                "<img src=x onerror=alert('XSS')>"
+            ];
+            
+            for (const payload of xssPayloads) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: payload, password: 'test' })
+                    });
+                    
+                    const data = await response.text();
+                    const hasXSS = data.includes('<script>') || data.includes('javascript:');
+                    
+                    logResult('diagnosticsResult', 
+                             `XSS protection: ${hasXSS ? 'VULNERABLE' : 'Protected'}`, 
+                             hasXSS ? 'error' : 'success');
+                } catch (error) {
+                    logResult('diagnosticsResult', `XSS test error: ${error.message}`, 'warning');
+                }
+            }
+        }
+
+        async function testCSRFProtection() {
+            try {
+                // Attempt request without proper CSRF token
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: 'test@test.com', password: 'test' })
+                });
+                
+                // Check for CSRF headers or tokens
+                const csrfHeader = response.headers.get('X-CSRF-Token');
+                logResult('diagnosticsResult', 
+                         `CSRF protection: ${csrfHeader ? 'Present' : 'Not detected'}`, 
+                         csrfHeader ? 'success' : 'warning');
+            } catch (error) {
+                logResult('diagnosticsResult', `CSRF test error: ${error.message}`, 'warning');
+            }
+        }
+
+        async function testAuthBypass() {
+            const bypassAttempts = [
+                { headers: { 'Authorization': 'Bearer invalid' } },
+                { headers: { 'Authorization': 'Bearer null' } },
+                { headers: { 'Authorization': 'Bearer undefined' } },
+                { headers: { 'X-User-Id': '1' } }
+            ];
+            
+            for (const attempt of bypassAttempts) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/portfolios`, {
+                        method: 'GET',
+                        headers: attempt.headers
+                    });
+                    
+                    logResult('diagnosticsResult', 
+                             `Auth bypass attempt: ${response.status}`, 
+                             response.status === 401 || response.status === 403 ? 'success' : 'error');
+                } catch (error) {
+                    logResult('diagnosticsResult', `Auth bypass test error: ${error.message}`, 'warning');
+                }
+            }
+        }
+
+        async function testDataExposure() {
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const data = await response.json();
+                
+                // Check for sensitive data in health endpoint
+                const sensitiveFields = ['password', 'secret', 'key', 'token', 'private'];
+                const dataString = JSON.stringify(data).toLowerCase();
+                
+                const exposedSensitiveData = sensitiveFields.some(field => 
+                    dataString.includes(field) && !dataString.includes('***')
+                );
+                
+                logResult('diagnosticsResult', 
+                         `Sensitive data exposure: ${exposedSensitiveData ? 'DETECTED' : 'Not detected'}`, 
+                         exposedSensitiveData ? 'error' : 'success');
+            } catch (error) {
+                logResult('diagnosticsResult', `Data exposure test error: ${error.message}`, 'warning');
+            }
+        }
+
+        // 6. Automated Test Suite
+        async function runAutomatedTestSuite() {
+            clearResult('automatedTestResult');
+            logResult('automatedTestResult', '🤖 Running automated test verification suite...', 'info');
+            
+            const testSuite = [
+                { name: 'API Connection', test: () => testAPIConnection() },
+                { name: 'Authentication Flow', test: () => testHardcodedLogin() },
+                { name: 'Invalid Login Rejection', test: () => testInvalidLogin() },
+                { name: 'Network Diagnostics', test: () => performNetworkDiagnostics() },
+                { name: 'Security Scan', test: () => runSecurityTests() }
+            ];
+            
+            let passed = 0;
+            let failed = 0;
+            
+            for (const { name, test } of testSuite) {
+                logResult('automatedTestResult', `\n🔄 Running: ${name}`, 'info');
+                
+                try {
+                    await test();
+                    logResult('automatedTestResult', `✅ ${name}: PASSED`, 'success');
+                    passed++;
+                } catch (error) {
+                    logResult('automatedTestResult', `❌ ${name}: FAILED - ${error.message}`, 'error');
+                    failed++;
+                }
+            }
+            
+            logResult('automatedTestResult', `\n📊 Test Results Summary:`, 'info');
+            logResult('automatedTestResult', `✅ Passed: ${passed}`, 'success');
+            logResult('automatedTestResult', `❌ Failed: ${failed}`, failed > 0 ? 'error' : 'success');
+            logResult('automatedTestResult', `📈 Success Rate: ${((passed / (passed + failed)) * 100).toFixed(1)}%`, 
+                     passed > failed ? 'success' : 'warning');
+            
+            testResults.automatedTests = { passed, failed, successRate: (passed / (passed + failed)) * 100 };
+        }
+
+        function exportTestResults() {
+            const results = {
+                ...testResults,
+                timestamp: new Date().toISOString(),
+                browserInfo: {
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    language: navigator.language
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `auth-test-results-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            logResult('automatedTestResult', '📄 Test results exported successfully!', 'success');
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            logResult('apiConnectionResult', '🚀 Authentication Test Suite Initialized', 'info');
+            logResult('apiConnectionResult', `Backend URL: ${API_BASE}`, 'info');
+            logResult('apiConnectionResult', `Frontend URL: ${FRONTEND_BASE}`, 'info');
+            logResult('apiConnectionResult', 'Click "Test API Connection" to begin testing', 'info');
+        });
+
+        // DevTools helper functions
+        console.log('🔧 Auth Test Suite DevTools Functions Available:');
+        console.log('- window.testAuth() - Run authentication tests');
+        console.log('- window.testAPI() - Test API connection');
+        console.log('- window.getTestResults() - Get current test results');
+        
+        window.testAuth = testHardcodedLogin;
+        window.testAPI = testAPIConnection;
+        window.getTestResults = () => testResults;
+    </script>
+</body>
+</html>

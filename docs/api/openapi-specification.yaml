@@ -1,0 +1,1703 @@
+openapi: 3.0.0
+info:
+  title: Portfolio Site REST API
+  version: 2.0.0
+  description: |
+    Comprehensive REST API for Hugo-based portfolio site with content management,
+    analytics, webhooks, and GraphQL integration.
+    
+    ## Features
+    - Full CRUD operations for all content types
+    - Advanced search and filtering
+    - Real-time analytics and reporting
+    - Webhook system for integrations
+    - GraphQL endpoint for flexible queries
+    - Multi-language content support
+    - Image optimization and management
+    - SEO and metadata management
+    
+  contact:
+    name: API Support
+    email: support@portfolio.com
+    url: https://portfolio.com/support
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.portfolio.com/v2
+    description: Production server
+  - url: https://staging-api.portfolio.com/v2
+    description: Staging server
+  - url: http://localhost:3000/api/v2
+    description: Development server
+
+security:
+  - bearerAuth: []
+  - apiKey: []
+
+paths:
+  # Health and System
+  /health:
+    get:
+      tags: [System]
+      summary: Health check endpoint
+      description: Returns system health status and basic metrics
+      security: []
+      responses:
+        '200':
+          description: System is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: 'healthy'
+                timestamp: '2025-01-15T10:30:00Z'
+                uptime: 86400
+                version: '2.0.0'
+                services:
+                  database: 'connected'
+                  hugo: 'running'
+                  redis: 'connected'
+
+  # Authentication
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: User login
+      description: Authenticate user and return JWT token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: 'admin@portfolio.com'
+              password: 'securePassword123'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /auth/refresh:
+    post:
+      tags: [Authentication]
+      summary: Refresh access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        '200':
+          description: Token refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+
+  # Content Management - Blog Posts
+  /content/blog:
+    get:
+      tags: [Content - Blog]
+      summary: List blog posts
+      description: Retrieve paginated list of blog posts with filtering options
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Language'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, published, archived]
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: tag
+          in: query
+          schema:
+            type: string
+        - name: author
+          in: query
+          schema:
+            type: string
+        - name: dateFrom
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: dateTo
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Blog posts retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBlogPosts'
+
+    post:
+      tags: [Content - Blog]
+      summary: Create new blog post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBlogPostRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateBlogPostMultipart'
+      responses:
+        '201':
+          description: Blog post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /content/blog/{id}:
+    get:
+      tags: [Content - Blog]
+      summary: Get blog post by ID
+      parameters:
+        - $ref: '#/components/parameters/ContentId'
+        - $ref: '#/components/parameters/Language'
+      responses:
+        '200':
+          description: Blog post retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    put:
+      tags: [Content - Blog]
+      summary: Update blog post
+      parameters:
+        - $ref: '#/components/parameters/ContentId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBlogPostRequest'
+      responses:
+        '200':
+          description: Blog post updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    delete:
+      tags: [Content - Blog]
+      summary: Delete blog post
+      parameters:
+        - $ref: '#/components/parameters/ContentId'
+      responses:
+        '204':
+          description: Blog post deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  # Content Management - Portfolio
+  /content/portfolio:
+    get:
+      tags: [Content - Portfolio]
+      summary: List portfolio items
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Language'
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [web-development, language-learning, education, tools]
+        - name: technology
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: featured
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Portfolio items retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPortfolioItems'
+
+    post:
+      tags: [Content - Portfolio]
+      summary: Create portfolio item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePortfolioRequest'
+      responses:
+        '201':
+          description: Portfolio item created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioItem'
+
+  /content/portfolio/{id}:
+    get:
+      tags: [Content - Portfolio]
+      summary: Get portfolio item by ID
+      parameters:
+        - $ref: '#/components/parameters/ContentId'
+      responses:
+        '200':
+          description: Portfolio item retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioItem'
+
+    put:
+      tags: [Content - Portfolio]
+      summary: Update portfolio item
+      parameters:
+        - $ref: '#/components/parameters/ContentId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePortfolioRequest'
+      responses:
+        '200':
+          description: Portfolio item updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioItem'
+
+    delete:
+      tags: [Content - Portfolio]
+      summary: Delete portfolio item
+      parameters:
+        - $ref: '#/components/parameters/ContentId'
+      responses:
+        '204':
+          description: Portfolio item deleted successfully
+
+  # Search and Filtering
+  /search:
+    get:
+      tags: [Search]
+      summary: Global content search
+      description: Advanced search across all content types with full-text search
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 3
+          description: Search query
+        - name: type
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [blog, portfolio, tools, teaching, pages]
+          description: Content types to search
+        - name: language
+          in: query
+          schema:
+            type: string
+            enum: [en, es]
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [relevance, date, title, views]
+            default: relevance
+        - name: dateRange
+          in: query
+          schema:
+            type: string
+            enum: [week, month, year, all]
+            default: all
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResults'
+
+  /search/suggestions:
+    get:
+      tags: [Search]
+      summary: Get search suggestions
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 2
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 20
+            default: 10
+      responses:
+        '200':
+          description: Search suggestions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                    type:
+                      type: string
+                    count:
+                      type: integer
+
+  # Analytics and Reporting
+  /analytics/overview:
+    get:
+      tags: [Analytics]
+      summary: Get analytics overview
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [day, week, month, quarter, year]
+            default: month
+        - name: timezone
+          in: query
+          schema:
+            type: string
+            default: UTC
+      responses:
+        '200':
+          description: Analytics overview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsOverview'
+
+  /analytics/content/{id}/metrics:
+    get:
+      tags: [Analytics]
+      summary: Get content-specific metrics
+      parameters:
+        - $ref: '#/components/parameters/ContentId'
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [day, week, month]
+            default: month
+      responses:
+        '200':
+          description: Content metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentMetrics'
+
+  /analytics/reports:
+    get:
+      tags: [Analytics]
+      summary: Generate custom reports
+      parameters:
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [traffic, engagement, content-performance, user-behavior]
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [json, csv, pdf]
+            default: json
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [week, month, quarter, year]
+            default: month
+      responses:
+        '200':
+          description: Generated report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsReport'
+            text/csv:
+              schema:
+                type: string
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+
+  # Webhooks
+  /webhooks:
+    get:
+      tags: [Webhooks]
+      summary: List webhooks
+      responses:
+        '200':
+          description: Webhooks list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Webhook'
+
+    post:
+      tags: [Webhooks]
+      summary: Create webhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebhookRequest'
+      responses:
+        '201':
+          description: Webhook created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+
+  /webhooks/{id}:
+    get:
+      tags: [Webhooks]
+      summary: Get webhook by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Webhook details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+
+    put:
+      tags: [Webhooks]
+      summary: Update webhook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWebhookRequest'
+      responses:
+        '200':
+          description: Webhook updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+
+    delete:
+      tags: [Webhooks]
+      summary: Delete webhook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Webhook deleted successfully
+
+  /webhooks/{id}/test:
+    post:
+      tags: [Webhooks]
+      summary: Test webhook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Test webhook result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  status_code:
+                    type: integer
+                  response_time:
+                    type: number
+                  error_message:
+                    type: string
+
+  # GraphQL
+  /graphql:
+    post:
+      tags: [GraphQL]
+      summary: GraphQL endpoint
+      description: |
+        Flexible GraphQL endpoint for complex queries and mutations.
+        
+        Example queries:
+        ```graphql
+        query {
+          blogPosts(first: 10, where: {status: "published"}) {
+            edges {
+              node {
+                id
+                title
+                excerpt
+                publishedAt
+                tags {
+                  name
+                }
+              }
+            }
+          }
+        }
+        ```
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query:
+                  type: string
+                  description: GraphQL query
+                variables:
+                  type: object
+                  description: Query variables
+                operationName:
+                  type: string
+                  description: Operation name
+      responses:
+        '200':
+          description: GraphQL response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                  errors:
+                    type: array
+                    items:
+                      type: object
+
+  # File Management
+  /files/upload:
+    post:
+      tags: [Files]
+      summary: Upload file
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                category:
+                  type: string
+                  enum: [images, documents, media]
+                optimize:
+                  type: boolean
+                  default: true
+      responses:
+        '201':
+          description: File uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadedFile'
+
+  /files/{id}:
+    get:
+      tags: [Files]
+      summary: Get file metadata
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: File metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileMetadata'
+
+    delete:
+      tags: [Files]
+      summary: Delete file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: File deleted successfully
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  parameters:
+    ContentId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^[a-zA-Z0-9_-]+$'
+      description: Content identifier
+    
+    Page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: Page number for pagination
+    
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+      description: Number of items per page
+    
+    Language:
+      name: lang
+      in: query
+      schema:
+        type: string
+        enum: [en, es]
+        default: en
+      description: Content language
+
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        timestamp:
+          type: string
+          format: date-time
+        uptime:
+          type: number
+          description: Server uptime in seconds
+        version:
+          type: string
+        services:
+          type: object
+          properties:
+            database:
+              type: string
+              enum: [connected, disconnected, error]
+            hugo:
+              type: string
+              enum: [running, stopped, error]
+            redis:
+              type: string
+              enum: [connected, disconnected, error]
+        metrics:
+          type: object
+          properties:
+            memory_usage:
+              type: number
+            cpu_usage:
+              type: number
+            active_connections:
+              type: integer
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+          example: admin@portfolio.com
+        password:
+          type: string
+          minLength: 8
+          example: securePassword123
+
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        accessToken:
+          type: string
+          description: JWT access token
+        refreshToken:
+          type: string
+          description: JWT refresh token
+        expiresIn:
+          type: integer
+          description: Token expiration time in seconds
+
+    TokenResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        expiresIn:
+          type: integer
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [admin, editor, viewer]
+        firstName:
+          type: string
+        lastName:
+          type: string
+        avatar:
+          type: string
+          format: uri
+        isActive:
+          type: boolean
+        preferences:
+          type: object
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    BlogPost:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        slug:
+          type: string
+        excerpt:
+          type: string
+        content:
+          type: string
+        status:
+          type: string
+          enum: [draft, published, archived]
+        language:
+          type: string
+          enum: [en, es]
+        author:
+          $ref: '#/components/schemas/User'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        featuredImage:
+          type: string
+          format: uri
+        publishedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        seo:
+          $ref: '#/components/schemas/SEOMetadata'
+        metrics:
+          $ref: '#/components/schemas/ContentMetrics'
+
+    CreateBlogPostRequest:
+      type: object
+      required: [title, content, status]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        slug:
+          type: string
+          pattern: '^[a-z0-9-]+$'
+        excerpt:
+          type: string
+          maxLength: 500
+        content:
+          type: string
+          minLength: 1
+        status:
+          type: string
+          enum: [draft, published]
+        language:
+          type: string
+          enum: [en, es]
+          default: en
+        categories:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+        featuredImage:
+          type: string
+          format: uri
+        publishedAt:
+          type: string
+          format: date-time
+        seo:
+          $ref: '#/components/schemas/SEOMetadataInput'
+
+    CreateBlogPostMultipart:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateBlogPostRequest'
+        featuredImage:
+          type: string
+          format: binary
+        attachments:
+          type: array
+          items:
+            type: string
+            format: binary
+
+    UpdateBlogPostRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        slug:
+          type: string
+          pattern: '^[a-z0-9-]+$'
+        excerpt:
+          type: string
+          maxLength: 500
+        content:
+          type: string
+        status:
+          type: string
+          enum: [draft, published, archived]
+        categories:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+        featuredImage:
+          type: string
+          format: uri
+        publishedAt:
+          type: string
+          format: date-time
+        seo:
+          $ref: '#/components/schemas/SEOMetadataInput'
+
+    PortfolioItem:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+        category:
+          type: string
+          enum: [web-development, language-learning, education, tools]
+        technologies:
+          type: array
+          items:
+            type: string
+        featured:
+          type: boolean
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+        liveUrl:
+          type: string
+          format: uri
+        repositoryUrl:
+          type: string
+          format: uri
+        demoUrl:
+          type: string
+          format: uri
+        status:
+          type: string
+          enum: [active, completed, archived]
+        language:
+          type: string
+          enum: [en, es]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        seo:
+          $ref: '#/components/schemas/SEOMetadata'
+
+    CreatePortfolioRequest:
+      type: object
+      required: [title, description, category]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        slug:
+          type: string
+          pattern: '^[a-z0-9-]+$'
+        description:
+          type: string
+          minLength: 1
+          maxLength: 500
+        content:
+          type: string
+        category:
+          type: string
+          enum: [web-development, language-learning, education, tools]
+        technologies:
+          type: array
+          items:
+            type: string
+        featured:
+          type: boolean
+          default: false
+        liveUrl:
+          type: string
+          format: uri
+        repositoryUrl:
+          type: string
+          format: uri
+        demoUrl:
+          type: string
+          format: uri
+        status:
+          type: string
+          enum: [active, completed, archived]
+          default: active
+        language:
+          type: string
+          enum: [en, es]
+          default: en
+        seo:
+          $ref: '#/components/schemas/SEOMetadataInput'
+
+    UpdatePortfolioRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        slug:
+          type: string
+          pattern: '^[a-z0-9-]+$'
+        description:
+          type: string
+          maxLength: 500
+        content:
+          type: string
+        category:
+          type: string
+          enum: [web-development, language-learning, education, tools]
+        technologies:
+          type: array
+          items:
+            type: string
+        featured:
+          type: boolean
+        liveUrl:
+          type: string
+          format: uri
+        repositoryUrl:
+          type: string
+          format: uri
+        demoUrl:
+          type: string
+          format: uri
+        status:
+          type: string
+          enum: [active, completed, archived]
+        seo:
+          $ref: '#/components/schemas/SEOMetadataInput'
+
+    PaginatedBlogPosts:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlogPost'
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+
+    PaginatedPortfolioItems:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortfolioItem'
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+
+    PaginationMeta:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+        totalPages:
+          type: integer
+        totalItems:
+          type: integer
+        itemsPerPage:
+          type: integer
+        hasNext:
+          type: boolean
+        hasPrevious:
+          type: boolean
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+        itemCount:
+          type: integer
+
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+        color:
+          type: string
+        itemCount:
+          type: integer
+
+    SEOMetadata:
+      type: object
+      properties:
+        metaTitle:
+          type: string
+          maxLength: 60
+        metaDescription:
+          type: string
+          maxLength: 160
+        metaKeywords:
+          type: array
+          items:
+            type: string
+        openGraph:
+          type: object
+          properties:
+            title:
+              type: string
+            description:
+              type: string
+            image:
+              type: string
+              format: uri
+            type:
+              type: string
+              default: article
+        twitter:
+          type: object
+          properties:
+            card:
+              type: string
+              default: summary_large_image
+            title:
+              type: string
+            description:
+              type: string
+            image:
+              type: string
+              format: uri
+        structuredData:
+          type: object
+
+    SEOMetadataInput:
+      type: object
+      properties:
+        metaTitle:
+          type: string
+          maxLength: 60
+        metaDescription:
+          type: string
+          maxLength: 160
+        metaKeywords:
+          type: array
+          items:
+            type: string
+        openGraph:
+          type: object
+          properties:
+            title:
+              type: string
+            description:
+              type: string
+            image:
+              type: string
+              format: uri
+        twitter:
+          type: object
+          properties:
+            title:
+              type: string
+            description:
+              type: string
+            image:
+              type: string
+              format: uri
+
+    SearchResults:
+      type: object
+      properties:
+        query:
+          type: string
+        total:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+        facets:
+          type: object
+          properties:
+            types:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  count:
+                    type: integer
+            categories:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  count:
+                    type: integer
+            tags:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  count:
+                    type: integer
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+
+    SearchResult:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [blog, portfolio, tools, teaching, pages]
+        title:
+          type: string
+        excerpt:
+          type: string
+        url:
+          type: string
+        language:
+          type: string
+        publishedAt:
+          type: string
+          format: date-time
+        relevanceScore:
+          type: number
+        highlights:
+          type: array
+          items:
+            type: string
+
+    AnalyticsOverview:
+      type: object
+      properties:
+        period:
+          type: object
+          properties:
+            start:
+              type: string
+              format: date-time
+            end:
+              type: string
+              format: date-time
+        metrics:
+          type: object
+          properties:
+            totalViews:
+              type: integer
+            uniqueVisitors:
+              type: integer
+            bounceRate:
+              type: number
+            averageSessionDuration:
+              type: number
+            topPages:
+              type: array
+              items:
+                type: object
+                properties:
+                  path:
+                    type: string
+                  views:
+                    type: integer
+                  title:
+                    type: string
+            topReferrers:
+              type: array
+              items:
+                type: object
+                properties:
+                  source:
+                    type: string
+                  visits:
+                    type: integer
+            deviceTypes:
+              type: object
+              properties:
+                desktop:
+                  type: integer
+                mobile:
+                  type: integer
+                tablet:
+                  type: integer
+            countries:
+              type: array
+              items:
+                type: object
+                properties:
+                  country:
+                    type: string
+                  visitors:
+                    type: integer
+
+    ContentMetrics:
+      type: object
+      properties:
+        views:
+          type: integer
+        uniqueViews:
+          type: integer
+        averageTimeOnPage:
+          type: number
+        bounceRate:
+          type: number
+        socialShares:
+          type: object
+          properties:
+            total:
+              type: integer
+            twitter:
+              type: integer
+            facebook:
+              type: integer
+            linkedin:
+              type: integer
+        engagement:
+          type: object
+          properties:
+            likes:
+              type: integer
+            comments:
+              type: integer
+            bookmarks:
+              type: integer
+
+    AnalyticsReport:
+      type: object
+      properties:
+        reportId:
+          type: string
+        type:
+          type: string
+        period:
+          type: object
+          properties:
+            start:
+              type: string
+              format: date-time
+            end:
+              type: string
+              format: date-time
+        data:
+          type: object
+        generatedAt:
+          type: string
+          format: date-time
+        downloadUrl:
+          type: string
+          format: uri
+
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        url:
+          type: string
+          format: uri
+        events:
+          type: array
+          items:
+            type: string
+            enum: [content.created, content.updated, content.deleted, user.created, analytics.report]
+        secret:
+          type: string
+        isActive:
+          type: boolean
+        lastTriggered:
+          type: string
+          format: date-time
+        successCount:
+          type: integer
+        errorCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CreateWebhookRequest:
+      type: object
+      required: [name, url, events]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        url:
+          type: string
+          format: uri
+        events:
+          type: array
+          items:
+            type: string
+            enum: [content.created, content.updated, content.deleted, user.created, analytics.report]
+          minItems: 1
+        secret:
+          type: string
+          minLength: 16
+        isActive:
+          type: boolean
+          default: true
+
+    UpdateWebhookRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        url:
+          type: string
+          format: uri
+        events:
+          type: array
+          items:
+            type: string
+            enum: [content.created, content.updated, content.deleted, user.created, analytics.report]
+        secret:
+          type: string
+          minLength: 16
+        isActive:
+          type: boolean
+
+    UploadedFile:
+      type: object
+      properties:
+        id:
+          type: string
+        filename:
+          type: string
+        originalName:
+          type: string
+        mimeType:
+          type: string
+        size:
+          type: integer
+        url:
+          type: string
+          format: uri
+        thumbnailUrl:
+          type: string
+          format: uri
+        category:
+          type: string
+        metadata:
+          type: object
+        uploadedAt:
+          type: string
+          format: date-time
+
+    FileMetadata:
+      type: object
+      properties:
+        id:
+          type: string
+        filename:
+          type: string
+        originalName:
+          type: string
+        mimeType:
+          type: string
+        size:
+          type: integer
+        url:
+          type: string
+          format: uri
+        thumbnailUrl:
+          type: string
+          format: uri
+        category:
+          type: string
+        dimensions:
+          type: object
+          properties:
+            width:
+              type: integer
+            height:
+              type: integer
+        isOptimized:
+          type: boolean
+        metadata:
+          type: object
+        uploadedAt:
+          type: string
+          format: date-time
+        lastModified:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code
+        details:
+          type: object
+          description: Additional error details
+        timestamp:
+          type: string
+          format: date-time
+        requestId:
+          type: string
+
+  responses:
+    UnauthorizedError:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: 'Authentication required'
+            code: 'UNAUTHORIZED'
+            timestamp: '2025-01-15T10:30:00Z'
+
+    ForbiddenError:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: 'Insufficient permissions'
+            code: 'FORBIDDEN'
+            timestamp: '2025-01-15T10:30:00Z'
+
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: 'Resource not found'
+            code: 'NOT_FOUND'
+            timestamp: '2025-01-15T10:30:00Z'
+
+    ValidationError:
+      description: Invalid input data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: 'Validation failed'
+            code: 'VALIDATION_ERROR'
+            details:
+              email: 'Invalid email format'
+              password: 'Password must be at least 8 characters'
+            timestamp: '2025-01-15T10:30:00Z'
+
+tags:
+  - name: System
+    description: System health and monitoring
+  - name: Authentication
+    description: User authentication and authorization
+  - name: Content - Blog
+    description: Blog post management
+  - name: Content - Portfolio
+    description: Portfolio item management
+  - name: Search
+    description: Search and filtering functionality
+  - name: Analytics
+    description: Analytics and reporting
+  - name: Webhooks
+    description: Webhook management for integrations
+  - name: GraphQL
+    description: Flexible GraphQL queries
+  - name: Files
+    description: File upload and management

@@ -45,7 +45,7 @@
     // Verify token with backend
     async function verifyToken(token) {
         try {
-            const response = await fetch('http://localhost:3000/api/auth/me', {
+            const response = await fetch('http://localhost:3001/api/auth/me', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

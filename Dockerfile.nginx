@@ -1,0 +1,34 @@
+# Nginx Dockerfile with monitoring and security
+FROM nginx:1.25-alpine
+
+# Install monitoring and security tools
+RUN apk add --no-cache \
+    curl \
+    htop \
+    logrotate \
+    certbot \
+    certbot-nginx
+
+# Copy nginx configuration
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/sites/ /etc/nginx/sites-enabled/
+COPY nginx/ssl/ /etc/nginx/ssl/
+
+# Create monitoring directories
+RUN mkdir -p /var/log/nginx/monitoring \
+    /var/cache/nginx/monitoring \
+    /etc/nginx/monitoring
+
+# Copy monitoring scripts
+COPY infrastructure/scripts/nginx-metrics.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/nginx-metrics.sh
+
+# Health check for nginx
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost/health || exit 1
+
+# Expose ports
+EXPOSE 80 443 8080
+
+# Start nginx with monitoring
+CMD ["/bin/sh", "-c", "nginx -g 'daemon off;' & /usr/local/bin/nginx-metrics.sh"]

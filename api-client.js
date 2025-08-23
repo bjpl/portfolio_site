@@ -1,8 +1,26 @@
 // api-client.js - Unified API client for all Hugo management tools
 // Include this in each HTML file or as a separate script
 
-const API_BASE = 'http://localhost:3000/api';
-const WS_URL = 'ws://localhost:3001';
+// Use central configuration
+const getAPIConfig = () => {
+    if (window.CentralAPIConfig) {
+        return {
+            API_BASE: window.CentralAPIConfig.getAPIBaseURL(),
+            WS_URL: window.CentralAPIConfig.getWebSocketURL()
+        };
+    }
+    
+    // Fallback for older browsers or missing config
+    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    return {
+        API_BASE: isDev ? 'http://localhost:3001/api' : '/api',
+        WS_URL: isDev ? 'ws://localhost:3001/ws' : `wss://${window.location.host}/ws`
+    };
+};
+
+const config = getAPIConfig();
+const API_BASE = config.API_BASE;
+const WS_URL = config.WS_URL;
 
 class HugoManagementAPI {
     constructor() {

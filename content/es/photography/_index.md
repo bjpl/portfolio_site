@@ -5,6 +5,7 @@ layout: "gallery"
 menu:
   main:
     name: "Letratos"
+    identifier: "letratos-es"
     weight: 50
 ---
 

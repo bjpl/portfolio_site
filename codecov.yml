@@ -1,0 +1,85 @@
+# Codecov configuration for coverage reporting
+
+coverage:
+  # Coverage precision (2 decimal places)
+  precision: 2
+  
+  # Round coverage to nearest value
+  round: down
+  
+  # Range for color coding (red to green)
+  range: "70...100"
+  
+  # Status checks
+  status:
+    # Overall project coverage
+    project:
+      default:
+        target: 80%
+        threshold: 2%
+        if_ci_failed: error
+    
+    # Patch coverage (new code)
+    patch:
+      default:
+        target: 85%
+        threshold: 5%
+        if_ci_failed: error
+  
+  # Ignore these paths from coverage
+  ignore:
+    - "tests/**/*"
+    - "**/*.test.js"
+    - "**/*.test.ts"
+    - "**/*.spec.js"
+    - "**/*.spec.ts"
+    - "**/node_modules/**"
+    - "**/dist/**"
+    - "**/build/**"
+    - "**/public/**"
+    - "**/static/**"
+    - "backend/uploads/**"
+    - "**/*.config.js"
+    - "**/*.config.ts"
+    - "**/webpack.config.js"
+    - "**/babel.config.js"
+    - "**/jest.config.js"
+    - "**/playwright.config.js"
+    - "scripts/**"
+    - "docs/**"
+    
+comment:
+  # Disable PR comments if preferred
+  layout: "header, diff, flags, files, footer"
+  behavior: default
+  require_changes: false
+  require_base: no
+  require_head: yes
+  
+# Flags for different types of tests
+flags:
+  unit:
+    paths:
+      - src/
+      - backend/src/
+  
+  integration:
+    paths:
+      - tests/integration/
+      - backend/test/integration/
+  
+  e2e:
+    paths:
+      - tests/e2e/
+  
+  frontend:
+    paths:
+      - src/
+  
+  backend:
+    paths:
+      - backend/src/
+
+# GitHub status checks
+github_checks:
+  annotations: true

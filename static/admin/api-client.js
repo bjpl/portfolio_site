@@ -1,11 +1,23 @@
-// Unified API Client for Portfolio Admin
-const API_BASE = window.location.hostname === 'localhost' 
-    ? 'http://localhost:3000/api'
-    : '/api';
+// Unified API Client for Portfolio Admin - Using Central Configuration
+const getAPIConfig = () => {
+    if (window.CentralAPIConfig) {
+        return {
+            API_BASE: window.CentralAPIConfig.getAPIBaseURL(),
+            WS_BASE: window.CentralAPIConfig.getWebSocketURL()
+        };
+    }
+    
+    // Fallback configuration
+    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    return {
+        API_BASE: isDev ? 'http://localhost:3001/api' : '/api',
+        WS_BASE: isDev ? 'ws://localhost:3001/ws' : `wss://${window.location.host}/ws`
+    };
+};
 
-const WS_BASE = window.location.hostname === 'localhost'
-    ? 'ws://localhost:3000'
-    : `wss://${window.location.host}`;
+const config = getAPIConfig();
+const API_BASE = config.API_BASE;
+const WS_BASE = config.WS_BASE;
 
 class APIClient {
     constructor() {

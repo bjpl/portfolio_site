@@ -28,7 +28,10 @@
       "Bash(git commit:*)",
       "Bash(del:*)",
       "Bash(time curl:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(timeout:*)",
+      "Bash(set PORT=3002)",
+      "Bash(pkill:*)"
     ],
     "deny": []
   }

@@ -1,7 +1,7 @@
-# Multi-stage build for production-ready portfolio site
+# Multi-stage build for production-ready portfolio site with monitoring
 
 # Stage 1: Hugo builder
-FROM klakegg/hugo:0.111.3-ext-alpine AS hugo-builder
+FROM klakegg/hugo:0.121.1-ext-alpine AS hugo-builder
 
 WORKDIR /app
 
@@ -54,13 +54,16 @@ COPY tsconfig.json ./
 # Build frontend assets
 RUN npm run build
 
-# Stage 4: Production image
+# Stage 4: Production image with monitoring agents
 FROM node:18-alpine
 
-# Install runtime dependencies
+# Install runtime dependencies and monitoring tools
 RUN apk add --no-cache \
     curl \
     tini \
+    htop \
+    procps \
+    ca-certificates \
     && addgroup -g 1000 node \
     && adduser -u 1000 -G node -s /bin/sh -D node
 
@@ -78,18 +81,22 @@ COPY --from=frontend-builder --chown=node:node /app/dist ./public/dist
 # Copy static files and admin
 COPY --chown=node:node static ./static
 
-# Create necessary directories
-RUN mkdir -p logs uploads temp && \
-    chown -R node:node logs uploads temp
+# Create necessary directories with monitoring
+RUN mkdir -p logs uploads temp metrics config/monitoring && \
+    chown -R node:node logs uploads temp metrics config
 
-# Environment variables
+# Environment variables with monitoring
 ENV NODE_ENV=production \
     PORT=3333 \
-    HOST=0.0.0.0
+    HOST=0.0.0.0 \
+    PROMETHEUS_ENABLED=true \
+    METRICS_PORT=9090 \
+    LOG_LEVEL=info
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:${PORT}/api/health || exit 1
+# Enhanced health check with monitoring
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:${PORT}/api/health && \
+        curl -f http://localhost:${METRICS_PORT}/metrics || exit 1
 
 # Use non-root user
 USER node
