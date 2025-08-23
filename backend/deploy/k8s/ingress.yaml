@@ -1,0 +1,122 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: portfolio-backend-ingress
+  namespace: portfolio-backend
+  labels:
+    app: portfolio-backend
+    component: ingress
+  annotations:
+    # Nginx Ingress Controller annotations
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/client-body-timeout: "60"
+    nginx.ingress.kubernetes.io/client-header-timeout: "60"
+    nginx.ingress.kubernetes.io/client-max-body-size: "10m"
+    
+    # SSL/TLS Configuration
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    
+    # Rate limiting
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    
+    # CORS headers
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://portfolio.yourdomain.com"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Content-Type, Authorization, X-Requested-With"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    
+    # Security headers
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+      more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; media-src 'self'; object-src 'none'; child-src 'none'; frame-src 'none'; worker-src 'none'; frame-ancestors 'none'; form-action 'self'; base-uri 'self';";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - api.portfolio.yourdomain.com
+    secretName: portfolio-backend-tls
+  rules:
+  - host: api.portfolio.yourdomain.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: portfolio-backend-service
+            port:
+              number: 80
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: portfolio-backend-service
+            port:
+              number: 80
+      - path: /health
+        pathType: Prefix
+        backend:
+          service:
+            name: portfolio-backend-service
+            port:
+              number: 80
+
+---
+# Internal ingress for monitoring and admin tools
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: portfolio-backend-internal-ingress
+  namespace: portfolio-backend
+  labels:
+    app: portfolio-backend
+    component: internal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    
+    # Restrict access to internal networks
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+    
+    # Basic authentication for admin endpoints
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: portfolio-admin-auth
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - Portfolio Admin'
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - admin.portfolio.yourdomain.com
+    secretName: portfolio-admin-tls
+  rules:
+  - host: admin.portfolio.yourdomain.com
+    http:
+      paths:
+      - path: /metrics
+        pathType: Prefix
+        backend:
+          service:
+            name: portfolio-backend-internal
+            port:
+              number: 3333
+      - path: /admin
+        pathType: Prefix
+        backend:
+          service:
+            name: portfolio-backend-internal
+            port:
+              number: 3333

@@ -1,6 +1,6 @@
 /**
- * Universal API System - Main Entry Point
- * Complete API management solution with fallbacks and error resilience
+ * Universal API System - Enhanced Entry Point
+ * Complete API management solution with authentication, error handling, and admin features
  */
 
 // Import all API modules
@@ -8,7 +8,12 @@ const scripts = [
   '/js/api/config.js',
   '/js/api/client.js',
   '/js/api/error-boundary.js',
-  '/js/api/monitor.js'
+  '/js/api/monitor.js',
+  '/js/api/auth-manager.js',
+  '/js/api/data-service.js',
+  '/js/ui/loading-manager.js',
+  '/js/ui/error-boundary.js',
+  '/js/ui/user-context.js'
 ];
 
 // Load scripts dynamically
@@ -20,7 +25,8 @@ async function loadAPISystem() {
     // Initialize the API system
     await initializeAPISystem();
     
-    console.log('🚀 Universal API System loaded successfully');
+    console.log('🚀 Enhanced Universal API System loaded successfully');
+    console.log('✅ Features: Authentication, Data Services, Error Handling, User Context');
   } catch (error) {
     console.error('❌ Failed to load API system:', error);
     // Even if loading fails, provide basic functionality

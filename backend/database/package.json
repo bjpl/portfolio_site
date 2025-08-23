@@ -1,0 +1,56 @@
+{
+  "name": "portfolio-database",
+  "version": "1.0.0",
+  "description": "Production database solution for portfolio site",
+  "main": "index.js",
+  "scripts": {
+    "db:generate": "prisma generate --schema=./models/schema.prisma",
+    "db:push": "prisma db push --schema=./models/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema=./models/schema.prisma",
+    "db:migrate:prod": "prisma migrate deploy --schema=./models/schema.prisma",
+    "db:seed": "node seeds/seed.js",
+    "db:reset": "prisma migrate reset --schema=./models/schema.prisma --force",
+    "db:studio": "prisma studio --schema=./models/schema.prisma",
+    "db:format": "prisma format --schema=./models/schema.prisma",
+    "db:validate": "prisma validate --schema=./models/schema.prisma",
+    "db:backup": "node utils/backup.js",
+    "db:restore": "node utils/restore.js",
+    "db:health": "node utils/health-check.js",
+    "db:stats": "node utils/stats.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.8.0",
+    "prisma": "^5.8.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "validator": "^13.11.0",
+    "slugify": "^1.6.6",
+    "node-cron": "^3.0.3",
+    "compression": "^1.7.4",
+    "archiver": "^6.0.1",
+    "extract-zip": "^2.0.1",
+    "crypto": "^1.0.1",
+    "pg": "^8.11.3",
+    "mysql2": "^3.6.5",
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "@types/jest": "^29.5.8",
+    "nodemon": "^3.0.2",
+    "dotenv": "^16.3.1"
+  },
+  "keywords": [
+    "database",
+    "prisma",
+    "postgresql",
+    "portfolio",
+    "backend"
+  ],
+  "author": "Portfolio Site",
+  "license": "MIT"
+}

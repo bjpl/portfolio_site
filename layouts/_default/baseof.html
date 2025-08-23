@@ -12,6 +12,30 @@
     <link rel="stylesheet" href="/css/content-pages.css?v={{ now.Unix }}">
     <link rel="stylesheet" href="/css/language-dropdown-fix.css?v={{ now.Unix }}">
     
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#667eea">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Portfolio">
+    
+    <!-- Enhanced Universal API System -->
+    <script defer src="/js/api/index.js"></script>
+    
+    <!-- WebSocket Real-time Communication -->
+    <script defer src="/js/api/websocket-manager.js"></script>
+    
+    <!-- Admin Interface (load conditionally) -->
+    <script defer src="/js/admin/admin-interface.js"></script>
+    
+    <!-- API Demo Interface (development/demo mode) -->
+    <script defer src="/js/api-demo.js"></script>
+    
+    <!-- Enhanced Contact Form -->
+    <script defer src="/js/contact-form.js"></script>
+    
     <!-- Theme Toggle (Load immediately to prevent flash) -->
     <script src="/js/theme-toggle.js"></script>
     <!-- Analytics Tracker -->

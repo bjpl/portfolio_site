@@ -1,0 +1,698 @@
+// Portfolio Site Database Schema
+// Complete production-ready schema with all required features
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Core User Management
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  username          String?   @unique
+  firstName         String?
+  lastName          String?
+  displayName       String?
+  avatar            String?
+  bio               String?   @db.Text
+  
+  // Authentication
+  passwordHash      String?
+  emailVerified     Boolean   @default(false)
+  emailVerifiedAt   DateTime?
+  
+  // Two-Factor Authentication
+  twoFactorEnabled  Boolean   @default(false)
+  twoFactorSecret   String?
+  backupCodes       String[]  @default([])
+  
+  // OAuth
+  providers         UserProvider[]
+  
+  // Security
+  isActive          Boolean   @default(true)
+  isLocked          Boolean   @default(false)
+  lockReason        String?
+  lockedAt          DateTime?
+  lockedUntil       DateTime?
+  failedLoginCount  Int       @default(0)
+  lastFailedLogin   DateTime?
+  lastLoginAt       DateTime?
+  lastLoginIp       String?
+  
+  // Preferences
+  language          String    @default("en")
+  timezone          String    @default("UTC")
+  theme             String    @default("light")
+  notifications     Json      @default("{}")
+  
+  // Audit
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  createdBy         String?
+  updatedBy         String?
+  
+  // Relationships
+  roles             UserRole[]
+  sessions          UserSession[]
+  auditLogs         AuditLog[]
+  projects          Project[]
+  blogs             BlogPost[]
+  comments          Comment[]
+  media             MediaAsset[]
+  activities        UserActivity[]
+  
+  @@map("users")
+}
+
+// OAuth Providers
+model UserProvider {
+  id           String   @id @default(cuid())
+  userId       String
+  provider     String   // google, github, linkedin, etc.
+  providerId   String   // External provider user ID
+  accessToken  String?  @db.Text
+  refreshToken String?  @db.Text
+  expiresAt    DateTime?
+  scope        String?
+  tokenType    String?
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([provider, providerId])
+  @@map("user_providers")
+}
+
+// Role-Based Access Control
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  displayName String
+  description String?  @db.Text
+  permissions Json     @default("[]")
+  isSystem    Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  users       UserRole[]
+  
+  @@map("roles")
+}
+
+model UserRole {
+  id        String   @id @default(cuid())
+  userId    String
+  roleId    String
+  grantedBy String?
+  grantedAt DateTime @default(now())
+  expiresAt DateTime?
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, roleId])
+  @@map("user_roles")
+}
+
+// Session Management
+model UserSession {
+  id        String   @id @default(cuid())
+  userId    String
+  sessionId String   @unique
+  token     String   @unique @db.Text
+  
+  // Session Info
+  ipAddress String?
+  userAgent String?  @db.Text
+  device    String?
+  location  Json?
+  
+  // Timing
+  expiresAt DateTime
+  lastUsedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("user_sessions")
+}
+
+// Portfolio Projects
+model Project {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  subtitle    String?
+  description String   @db.Text
+  content     String   @db.Text
+  excerpt     String?  @db.Text
+  
+  // Project Details
+  status      ProjectStatus @default(DRAFT)
+  type        ProjectType   @default(WEB)
+  priority    Int           @default(0)
+  featured    Boolean       @default(false)
+  
+  // URLs and Links
+  demoUrl     String?
+  githubUrl   String?
+  liveUrl     String?
+  caseStudyUrl String?
+  
+  // SEO and Meta
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  keywords        String[] @default([])
+  ogImage         String?
+  
+  // Dates
+  startDate   DateTime?
+  endDate     DateTime?
+  publishedAt DateTime?
+  
+  // Audit
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   String
+  updatedBy   String?
+  
+  // Relationships
+  author      User           @relation(fields: [createdBy], references: [id])
+  tags        ProjectTag[]
+  skills      ProjectSkill[]
+  media       ProjectMedia[]
+  analytics   ProjectAnalytics[]
+  versions    ProjectVersion[]
+  
+  @@map("projects")
+}
+
+enum ProjectStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ProjectType {
+  WEB
+  MOBILE
+  DESKTOP
+  API
+  LIBRARY
+  TOOL
+  DESIGN
+  RESEARCH
+  OTHER
+}
+
+// Blog System
+model BlogPost {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  title       String
+  subtitle    String?
+  content     String      @db.Text
+  excerpt     String?     @db.Text
+  
+  // Blog Meta
+  status      PostStatus  @default(DRAFT)
+  type        PostType    @default(ARTICLE)
+  featured    Boolean     @default(false)
+  allowComments Boolean   @default(true)
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  keywords        String[] @default([])
+  ogImage         String?
+  
+  // Reading Stats
+  readingTime     Int?     // in minutes
+  wordCount       Int?
+  viewCount       Int      @default(0)
+  likeCount       Int      @default(0)
+  shareCount      Int      @default(0)
+  
+  // Publishing
+  publishedAt     DateTime?
+  scheduledAt     DateTime?
+  
+  // Audit
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  createdBy       String
+  updatedBy       String?
+  
+  // Relationships
+  author          User         @relation(fields: [createdBy], references: [id])
+  tags            BlogTag[]
+  categories      BlogCategory[]
+  comments        Comment[]
+  media           BlogMedia[]
+  analytics       BlogAnalytics[]
+  versions        BlogVersion[]
+  
+  @@map("blog_posts")
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+  ARCHIVED
+}
+
+enum PostType {
+  ARTICLE
+  TUTORIAL
+  CASE_STUDY
+  ANNOUNCEMENT
+  PERSONAL
+  TECHNICAL
+}
+
+// Taxonomies
+model Tag {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  color       String?  @default("#3B82F6")
+  
+  // Usage stats
+  projectCount Int     @default(0)
+  blogCount    Int     @default(0)
+  
+  // Audit
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relationships
+  projects    ProjectTag[]
+  blogs       BlogTag[]
+  
+  @@map("tags")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  color       String?  @default("#10B981")
+  parentId    String?
+  
+  // Hierarchy
+  parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+  
+  // Usage stats
+  postCount   Int        @default(0)
+  
+  // Audit
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  // Relationships
+  blogs       BlogCategory[]
+  
+  @@map("categories")
+}
+
+model Skill {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  category    SkillCategory
+  level       SkillLevel  @default(INTERMEDIATE)
+  description String?     @db.Text
+  color       String?     @default("#8B5CF6")
+  icon        String?
+  
+  // Usage stats
+  projectCount Int        @default(0)
+  
+  // Audit
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  // Relationships
+  projects    ProjectSkill[]
+  
+  @@map("skills")
+}
+
+enum SkillCategory {
+  FRONTEND
+  BACKEND
+  DATABASE
+  DEVOPS
+  MOBILE
+  DESIGN
+  TOOLS
+  LANGUAGES
+  FRAMEWORKS
+  OTHER
+}
+
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+// Junction Tables
+model ProjectTag {
+  id        String  @id @default(cuid())
+  projectId String
+  tagId     String
+  
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@unique([projectId, tagId])
+  @@map("project_tags")
+}
+
+model ProjectSkill {
+  id        String  @id @default(cuid())
+  projectId String
+  skillId   String
+  
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  skill     Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  
+  @@unique([projectId, skillId])
+  @@map("project_skills")
+}
+
+model BlogTag {
+  id     String   @id @default(cuid())
+  postId String
+  tagId  String
+  
+  post   BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@unique([postId, tagId])
+  @@map("blog_tags")
+}
+
+model BlogCategory {
+  id         String   @id @default(cuid())
+  postId     String
+  categoryId String
+  
+  post       BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  @@unique([postId, categoryId])
+  @@map("blog_categories")
+}
+
+// Comments and Interactions
+model Comment {
+  id        String        @id @default(cuid())
+  content   String        @db.Text
+  status    CommentStatus @default(PENDING)
+  
+  // Relations
+  postId    String?
+  parentId  String?
+  authorId  String
+  
+  // Audit
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  
+  // Relationships
+  post      BlogPost?     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent    Comment?      @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[]     @relation("CommentReplies")
+  author    User          @relation(fields: [authorId], references: [id])
+  
+  @@map("comments")
+}
+
+enum CommentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SPAM
+}
+
+// Media Management
+model MediaAsset {
+  id          String    @id @default(cuid())
+  filename    String
+  originalName String
+  mimeType    String
+  size        Int       // in bytes
+  width       Int?
+  height      Int?
+  duration    Int?      // for videos/audio in seconds
+  
+  // Storage
+  url         String
+  thumbnailUrl String?
+  cdnUrl      String?
+  path        String
+  bucket      String?
+  
+  // Metadata
+  alt         String?
+  caption     String?  @db.Text
+  description String?  @db.Text
+  tags        String[] @default([])
+  
+  // SEO
+  title       String?
+  keywords    String[] @default([])
+  
+  // Usage tracking
+  downloadCount Int    @default(0)
+  viewCount     Int    @default(0)
+  
+  // Audit
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  uploadedBy  String
+  
+  // Relationships
+  uploader    User           @relation(fields: [uploadedBy], references: [id])
+  projects    ProjectMedia[]
+  blogs       BlogMedia[]
+  
+  @@map("media_assets")
+}
+
+model ProjectMedia {
+  id        String     @id @default(cuid())
+  projectId String
+  mediaId   String
+  type      MediaType  @default(IMAGE)
+  order     Int        @default(0)
+  
+  project   Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  media     MediaAsset @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  
+  @@unique([projectId, mediaId])
+  @@map("project_media")
+}
+
+model BlogMedia {
+  id      String     @id @default(cuid())
+  postId  String
+  mediaId String
+  type    MediaType  @default(IMAGE)
+  order   Int        @default(0)
+  
+  post    BlogPost   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  media   MediaAsset @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  
+  @@unique([postId, mediaId])
+  @@map("blog_media")
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+  ARCHIVE
+  OTHER
+}
+
+// Analytics and Tracking
+model ProjectAnalytics {
+  id        String   @id @default(cuid())
+  projectId String
+  event     String
+  data      Json     @default("{}")
+  
+  // Tracking
+  ipAddress String?
+  userAgent String?  @db.Text
+  referrer  String?
+  country   String?
+  city      String?
+  
+  timestamp DateTime @default(now())
+  
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  @@map("project_analytics")
+}
+
+model BlogAnalytics {
+  id        String   @id @default(cuid())
+  postId    String
+  event     String
+  data      Json     @default("{}")
+  
+  // Tracking
+  ipAddress String?
+  userAgent String?  @db.Text
+  referrer  String?
+  country   String?
+  city      String?
+  
+  timestamp DateTime @default(now())
+  
+  post      BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  @@map("blog_analytics")
+}
+
+// Content Versioning
+model ProjectVersion {
+  id        String   @id @default(cuid())
+  projectId String
+  version   Int
+  title     String
+  content   String   @db.Text
+  changes   Json     @default("{}")
+  
+  createdAt DateTime @default(now())
+  createdBy String
+  
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  @@unique([projectId, version])
+  @@map("project_versions")
+}
+
+model BlogVersion {
+  id      String   @id @default(cuid())
+  postId  String
+  version Int
+  title   String
+  content String   @db.Text
+  changes Json     @default("{}")
+  
+  createdAt DateTime @default(now())
+  createdBy String
+  
+  post    BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  @@unique([postId, version])
+  @@map("blog_versions")
+}
+
+// User Activity Logging
+model UserActivity {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  resource  String?
+  resourceId String?
+  details   Json     @default("{}")
+  
+  // Tracking
+  ipAddress String?
+  userAgent String?  @db.Text
+  
+  timestamp DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("user_activities")
+}
+
+// Audit Logging
+model AuditLog {
+  id           String   @id @default(cuid())
+  action       String
+  tableName    String
+  recordId     String
+  oldValues    Json?
+  newValues    Json?
+  changedFields String[] @default([])
+  
+  // Actor
+  userId       String?
+  ipAddress    String?
+  userAgent    String?  @db.Text
+  
+  timestamp    DateTime @default(now())
+  
+  user         User?    @relation(fields: [userId], references: [id])
+  
+  @@map("audit_logs")
+}
+
+// System Configuration
+model Setting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       Json
+  type        String   @default("string")
+  category    String   @default("general")
+  description String?  @db.Text
+  isPublic    Boolean  @default(false)
+  isEditable  Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("settings")
+}
+
+// Indexes for performance
+// User indexes
+@@index([User.email])
+@@index([User.username])
+@@index([User.isActive])
+
+// Project indexes
+@@index([Project.status])
+@@index([Project.featured])
+@@index([Project.publishedAt])
+@@index([Project.createdBy])
+
+// Blog indexes
+@@index([BlogPost.status])
+@@index([BlogPost.featured])
+@@index([BlogPost.publishedAt])
+@@index([BlogPost.createdBy])
+
+// Analytics indexes
+@@index([ProjectAnalytics.projectId, ProjectAnalytics.timestamp])
+@@index([BlogAnalytics.postId, BlogAnalytics.timestamp])
+
+// Activity indexes
+@@index([UserActivity.userId, UserActivity.timestamp])
+@@index([AuditLog.tableName, AuditLog.recordId])

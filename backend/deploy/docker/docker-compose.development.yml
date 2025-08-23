@@ -1,0 +1,166 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: portfolio-db-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-portfolio_development}
+      POSTGRES_USER: ${DB_USER:-portfolio_dev}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-dev_password_123}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+      - ../../scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - portfolio-dev-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-portfolio_dev} -d ${DB_NAME:-portfolio_development}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: portfolio-redis-dev
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-dev_redis_123}
+    volumes:
+      - redis_data_dev:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - portfolio-dev-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Portfolio Application (Development)
+  app:
+    build:
+      context: ../../
+      dockerfile: ./deploy/docker/Dockerfile.production
+      target: development
+    container_name: portfolio-app-dev
+    restart: unless-stopped
+    env_file:
+      - ../env/.env.development
+    environment:
+      NODE_ENV: development
+      PORT: ${PORT:-3333}
+      DB_HOST: postgres
+      REDIS_HOST: redis
+      HOT_RELOAD: true
+      DEBUG_MODE: true
+    volumes:
+      - ../../src:/app/src
+      - ../../package.json:/app/package.json
+      - ../../package-lock.json:/app/package-lock.json
+      - app_uploads_dev:/app/uploads
+      - app_logs_dev:/app/logs
+      - app_node_modules:/app/node_modules
+    ports:
+      - "${PORT:-3333}:3333"
+      - "9229:9229" # Node.js debugger
+    networks:
+      - portfolio-dev-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3333/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # MailHog (Email testing)
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: portfolio-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025" # SMTP server
+      - "8025:8025" # Web UI
+    networks:
+      - portfolio-dev-network
+
+  # Redis Commander (Redis GUI)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: portfolio-redis-commander
+    restart: unless-stopped
+    environment:
+      REDIS_HOSTS: redis:redis:6379:0:${REDIS_PASSWORD:-dev_redis_123}
+    ports:
+      - "8081:8081"
+    networks:
+      - portfolio-dev-network
+    depends_on:
+      - redis
+    profiles:
+      - tools
+
+  # pgAdmin (PostgreSQL GUI)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: portfolio-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@portfolio.local
+      PGADMIN_DEFAULT_PASSWORD: dev_password_123
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "8080:80"
+    networks:
+      - portfolio-dev-network
+    depends_on:
+      - postgres
+    profiles:
+      - tools
+
+  # Jaeger (Distributed Tracing)
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: portfolio-jaeger
+    restart: unless-stopped
+    environment:
+      COLLECTOR_OTLP_ENABLED: true
+    ports:
+      - "16686:16686" # Web UI
+      - "14268:14268" # HTTP collector
+    networks:
+      - portfolio-dev-network
+    profiles:
+      - observability
+
+networks:
+  portfolio-dev-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+
+volumes:
+  postgres_data_dev:
+    driver: local
+  redis_data_dev:
+    driver: local
+  app_uploads_dev:
+    driver: local
+  app_logs_dev:
+    driver: local
+  app_node_modules:
+    driver: local
+  pgadmin_data:
+    driver: local

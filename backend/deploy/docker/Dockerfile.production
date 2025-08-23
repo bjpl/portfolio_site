@@ -1,0 +1,94 @@
+# Multi-stage production Dockerfile for Portfolio Backend
+FROM node:18-alpine AS base
+
+# Install security updates and required tools
+RUN apk update && apk upgrade && \
+    apk add --no-cache \
+    dumb-init \
+    curl \
+    postgresql-client \
+    && rm -rf /var/cache/apk/*
+
+# Create app directory and user
+WORKDIR /app
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S portfolio -u 1001
+
+# Copy package files
+COPY package*.json ./
+COPY yarn.lock* ./
+
+# Development stage
+FROM base AS development
+ENV NODE_ENV=development
+RUN npm ci --include=dev && npm cache clean --force
+COPY . .
+RUN chown -R portfolio:nodejs /app
+USER portfolio
+EXPOSE 3333
+CMD ["dumb-init", "npm", "run", "dev"]
+
+# Build stage
+FROM base AS build
+ENV NODE_ENV=production
+
+# Install dependencies including devDependencies for build
+RUN npm ci --include=dev && npm cache clean --force
+
+# Copy source code
+COPY . .
+
+# Run build steps if needed
+RUN npm run build 2>/dev/null || echo "No build script found"
+
+# Remove dev dependencies
+RUN npm ci --only=production && npm cache clean --force
+
+# Production stage
+FROM node:18-alpine AS production
+
+# Install production dependencies and security updates
+RUN apk update && apk upgrade && \
+    apk add --no-cache \
+    dumb-init \
+    curl \
+    postgresql-client \
+    && rm -rf /var/cache/apk/*
+
+# Create app directory and user
+WORKDIR /app
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S portfolio -u 1001
+
+# Copy production node_modules and built application
+COPY --from=build --chown=portfolio:nodejs /app/node_modules ./node_modules
+COPY --from=build --chown=portfolio:nodejs /app/package*.json ./
+COPY --from=build --chown=portfolio:nodejs /app/src ./src
+COPY --from=build --chown=portfolio:nodejs /app/scripts ./scripts
+
+# Create necessary directories
+RUN mkdir -p logs uploads temp && \
+    chown -R portfolio:nodejs logs uploads temp
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:3333/api/health || exit 1
+
+# Switch to non-root user
+USER portfolio
+
+# Expose port
+EXPOSE 3333
+
+# Set production environment
+ENV NODE_ENV=production
+ENV NODE_OPTIONS="--max-old-space-size=1024"
+
+# Start the application
+CMD ["dumb-init", "node", "src/server.js"]
+
+# Metadata
+LABEL maintainer="Portfolio Team"
+LABEL version="1.0.0"
+LABEL description="Production image for Portfolio Backend"
+LABEL org.opencontainers.image.source="https://github.com/portfolio/backend"

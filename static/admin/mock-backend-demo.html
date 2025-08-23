@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Backend Demo - Portfolio CMS</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .demo-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-online {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .log-container {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .content-item {
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .content-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .content-meta {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>Mock Backend Demo</h1>
+        <p class="text-muted">Demonstration of the complete in-browser mock backend system</p>
+
+        <!-- Status Section -->
+        <div class="demo-section">
+            <h2>System Status</h2>
+            <div class="demo-grid">
+                <div>
+                    <h4>Connection Status</h4>
+                    <p>Network: <span id="networkStatus" class="status-indicator">Checking...</span></p>
+                    <p>Service Worker: <span id="swStatus" class="status-indicator">Checking...</span></p>
+                    <p>Authentication: <span id="authStatus" class="status-indicator">Checking...</span></p>
+                    <p>WebSocket: <span id="wsStatus" class="status-indicator">Checking...</span></p>
+                </div>
+                
+                <div>
+                    <h4>Statistics</h4>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="contentCount">0</div>
+                            <div class="stat-label">Content Items</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="userCount">0</div>
+                            <div class="stat-label">Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="mediaCount">0</div>
+                            <div class="stat-label">Media Files</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="syncQueue">0</div>
+                            <div class="stat-label">Sync Queue</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Authentication Section -->
+        <div class="demo-section">
+            <h2>Authentication Demo</h2>
+            <div class="demo-grid">
+                <div>
+                    <h4>Login</h4>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="loginEmail" class="form-control" value="admin@portfolio.dev">
+                    </div>
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input type="password" id="loginPassword" class="form-control" value="admin123!">
+                    </div>
+                    <div class="button-group">
+                        <button onclick="performLogin()" class="btn btn-primary">Login</button>
+                        <button onclick="performLogout()" class="btn btn-secondary">Logout</button>
+                        <button onclick="checkAuth()" class="btn btn-outline-primary">Check Auth</button>
+                    </div>
+                    
+                    <div id="userInfo" style="margin-top: 15px;"></div>
+                </div>
+                
+                <div>
+                    <h4>Registration</h4>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="regEmail" class="form-control" placeholder="test@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input type="password" id="regPassword" class="form-control" placeholder="password123!">
+                    </div>
+                    <div class="form-group">
+                        <label>First Name:</label>
+                        <input type="text" id="regFirstName" class="form-control" placeholder="John">
+                    </div>
+                    <button onclick="performRegister()" class="btn btn-success">Register</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Management Section -->
+        <div class="demo-section">
+            <h2>Content Management Demo</h2>
+            <div class="demo-grid">
+                <div>
+                    <h4>Create Content</h4>
+                    <div class="form-group">
+                        <label>Path:</label>
+                        <input type="text" id="contentPath" class="form-control" placeholder="blog/demo-post">
+                    </div>
+                    <div class="form-group">
+                        <label>Title:</label>
+                        <input type="text" id="contentTitle" class="form-control" placeholder="Demo Post">
+                    </div>
+                    <div class="form-group">
+                        <label>Content:</label>
+                        <textarea id="contentBody" class="form-control" placeholder="Post content..."></textarea>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="createContent()" class="btn btn-primary">Create</button>
+                        <button onclick="loadContent()" class="btn btn-outline-primary">Load All</button>
+                        <button onclick="searchContent()" class="btn btn-outline-secondary">Search</button>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4>Content List</h4>
+                    <div id="contentList" style="max-height: 300px; overflow-y: auto;">
+                        <p class="text-muted">No content loaded</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Management Section -->
+        <div class="demo-section">
+            <h2>File Management Demo</h2>
+            <div class="demo-grid">
+                <div>
+                    <h4>File Upload</h4>
+                    <div class="form-group">
+                        <label>Select File:</label>
+                        <input type="file" id="fileInput" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Path:</label>
+                        <input type="text" id="uploadPath" class="form-control" placeholder="images/">
+                    </div>
+                    <div class="button-group">
+                        <button onclick="uploadFile()" class="btn btn-primary">Upload</button>
+                        <button onclick="loadFiles()" class="btn btn-outline-primary">Load Files</button>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4>File List</h4>
+                    <div id="fileList" style="max-height: 300px; overflow-y: auto;">
+                        <p class="text-muted">No files loaded</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WebSocket Demo Section -->
+        <div class="demo-section">
+            <h2>WebSocket Demo</h2>
+            <div class="demo-grid">
+                <div>
+                    <h4>Real-time Messaging</h4>
+                    <div class="form-group">
+                        <label>Room ID:</label>
+                        <input type="text" id="roomId" class="form-control" value="demo-room">
+                    </div>
+                    <div class="form-group">
+                        <label>Message:</label>
+                        <input type="text" id="wsMessage" class="form-control" placeholder="Hello, world!">
+                    </div>
+                    <div class="button-group">
+                        <button onclick="joinRoom()" class="btn btn-primary">Join Room</button>
+                        <button onclick="sendMessage()" class="btn btn-success">Send Message</button>
+                        <button onclick="leaveRoom()" class="btn btn-secondary">Leave Room</button>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4>WebSocket Messages</h4>
+                    <div id="wsMessages" class="log-container"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sync Demo Section -->
+        <div class="demo-section">
+            <h2>Sync Demo</h2>
+            <div class="demo-grid">
+                <div>
+                    <h4>Synchronization</h4>
+                    <p>Current sync status: <span id="syncStatus">Unknown</span></p>
+                    <p>Last sync: <span id="lastSync">Never</span></p>
+                    <p>Queue length: <span id="queueLength">0</span></p>
+                    
+                    <div class="button-group">
+                        <button onclick="manualSync()" class="btn btn-primary">Manual Sync</button>
+                        <button onclick="getSyncStatus()" class="btn btn-outline-primary">Check Status</button>
+                        <button onclick="toggleNetwork()" class="btn btn-warning" id="networkToggle">Go Offline</button>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4>Sync Operations</h4>
+                    <p class="text-muted">Perform operations while offline to see sync in action:</p>
+                    <div class="button-group">
+                        <button onclick="createOfflineContent()" class="btn btn-outline-success">Create Offline Content</button>
+                        <button onclick="updateOfflineContent()" class="btn btn-outline-warning">Update Content</button>
+                        <button onclick="deleteOfflineContent()" class="btn btn-outline-danger">Delete Content</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event Log Section -->
+        <div class="demo-section">
+            <h2>Event Log</h2>
+            <div class="button-group" style="margin-bottom: 15px;">
+                <button onclick="clearLog()" class="btn btn-outline-secondary">Clear Log</button>
+                <button onclick="exportData()" class="btn btn-outline-info">Export Data</button>
+            </div>
+            <div id="eventLog" class="log-container"></div>
+        </div>
+    </div>
+
+    <!-- Load Mock Backend -->
+    <script src="/js/mock-backend/mock-client.js"></script>
+
+    <script>
+        // Global variables
+        let mockClient;
+        let isOfflineMode = false;
+        let wsMessages = [];
+
+        // Initialize demo
+        async function initDemo() {
+            mockClient = window.mockBackendClient;
+            
+            // Initialize with debug enabled
+            const success = await mockClient.initialize({
+                debug: true,
+                enableWebSocket: true,
+                enableSync: true
+            });
+
+            if (success) {
+                logEvent('Mock backend initialized successfully');
+                setupEventListeners();
+                updateStatus();
+            } else {
+                logEvent('Failed to initialize mock backend', 'error');
+            }
+        }
+
+        function setupEventListeners() {
+            // Authentication events
+            mockClient.on('login-success', (data) => {
+                logEvent(`Login successful: ${data.user.email}`, 'success');
+                updateUserInfo(data.user);
+                updateStatus();
+            });
+
+            mockClient.on('login-error', (data) => {
+                logEvent(`Login failed: ${data.error}`, 'error');
+            });
+
+            mockClient.on('logout-success', () => {
+                logEvent('Logout successful', 'success');
+                updateUserInfo(null);
+                updateStatus();
+            });
+
+            // Network events
+            mockClient.on('network-status-changed', (data) => {
+                logEvent(`Network status: ${data.isOnline ? 'Online' : 'Offline'}`, 'info');
+                updateStatus();
+            });
+
+            // Sync events
+            mockClient.on('sync-completed', (data) => {
+                logEvent(`Sync completed at ${data.timestamp}`, 'success');
+                updateSyncStatus();
+            });
+
+            mockClient.on('sync-error', (data) => {
+                logEvent(`Sync error: ${data.error}`, 'error');
+            });
+
+            // WebSocket events
+            mockClient.on('ws-message', (data) => {
+                const message = `[${new Date().toLocaleTimeString()}] ${JSON.stringify(data)}`;
+                wsMessages.unshift(message);
+                if (wsMessages.length > 50) wsMessages.pop();
+                updateWSMessages();
+            });
+
+            mockClient.on('ws-connected', () => {
+                logEvent('WebSocket connected', 'success');
+                updateStatus();
+            });
+
+            // Service worker events
+            mockClient.on('sw-update-found', () => {
+                logEvent('Service Worker update found', 'info');
+            });
+        }
+
+        function updateStatus() {
+            const status = mockClient.getStatus();
+            
+            // Network status
+            const networkEl = document.getElementById('networkStatus');
+            networkEl.textContent = mockClient.isOnline() ? 'Online' : 'Offline';
+            networkEl.className = 'status-indicator ' + (mockClient.isOnline() ? 'status-online' : 'status-offline');
+
+            // Service Worker status
+            const swEl = document.getElementById('swStatus');
+            swEl.textContent = status.serviceWorker ? 'Active' : 'Inactive';
+            swEl.className = 'status-indicator ' + (status.serviceWorker ? 'status-online' : 'status-offline');
+
+            // Auth status
+            const authEl = document.getElementById('authStatus');
+            authEl.textContent = status.isAuthenticated ? 'Authenticated' : 'Not authenticated';
+            authEl.className = 'status-indicator ' + (status.isAuthenticated ? 'status-online' : 'status-offline');
+
+            // WebSocket status
+            const wsEl = document.getElementById('wsStatus');
+            wsEl.textContent = status.webSocket ? 'Connected' : 'Disconnected';
+            wsEl.className = 'status-indicator ' + (status.webSocket ? 'status-online' : 'status-offline');
+        }
+
+        function updateUserInfo(user) {
+            const userInfoEl = document.getElementById('userInfo');
+            if (user) {
+                userInfoEl.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong>Logged in as:</strong> ${user.email}<br>
+                        <strong>Role:</strong> ${user.role}<br>
+                        <strong>ID:</strong> ${user.id}
+                    </div>
+                `;
+            } else {
+                userInfoEl.innerHTML = '<div class="alert alert-info">Not logged in</div>';
+            }
+        }
+
+        function updateSyncStatus() {
+            const syncStatus = mockClient.getSyncStatus();
+            if (syncStatus) {
+                document.getElementById('syncStatus').textContent = syncStatus.syncInProgress ? 'In Progress' : 'Idle';
+                document.getElementById('lastSync').textContent = syncStatus.lastSync ? new Date(syncStatus.lastSync).toLocaleString() : 'Never';
+                document.getElementById('queueLength').textContent = syncStatus.queueLength || 0;
+            }
+        }
+
+        function updateWSMessages() {
+            const messagesEl = document.getElementById('wsMessages');
+            messagesEl.textContent = wsMessages.join('\n');
+            messagesEl.scrollTop = 0;
+        }
+
+        // Authentication functions
+        async function performLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                await mockClient.login(email, password);
+            } catch (error) {
+                logEvent(`Login error: ${error.message}`, 'error');
+            }
+        }
+
+        async function performLogout() {
+            try {
+                await mockClient.logout();
+            } catch (error) {
+                logEvent(`Logout error: ${error.message}`, 'error');
+            }
+        }
+
+        async function performRegister() {
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const firstName = document.getElementById('regFirstName').value;
+
+            try {
+                await mockClient.register({
+                    email,
+                    password,
+                    firstName
+                });
+                logEvent(`Registration successful for ${email}`, 'success');
+            } catch (error) {
+                logEvent(`Registration error: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkAuth() {
+            const status = mockClient.getStatus();
+            logEvent(`Auth check - Authenticated: ${status.isAuthenticated}, User: ${status.currentUser ? status.currentUser.email : 'None'}`, 'info');
+        }
+
+        // Content management functions
+        async function createContent() {
+            if (!mockClient.isAuthenticated) {
+                logEvent('Please login first to create content', 'error');
+                return;
+            }
+
+            const path = document.getElementById('contentPath').value;
+            const title = document.getElementById('contentTitle').value;
+            const body = document.getElementById('contentBody').value;
+
+            if (!path || !title) {
+                logEvent('Path and title are required', 'error');
+                return;
+            }
+
+            try {
+                const result = await mockClient.createContent({
+                    path,
+                    title,
+                    content: body,
+                    type: 'post',
+                    status: 'published'
+                });
+                
+                logEvent(`Content created: ${result.content.path}`, 'success');
+                
+                // Clear form
+                document.getElementById('contentPath').value = '';
+                document.getElementById('contentTitle').value = '';
+                document.getElementById('contentBody').value = '';
+                
+                loadContent();
+            } catch (error) {
+                logEvent(`Content creation error: ${error.message}`, 'error');
+            }
+        }
+
+        async function loadContent() {
+            try {
+                const result = await mockClient.getContent();
+                const contentList = document.getElementById('contentList');
+                
+                if (result.content && result.content.length > 0) {
+                    contentList.innerHTML = result.content.map(item => `
+                        <div class="content-item">
+                            <div class="content-title">${item.title || 'Untitled'}</div>
+                            <div class="content-meta">
+                                Path: ${item.path} | Status: ${item.status} | Created: ${new Date(item.createdAt).toLocaleDateString()}
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    contentList.innerHTML = '<p class="text-muted">No content found</p>';
+                }
+                
+                // Update count
+                document.getElementById('contentCount').textContent = result.content ? result.content.length : 0;
+                
+            } catch (error) {
+                logEvent(`Load content error: ${error.message}`, 'error');
+            }
+        }
+
+        async function searchContent() {
+            const query = prompt('Enter search query:');
+            if (!query) return;
+
+            try {
+                const result = await mockClient.searchContent(query);
+                logEvent(`Search found ${result.results.length} results for "${query}"`, 'info');
+            } catch (error) {
+                logEvent(`Search error: ${error.message}`, 'error');
+            }
+        }
+
+        // File management functions
+        async function uploadFile() {
+            if (!mockClient.isAuthenticated) {
+                logEvent('Please login first to upload files', 'error');
+                return;
+            }
+
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const path = document.getElementById('uploadPath').value;
+
+            if (!file) {
+                logEvent('Please select a file to upload', 'error');
+                return;
+            }
+
+            try {
+                const result = await mockClient.uploadFile(file, path);
+                logEvent(`File uploaded: ${result.file.filename}`, 'success');
+                loadFiles();
+            } catch (error) {
+                logEvent(`Upload error: ${error.message}`, 'error');
+            }
+        }
+
+        async function loadFiles() {
+            try {
+                const result = await mockClient.getFiles();
+                const fileList = document.getElementById('fileList');
+                
+                if (result.files && result.files.length > 0) {
+                    fileList.innerHTML = result.files.map(file => `
+                        <div class="content-item">
+                            <div class="content-title">${file.filename}</div>
+                            <div class="content-meta">
+                                Size: ${(file.size / 1024).toFixed(1)} KB | Type: ${file.type}
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    fileList.innerHTML = '<p class="text-muted">No files found</p>';
+                }
+                
+                // Update count
+                document.getElementById('mediaCount').textContent = result.files ? result.files.length : 0;
+                
+            } catch (error) {
+                logEvent(`Load files error: ${error.message}`, 'error');
+            }
+        }
+
+        // WebSocket functions
+        async function joinRoom() {
+            const roomId = document.getElementById('roomId').value;
+            if (!roomId) {
+                logEvent('Please enter a room ID', 'error');
+                return;
+            }
+
+            try {
+                await mockClient.joinRoom(roomId);
+                logEvent(`Joined room: ${roomId}`, 'success');
+            } catch (error) {
+                logEvent(`Join room error: ${error.message}`, 'error');
+            }
+        }
+
+        async function sendMessage() {
+            const message = document.getElementById('wsMessage').value;
+            const roomId = document.getElementById('roomId').value;
+            
+            if (!message) {
+                logEvent('Please enter a message', 'error');
+                return;
+            }
+
+            try {
+                await mockClient.sendWebSocketMessage({
+                    type: 'broadcast',
+                    message,
+                    roomId
+                });
+                
+                document.getElementById('wsMessage').value = '';
+                logEvent(`Message sent to room ${roomId}`, 'success');
+            } catch (error) {
+                logEvent(`Send message error: ${error.message}`, 'error');
+            }
+        }
+
+        async function leaveRoom() {
+            const roomId = document.getElementById('roomId').value;
+            try {
+                await mockClient.leaveRoom(roomId);
+                logEvent(`Left room: ${roomId}`, 'success');
+            } catch (error) {
+                logEvent(`Leave room error: ${error.message}`, 'error');
+            }
+        }
+
+        // Sync functions
+        async function manualSync() {
+            try {
+                await mockClient.manualSync();
+                logEvent('Manual sync initiated', 'info');
+            } catch (error) {
+                logEvent(`Sync error: ${error.message}`, 'error');
+            }
+        }
+
+        function getSyncStatus() {
+            updateSyncStatus();
+            logEvent('Sync status updated', 'info');
+        }
+
+        function toggleNetwork() {
+            isOfflineMode = !isOfflineMode;
+            const button = document.getElementById('networkToggle');
+            
+            if (isOfflineMode) {
+                // Simulate going offline
+                button.textContent = 'Go Online';
+                button.className = 'btn btn-success';
+                logEvent('Simulating offline mode', 'warning');
+            } else {
+                // Simulate going online
+                button.textContent = 'Go Offline';
+                button.className = 'btn btn-warning';
+                logEvent('Simulating online mode', 'info');
+            }
+        }
+
+        // Offline operation functions
+        async function createOfflineContent() {
+            await createContent(); // Will queue for sync if offline
+        }
+
+        async function updateOfflineContent() {
+            logEvent('Offline update operations not implemented in demo', 'info');
+        }
+
+        async function deleteOfflineContent() {
+            logEvent('Offline delete operations not implemented in demo', 'info');
+        }
+
+        // Utility functions
+        function logEvent(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}\n`;
+            
+            const logEl = document.getElementById('eventLog');
+            logEl.textContent = logEntry + logEl.textContent;
+            
+            // Limit log size
+            const lines = logEl.textContent.split('\n');
+            if (lines.length > 100) {
+                logEl.textContent = lines.slice(0, 100).join('\n');
+            }
+            
+            console.log('[Demo]', message);
+        }
+
+        function clearLog() {
+            document.getElementById('eventLog').textContent = '';
+            wsMessages = [];
+            updateWSMessages();
+        }
+
+        async function exportData() {
+            try {
+                // Get stats
+                const stats = await mockClient.getDashboardStats();
+                
+                const exportData = {
+                    timestamp: new Date().toISOString(),
+                    status: mockClient.getStatus(),
+                    stats: stats?.stats || {},
+                    syncStatus: mockClient.getSyncStatus(),
+                    wsMessages: wsMessages.slice(0, 10) // Last 10 messages
+                };
+                
+                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `mock-backend-export-${Date.now()}.json`;
+                a.click();
+                
+                URL.revokeObjectURL(url);
+                logEvent('Data exported successfully', 'success');
+                
+            } catch (error) {
+                logEvent(`Export error: ${error.message}`, 'error');
+            }
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', initDemo);
+
+        // Auto-update stats every 10 seconds
+        setInterval(() => {
+            if (mockClient) {
+                updateStatus();
+                updateSyncStatus();
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
