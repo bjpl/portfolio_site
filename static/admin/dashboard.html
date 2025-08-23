@@ -1006,6 +1006,100 @@
                 });
             }
         }
+
+        // Helper functions for dashboard functionality
+        function updateStorageUsage(sizeMB) {
+            const storageElement = document.querySelector('.status-item .status-label:contains("Storage")');
+            if (storageElement) {
+                const valueElement = storageElement.parentElement.querySelector('.status-value');
+                const percentage = Math.min(Math.round((sizeMB / 100) * 100), 100); // Assume 100MB limit
+                valueElement.textContent = `${percentage}% (${sizeMB}MB)`;
+                valueElement.className = percentage > 80 ? 'status-value error' : 
+                                        percentage > 60 ? 'status-value warning' : 'status-value good';
+            }
+        }
+
+        function updateStatTrends(files) {
+            // Simple trend calculation based on file dates
+            const now = new Date();
+            const lastWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            
+            const recentFiles = files.filter(f => f.date && new Date(f.date) > lastWeek);
+            const trendPercentage = Math.min(Math.round((recentFiles.length / files.length) * 100), 100);
+            
+            // Update trend indicators with real data
+            const trends = document.querySelectorAll('.stat-trend');
+            trends.forEach((trend, index) => {
+                if (trendPercentage > 5) {
+                    trend.textContent = `↑ ${trendPercentage}%`;
+                    trend.className = 'stat-trend up';
+                } else {
+                    trend.textContent = `→ ${trendPercentage}%`;
+                    trend.className = 'stat-trend';
+                }
+            });
+        }
+
+        function updateTopPages(topPages) {
+            // Add top pages info to activity or create a small widget
+            if (topPages.length > 0) {
+                const topPage = topPages[0];
+                addActivity({
+                    icon: '🏆',
+                    text: `Most popular page: "${topPage.path}" (${topPage.views} views)`,
+                    time: 'Analytics'
+                });
+            }
+        }
+
+        function openContent(contentPath) {
+            // Open content in editor
+            window.open(`simple-editor.html?file=${encodeURIComponent(contentPath)}`, '_blank');
+        }
+
+        function createNewContent(type = 'page') {
+            // Create new content based on type
+            const fileName = prompt(`Enter name for new ${type}:`);
+            if (fileName) {
+                const path = type === 'blog' ? `blog/${fileName}.md` : `${fileName}.md`;
+                window.open(`simple-editor.html?new=${encodeURIComponent(path)}&type=${type}`, '_blank');
+            }
+        }
+
+        // Refresh dashboard data
+        function refreshDashboard() {
+            showStatus('Refreshing dashboard...', 'info');
+            loadDashboardData().then(() => {
+                showStatus('Dashboard updated', 'success');
+            }).catch(() => {
+                showStatus('Failed to refresh dashboard', 'error');
+            });
+        }
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'r':
+                        e.preventDefault();
+                        refreshDashboard();
+                        break;
+                    case 'n':
+                        e.preventDefault();
+                        createNewContent('blog');
+                        break;
+                    case 'd':
+                        e.preventDefault();
+                        deployToProduction();
+                        break;
+                }
+            }
+        });
+
+        // Auto-refresh dashboard every 5 minutes
+        setInterval(() => {
+            loadDashboardData();
+        }, 5 * 60 * 1000);
     </script>
 </body>
 </html>
