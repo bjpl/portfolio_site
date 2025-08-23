@@ -305,12 +305,23 @@
             setLoading(true);
             
             try {
-                // Use central API configuration with Netlify support
-                const apiURL = window.APIConfig ? 
-                    window.APIConfig.getURL('/auth/login') : 
-                    (window.location.hostname.includes('netlify.app') ? 
-                        '/.netlify/functions/auth-login' : 
-                        'http://localhost:3000/api/auth/login');
+                // Determine API URL based on environment
+                let apiURL;
+                const hostname = window.location.hostname;
+                
+                if (hostname.includes('netlify.app') || hostname.includes('netlify.com')) {
+                    // On Netlify - use serverless functions
+                    apiURL = '/.netlify/functions/auth-login';
+                    console.log('Using Netlify Functions for auth');
+                } else if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                    // Local development
+                    apiURL = 'http://localhost:3000/api/auth/login';
+                    console.log('Using local backend for auth');
+                } else {
+                    // Other deployment - try Netlify functions first
+                    apiURL = '/.netlify/functions/auth-login';
+                    console.log('Using Netlify Functions (fallback)');
+                }
                 
                 const response = await fetch(apiURL, {
                     method: 'POST',
@@ -356,7 +367,14 @@
                 let errorMessage = 'Login failed. ';
                 
                 if (error.name === 'TypeError' || error.message.includes('fetch')) {
-                    errorMessage += 'Unable to connect to server. Please ensure the backend is running.';
+                    const hostname = window.location.hostname;
+                    if (hostname.includes('netlify')) {
+                        errorMessage = 'Authentication service is initializing. Please try again in a moment.';
+                    } else if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                        errorMessage += 'Unable to connect to server. Please ensure the backend is running on port 3000.';
+                    } else {
+                        errorMessage = 'Authentication service unavailable. Please try again.';
+                    }
                     
                     // Show backend status if config checker is available
                     if (window.ConfigChecker) {
