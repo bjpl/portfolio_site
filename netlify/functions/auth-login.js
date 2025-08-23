@@ -1,101 +1,86 @@
-// Netlify Function for authentication login
-exports.handler = async (event, context) => {
-  // CORS configuration
-  const origin = event.headers.origin;
-  const allowedOrigins = [
-    'https://vocal-pony-24e3de.netlify.app',
-    ...(process.env.NODE_ENV === 'development' ? ['http://localhost:1313', 'http://localhost:3000'] : [])
-  ];
-  
-  const headers = {
-    'Access-Control-Allow-Origin': allowedOrigins.includes(origin) ? origin : allowedOrigins[0],
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Credentials': 'true',
-    'Content-Type': 'application/json'
-  };
+// Auth login endpoint for Netlify Functions
+const ADMIN_USER = {
+  username: 'admin',
+  email: 'admin@portfolio.com',
+  passwordHash: '$2a$10$afmPk0ks7cRHrNgSv/lf7Oor8EwILf7iOCmNjmd6X7CK3sRbjxp82'
+};
 
-  // Handle preflight
+function generateToken(user) {
+  const payload = {
+    user: user.username,
+    email: user.email,
+    exp: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+  };
+  return Buffer.from(JSON.stringify(payload)).toString('base64');
+}
+
+exports.handler = async (event, context) => {
+  // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers, body: '' };
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+      },
+      body: ''
+    };
   }
 
-  // Only allow POST
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
-      headers,
+      headers: { 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify({ error: 'Method not allowed' })
     };
   }
 
   try {
-    const body = JSON.parse(event.body);
-    const { email, password, emailOrUsername } = body;
+    const { emailOrUsername, password } = JSON.parse(event.body);
     
-    // Support both formats
-    const userInput = emailOrUsername || email;
-    
-    console.log('Login attempt:', { userInput, hasPassword: !!password });
-
-    // Authentication logic - support multiple credential formats
-    const validCredentials = [
-      { user: 'admin', pass: 'password123', email: 'admin@portfolio.com' },
-      { user: 'admin@example.com', pass: 'admin123', email: 'admin@example.com' },
-      { user: 'admin@portfolio.com', pass: 'password123', email: 'admin@portfolio.com' }
-    ];
-    
-    const isValid = validCredentials.some(cred => 
-      (userInput === cred.user || userInput === cred.email) && password === cred.pass
-    );
-    
-    if (isValid) {
-      // Generate token with user info
-      const tokenPayload = {
-        username: 'admin',
-        email: 'admin@portfolio.com',
-        role: 'admin',
-        exp: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
-      };
+    if ((emailOrUsername === 'admin' || emailOrUsername === 'admin@portfolio.com') && 
+        password === 'password123') {
       
-      const token = Buffer.from(JSON.stringify(tokenPayload)).toString('base64');
+      const token = generateToken(ADMIN_USER);
       
       return {
         statusCode: 200,
-        headers,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
         body: JSON.stringify({
           success: true,
-          token: token,
-          refreshToken: token,
           user: {
-            id: 1,
-            username: 'admin',
-            email: 'admin@portfolio.com',
+            username: ADMIN_USER.username,
+            email: ADMIN_USER.email,
             role: 'admin'
-          }
+          },
+          token: token,
+          refreshToken: token
         })
       };
     }
-
-    console.log('Invalid credentials for:', userInput);
+    
     return {
       statusCode: 401,
-      headers,
-      body: JSON.stringify({ 
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({
         success: false,
-        error: 'Invalid credentials' 
+        error: 'Invalid credentials'
       })
     };
+    
   } catch (error) {
-    console.error('Auth error:', error);
+    console.error('Auth login error:', error);
     return {
       statusCode: 500,
-      headers,
-      body: JSON.stringify({ 
-        success: false,
-        error: 'Server error', 
-        details: error.message 
-      })
+      headers: { 'Access-Control-Allow-Origin': '*' },
+      body: JSON.stringify({ error: 'Internal server error' })
     };
   }
 };

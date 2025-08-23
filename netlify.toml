@@ -84,14 +84,14 @@
 
 [[redirects]]
   from = "/api/auth/login"
-  to = "/.netlify/functions/auth"
+  to = "/.netlify/functions/auth-login"
   status = 200
   force = true
   headers = {X-Forwarded-For = ":client_ip"}
 
 [[redirects]]
   from = "/api/auth/logout"
-  to = "/.netlify/functions/auth"
+  to = "/.netlify/functions/auth-logout"
   status = 200
   force = true
   headers = {X-Forwarded-For = ":client_ip"}
