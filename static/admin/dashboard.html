@@ -472,21 +472,29 @@
                 <div class="quick-actions">
                     <h3 style="margin: 0 0 16px 0; font-size: 18px; color: var(--text-primary);">Quick Actions</h3>
                     <div class="actions-grid">
-                        <a href="simple-editor.html" class="action-card">
+                        <div onclick="createNewContent('blog')" class="action-card">
                             <span class="action-icon">➕</span>
-                            <span class="action-text">New Post</span>
-                        </a>
+                            <span class="action-text">New Blog Post</span>
+                        </div>
                         <a href="simple-editor.html" class="action-card">
-                            <span class="action-icon">🖼️</span>
+                            <span class="action-icon">✏️</span>
                             <span class="action-text">Edit Content</span>
                         </a>
-                        <a href="#" onclick="deployToProduction()" class="action-card">
-                            <span class="action-icon">🚀</span>
-                            <span class="action-text">Deploy</span>
+                        <a href="image-optimizer.html" class="action-card">
+                            <span class="action-icon">🖼️</span>
+                            <span class="action-text">Manage Media</span>
                         </a>
+                        <div onclick="deployToProduction()" class="action-card">
+                            <span class="action-icon">🚀</span>
+                            <span class="action-text">Deploy Site</span>
+                        </div>
                         <a href="analytics.html" class="action-card">
                             <span class="action-icon">📈</span>
-                            <span class="action-text">View Stats</span>
+                            <span class="action-text">View Analytics</span>
+                        </a>
+                        <a href="portfolio.html" class="action-card">
+                            <span class="action-icon">💼</span>
+                            <span class="action-text">Portfolio</span>
                         </a>
                     </div>
                 </div>
@@ -496,19 +504,19 @@
                     <div class="status-grid">
                         <div class="status-item">
                             <span class="status-label">API</span>
-                            <span class="status-value good">Operational</span>
+                            <span class="status-value good">Checking...</span>
                         </div>
                         <div class="status-item">
-                            <span class="status-label">Build</span>
-                            <span class="status-value good">Success</span>
+                            <span class="status-label">Content</span>
+                            <span class="status-value good">Checking...</span>
                         </div>
                         <div class="status-item">
-                            <span class="status-label">Storage</span>
-                            <span class="status-value warning">75% Used</span>
+                            <span class="status-label">Media</span>
+                            <span class="status-value good">Checking...</span>
                         </div>
                         <div class="status-item">
-                            <span class="status-label">SSL</span>
-                            <span class="status-value good">Valid</span>
+                            <span class="status-label">Analytics</span>
+                            <span class="status-value warning">Checking...</span>
                         </div>
                     </div>
                 </div>
@@ -585,19 +593,34 @@
                 const response = await fetch('/api/content');
                 const data = await response.json();
                 
-                if (data.success) {
+                if (data.success && data.files) {
                     const files = data.files;
-                    const blogPosts = files.filter(f => f.type === 'blog' || f.path.includes('/blog/')).length;
-                    const pages = files.filter(f => f.type !== 'blog' && !f.path.includes('/blog/')).length;
+                    const blogPosts = files.filter(f => 
+                        f.type === 'blog' || 
+                        f.path.includes('/blog/') || 
+                        f.path.startsWith('blog/')
+                    ).length;
+                    const pages = files.filter(f => 
+                        f.type !== 'blog' && 
+                        !f.path.includes('/blog/') && 
+                        !f.path.startsWith('blog/')
+                    ).length;
                     
-                    document.getElementById('totalPages').textContent = pages || files.length;
+                    document.getElementById('totalPages').textContent = pages || (files.length - blogPosts);
                     document.getElementById('blogPosts').textContent = blogPosts;
                     
                     // Update recent activity with real content edits
                     updateActivityFeed(files);
+                    
+                    // Update stat trends based on content count
+                    updateStatTrends(files);
+                } else {
+                    console.warn('No content files found or invalid response');
+                    // Keep placeholder values if API fails
                 }
             } catch (error) {
                 console.error('Error loading content stats:', error);
+                showStatus('Failed to load content statistics', 'warning');
             }
         }
 
@@ -606,11 +629,20 @@
                 const response = await fetch('/api/media');
                 const data = await response.json();
                 
-                if (data.success) {
-                    document.getElementById('mediaFiles').textContent = data.files.length;
+                if (data.success && data.files) {
+                    const totalFiles = data.files.length;
+                    document.getElementById('mediaFiles').textContent = totalFiles;
+                    
+                    // Calculate storage usage
+                    const totalSize = data.files.reduce((sum, file) => sum + (file.size || 0), 0);
+                    const sizeMB = (totalSize / (1024 * 1024)).toFixed(1);
+                    updateStorageUsage(sizeMB);
+                } else {
+                    console.warn('No media files found or invalid response');
                 }
             } catch (error) {
                 console.error('Error loading media stats:', error);
+                showStatus('Failed to load media statistics', 'warning');
             }
         }
 
@@ -619,16 +651,37 @@
                 const response = await fetch('/api/analytics/summary');
                 const data = await response.json();
                 
-                if (data.success) {
-                    const visitors = data.data.uniqueVisitors;
+                if (data.success && data.data) {
+                    const analytics = data.data;
+                    const visitors = analytics.uniqueVisitors || 0;
+                    const pageViews = analytics.pageViews || 0;
+                    
                     const visitorCount = visitors > 1000 ? 
                         (visitors / 1000).toFixed(1) + 'K' : 
                         visitors.toString();
+                    
                     document.getElementById('visitors').textContent = visitorCount;
+                    
+                    // Update page views info if element exists
+                    const pageViewsEl = document.getElementById('pageViews');
+                    if (pageViewsEl) {
+                        const pvCount = pageViews > 1000 ? 
+                            (pageViews / 1000).toFixed(1) + 'K' : 
+                            pageViews.toString();
+                        pageViewsEl.textContent = pvCount;
+                    }
+                    
+                    // Show top pages if available
+                    if (analytics.topPages && analytics.topPages.length > 0) {
+                        updateTopPages(analytics.topPages);
+                    }
+                } else {
+                    console.warn('Analytics data not available, using demo data');
+                    // Keep demo data if real analytics aren't available
                 }
             } catch (error) {
                 console.error('Error loading analytics stats:', error);
-                // Keep placeholder data if analytics not available
+                console.log('Analytics not configured - using demo data for visualization');
             }
         }
 
@@ -637,15 +690,36 @@
                 // Check API health
                 const apiResponse = await fetch('/api/content');
                 const apiStatus = apiResponse.ok ? 'good' : 'error';
-                updateStatusItem('API', apiStatus ? 'Operational' : 'Error', apiStatus);
+                updateStatusItem('API', apiStatus === 'good' ? 'Operational' : 'Error', apiStatus);
                 
-                // Check build status (try to get Hugo version)
-                const buildResponse = await fetch('/api/build', { method: 'POST' });
-                const buildStatus = buildResponse.ok ? 'good' : 'warning';
-                updateStatusItem('Build', buildStatus === 'good' ? 'Ready' : 'Warning', buildStatus);
+                // Check if content files are accessible
+                if (apiResponse.ok) {
+                    const apiData = await apiResponse.json();
+                    const hasContent = apiData.success && apiData.files && apiData.files.length > 0;
+                    updateStatusItem('Content', hasContent ? 'Available' : 'Empty', hasContent ? 'good' : 'warning');
+                }
+                
+                // Check media endpoint
+                try {
+                    const mediaResponse = await fetch('/api/media');
+                    const mediaStatus = mediaResponse.ok ? 'good' : 'warning';
+                    updateStatusItem('Media', mediaStatus === 'good' ? 'Ready' : 'Limited', mediaStatus);
+                } catch (e) {
+                    updateStatusItem('Media', 'Unavailable', 'error');
+                }
+                
+                // Check analytics
+                try {
+                    const analyticsResponse = await fetch('/api/analytics/summary');
+                    const analyticsStatus = analyticsResponse.ok ? 'good' : 'warning';
+                    updateStatusItem('Analytics', analyticsStatus === 'good' ? 'Active' : 'Limited', analyticsStatus);
+                } catch (e) {
+                    updateStatusItem('Analytics', 'Offline', 'warning');
+                }
                 
             } catch (error) {
                 console.error('Error checking system status:', error);
+                updateStatusItem('API', 'Error', 'error');
             }
         }
 
@@ -664,32 +738,50 @@
         function updateActivityFeed(files) {
             const activityList = document.getElementById('activityList');
             
-            // Sort files by date (most recent first)
+            if (!files || files.length === 0) {
+                activityList.innerHTML = `
+                    <div class="activity-item">
+                        <div class="activity-icon">📝</div>
+                        <div class="activity-content">
+                            <div class="activity-text">Welcome to your portfolio admin</div>
+                            <div class="activity-time">Start by creating content</div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort files by date (most recent first) or by title if no date
             const recentFiles = files
-                .filter(f => f.date)
-                .sort((a, b) => new Date(b.date) - new Date(a.date))
-                .slice(0, 4);
+                .filter(f => f.title && f.title !== '')
+                .sort((a, b) => {
+                    if (a.date && b.date) {
+                        return new Date(b.date) - new Date(a.date);
+                    }
+                    // If no dates, sort by title alphabetically
+                    return a.title.localeCompare(b.title);
+                })
+                .slice(0, 5);
             
             const activities = recentFiles.map(file => {
-                const date = new Date(file.date);
-                const timeAgo = getTimeAgo(date);
-                const icon = file.type === 'blog' ? '📝' : '📄';
-                const action = file.draft ? 'drafted' : 'published';
+                const timeAgo = file.date ? getTimeAgo(new Date(file.date)) : 'Recently';
+                const icon = (file.type === 'blog' || file.path.includes('blog')) ? '📝' : 
+                           (file.path.includes('portfolio') || file.path.includes('project')) ? '💼' : '📄';
+                const action = file.draft ? 'Draft' : 'Content';
+                const title = file.title || file.path.split('/').pop().replace(/\.[^/.]+$/, "");
                 
                 return `
-                    <div class="activity-item">
+                    <div class="activity-item" onclick="openContent('${file.path}')" style="cursor: pointer;">
                         <div class="activity-icon">${icon}</div>
                         <div class="activity-content">
-                            <div class="activity-text">${action === 'drafted' ? 'Draft created' : 'Page updated'}: "${file.title}"</div>
+                            <div class="activity-text">${action}: "${title}"</div>
                             <div class="activity-time">${timeAgo}</div>
                         </div>
                     </div>
                 `;
             });
             
-            if (activities.length > 0) {
-                activityList.innerHTML = activities.join('');
-            }
+            activityList.innerHTML = activities.join('');
         }
 
         function getTimeAgo(date) {
@@ -816,31 +908,46 @@
         }
         
         async function deployToProduction() {
-            if (!confirm('Deploy all changes to live site? This will push to Git and trigger Netlify deployment.')) {
+            if (!confirm('Deploy all changes to live site? This will build the site and push to Git for Netlify deployment.')) {
                 return;
             }
             
             try {
-                showStatus('Deploying to production...', 'info');
+                showStatus('Building site...', 'info');
                 
-                const response = await fetch('/api/deploy', { method: 'POST' });
-                const data = await response.json();
+                // First build the site
+                const buildResponse = await fetch('/api/build', { method: 'POST' });
+                const buildData = await buildResponse.json();
                 
-                if (data.success) {
-                    showStatus('Deployment started! Changes will be live in ~1 minute', 'success');
+                if (!buildData.success) {
+                    showStatus('Build failed: ' + (buildData.error || 'Unknown error'), 'error');
+                    return;
+                }
+                
+                showStatus('Build successful! Deploying...', 'info');
+                
+                // Then deploy
+                const deployResponse = await fetch('/api/deploy', { method: 'POST' });
+                const deployData = await deployResponse.json();
+                
+                if (deployData.success) {
+                    showStatus('Deployment started! Changes will be live in ~2 minutes', 'success');
                     
                     // Add to activity feed
                     addActivity({
                         icon: '🚀',
-                        text: 'Site deployed to production',
+                        text: 'Site built and deployed to production',
                         time: 'Just now'
                     });
+                    
+                    // Update system status
+                    updateStatusItem('Build', 'Deployed', 'good');
                 } else {
-                    showStatus('Deployment failed', 'error');
+                    showStatus('Deployment failed: ' + (deployData.error || 'Unknown error'), 'error');
                 }
             } catch (error) {
                 console.error('Deployment error:', error);
-                showStatus('Deployment failed', 'error');
+                showStatus('Deployment failed - check console for details', 'error');
             }
         }
         

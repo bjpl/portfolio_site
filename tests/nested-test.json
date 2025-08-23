@@ -1,0 +1,12 @@
+{
+  "frontmatter": {
+    "title": "Nested Content Test",
+    "date": "2025-08-23T01:40:00.000Z",
+    "draft": false,
+    "tags": ["test", "nested", "hugo"],
+    "categories": ["testing"],
+    "description": "Testing nested directory structure for Hugo",
+    "weight": 10
+  },
+  "content": "# Nested Content Structure Test\n\nThis tests creating content in nested directories to ensure Hugo compatibility.\n\n## Hugo Features Tested\n\n- Nested directory structure\n- Front matter with Hugo-specific fields\n- Weight for menu ordering\n- Categories and tags\n- ISO date format\n\n## Directory Structure\n\n```\ntesting/\n└── nested/\n    └── hugo-test.md\n```\n\nThis should work seamlessly with Hugo's content organization.\n"
+}
