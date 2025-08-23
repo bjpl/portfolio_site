@@ -1,56 +1,81 @@
 /**
  * Netlify Function: Contact Form Handler
- * Handles contact form submissions with validation and notifications
+ * Handles contact form submissions with validation and saves to Supabase
  */
 
-exports.handler = async (event, context) => {
-  // Handle CORS
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Content-Type': 'application/json'
-  };
+const { 
+  getSupabaseClient, 
+  withErrorHandling, 
+  formatResponse, 
+  getStandardHeaders, 
+  handleCORS,
+  validateRequiredFields,
+  sanitizeInput,
+  checkRateLimit
+} = require('./utils/supabase');
 
-  // Handle preflight requests
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers,
-      body: ''
-    };
-  }
+exports.handler = async (event, context) => {
+  // Handle CORS preflight
+  const corsResponse = handleCORS(event);
+  if (corsResponse) return corsResponse;
+
+  const headers = getStandardHeaders();
 
   // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
       headers,
-      body: JSON.stringify({
-        success: false,
-        message: 'Method not allowed. Use POST.'
-      })
+      body: JSON.stringify(formatResponse(
+        false, 
+        null, 
+        'Method not allowed. Use POST.', 
+        null, 
+        405
+      ))
     };
   }
 
   try {
     // Parse request body
-    const data = JSON.parse(event.body);
-    
-    // Validate required fields
-    const requiredFields = ['name', 'email', 'message'];
-    const missingFields = requiredFields.filter(field => !data[field] || !data[field].trim());
-    
-    if (missingFields.length > 0) {
+    let data;
+    try {
+      data = JSON.parse(event.body);
+    } catch (parseError) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({
-          success: false,
-          message: `Missing required fields: ${missingFields.join(', ')}`
-        })
+        body: JSON.stringify(formatResponse(
+          false, 
+          null, 
+          'Invalid JSON in request body', 
+          parseError.message, 
+          400
+        ))
       };
     }
+    
+    // Validate required fields
+    const validation = validateRequiredFields(data, ['name', 'email', 'message']);
+    if (!validation.valid) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify(formatResponse(
+          false, 
+          null, 
+          `Missing required fields: ${validation.missing.join(', ')}`, 
+          null, 
+          400
+        ))
+      };
+    }
+
+    // Sanitize inputs
+    data.name = sanitizeInput(data.name);
+    data.email = sanitizeInput(data.email);
+    data.message = sanitizeInput(data.message);
+    data.subject = data.subject ? sanitizeInput(data.subject) : null;
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -58,65 +83,111 @@ exports.handler = async (event, context) => {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({
-          success: false,
-          message: 'Invalid email format'
-        })
+        body: JSON.stringify(formatResponse(
+          false, 
+          null, 
+          'Invalid email format', 
+          null, 
+          400
+        ))
+      };
+    }
+
+    // Rate limiting
+    const clientIP = event.headers['client-ip'] || event.headers['x-forwarded-for'] || 'unknown';
+    if (!checkRateLimit(clientIP, 5, 300000)) { // 5 requests per 5 minutes
+      return {
+        statusCode: 429,
+        headers,
+        body: JSON.stringify(formatResponse(
+          false, 
+          null, 
+          'Too many requests. Please try again later.', 
+          null, 
+          429
+        ))
       };
     }
 
     // Basic spam protection
     const message = data.message.toLowerCase();
-    const spamKeywords = ['viagra', 'casino', 'lottery', 'bitcoin', 'crypto', 'loan'];
+    const spamKeywords = ['viagra', 'casino', 'lottery', 'bitcoin', 'crypto', 'loan', 'investment'];
     const hasSpam = spamKeywords.some(keyword => message.includes(keyword));
     
     if (hasSpam) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({
-          success: false,
-          message: 'Message rejected by spam filter'
-        })
+        body: JSON.stringify(formatResponse(
+          false, 
+          null, 
+          'Message rejected by spam filter', 
+          null, 
+          400
+        ))
       };
     }
 
-    // Rate limiting (simple IP-based)
-    const clientIP = event.headers['client-ip'] || event.headers['x-forwarded-for'] || 'unknown';
-    console.log(`Contact form submission from IP: ${clientIP}`);
-
-    // In a real implementation, you would:
-    // 1. Store the message in a database
-    // 2. Send email notifications
-    // 3. Integrate with services like Formspree, Netlify Forms, or SendGrid
-    
-    // For demo purposes, we'll simulate success
-    const response = {
-      success: true,
-      message: 'Thank you for your message! We\'ll get back to you soon.',
-      timestamp: new Date().toISOString(),
-      id: `contact_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      data: {
-        name: data.name,
-        email: data.email,
-        subject: data.subject || 'Contact Form Submission',
-        messageLength: data.message.length
-      }
+    // Save to Supabase contact_messages table
+    const supabase = getSupabaseClient();
+    const contactData = {
+      name: data.name,
+      email: data.email,
+      subject: data.subject || 'Contact Form Submission',
+      message: data.message,
+      ip_address: clientIP,
+      user_agent: event.headers['user-agent'] || null,
+      submitted_at: new Date().toISOString()
     };
 
-    // Log the submission (in production, you'd want proper logging)
-    console.log('Contact form submission:', {
+    const result = await withErrorHandling(async () => {
+      return await supabase
+        .from('contact_messages')
+        .insert([contactData])
+        .select('id, created_at')
+        .single();
+    }, 'contact message insert');
+
+    if (!result.success) {
+      console.error('Failed to save contact message:', result.error);
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify(formatResponse(
+          false, 
+          null, 
+          'Failed to save message. Please try again.', 
+          result.error, 
+          500
+        ))
+      };
+    }
+
+    // Log successful submission
+    console.log('Contact form submission saved:', {
+      id: result.data.id,
       name: data.name,
       email: data.email,
       subject: data.subject,
-      timestamp: response.timestamp,
+      timestamp: result.data.created_at,
       ip: clientIP
     });
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify(response)
+      body: JSON.stringify(formatResponse(
+        true,
+        {
+          id: result.data.id,
+          name: data.name,
+          email: data.email,
+          subject: contactData.subject,
+          messageLength: data.message.length,
+          submittedAt: result.data.created_at
+        },
+        'Thank you for your message! We\'ll get back to you soon.'
+      ))
     };
 
   } catch (error) {
@@ -125,11 +196,13 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({
-        success: false,
-        message: 'Internal server error. Please try again later.',
-        timestamp: new Date().toISOString()
-      })
+      body: JSON.stringify(formatResponse(
+        false, 
+        null, 
+        'Internal server error. Please try again later.', 
+        error.message, 
+        500
+      ))
     };
   }
 };

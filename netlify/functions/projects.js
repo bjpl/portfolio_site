@@ -1,35 +1,37 @@
 /**
  * Netlify Function: Projects API
- * Serves portfolio projects data with filtering and categorization
+ * Serves portfolio projects data from Supabase with filtering and categorization
  */
 
-exports.handler = async (event, context) => {
-  // Handle CORS
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
-    'Content-Type': 'application/json',
-    'Cache-Control': 'public, max-age=600' // Cache for 10 minutes
-  };
+const { 
+  getSupabaseClient, 
+  withErrorHandling, 
+  formatResponse, 
+  getStandardHeaders, 
+  handleCORS
+} = require('./utils/supabase');
 
-  // Handle preflight requests
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers,
-      body: ''
-    };
-  }
+exports.handler = async (event, context) => {
+  // Handle CORS preflight
+  const corsResponse = handleCORS(event);
+  if (corsResponse) return corsResponse;
+
+  const headers = getStandardHeaders({
+    'Cache-Control': 'public, max-age=600' // Cache for 10 minutes
+  });
 
   // Only allow GET requests
   if (event.httpMethod !== 'GET') {
     return {
       statusCode: 405,
       headers,
-      body: JSON.stringify({
-        error: 'Method not allowed. Use GET.'
-      })
+      body: JSON.stringify(formatResponse(
+        false, 
+        null, 
+        'Method not allowed. Use GET.', 
+        null, 
+        405
+      ))
     };
   }
 
@@ -39,9 +41,143 @@ exports.handler = async (event, context) => {
     const category = params.get('category');
     const technology = params.get('technology');
     const featured = params.get('featured') === 'true';
+    const status = params.get('status');
+    const limit = parseInt(params.get('limit')) || null;
+    const offset = parseInt(params.get('offset')) || 0;
 
-    // Mock projects data (in production, you'd fetch from a CMS or database)
-    const allProjects = [
+    // Get Supabase client
+    const supabase = getSupabaseClient();
+
+    // Build query
+    let query = supabase
+      .from('projects')
+      .select(`
+        id,
+        name,
+        slug,
+        description,
+        long_description,
+        category,
+        technologies,
+        status,
+        featured,
+        images,
+        links,
+        metrics,
+        start_date,
+        completed_date,
+        expected_completion,
+        highlights,
+        created_at,
+        updated_at
+      `);
+
+    // Apply filters
+    if (category) {
+      query = query.eq('category', category);
+    }
+    
+    if (status) {
+      query = query.eq('status', status);
+    }
+    
+    if (featured) {
+      query = query.eq('featured', true);
+    }
+    
+    if (technology) {
+      query = query.contains('technologies', [technology]);
+    }
+
+    // Apply pagination
+    if (limit) {
+      query = query.range(offset, offset + limit - 1);
+    }
+
+    // Order by featured first, then by completion date
+    query = query.order('featured', { ascending: false })
+                 .order('completed_date', { ascending: false, nullsLast: true })
+                 .order('created_at', { ascending: false });
+
+    // Execute query
+    const result = await withErrorHandling(async () => {
+      return await query;
+    }, 'projects fetch');
+
+    if (!result.success) {
+      console.error('Failed to fetch projects:', result.error);
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify(formatResponse(
+          false, 
+          null, 
+          'Failed to fetch projects', 
+          result.error, 
+          500
+        ))
+      };
+    }
+
+    const projects = result.data || [];
+
+    // Get metadata (categories, technologies, stats) from all projects
+    const metaResult = await withErrorHandling(async () => {
+      return await supabase
+        .from('projects')
+        .select('category, technologies, status, featured');
+    }, 'projects metadata fetch');
+
+    let categories = [];
+    let technologies = [];
+    let stats = {
+      total: 0,
+      completed: 0,
+      inProgress: 0,
+      featured: 0
+    };
+
+    if (metaResult.success && metaResult.data) {
+      // Extract unique categories and technologies
+      const allProjects = metaResult.data;
+      categories = [...new Set(allProjects.map(p => p.category).filter(Boolean))];
+      technologies = [...new Set(allProjects.flatMap(p => p.technologies || []))];
+      
+      // Calculate stats
+      stats = {
+        total: allProjects.length,
+        completed: allProjects.filter(p => p.status === 'completed').length,
+        inProgress: allProjects.filter(p => p.status === 'in-progress').length,
+        featured: allProjects.filter(p => p.featured).length
+      };
+    }
+
+    const response = formatResponse(
+      true,
+      {
+        projects,
+        meta: {
+          categories,
+          technologies,
+          stats,
+          pagination: {
+            offset,
+            limit,
+            count: projects.length
+          },
+          lastUpdated: new Date().toISOString()
+        }
+      },
+      'Projects fetched successfully'
+    );
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify(response)
+    };
+    // Fallback mock data if Supabase is unavailable
+    const fallbackProjects = [
       {
         id: 1,
         name: 'Universal API System',
@@ -184,66 +320,28 @@ exports.handler = async (event, context) => {
       }
     ];
 
-    // Filter projects
-    let filteredProjects = [...allProjects];
+    ];
 
-    // Category filter
-    if (category) {
-      filteredProjects = filteredProjects.filter(project => 
-        project.category.toLowerCase() === category.toLowerCase()
-      );
-    }
-
-    // Technology filter
-    if (technology) {
-      filteredProjects = filteredProjects.filter(project =>
-        project.technologies.some(tech => 
-          tech.toLowerCase().includes(technology.toLowerCase())
-        )
-      );
-    }
-
-    // Featured filter
-    if (featured) {
-      filteredProjects = filteredProjects.filter(project => project.featured);
-    }
-
-    // Sort by featured first, then by completion date
-    filteredProjects.sort((a, b) => {
-      if (a.featured && !b.featured) return -1;
-      if (!a.featured && b.featured) return 1;
-      
-      const dateA = new Date(a.completedDate || a.startDate);
-      const dateB = new Date(b.completedDate || b.startDate);
-      return dateB - dateA;
-    });
-
-    // Get available categories and technologies for filtering
-    const categories = [...new Set(allProjects.map(project => project.category))];
-    const technologies = [...new Set(allProjects.flatMap(project => project.technologies))];
-
-    // Calculate stats
-    const stats = {
-      total: allProjects.length,
-      completed: allProjects.filter(p => p.status === 'completed').length,
-      inProgress: allProjects.filter(p => p.status === 'in-progress').length,
-      featured: allProjects.filter(p => p.featured).length
-    };
-
-    const response = {
-      projects: filteredProjects,
-      meta: {
-        categories,
-        technologies,
-        stats,
-        lastUpdated: new Date().toISOString()
-      }
-    };
-
+    // This fallback will never be reached in the new implementation
+    // as we handle Supabase errors above
+    console.warn('Using fallback project data - this should not happen');
+    
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify(response)
+      body: JSON.stringify(formatResponse(
+        true,
+        {
+          projects: fallbackProjects,
+          meta: {
+            categories: [],
+            technologies: [],
+            stats: { total: 0, completed: 0, inProgress: 0, featured: 0 },
+            lastUpdated: new Date().toISOString()
+          }
+        },
+        'Projects fetched (fallback data)'
+      ))
     };
 
   } catch (error) {
@@ -252,11 +350,13 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({
-        error: 'Internal server error',
-        message: 'Failed to fetch projects',
-        timestamp: new Date().toISOString()
-      })
+      body: JSON.stringify(formatResponse(
+        false, 
+        null, 
+        'Failed to fetch projects', 
+        error.message, 
+        500
+      ))
     };
   }
 };

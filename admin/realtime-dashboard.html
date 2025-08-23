@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Realtime Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .dashboard-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+        }
+        
+        .metric-card.primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .metric-card.success { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .metric-card.warning { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .metric-card.info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .activity-feed {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            padding: 12px;
+            border-left: 4px solid #e5e7eb;
+            margin-bottom: 8px;
+            background: #f9fafb;
+            border-radius: 0 6px 6px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-item.new {
+            border-left-color: #10b981;
+            background: #ecfdf5;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .activity-item.comment { border-left-color: #3b82f6; }
+        .activity-item.contact { border-left-color: #f59e0b; }
+        .activity-item.blog { border-left-color: #8b5cf6; }
+        .activity-item.user { border-left-color: #06b6d4; }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .connection-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            z-index: 1000;
+        }
+        
+        .connection-indicator.connected {
+            background: #10b981;
+            color: white;
+        }
+        
+        .connection-indicator.connecting {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .connection-indicator.disconnected {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .chart-container {
+            height: 300px;
+            width: 100%;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-badge.pending { background: #fef3c7; color: #92400e; }
+        .status-badge.approved { background: #d1fae5; color: #065f46; }
+        .status-badge.published { background: #dbeafe; color: #1e40af; }
+        
+        .table-container {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="connection-status" class="connection-indicator connecting">
+        <i class="fas fa-circle pulse mr-2"></i>
+        Connecting...
+    </div>
+
+    <div class="container mx-auto px-6 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">
+                <i class="fas fa-tachometer-alt mr-3"></i>
+                Realtime Dashboard
+            </h1>
+            <div class="flex space-x-4">
+                <button id="refresh-data" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
+                    <i class="fas fa-sync-alt mr-2"></i>
+                    Refresh
+                </button>
+                <button id="export-data" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition">
+                    <i class="fas fa-download mr-2"></i>
+                    Export
+                </button>
+            </div>
+        </div>
+
+        <!-- Metrics Row -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="metric-card primary">
+                <div id="active-users" class="metric-value">0</div>
+                <div class="metric-label">Active Users</div>
+            </div>
+            <div class="metric-card success">
+                <div id="total-page-views" class="metric-value">0</div>
+                <div class="metric-label">Page Views Today</div>
+            </div>
+            <div class="metric-card warning">
+                <div id="pending-contacts" class="metric-value">0</div>
+                <div class="metric-label">Pending Contacts</div>
+            </div>
+            <div class="metric-card info">
+                <div id="pending-comments" class="metric-value">0</div>
+                <div class="metric-label">Pending Comments</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Live Activity Feed -->
+            <div class="dashboard-card">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">
+                        <i class="fas fa-stream mr-2"></i>
+                        Live Activity Feed
+                    </h2>
+                    <button id="clear-activity" class="text-gray-500 hover:text-red-500 transition">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div id="activity-feed" class="activity-feed">
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-clock text-3xl mb-2"></i>
+                        <p>Waiting for activity...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Presence -->
+            <div class="dashboard-card">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">
+                    <i class="fas fa-users mr-2"></i>
+                    Online Users
+                </h2>
+                <div id="user-presence-list" class="space-y-3">
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-user-clock text-3xl mb-2"></i>
+                        <p>No users online</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Forms Section -->
+        <div class="dashboard-card mt-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">
+                    <i class="fas fa-envelope mr-2"></i>
+                    Recent Contact Submissions
+                </h2>
+                <span id="contact-count" class="status-badge pending">0 pending</span>
+            </div>
+            <div class="table-container">
+                <table class="min-w-full">
+                    <thead class="bg-gray-50 sticky top-0">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contact-submissions-table" class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                                <i class="fas fa-inbox text-3xl mb-2"></i>
+                                <p>No contact submissions yet</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Comments Moderation -->
+        <div class="dashboard-card mt-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">
+                    <i class="fas fa-comments mr-2"></i>
+                    Comments Moderation
+                </h2>
+                <span id="comments-count" class="status-badge pending">0 pending</span>
+            </div>
+            <div class="table-container">
+                <table class="min-w-full">
+                    <thead class="bg-gray-50 sticky top-0">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Content</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Post</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comments-moderation-table" class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                                <i class="fas fa-comment-slash text-3xl mb-2"></i>
+                                <p>No comments to moderate</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Analytics Chart -->
+        <div class="dashboard-card mt-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">
+                <i class="fas fa-chart-line mr-2"></i>
+                Real-time Analytics
+            </h2>
+            <div class="chart-container">
+                <canvas id="analytics-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { realtimeSubscriptions } from '../static/js/realtime/subscriptions.js';
+        import { wsManager } from '../static/js/realtime/websocket-manager.js';
+        import { uiUpdates } from '../static/js/realtime/ui-updates.js';
+
+        class AdminDashboard {
+            constructor() {
+                this.activityCount = 0;
+                this.chart = null;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.initializeChart();
+                this.loadInitialData();
+                
+                // Setup realtime event listeners
+                this.setupRealtimeListeners();
+            }
+
+            setupEventListeners() {
+                // Refresh button
+                document.getElementById('refresh-data').addEventListener('click', () => {
+                    this.refreshData();
+                });
+
+                // Export button
+                document.getElementById('export-data').addEventListener('click', () => {
+                    this.exportData();
+                });
+
+                // Clear activity feed
+                document.getElementById('clear-activity').addEventListener('click', () => {
+                    this.clearActivityFeed();
+                });
+            }
+
+            setupRealtimeListeners() {
+                // Listen for realtime events
+                window.addEventListener('realtime:newComment', (e) => {
+                    this.handleNewComment(e.detail.comment);
+                });
+
+                window.addEventListener('realtime:newContactForm', (e) => {
+                    this.handleNewContactForm(e.detail.submission);
+                });
+
+                window.addEventListener('realtime:userJoined', (e) => {
+                    this.handleUserJoined(e.detail.newPresences[0]);
+                });
+
+                window.addEventListener('realtime:userLeft', (e) => {
+                    this.handleUserLeft(e.detail.leftPresences[0]);
+                });
+
+                window.addEventListener('realtime:presenceSync', (e) => {
+                    this.handlePresenceSync(e.detail);
+                });
+
+                window.addEventListener('realtime:analyticsUpdate', (e) => {
+                    this.handleAnalyticsUpdate(e.detail.newData);
+                });
+
+                // Connection status updates
+                window.addEventListener('ws:connection:open', (e) => {
+                    this.updateConnectionStatus('connected');
+                });
+
+                window.addEventListener('ws:connection:close', (e) => {
+                    this.updateConnectionStatus('disconnected');
+                });
+
+                window.addEventListener('ws:connection:error', (e) => {
+                    this.updateConnectionStatus('error');
+                });
+            }
+
+            handleNewComment(comment) {
+                this.addActivityItem({
+                    type: 'comment',
+                    icon: 'fas fa-comment',
+                    title: 'New Comment',
+                    description: `${comment.author_name} commented on "${comment.post_title}"`,
+                    time: new Date(comment.created_at),
+                    data: comment
+                });
+
+                this.addCommentToTable(comment);
+                
+                if (comment.status === 'pending') {
+                    this.incrementMetric('pending-comments');
+                }
+            }
+
+            handleNewContactForm(submission) {
+                this.addActivityItem({
+                    type: 'contact',
+                    icon: 'fas fa-envelope',
+                    title: 'New Contact Form',
+                    description: `${submission.name} sent a message: "${submission.subject}"`,
+                    time: new Date(submission.created_at),
+                    data: submission
+                });
+
+                this.addContactToTable(submission);
+                this.incrementMetric('pending-contacts');
+            }
+
+            handleUserJoined(presence) {
+                if (presence.user_id === 'anonymous') return;
+                
+                this.addActivityItem({
+                    type: 'user',
+                    icon: 'fas fa-user-plus',
+                    title: 'User Joined',
+                    description: `${presence.user_id} joined from ${presence.page}`,
+                    time: new Date(),
+                    data: presence
+                });
+
+                this.addUserToPresenceList(presence);
+            }
+
+            handleUserLeft(presence) {
+                if (presence.user_id === 'anonymous') return;
+                
+                this.addActivityItem({
+                    type: 'user',
+                    icon: 'fas fa-user-minus',
+                    title: 'User Left',
+                    description: `${presence.user_id} left the site`,
+                    time: new Date(),
+                    data: presence
+                });
+
+                this.removeUserFromPresenceList(presence.user_id);
+            }
+
+            handlePresenceSync({ activeUsers, presenceState }) {
+                this.updateMetric('active-users', activeUsers);
+                this.updatePresenceList(presenceState);
+            }
+
+            handleAnalyticsUpdate(data) {
+                if (data.page_views !== undefined) {
+                    this.updateMetric('total-page-views', data.page_views);
+                }
+
+                // Update chart
+                if (this.chart) {
+                    this.updateChart(data);
+                }
+            }
+
+            addActivityItem({ type, icon, title, description, time, data }) {
+                const feed = document.getElementById('activity-feed');
+                const emptyMessage = feed.querySelector('.text-center');
+                
+                if (emptyMessage) {
+                    emptyMessage.remove();
+                }
+
+                const item = document.createElement('div');
+                item.className = `activity-item ${type} new`;
+                item.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-start space-x-3">
+                            <i class="${icon} text-lg mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">${title}</h4>
+                                <p class="text-gray-600 text-sm">${description}</p>
+                                <span class="text-xs text-gray-400">${this.formatTime(time)}</span>
+                            </div>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600" onclick="this.parentElement.parentElement.remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+
+                feed.insertBefore(item, feed.firstChild);
+                
+                // Remove old items if too many
+                const items = feed.querySelectorAll('.activity-item');
+                if (items.length > 50) {
+                    items[items.length - 1].remove();
+                }
+
+                // Remove 'new' class after animation
+                setTimeout(() => {
+                    item.classList.remove('new');
+                }, 300);
+
+                this.activityCount++;
+            }
+
+            addCommentToTable(comment) {
+                const table = document.getElementById('comments-moderation-table');
+                const emptyRow = table.querySelector('td[colspan="5"]')?.parentElement;
+                
+                if (emptyRow) {
+                    emptyRow.remove();
+                }
+
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="user-avatar">${comment.author_name.charAt(0)}</div>
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900">${comment.author_name}</div>
+                                <div class="text-sm text-gray-500">${comment.author_email || 'N/A'}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm text-gray-900 max-w-xs truncate">${comment.content}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        ${comment.post_title}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="status-badge ${comment.status}">${comment.status}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="space-x-2">
+                            ${comment.status === 'pending' ? `
+                                <button class="text-green-600 hover:text-green-900" onclick="approveComment('${comment.id}')">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button class="text-red-600 hover:text-red-900" onclick="rejectComment('${comment.id}')">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            ` : ''}
+                            <button class="text-blue-600 hover:text-blue-900" onclick="editComment('${comment.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                table.insertBefore(row, table.firstChild);
+            }
+
+            addContactToTable(submission) {
+                const table = document.getElementById('contact-submissions-table');
+                const emptyRow = table.querySelector('td[colspan="5"]')?.parentElement;
+                
+                if (emptyRow) {
+                    emptyRow.remove();
+                }
+
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="user-avatar">${submission.name.charAt(0)}</div>
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900">${submission.name}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        ${submission.email}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm text-gray-900 max-w-xs truncate">${submission.subject}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${this.formatTime(new Date(submission.created_at))}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900" onclick="viewSubmission('${submission.id}')">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="text-green-600 hover:text-green-900" onclick="replyToSubmission('${submission.id}')">
+                                <i class="fas fa-reply"></i> Reply
+                            </button>
+                            <button class="text-gray-600 hover:text-gray-900" onclick="markAsRead('${submission.id}')">
+                                <i class="fas fa-check"></i> Mark Read
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                table.insertBefore(row, table.firstChild);
+            }
+
+            addUserToPresenceList(presence) {
+                const list = document.getElementById('user-presence-list');
+                const emptyMessage = list.querySelector('.text-center');
+                
+                if (emptyMessage) {
+                    emptyMessage.remove();
+                }
+
+                const userElement = document.createElement('div');
+                userElement.id = `presence-${presence.user_id}`;
+                userElement.className = 'flex items-center space-x-3 p-3 bg-white rounded-lg border';
+                userElement.innerHTML = `
+                    <div class="user-avatar">${presence.user_id.charAt(0).toUpperCase()}</div>
+                    <div class="flex-1">
+                        <div class="text-sm font-medium text-gray-900">${presence.user_id}</div>
+                        <div class="text-xs text-gray-500">Viewing: ${presence.page}</div>
+                    </div>
+                    <div class="text-xs text-gray-400">${this.formatTime(new Date(presence.online_at))}</div>
+                `;
+
+                list.appendChild(userElement);
+            }
+
+            removeUserFromPresenceList(userId) {
+                const userElement = document.getElementById(`presence-${userId}`);
+                if (userElement) {
+                    userElement.style.transition = 'all 0.3s ease';
+                    userElement.style.opacity = '0';
+                    userElement.style.transform = 'translateX(20px)';
+                    
+                    setTimeout(() => {
+                        userElement.remove();
+                        
+                        const list = document.getElementById('user-presence-list');
+                        if (list.children.length === 0) {
+                            list.innerHTML = `
+                                <div class="text-center text-gray-500 py-8">
+                                    <i class="fas fa-user-clock text-3xl mb-2"></i>
+                                    <p>No users online</p>
+                                </div>
+                            `;
+                        }
+                    }, 300);
+                }
+            }
+
+            updatePresenceList(presenceState) {
+                const list = document.getElementById('user-presence-list');
+                list.innerHTML = '';
+                
+                const users = Object.values(presenceState).flat();
+                
+                if (users.length === 0) {
+                    list.innerHTML = `
+                        <div class="text-center text-gray-500 py-8">
+                            <i class="fas fa-user-clock text-3xl mb-2"></i>
+                            <p>No users online</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                users.forEach(presence => {
+                    this.addUserToPresenceList(presence);
+                });
+            }
+
+            updateMetric(metricId, value) {
+                const element = document.getElementById(metricId);
+                if (element) {
+                    element.textContent = value;
+                    element.classList.add('pulse');
+                    setTimeout(() => {
+                        element.classList.remove('pulse');
+                    }, 1000);
+                }
+            }
+
+            incrementMetric(metricId, amount = 1) {
+                const element = document.getElementById(metricId);
+                if (element) {
+                    const currentValue = parseInt(element.textContent) || 0;
+                    this.updateMetric(metricId, currentValue + amount);
+                }
+            }
+
+            updateConnectionStatus(status) {
+                const indicator = document.getElementById('connection-status');
+                const statusText = {
+                    connected: 'Connected',
+                    connecting: 'Connecting...',
+                    disconnected: 'Disconnected',
+                    error: 'Connection Error'
+                };
+
+                indicator.className = `connection-indicator ${status}`;
+                indicator.innerHTML = `
+                    <i class="fas fa-circle ${status === 'connecting' ? 'pulse' : ''} mr-2"></i>
+                    ${statusText[status]}
+                `;
+            }
+
+            clearActivityFeed() {
+                const feed = document.getElementById('activity-feed');
+                feed.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-clock text-3xl mb-2"></i>
+                        <p>Waiting for activity...</p>
+                    </div>
+                `;
+                this.activityCount = 0;
+            }
+
+            formatTime(date) {
+                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+
+            initializeChart() {
+                // This would integrate with Chart.js or another charting library
+                const canvas = document.getElementById('analytics-chart');
+                const ctx = canvas.getContext('2d');
+                
+                // Simple placeholder chart
+                ctx.fillStyle = '#f3f4f6';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#6b7280';
+                ctx.font = '16px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Real-time Analytics Chart', canvas.width / 2, canvas.height / 2);
+                ctx.fillText('(Chart.js integration would go here)', canvas.width / 2, canvas.height / 2 + 25);
+            }
+
+            updateChart(data) {
+                // Update chart with new data
+                console.log('Updating chart with:', data);
+            }
+
+            loadInitialData() {
+                // Load initial data from backend
+                // This would be replaced with actual API calls
+                this.updateMetric('active-users', 0);
+                this.updateMetric('total-page-views', 0);
+                this.updateMetric('pending-contacts', 0);
+                this.updateMetric('pending-comments', 0);
+            }
+
+            refreshData() {
+                console.log('Refreshing dashboard data...');
+                this.loadInitialData();
+            }
+
+            exportData() {
+                console.log('Exporting dashboard data...');
+                const data = {
+                    timestamp: new Date().toISOString(),
+                    metrics: {
+                        activeUsers: document.getElementById('active-users').textContent,
+                        pageViews: document.getElementById('total-page-views').textContent,
+                        pendingContacts: document.getElementById('pending-contacts').textContent,
+                        pendingComments: document.getElementById('pending-comments').textContent
+                    },
+                    activityCount: this.activityCount
+                };
+
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `dashboard-export-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        // Global functions for button handlers
+        window.approveComment = (commentId) => {
+            console.log('Approving comment:', commentId);
+            // API call to approve comment
+        };
+
+        window.rejectComment = (commentId) => {
+            console.log('Rejecting comment:', commentId);
+            // API call to reject comment
+        };
+
+        window.editComment = (commentId) => {
+            console.log('Editing comment:', commentId);
+            // Open edit modal
+        };
+
+        window.viewSubmission = (submissionId) => {
+            console.log('Viewing submission:', submissionId);
+            // Open view modal
+        };
+
+        window.replyToSubmission = (submissionId) => {
+            console.log('Replying to submission:', submissionId);
+            // Open reply modal
+        };
+
+        window.markAsRead = (submissionId) => {
+            console.log('Marking as read:', submissionId);
+            // API call to mark as read
+        };
+
+        // Initialize dashboard
+        const dashboard = new AdminDashboard();
+        
+        // Set connection status to connecting initially
+        dashboard.updateConnectionStatus('connecting');
+
+        // Simulate connection after realtime subscriptions initialize
+        setTimeout(() => {
+            dashboard.updateConnectionStatus('connected');
+        }, 2000);
+    </script>
+</body>
+</html>

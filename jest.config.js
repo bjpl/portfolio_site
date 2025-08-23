@@ -16,7 +16,8 @@ module.exports = {
   // Setup files
   setupFilesAfterEnv: [
     '<rootDir>/tests/setup.ts',
-    '<rootDir>/tests/fixtures/test-data.js'
+    '<rootDir>/tests/fixtures/test-data.js',
+    '<rootDir>/tests/supabase/setup.js'
   ],
   
   // Module name mapping for aliases
@@ -28,7 +29,7 @@ module.exports = {
     '^@services/(.*)$': '<rootDir>/src/services/$1',
     '^@utils/(.*)$': '<rootDir>/src/utils/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/__mocks__/fileMock.js'
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/supabase/__mocks__/fileMock.js'
   },
   
   // Coverage configuration
@@ -78,6 +79,13 @@ module.exports = {
       functions: 85,
       lines: 85,
       statements: 85
+    },
+    // Supabase integration tests
+    './tests/supabase/': {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80
     }
   },
   
@@ -193,6 +201,30 @@ module.exports = {
         '<rootDir>/backend/test/integration/**/*.test.js'
       ],
       testEnvironment: 'node'
+    },
+    {
+      displayName: 'supabase-integration',
+      testMatch: [
+        '<rootDir>/tests/supabase/integration/**/*.test.js'
+      ],
+      testEnvironment: 'node',
+      setupFilesAfterEnv: ['<rootDir>/tests/supabase/setup.js']
+    },
+    {
+      displayName: 'supabase-api',
+      testMatch: [
+        '<rootDir>/tests/supabase/api/**/*.test.js'
+      ],
+      testEnvironment: 'node',
+      setupFilesAfterEnv: ['<rootDir>/tests/supabase/setup.js']
+    },
+    {
+      displayName: 'supabase-frontend',
+      testMatch: [
+        '<rootDir>/tests/supabase/frontend/**/*.test.js'
+      ],
+      testEnvironment: 'jsdom',
+      setupFilesAfterEnv: ['<rootDir>/tests/supabase/setup.js']
     }
   ],
   

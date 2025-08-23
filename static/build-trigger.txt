@@ -1,2 +1,0 @@
-Build trigger: 2025-08-18 20:42:00
-This file triggers Netlify rebuilds when updated.

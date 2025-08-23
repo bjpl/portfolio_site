@@ -1,4 +1,4 @@
-# Hugo
+# Hugo specific
 /public/
 /resources/_gen/
 /assets/jsconfig.json
@@ -33,6 +33,7 @@ lerna-debug.log*
 /.output/
 /.vuepress/dist/
 /.temp/
+public-test/
 
 # Environment files
 .env
@@ -44,6 +45,8 @@ lerna-debug.log*
 .env.test
 .env.build
 !.env.example
+!.env.test.example
+!*/.env.example
 
 # Logs
 *.log
@@ -68,6 +71,9 @@ coverage/
 *.lcov
 .nyc_output/
 lib-cov/
+test-results/
+test-report.xml
+junit.xml
 
 # IDE files
 .vscode/*
@@ -107,8 +113,6 @@ $RECYCLE.BIN/
 .tmp/
 temp/
 tmp/
-*.swp
-*.swo
 .cache/
 nul
 
@@ -123,13 +127,6 @@ nul
 *.db-wal
 *.rdb
 
-# Test coverage
-/coverage/
-.nyc_output/
-junit.xml
-test-results/
-test-report.xml
-
 # Netlify
 .netlify/
 !.netlify.toml
@@ -138,19 +135,13 @@ test-report.xml
 # Vercel
 .vercel/
 
-# Hugo specific
-public/
-resources/_gen/
-assets/jsconfig.json
-hugo_stats.json
-.hugo_build.lock
-
 # Content Management Tools
 static/tools/temp/
 static/tools/uploads/
 static/tools/*.log
 uploads/
 media/uploads/temp/
+static/admin/mock-backend-demo.html
 
 # Backend specific
 backend/node_modules/
@@ -162,6 +153,7 @@ backend/data/backups/
 backend/uploads/temp/
 backend/logs/
 backend/users.json
+backend/package-lock.json
 
 # Authentication & Security
 auth.json
@@ -175,6 +167,7 @@ private-key.pem
 test-*.json
 mock-data.json
 !test-data.example.json
+!**/test-data.example.json
 
 # Claude Flow & AI tools
 .claude/settings.local.json
@@ -197,10 +190,9 @@ claude-flow.ps1
 hive-mind-prompt-*.txt
 .roo/
 
-# Package manager lock files (optional - uncomment if needed)
-# package-lock.json
-# yarn.lock
-# pnpm-lock.yaml
+# Package manager lock files (keep root, ignore nested)
+package-lock.json
+tools/backend/package-lock.json
 
 # Analytics and monitoring
 analytics/
@@ -213,12 +205,74 @@ trace.json
 *.tsbuildinfo
 .turbo/
 
-# Supabase
+# Supabase local
 supabase/.branches/
 supabase/.temp/
 supabase/functions/_import_map.json
 
-# Local development
+# Development and test files
 .local/
 local.json
 development.json
+test-results/
+tree_exports_*/
+portfolio_site_tree*.txt
+deployment-summary.md
+*_content.txt
+*_tree.txt
+static_tools_content.csv
+public_tools_inventory.csv
+*.csv
+missing*/
+usernames.txt
+instagram_*.txt
+instagram_*.csv
+missing_*.txt
+missing_*.md
+*_report.md
+*_audit.py
+*_links_*.py
+*.py
+
+# Generated documentation files
+docs/architecture/MIGRATION_STRATEGY.md
+docs/architecture/SUPABASE_ARCHITECTURE_DESIGN.md
+docs/SUPABASE_INTEGRATION_GUIDE.md
+docs/supabase-integration.md
+
+# Admin panel files that should be tracked in development
+admin/
+!admin/
+
+# Working files and scripts
+*.ps1
+*.bat
+*.sh
+content-tool.*
+master-implementation.ps1
+setup-*.ps1
+deploy*.ps1
+*.txt
+!README*.txt
+!LICENSE.txt
+
+# JavaScript mock and demo files
+static/js/mock-backend/
+static/js/api-demo.js
+static/js/analytics*.js
+static/js/cache-cleaner.js
+static/js/client-auth.js
+static/js/config-checker.js
+static/js/contact-form.js
+static/js/edge-auth-client.js
+static/js/hugo-integration.js
+static/js/lazy-load.js
+static/js/theme-toggle.js
+static/js/url-mappings-complete.js
+static/js/api-config-central.js
+
+# Specific test and debug files
+test-*.html
+test_*.html
+*-debug.html
+*-test.html

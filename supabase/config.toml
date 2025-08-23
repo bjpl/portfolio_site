@@ -1,0 +1,90 @@
+# A string used to distinguish different Supabase projects on the same host
+project_id = "portfolio-site"
+
+[api]
+# Port to use for the API URL
+port = 54321
+# Schemas to expose in your API. Tables, views and stored procedures in this schema will get API endpoints
+schemas = ["public", "graphql_public"]
+# Extra schemas to add to the search_path of every request
+extra_search_path = ["public", "extensions"]
+# The maximum number of rows returns from a table in a single request. 
+max_rows = 1000
+
+[db]
+# Port to use for the local database URL
+port = 54322
+# The database major version to use. This has to be the same as your remote database's. 
+major_version = 15
+# The password for the postgres role
+password = "postgres"
+# Database settings
+pooler_enabled = true
+pool_size = 20
+connection_limit = 100
+
+[realtime]
+# Bind realtime to an IPv6 address
+enabled = true
+ip_version = "ipv4"
+
+[studio]
+# Port to use for Supabase Studio
+port = 54323
+# External URL of the API server that frontend connects to
+api_url = "http://localhost:54321"
+
+[inbucket]
+# Port to use for the inbucket (local email testing)
+port = 54324
+enabled = true
+smtp_port = 2500
+web_port = 9000
+
+[storage]
+# The maximum file size allowed (e.g. "5MB", "500KB")
+file_size_limit = "50MiB"
+
+[auth]
+# The base URL of your website. Used as an allow-list for redirects and for constructing URLs used
+# in emails.
+site_url = "http://localhost:1313"
+# A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
+additional_redirect_urls = ["https://localhost:1313"]
+# How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604800 (1 week).
+jwt_expiry = 3600
+# Allow/disallow new user signups to your project.
+enable_signup = false
+# If enabled, a user will be required to confirm any email change on both the old, and new email addresses. 
+# If disabled, only the new email is required to confirm.
+enable_confirmations = true
+
+[auth.email]
+# Allow/disallow new user signups via email to your project.
+enable_signup = false
+# If enabled, users need to confirm their email address before signing in.
+enable_confirmations = true
+
+# Use an external OAuth provider. The full list of providers are:
+# `apple`, `azure`, `bitbucket`, `discord`, `facebook`, `github`, `gitlab`, `google`, `keycloak`, `linkedin`, `notion`, `twitch`, `twitter`, `slack`, `spotify`, `workos`, `zoom`.
+[auth.external.github]
+enabled = false
+client_id = ""
+secret = ""
+# Overrides the default auth redirectUrl.
+redirect_uri = ""
+# Overrides the default auth provider URL.
+url = ""
+
+[analytics]
+enabled = false
+port = 54327
+vector_port = 9001
+# Configure the PgBouncer log level for the analytics backend
+log_level = "error"
+
+[functions]
+# External URL of the Functions server
+external_url = "http://localhost:54321/functions/v1"
+# PostgreSQL connection string for Functions
+database_url = "postgresql://postgres:postgres@localhost:54322/postgres"
