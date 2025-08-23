@@ -1,4 +1,4 @@
-// Netlify Function for token verification and user info
+// Netlify Function for token refresh
 exports.handler = async (event, context) => {
   // CORS configuration
   const origin = event.headers.origin;
@@ -10,7 +10,7 @@ exports.handler = async (event, context) => {
   const headers = {
     'Access-Control-Allow-Origin': allowedOrigins.includes(origin) ? origin : allowedOrigins[0],
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Credentials': 'true',
     'Content-Type': 'application/json'
   };
@@ -20,8 +20,8 @@ exports.handler = async (event, context) => {
     return { statusCode: 200, headers, body: '' };
   }
 
-  // Only allow GET
-  if (event.httpMethod !== 'GET') {
+  // Only allow POST
+  if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
       headers,
@@ -32,14 +32,12 @@ exports.handler = async (event, context) => {
   try {
     const authHeader = event.headers.authorization || event.headers.Authorization;
     
-    console.log('Auth header:', authHeader ? 'Present' : 'Missing');
-    
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return {
         statusCode: 401,
         headers,
         body: JSON.stringify({ 
-          error: 'No token provided',
+          error: 'No refresh token provided',
           success: false 
         })
       };
@@ -48,51 +46,48 @@ exports.handler = async (event, context) => {
     const token = authHeader.substring(7);
     
     try {
-      // Decode the token (matches our login token format)
+      // Validate existing token
       const decoded = Buffer.from(token, 'base64').toString('utf-8');
       const payload = JSON.parse(decoded);
       
-      // Check if token is expired
-      if (payload.exp && Date.now() > payload.exp) {
-        return {
-          statusCode: 401,
-          headers,
-          body: JSON.stringify({ 
-            error: 'Token expired',
-            success: false 
-          })
-        };
-      }
+      // Generate new token with extended expiry
+      const newTokenPayload = {
+        username: payload.username || 'admin',
+        email: payload.email || 'admin@portfolio.com',
+        role: payload.role || 'admin',
+        exp: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+      };
       
-      // Return user info
+      const newToken = Buffer.from(JSON.stringify(newTokenPayload)).toString('base64');
+      
       return {
         statusCode: 200,
         headers,
         body: JSON.stringify({
           success: true,
+          token: newToken,
           user: {
             id: 1,
-            username: payload.username || 'admin',
-            email: payload.email || 'admin@portfolio.com',
-            role: payload.role || 'admin'
+            username: newTokenPayload.username,
+            email: newTokenPayload.email,
+            role: newTokenPayload.role
           }
         })
       };
       
     } catch (decodeError) {
-      console.error('Token decode error:', decodeError);
       return {
         statusCode: 401,
         headers,
         body: JSON.stringify({ 
-          error: 'Invalid token format',
+          error: 'Invalid refresh token',
           success: false 
         })
       };
     }
     
   } catch (error) {
-    console.error('Auth verification error:', error);
+    console.error('Token refresh error:', error);
     return {
       statusCode: 500,
       headers,

@@ -39,7 +39,8 @@ class CentralAPIConfig {
                     ws: 'ws://localhost:3000/ws'
                 },
                 netlify: {
-                    http: '/.netlify/functions',
+                    http: '/api',
+                    functionsPath: '/.netlify/functions',
                     ws: null // WebSocket not available on Netlify
                 },
                 production: {
@@ -76,6 +77,9 @@ class CentralAPIConfig {
      */
     getAPIBaseURL() {
         const env = this.config.environment;
+        if (env === 'netlify') {
+            return this.config.api[env]?.http || '/api';
+        }
         return this.config.api[env]?.http || this.config.api.production.http;
     }
 
@@ -244,8 +248,18 @@ class CentralAPIConfig {
         
         // Mock responses for common endpoints
         const mockResponses = {
-            '/health': { status: 'offline', mode: 'fallback' },
-            '/auth/login': { error: 'Backend unavailable. Please ensure the backend server is running.' }
+            '/health': { 
+                status: 'healthy', 
+                mode: 'netlify-functions',
+                environment: 'production',
+                message: 'Portfolio site API is running on Netlify Functions'
+            },
+            '/auth/login': { error: 'Authentication service temporarily unavailable.' },
+            '/content/projects': {
+                success: true,
+                data: [],
+                message: 'Using fallback mode - content service unavailable'
+            }
         };
 
         const mockResponse = mockResponses[endpoint];

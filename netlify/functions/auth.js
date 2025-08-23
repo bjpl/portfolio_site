@@ -25,10 +25,16 @@ exports.handler = async (event, context) => {
     const origin = event.headers.origin;
     const allowedOrigins = [
       'https://vocal-pony-24e3de.netlify.app',
+      'https://www.vocal-pony-24e3de.netlify.app',
       // Add your custom domain here when you set it up:
       // 'https://yourdomain.com',
       // 'https://www.yourdomain.com',
-      ...(process.env.NODE_ENV === 'development' ? ['http://localhost:1313', 'http://localhost:3000'] : [])
+      ...(process.env.NODE_ENV === 'development' ? [
+        'http://localhost:1313', 
+        'http://localhost:3000', 
+        'http://localhost:8888',
+        'http://127.0.0.1:1313'
+      ] : [])
     ];
     
     return {
@@ -88,7 +94,8 @@ exports.handler = async (event, context) => {
         statusCode: 401,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': allowedOrigins.includes(event.headers.origin) ? event.headers.origin : allowedOrigins[0],
+          'Access-Control-Allow-Credentials': 'true'
         },
         body: JSON.stringify({
           success: false,
@@ -103,7 +110,8 @@ exports.handler = async (event, context) => {
         statusCode: 200,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': allowedOrigins.includes(event.headers.origin) ? event.headers.origin : allowedOrigins[0],
+          'Access-Control-Allow-Credentials': 'true'
         },
         body: JSON.stringify({
           success: true,
@@ -120,7 +128,8 @@ exports.handler = async (event, context) => {
         statusCode: 200,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': allowedOrigins.includes(event.headers.origin) ? event.headers.origin : allowedOrigins[0],
+          'Access-Control-Allow-Credentials': 'true'
         },
         body: JSON.stringify({
           success: true,

@@ -11,6 +11,10 @@
   BUILD_ID = "2025-08-21-v3-force-clear"
   VITE_API_URL = "/api"
   VITE_SITE_URL = "https://vocal-pony-24e3de.netlify.app"
+  API_BASE_URL = "https://vocal-pony-24e3de.netlify.app/api"
+  NETLIFY_FUNCTIONS_URL = "https://vocal-pony-24e3de.netlify.app/.netlify/functions"
+  CORS_ORIGIN = "https://vocal-pony-24e3de.netlify.app"
+  NODE_ENV = "production"
   
 [context.production]
   command = "rm -rf public && hugo --minify --cleanDestinationDir --gc"
@@ -70,10 +74,51 @@
 
 # Page Speed Optimization - Removed incorrect preloads
 
-# API Proxy Rules for Backend Integration
+# API Proxy Rules for Production Deployment
+# Route API calls to Netlify Functions
+[[redirects]]
+  from = "/api/health"
+  to = "/.netlify/functions/health"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/auth/*"
+  to = "/.netlify/functions/auth"
+  status = 200
+  force = true
+  headers = {X-Forwarded-For = ":client_ip"}
+
+[[redirects]]
+  from = "/api/contact"
+  to = "/.netlify/functions/contact"
+  status = 200
+  force = true
+  headers = {X-Forwarded-For = ":client_ip"}
+
+# Future API endpoints
+[[redirects]]
+  from = "/api/content/*"
+  to = "/.netlify/functions/content"
+  status = 200
+  force = false
+
+[[redirects]]
+  from = "/api/portfolio/*"
+  to = "/.netlify/functions/portfolio"
+  status = 200
+  force = false
+
+[[redirects]]
+  from = "/api/media/*"
+  to = "/.netlify/functions/media"
+  status = 200
+  force = false
+
+# Fallback for unmatched API routes
 [[redirects]]
   from = "/api/*"
-  to = "https://your-backend-url.netlify.app/.netlify/functions/:splat"
+  to = "/.netlify/functions/fallback"
   status = 200
   force = false
 
@@ -105,19 +150,63 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-# Build Plugins
-[[plugins]]
-  package = "@netlify/plugin-lighthouse"
+# Edge Functions Configuration and Routing
+[[edge_functions]]
+  function = "auth-login"
+  path = "/api/auth/login"
 
-[[plugins]]
-  package = "netlify-plugin-hugo-cache-resources"
+[[edge_functions]]
+  function = "auth-verify"
+  path = "/api/auth/verify"
 
-[[plugins]]
-  package = "netlify-plugin-submit-sitemap"
+[[edge_functions]]
+  function = "auth-logout"
+  path = "/api/auth/logout"
 
-  [plugins.inputs]
-    baseUrl = "https://vocal-pony-24e3de.netlify.app"
-    sitemapPath = "/sitemap.xml"
+# Temporarily disabled auth-middleware due to parsing issues
+# [[edge_functions]]
+#   function = "auth-middleware"
+#   path = "/admin/*"
+#   
+# [[edge_functions]]
+#   function = "auth-middleware"
+#   path = "/api/admin/*"
+
+# [[edge_functions]]
+#   function = "auth-middleware"
+#   path = "/api/portfolio/*"
+
+# [[edge_functions]]
+#   function = "auth-middleware"
+#   path = "/api/content/*"
+
+[[edge_functions]]
+  function = "test-edge"
+  path = "/api/test-edge"
+
+# Function-specific configurations
+[functions."auth-login"]
+  timeout = 30
+
+[functions."auth-me"]
+  timeout = 30
+
+[functions."auth"]
+  timeout = 30
+
+# Build Plugins (disabled for local development to avoid Node.js version conflicts)
+# [[plugins]]
+#   package = "@netlify/plugin-lighthouse"
+
+# [[plugins]]
+#   package = "netlify-plugin-hugo-cache-resources"
+
+# [[plugins]]
+#   package = "netlify-plugin-submit-sitemap"
+
+#   [plugins.inputs]
+#     baseUrl = "https://vocal-pony-24e3de.netlify.app"
+#     sitemapPath = "/sitemap.xml"
 
 # Development Settings
 [dev]

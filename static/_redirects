@@ -1,16 +1,50 @@
 # Netlify Redirects Configuration
+# Production API routing for vocal-pony-24e3de.netlify.app
+
+# Health Check - Always available
+/api/health         /.netlify/functions/health      200
+
+# Authentication API Routes
+/api/auth/login     /.netlify/functions/auth        200
+/api/auth/logout    /.netlify/functions/auth        200
+/api/auth/refresh   /.netlify/functions/auth        200
+/api/auth/me        /.netlify/functions/auth-me     200
+/api/auth/*         /.netlify/functions/auth        200
+
+# Contact Form API
+/api/contact        /.netlify/functions/contact     200
+
+# Content Management API (Future)
+/api/content/*      /.netlify/functions/content     200
+/api/portfolio/*    /.netlify/functions/portfolio   200
+/api/media/*        /.netlify/functions/media       200
 
 # Admin Panel Redirects
-/admin              /admin/login.html    200
-/admin/             /admin/login.html    200
-/admin/index        /admin/dashboard.html 200
+/admin              /admin/login.html               200
+/admin/             /admin/login.html               200
+/admin/index        /admin/dashboard.html           200
 
-# API Redirects (if backend is not deployed)
-/api/*              /.netlify/functions/:splat 200
+# Admin Panel SPA Routing
+/admin/*            /admin/:splat                   200
 
-# SPA fallback for any unmatched routes
-# This ensures client-side routing works
-/admin/*            /admin/:splat        200
+# API Fallback - Catch any unmatched API routes
+/api/*              /.netlify/functions/fallback    200
 
-# Catch-all for 404s
-/*                  /index.html          404
+# Language-specific redirects
+/en/*               /:splat                         301
+
+# Legacy redirects
+/learn/*            /tools/:splat                   301
+/make/*             /writing/:splat                 301
+
+# Hugo multilingual support
+/es/*               /es/:splat                      200
+
+# Asset optimization
+/uploads/*          /uploads/:splat                 200  Cache-Control: public,max-age=31536000
+/images/*           /images/:splat                  200  Cache-Control: public,max-age=31536000
+/css/*              /css/:splat                     200  Cache-Control: public,max-age=3600
+/js/*               /js/:splat                      200  Cache-Control: public,max-age=3600
+
+# Main site fallback
+/*                  /index.html                     404

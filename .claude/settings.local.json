@@ -31,7 +31,12 @@
       "Bash(npm run:*)",
       "Bash(timeout:*)",
       "Bash(set PORT=3002)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "WebSearch",
+      "WebFetch(domain:vocal-pony-24e3de.netlify.app)",
+      "Bash(netlify dev:*)",
+      "Bash(ping:*)",
+      "Bash(ren:*)"
     ],
     "deny": []
   }

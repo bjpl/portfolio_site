@@ -33,11 +33,11 @@ const APIConfig = {
 
     // API Endpoints
     endpoints: {
-        // Auth
-        login: '/auth/login',
-        logout: '/auth/logout',
-        me: '/auth/me',
-        refresh: '/auth/refresh',
+        // Auth - Updated for Netlify Functions
+        login: '/auth-login',
+        logout: '/auth-logout',
+        me: '/auth-me',
+        refresh: '/auth-refresh',
 
         // Dashboard
         stats: '/dashboard/stats',

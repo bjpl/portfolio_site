@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Static CMS</title>
+    
+    <!-- Auth Styles -->
+    <link rel="stylesheet" href="/css/auth/auth-styles.css">
+    
+    <!-- Base Styles -->
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-hover: #2980b9;
+            --secondary-color: #95a5a6;
+            --secondary-hover: #7f8c8d;
+            --error-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --info-color: #3498db;
+            
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-hover: #f8f9fa;
+            
+            --text-primary: #2c3e50;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            
+            --border-color: #e1e5e9;
+            --border-light: #f0f0f0;
+            --border-hover: #bbbbbb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-header h1 {
+            color: white;
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+        
+        .auth-form {
+            background: white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-switch {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0 0 8px 8px;
+            margin-top: -1px;
+        }
+        
+        .form-switch p {
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .form-switch a {
+            color: white;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .form-switch a:hover {
+            text-decoration: underline;
+        }
+        
+        .dev-notice {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .dev-notice h3 {
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dev-notice p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.8rem;
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dev-notice code {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Login Header -->
+        <div class="login-header">
+            <h1>Static CMS</h1>
+            <p>Client-Side Content Management System</p>
+        </div>
+        
+        <!-- Development Notice -->
+        <div class="dev-notice">
+            <h3>🔧 Development Mode</h3>
+            <p><strong>Default Admin Login:</strong></p>
+            <p>Username: <code>admin</code></p>
+            <p>Password: <code>admin123!</code></p>
+            <p>This system runs entirely in your browser with no server required!</p>
+        </div>
+        
+        <!-- Login Form Container -->
+        <div id="login-form-container"></div>
+        
+        <!-- Register Form Container (Hidden by default) -->
+        <div id="register-form-container"></div>
+        
+        <!-- Form Switch Footer -->
+        <div class="form-switch" style="display: none;" id="form-switch">
+            <p>New to Static CMS? <a href="#" id="show-register-link">Create an account</a></p>
+        </div>
+    </div>
+
+    <!-- Auth Scripts -->
+    <script src="/js/utils/crypto-utils.js"></script>
+    <script src="/js/utils/storage-utils.js"></script>
+    <script src="/js/auth/jwt-utils.js"></script>
+    <script src="/js/auth/auth-service.js"></script>
+    <script src="/js/middleware/auth-middleware.js"></script>
+    <script src="/js/auth/auth-ui.js"></script>
+    <script src="/js/auth/auth-init.js"></script>
+    
+    <!-- Page-specific initialization -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🔐 Login page loaded');
+            
+            // Wait for auth system to initialize
+            let retries = 0;
+            const maxRetries = 50;
+            
+            while (!window.authService && retries < maxRetries) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                retries++;
+            }
+            
+            if (!window.authService) {
+                console.error('❌ Auth system failed to initialize');
+                document.body.innerHTML = `
+                    <div style="text-align: center; color: white; padding: 2rem;">
+                        <h2>❌ Authentication System Error</h2>
+                        <p>Failed to initialize authentication system.</p>
+                        <p>Please refresh the page or check console for errors.</p>
+                        <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: white; border: none; border-radius: 4px; cursor: pointer;">Reload Page</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            console.log('✅ Auth system ready on login page');
+            
+            // Show form switch
+            const formSwitch = document.getElementById('form-switch');
+            if (formSwitch) {
+                formSwitch.style.display = 'block';
+            }
+            
+            // Handle register link
+            const showRegisterLink = document.getElementById('show-register-link');
+            if (showRegisterLink) {
+                showRegisterLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (window.authUI) {
+                        window.authUI.showRegisterForm();
+                        showRegisterLink.textContent = 'Back to login';
+                        showRegisterLink.onclick = (e) => {
+                            e.preventDefault();
+                            window.authUI.showLoginForm();
+                            showRegisterLink.textContent = 'Create an account';
+                        };
+                    }
+                });
+            }
+            
+            // Check if already authenticated
+            if (window.authService.isAuthenticated()) {
+                console.log('🔸 User already authenticated, redirecting...');
+                const urlParams = new URLSearchParams(window.location.search);
+                const returnTo = urlParams.get('returnTo') || '/admin/dashboard.html';
+                window.location.href = returnTo;
+            }
+            
+            // Handle successful login
+            window.authService.on('login', (user) => {
+                console.log('🔸 Login successful, redirecting user:', user);
+                setTimeout(() => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const returnTo = urlParams.get('returnTo') || '/admin/dashboard.html';
+                    window.location.href = returnTo;
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html>

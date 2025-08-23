@@ -3,1269 +3,698 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Portfolio Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Dashboard - Static CMS</title>
+    
+    <!-- Auth Styles -->
+    <link rel="stylesheet" href="/css/auth/auth-styles.css">
+    
+    <!-- Dashboard Styles -->
     <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-hover: #2980b9;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --error-color: #e74c3c;
+            --info-color: #3498db;
+            
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            
+            --text-primary: #2c3e50;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            
+            --border-color: #e1e5e9;
+            --border-light: #f0f0f0;
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         
-        :root {
-            --primary: #667eea;
-            --primary-dark: #5a67d8;
-            --secondary: #48bb78;
-            --danger: #f56565;
-            --warning: #ed8936;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f7fafc;
-            --bg-tertiary: #edf2f7;
-            --text-primary: #2d3748;
-            --text-secondary: #4a5568;
-            --text-muted: #718096;
-            --border: #e2e8f0;
-            --shadow: rgba(0, 0, 0, 0.1);
-        }
-        
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-secondary);
             color: var(--text-primary);
             line-height: 1.6;
         }
         
-        .admin-layout {
+        /* Header */
+        .header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
             display: flex;
-            min-height: 100vh;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
         }
         
-        .main-content {
-            flex: 1;
-            margin-left: 260px;
-            padding: 30px;
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
         
-        @media (max-width: 768px) {
-            .main-content {
-                margin-left: 0;
-                margin-top: 80px;
-                padding: 20px;
-            }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-decoration: none;
         }
         
-        /* Dashboard specific styles */
-        .dashboard-grid {
+        .breadcrumb {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        /* Navigation */
+        .nav {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 2rem;
+        }
+        
+        .nav-list {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-item a {
+            display: block;
+            padding: 1rem 0;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-color 0.3s;
+        }
+        
+        .nav-item a:hover,
+        .nav-item a.active {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        /* Main Content */
+        .main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-title {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
             display: grid;
-            gap: 24px;
-        }
-        
-        /* Stats Cards */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
         
         .stat-card {
             background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            transition: all 0.3s;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px var(--shadow);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
         }
         
         .stat-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-title {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
         }
         
         .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-        
-        .stat-icon.blue { background: rgba(102, 126, 234, 0.1); color: #667eea; }
-        .stat-icon.green { background: rgba(72, 187, 120, 0.1); color: #48bb78; }
-        .stat-icon.orange { background: rgba(237, 137, 54, 0.1); color: #ed8936; }
-        .stat-icon.purple { background: rgba(159, 122, 234, 0.1); color: #9f7aea; }
-        
-        .stat-trend {
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .stat-trend.up {
-            background: rgba(72, 187, 120, 0.1);
-            color: #48bb78;
-        }
-        
-        .stat-trend.down {
-            background: rgba(245, 101, 101, 0.1);
-            color: #f56565;
+            font-size: 1.5rem;
+            opacity: 0.7;
         }
         
         .stat-value {
             font-size: 2rem;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 8px;
         }
         
-        .stat-label {
-            font-size: 14px;
-            color: var(--text-muted);
+        .stat-change {
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
         }
         
-        /* Charts Section */
-        .charts-row {
+        .stat-change.positive {
+            color: var(--success-color);
+        }
+        
+        .stat-change.negative {
+            color: var(--error-color);
+        }
+        
+        /* Content Grid */
+        .content-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 20px;
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
         
-        .chart-card {
+        .content-section {
             background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-        }
-        
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .chart-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        
-        .chart-options {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .chart-option {
-            padding: 6px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            background: transparent;
-            color: var(--text-secondary);
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .chart-option.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
-        .chart-placeholder {
-            height: 300px;
-            background: var(--bg-tertiary);
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
         }
         
-        /* Activity Feed */
-        .activity-feed {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
+        .section-header {
+            padding: 1.5rem 1.5rem 0 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 1.5rem;
         }
         
-        .activity-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .activity-title {
-            font-size: 18px;
+        .section-title {
+            font-size: 1.2rem;
             font-weight: 600;
-            color: var(--text-primary);
+            margin-bottom: 0.5rem;
         }
         
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .section-content {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+        
+        /* Recent Activity */
         .activity-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+            list-style: none;
         }
         
         .activity-item {
             display: flex;
-            gap: 12px;
-            padding: 12px;
-            background: var(--bg-secondary);
-            border-radius: 8px;
-            transition: all 0.2s;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-light);
         }
         
-        .activity-item:hover {
-            background: var(--bg-tertiary);
+        .activity-item:last-child {
+            border-bottom: none;
         }
         
         .activity-icon {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
+            background: var(--bg-secondary);
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--bg-primary);
+            font-size: 1rem;
             flex-shrink: 0;
         }
         
         .activity-content {
             flex: 1;
+            min-width: 0;
         }
         
         .activity-text {
-            color: var(--text-primary);
-            font-size: 14px;
-            margin-bottom: 4px;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
         }
         
         .activity-time {
             color: var(--text-muted);
-            font-size: 12px;
+            font-size: 0.8rem;
         }
         
         /* Quick Actions */
         .quick-actions {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-        }
-        
-        .actions-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin-top: 16px;
+            gap: 1rem;
         }
         
-        .action-card {
+        .action-button {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 18px 20px;
+            gap: 0.75rem;
+            padding: 1rem;
             background: var(--bg-secondary);
-            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
             text-decoration: none;
             color: var(--text-primary);
-            transition: all 0.2s;
-            cursor: pointer;
-            min-height: 60px;
+            transition: background-color 0.3s, border-color 0.3s;
         }
         
-        .action-card:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateX(4px);
+        .action-button:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
         }
         
         .action-icon {
-            font-size: 24px;
+            font-size: 1.2rem;
+            flex-shrink: 0;
         }
         
         .action-text {
+            flex: 1;
+        }
+        
+        .action-title {
             font-weight: 500;
+            margin-bottom: 0.25rem;
         }
         
-        /* System Status */
-        .system-status {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-        }
-        
-        .status-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-        
-        .status-item {
-            padding: 12px;
-            background: var(--bg-secondary);
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .status-label {
+        .action-description {
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 0.8rem;
         }
         
-        .status-value {
-            font-weight: 600;
-            font-size: 14px;
-            padding: 4px 8px;
-            border-radius: 4px;
+        /* Loading States */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--text-muted);
         }
         
-        .status-value.good {
-            background: rgba(72, 187, 120, 0.1);
-            color: #48bb78;
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-light);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
         }
         
-        .status-value.warning {
-            background: rgba(237, 137, 54, 0.1);
-            color: #ed8936;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
-        .status-value.error {
-            background: rgba(245, 101, 101, 0.1);
-            color: #f56565;
-        }
-        
-        @media (max-width: 1024px) {
-            .charts-row {
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav {
+                padding: 0 1rem;
+            }
+            
+            .nav-list {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .main {
+                padding: 1rem;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="admin-layout">
-        <!-- Navigation will be injected here -->
-        <div id="admin-nav"></div>
-        
-        <div class="main-content">
-            <div class="dashboard-grid">
-        <!-- Stats Row -->
-        <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon blue">📄</div>
-                    <span class="stat-trend up">↑ 12%</span>
-                </div>
-                <div class="stat-value" id="totalPages">113</div>
-                <div class="stat-label">Total Pages</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon green">📝</div>
-                    <span class="stat-trend up">↑ 8%</span>
-                </div>
-                <div class="stat-value" id="blogPosts">24</div>
-                <div class="stat-label">Blog Posts</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon orange">🖼️</div>
-                    <span class="stat-trend up">↑ 5%</span>
-                </div>
-                <div class="stat-value" id="mediaFiles">384</div>
-                <div class="stat-label">Media Files</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon purple">👥</div>
-                    <span class="stat-trend up">↑ 24%</span>
-                </div>
-                <div class="stat-value" id="visitors">2.1K</div>
-                <div class="stat-label">Monthly Visitors</div>
-            </div>
-        </div>
-
-        <!-- Charts Row -->
-        <div class="charts-row">
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3 class="chart-title">Traffic Overview</h3>
-                    <div class="chart-options">
-                        <button class="chart-option active">7D</button>
-                        <button class="chart-option">30D</button>
-                        <button class="chart-option">3M</button>
-                    </div>
-                </div>
-                <div class="chart-placeholder">
-                    <canvas id="trafficChart">📊 Chart will render here</canvas>
-                </div>
-            </div>
-            
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3 class="chart-title">Content Types</h3>
-                </div>
-                <div class="chart-placeholder">
-                    <canvas id="contentChart">📈 Chart will render here</canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Activity & Quick Actions Row -->
-        <div class="charts-row">
-            <div class="activity-feed">
-                <div class="activity-header">
-                    <h3 class="activity-title">Recent Activity</h3>
-                    <a href="#" style="color: var(--primary); text-decoration: none; font-size: 14px;">View all →</a>
-                </div>
-                <div class="activity-list" id="activityList">
-                    <div class="activity-item">
-                        <div class="activity-icon">📝</div>
-                        <div class="activity-content">
-                            <div class="activity-text">New blog post "Getting Started with Hugo" published</div>
-                            <div class="activity-time">2 hours ago</div>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-icon">🖼️</div>
-                        <div class="activity-content">
-                            <div class="activity-text">12 images optimized, saved 4.2 MB</div>
-                            <div class="activity-time">5 hours ago</div>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-icon">⚡</div>
-                        <div class="activity-content">
-                            <div class="activity-text">Site deployed to production</div>
-                            <div class="activity-time">Yesterday at 3:45 PM</div>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-icon">📄</div>
-                        <div class="activity-content">
-                            <div class="activity-text">About page updated</div>
-                            <div class="activity-time">2 days ago</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div>
-                <div class="quick-actions">
-                    <h3 style="margin: 0 0 16px 0; font-size: 18px; color: var(--text-primary);">Quick Actions</h3>
-                    <div class="actions-grid">
-                        <div onclick="createNewContent('blog')" class="action-card">
-                            <span class="action-icon">➕</span>
-                            <span class="action-text">New Blog Post</span>
-                        </div>
-                        <a href="simple-editor.html" class="action-card">
-                            <span class="action-icon">✏️</span>
-                            <span class="action-text">Edit Content</span>
-                        </a>
-                        <a href="image-optimizer.html" class="action-card">
-                            <span class="action-icon">🖼️</span>
-                            <span class="action-text">Manage Media</span>
-                        </a>
-                        <div onclick="deployToProduction()" class="action-card">
-                            <span class="action-icon">🚀</span>
-                            <span class="action-text">Deploy Site</span>
-                        </div>
-                        <a href="analytics.html" class="action-card">
-                            <span class="action-icon">📈</span>
-                            <span class="action-text">View Analytics</span>
-                        </a>
-                        <a href="portfolio.html" class="action-card">
-                            <span class="action-icon">💼</span>
-                            <span class="action-text">Portfolio</span>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="system-status" style="margin-top: 20px;">
-                    <h3 style="margin: 0 0 16px 0; font-size: 18px; color: var(--text-primary);">System Status</h3>
-                    <div class="status-grid">
-                        <div class="status-item">
-                            <span class="status-label">API</span>
-                            <span class="status-value good">Checking...</span>
-                        </div>
-                        <div class="status-item">
-                            <span class="status-label">Content</span>
-                            <span class="status-value good">Checking...</span>
-                        </div>
-                        <div class="status-item">
-                            <span class="status-label">Media</span>
-                            <span class="status-value good">Checking...</span>
-                        </div>
-                        <div class="status-item">
-                            <span class="status-label">Analytics</span>
-                            <span class="status-value warning">Checking...</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
+    <!-- Loading Screen -->
+    <div id="loading-screen" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; display: flex; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="text-align: center;">
+            <div class="loading-spinner" style="margin: 0 auto 1rem auto;"></div>
+            <p>Loading Dashboard...</p>
         </div>
     </div>
 
-    <script>
-        // Load navigation component
-        fetch('/admin/nav.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('admin-nav').innerHTML = html;
-                
-                // Execute any scripts in the nav component
-                const scripts = document.getElementById('admin-nav').querySelectorAll('script');
-                scripts.forEach(script => {
-                    const newScript = document.createElement('script');
-                    newScript.textContent = script.textContent;
-                    document.head.appendChild(newScript);
-                });
-            })
-            .catch(error => {
-                console.error('Failed to load navigation:', error);
-            });
-    </script>
-    
-    <script>
-        // Dashboard initialization
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Show loading state
-            showLoadingState();
-            
-            try {
-                // Load dashboard data immediately (no auth needed for simple CMS)
-                await loadDashboardData();
-                hideLoadingState();
-                showStatus('Dashboard loaded successfully', 'success');
-            } catch (error) {
-                hideLoadingState();
-                showStatus('Failed to load dashboard data', 'error');
-                console.error('Dashboard initialization error:', error);
-            }
-            
-            // Initialize WebSocket for real-time updates
-            if (window.apiClient) {
-                window.addEventListener('ws-message', (e) => {
-                    if (e.detail.type === 'stats-update') {
-                        updateStats(e.detail.data);
-                    } else if (e.detail.type === 'activity') {
-                        addActivity(e.detail.data);
-                    }
-                });
-            }
-            
-            // Setup chart option buttons
-            document.querySelectorAll('.chart-option').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.chart-option').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    // Update chart based on selected period
-                    updateChart(e.target.textContent);
-                });
-            });
-        });
-        
-        async function loadDashboardData() {
-            try {
-                // Load real data from our simple CMS APIs
-                await Promise.all([
-                    loadContentStats(),
-                    loadMediaStats(),
-                    loadAnalyticsStats(),
-                    loadSystemStatus()
-                ]);
-            } catch (error) {
-                console.error('Error loading dashboard data:', error);
-                showError('Failed to load dashboard data');
-            }
-        }
+    <!-- Header -->
+    <header class="header auth-logged-in-only" style="display: none;">
+        <div class="header-left">
+            <a href="/" class="logo">Static CMS</a>
+            <span class="breadcrumb">/ Dashboard</span>
+        </div>
+        <div class="header-right">
+            <div id="user-menu-container"></div>
+        </div>
+    </header>
 
-        async function loadContentStats() {
-            try {
-                const response = await fetch('/api/content');
-                const data = await response.json();
-                
-                if (data.success && data.files) {
-                    const files = data.files;
-                    const blogPosts = files.filter(f => 
-                        f.type === 'blog' || 
-                        f.path.includes('/blog/') || 
-                        f.path.startsWith('blog/')
-                    ).length;
-                    const pages = files.filter(f => 
-                        f.type !== 'blog' && 
-                        !f.path.includes('/blog/') && 
-                        !f.path.startsWith('blog/')
-                    ).length;
-                    
-                    document.getElementById('totalPages').textContent = pages || (files.length - blogPosts);
-                    document.getElementById('blogPosts').textContent = blogPosts;
-                    
-                    // Update recent activity with real content edits
-                    updateActivityFeed(files);
-                    
-                    // Update stat trends based on content count
-                    updateStatTrends(files);
-                } else {
-                    console.warn('No content files found or invalid response');
-                    // Keep placeholder values if API fails
-                }
-            } catch (error) {
-                console.error('Error loading content stats:', error);
-                showStatus('Failed to load content statistics', 'warning');
-            }
-        }
+    <!-- Navigation -->
+    <nav class="nav auth-logged-in-only" style="display: none;">
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="/admin/dashboard.html" class="active">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/posts/" data-auth="permission:write:posts">Posts</a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/media/" data-auth="permission:manage:media">Media</a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/users/" data-auth="admin">Users</a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/settings/" data-auth="role:super_admin">Settings</a>
+            </li>
+        </ul>
+    </nav>
 
-        async function loadMediaStats() {
-            try {
-                const response = await fetch('/api/media');
-                const data = await response.json();
-                
-                if (data.success && data.files) {
-                    const totalFiles = data.files.length;
-                    document.getElementById('mediaFiles').textContent = totalFiles;
-                    
-                    // Calculate storage usage
-                    const totalSize = data.files.reduce((sum, file) => sum + (file.size || 0), 0);
-                    const sizeMB = (totalSize / (1024 * 1024)).toFixed(1);
-                    updateStorageUsage(sizeMB);
-                } else {
-                    console.warn('No media files found or invalid response');
-                }
-            } catch (error) {
-                console.error('Error loading media stats:', error);
-                showStatus('Failed to load media statistics', 'warning');
-            }
-        }
+    <!-- Main Content -->
+    <main class="main auth-logged-in-only" style="display: none;">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Dashboard</h1>
+            <p class="dashboard-subtitle">Welcome back, <span id="user-display-name">User</span>!</p>
+        </div>
 
-        async function loadAnalyticsStats() {
-            try {
-                const response = await fetch('/api/analytics/summary');
-                const data = await response.json();
-                
-                if (data.success && data.data) {
-                    const analytics = data.data;
-                    const visitors = analytics.uniqueVisitors || 0;
-                    const pageViews = analytics.pageViews || 0;
-                    
-                    const visitorCount = visitors > 1000 ? 
-                        (visitors / 1000).toFixed(1) + 'K' : 
-                        visitors.toString();
-                    
-                    document.getElementById('visitors').textContent = visitorCount;
-                    
-                    // Update page views info if element exists
-                    const pageViewsEl = document.getElementById('pageViews');
-                    if (pageViewsEl) {
-                        const pvCount = pageViews > 1000 ? 
-                            (pageViews / 1000).toFixed(1) + 'K' : 
-                            pageViews.toString();
-                        pageViewsEl.textContent = pvCount;
-                    }
-                    
-                    // Show top pages if available
-                    if (analytics.topPages && analytics.topPages.length > 0) {
-                        updateTopPages(analytics.topPages);
-                    }
-                } else {
-                    console.warn('Analytics data not available, using demo data');
-                    // Keep demo data if real analytics aren't available
-                }
-            } catch (error) {
-                console.error('Error loading analytics stats:', error);
-                console.log('Analytics not configured - using demo data for visualization');
-            }
-        }
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3 class="stat-title">Total Posts</h3>
+                    <span class="stat-icon">📝</span>
+                </div>
+                <div class="stat-value" id="stat-posts">-</div>
+                <div class="stat-change positive">+2 this week</div>
+            </div>
 
-        async function loadSystemStatus() {
-            try {
-                // Check API health
-                const apiResponse = await fetch('/api/content');
-                const apiStatus = apiResponse.ok ? 'good' : 'error';
-                updateStatusItem('API', apiStatus === 'good' ? 'Operational' : 'Error', apiStatus);
-                
-                // Check if content files are accessible
-                if (apiResponse.ok) {
-                    const apiData = await apiResponse.json();
-                    const hasContent = apiData.success && apiData.files && apiData.files.length > 0;
-                    updateStatusItem('Content', hasContent ? 'Available' : 'Empty', hasContent ? 'good' : 'warning');
-                }
-                
-                // Check media endpoint
-                try {
-                    const mediaResponse = await fetch('/api/media');
-                    const mediaStatus = mediaResponse.ok ? 'good' : 'warning';
-                    updateStatusItem('Media', mediaStatus === 'good' ? 'Ready' : 'Limited', mediaStatus);
-                } catch (e) {
-                    updateStatusItem('Media', 'Unavailable', 'error');
-                }
-                
-                // Check analytics
-                try {
-                    const analyticsResponse = await fetch('/api/analytics/summary');
-                    const analyticsStatus = analyticsResponse.ok ? 'good' : 'warning';
-                    updateStatusItem('Analytics', analyticsStatus === 'good' ? 'Active' : 'Limited', analyticsStatus);
-                } catch (e) {
-                    updateStatusItem('Analytics', 'Offline', 'warning');
-                }
-                
-            } catch (error) {
-                console.error('Error checking system status:', error);
-                updateStatusItem('API', 'Error', 'error');
-            }
-        }
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3 class="stat-title">Draft Posts</h3>
+                    <span class="stat-icon">📄</span>
+                </div>
+                <div class="stat-value" id="stat-drafts">-</div>
+                <div class="stat-change">In progress</div>
+            </div>
 
-        function updateStatusItem(label, value, status) {
-            const statusItems = document.querySelectorAll('.status-item');
-            statusItems.forEach(item => {
-                const labelEl = item.querySelector('.status-label');
-                if (labelEl && labelEl.textContent === label) {
-                    const valueEl = item.querySelector('.status-value');
-                    valueEl.textContent = value;
-                    valueEl.className = `status-value ${status}`;
-                }
-            });
-        }
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3 class="stat-title">Media Files</h3>
+                    <span class="stat-icon">🖼️</span>
+                </div>
+                <div class="stat-value" id="stat-media">-</div>
+                <div class="stat-change positive">+5 this month</div>
+            </div>
 
-        function updateActivityFeed(files) {
-            const activityList = document.getElementById('activityList');
-            
-            if (!files || files.length === 0) {
-                activityList.innerHTML = `
-                    <div class="activity-item">
-                        <div class="activity-icon">📝</div>
-                        <div class="activity-content">
-                            <div class="activity-text">Welcome to your portfolio admin</div>
-                            <div class="activity-time">Start by creating content</div>
-                        </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3 class="stat-title">Active Users</h3>
+                    <span class="stat-icon">👥</span>
+                </div>
+                <div class="stat-value" id="stat-users">-</div>
+                <div class="stat-change">Online now</div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Recent Activity -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Recent Activity</h2>
+                    <p class="section-subtitle">Latest actions across your CMS</p>
+                </div>
+                <div class="section-content">
+                    <ul class="activity-list" id="activity-list">
+                        <li class="activity-item">
+                            <div class="activity-icon">👤</div>
+                            <div class="activity-content">
+                                <div class="activity-text">You logged in to the dashboard</div>
+                                <div class="activity-time">Just now</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Quick Actions</h2>
+                    <p class="section-subtitle">Common tasks and shortcuts</p>
+                </div>
+                <div class="section-content">
+                    <div class="quick-actions">
+                        <a href="/admin/posts/new.html" class="action-button" data-auth="permission:write:posts">
+                            <span class="action-icon">✏️</span>
+                            <div class="action-text">
+                                <div class="action-title">New Post</div>
+                                <div class="action-description">Create a new blog post</div>
+                            </div>
+                        </a>
+
+                        <a href="/admin/media/upload.html" class="action-button" data-auth="permission:manage:media">
+                            <span class="action-icon">📤</span>
+                            <div class="action-text">
+                                <div class="action-title">Upload Media</div>
+                                <div class="action-description">Add images and files</div>
+                            </div>
+                        </a>
+
+                        <a href="/admin/users/new.html" class="action-button" data-auth="admin">
+                            <span class="action-icon">➕</span>
+                            <div class="action-text">
+                                <div class="action-title">Add User</div>
+                                <div class="action-description">Create new user account</div>
+                            </div>
+                        </a>
+
+                        <a href="/admin/settings/" class="action-button" data-auth="role:super_admin">
+                            <span class="action-icon">⚙️</span>
+                            <div class="action-text">
+                                <div class="action-title">Settings</div>
+                                <div class="action-description">Configure CMS options</div>
+                            </div>
+                        </a>
                     </div>
-                `;
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Auth Scripts -->
+    <script src="/js/utils/crypto-utils.js"></script>
+    <script src="/js/utils/storage-utils.js"></script>
+    <script src="/js/auth/jwt-utils.js"></script>
+    <script src="/js/auth/auth-service.js"></script>
+    <script src="/js/middleware/auth-middleware.js"></script>
+    <script src="/js/auth/auth-ui.js"></script>
+    <script src="/js/auth/auth-init.js"></script>
+
+    <!-- Dashboard Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('📊 Dashboard loading...');
+            
+            // Wait for auth system
+            let retries = 0;
+            const maxRetries = 50;
+            
+            while (!window.authService && retries < maxRetries) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                retries++;
+            }
+            
+            if (!window.authService) {
+                console.error('❌ Auth system not available');
+                showError('Authentication system failed to load');
                 return;
             }
             
-            // Sort files by date (most recent first) or by title if no date
-            const recentFiles = files
-                .filter(f => f.title && f.title !== '')
-                .sort((a, b) => {
-                    if (a.date && b.date) {
-                        return new Date(b.date) - new Date(a.date);
-                    }
-                    // If no dates, sort by title alphabetically
-                    return a.title.localeCompare(b.title);
-                })
-                .slice(0, 5);
+            // Check authentication
+            if (!window.authService.isAuthenticated()) {
+                console.log('🔐 User not authenticated, redirecting to login');
+                window.location.href = `/login.html?returnTo=${encodeURIComponent(window.location.pathname)}`;
+                return;
+            }
             
-            const activities = recentFiles.map(file => {
-                const timeAgo = file.date ? getTimeAgo(new Date(file.date)) : 'Recently';
-                const icon = (file.type === 'blog' || file.path.includes('blog')) ? '📝' : 
-                           (file.path.includes('portfolio') || file.path.includes('project')) ? '💼' : '📄';
-                const action = file.draft ? 'Draft' : 'Content';
-                const title = file.title || file.path.split('/').pop().replace(/\.[^/.]+$/, "");
-                
-                return `
-                    <div class="activity-item" onclick="openContent('${file.path}')" style="cursor: pointer;">
-                        <div class="activity-icon">${icon}</div>
-                        <div class="activity-content">
-                            <div class="activity-text">${action}: "${title}"</div>
-                            <div class="activity-time">${timeAgo}</div>
-                        </div>
-                    </div>
-                `;
+            const user = window.authService.getCurrentUser();
+            console.log('✅ Dashboard loaded for user:', user);
+            
+            // Initialize dashboard
+            await initializeDashboard(user);
+            
+            // Hide loading screen and show content
+            document.getElementById('loading-screen').style.display = 'none';
+            document.querySelectorAll('.auth-logged-in-only').forEach(el => {
+                el.style.display = el.tagName === 'HEADER' ? 'flex' : 'block';
             });
-            
-            activityList.innerHTML = activities.join('');
-        }
-
-        function getTimeAgo(date) {
-            const now = new Date();
-            const diffMs = now - date;
-            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-            const diffDays = Math.floor(diffHours / 24);
-            
-            if (diffHours < 1) return 'Just now';
-            if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
-            if (diffDays < 7) return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
-            return date.toLocaleDateString();
-        }
-
-        function showError(message) {
-            console.error(message);
-            // Could add a toast notification here
-        }
+        });
         
-        function updateStats(stats) {
-            if (stats) {
-                document.getElementById('totalPages').textContent = stats.pages || '113';
-                document.getElementById('blogPosts').textContent = stats.posts || '24';
-                document.getElementById('mediaFiles').textContent = stats.media || '384';
-                document.getElementById('visitors').textContent = stats.visitors || '2.1K';
-            }
-        }
-        
-        function addActivity(activity) {
-            const activityList = document.getElementById('activityList');
-            const newItem = document.createElement('div');
-            newItem.className = 'activity-item';
-            newItem.innerHTML = `
-                <div class="activity-icon">${activity.icon}</div>
-                <div class="activity-content">
-                    <div class="activity-text">${activity.text}</div>
-                    <div class="activity-time">${activity.time}</div>
-                </div>
-            `;
-            activityList.insertBefore(newItem, activityList.firstChild);
-            
-            // Remove last item if list is too long
-            if (activityList.children.length > 5) {
-                activityList.removeChild(activityList.lastChild);
-            }
-        }
-        
-        async function updateChart(period) {
-            // Update chart with new data based on selected period
-            const chartData = await getChartDataForPeriod(period);
-            
-            if (window.dashboardChart) {
-                window.dashboardChart.data.labels = chartData.labels;
-                window.dashboardChart.data.datasets[0].data = chartData.data;
-                window.dashboardChart.update();
-            } else {
-                initializeChart(chartData);
+        async function initializeDashboard(user) {
+            // Update user display name
+            const displayNameEl = document.getElementById('user-display-name');
+            if (displayNameEl) {
+                displayNameEl.textContent = user.profile?.displayName || user.username;
             }
             
-            // Update active button state
-            document.querySelectorAll('[onclick^="updateChart"]').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
+            // Load stats
+            await loadDashboardStats();
+            
+            // Load recent activity
+            await loadRecentActivity(user);
+            
+            // Set up real-time updates
+            setupRealTimeUpdates();
         }
         
-        async function getChartDataForPeriod(period) {
-            const now = new Date();
-            
-            // Try to fetch real data from API
-            try {
-                const token = localStorage.getItem('token');
-                const response = await fetch(`http://localhost:3000/api/analytics/visits?period=${period}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                
-                if (response.ok) {
-                    const apiData = await response.json();
-                    return {
-                        labels: apiData.labels,
-                        data: apiData.values
-                    };
-                }
-            } catch (error) {
-                console.error('Failed to fetch analytics data:', error);
-            }
-            
-            // Fallback to realistic patterns if API unavailable
-            const data = {
-                '7d': {
-                    labels: Array.from({length: 7}, (_, i) => {
-                        const d = new Date(now);
-                        d.setDate(d.getDate() - (6 - i));
-                        return d.toLocaleDateString('en', { weekday: 'short' });
-                    }),
-                    // Realistic traffic pattern: lower on weekends
-                    data: [245, 312, 289, 367, 421, 198, 167]
-                },
-                '30d': {
-                    labels: Array.from({length: 30}, (_, i) => {
-                        const d = new Date(now);
-                        d.setDate(d.getDate() - (29 - i));
-                        return d.getDate();
-                    }),
-                    // Realistic monthly pattern with weekly cycles
-                    data: Array.from({length: 30}, (_, i) => {
-                        const dayOfWeek = new Date(now.getTime() - (29 - i) * 24 * 60 * 60 * 1000).getDay();
-                        const baseTraffic = 350;
-                        const weekendReduction = (dayOfWeek === 0 || dayOfWeek === 6) ? 0.6 : 1;
-                        const trend = i * 2; // Slight upward trend
-                        return Math.floor((baseTraffic + trend) * weekendReduction);
-                    })
-                },
-                '90d': {
-                    labels: Array.from({length: 12}, (_, i) => `Week ${i + 1}`),
-                    // Realistic quarterly pattern with growth
-                    data: [1850, 2100, 2250, 2180, 2420, 2580, 2650, 2890, 3020, 3180, 3350, 3520]
-                }
+        async function loadDashboardStats() {
+            // Simulate loading stats from localStorage/IndexedDB
+            const stats = {
+                posts: await getStoredCount('cms_posts', 0),
+                drafts: await getStoredCount('cms_drafts', 0),
+                media: await getStoredCount('cms_media', 0),
+                users: await getStoredCount('cms_users', 1) // At least current user
             };
             
-            return data[period] || data['7d'];
+            // Update stat displays
+            document.getElementById('stat-posts').textContent = stats.posts;
+            document.getElementById('stat-drafts').textContent = stats.drafts;
+            document.getElementById('stat-media').textContent = stats.media;
+            document.getElementById('stat-users').textContent = stats.users;
         }
         
-        async function deployToProduction() {
-            if (!confirm('Deploy all changes to live site? This will build the site and push to Git for Netlify deployment.')) {
-                return;
-            }
-            
+        async function getStoredCount(key, defaultValue = 0) {
             try {
-                showStatus('Building site...', 'info');
-                
-                // First build the site
-                const buildResponse = await fetch('/api/build', { method: 'POST' });
-                const buildData = await buildResponse.json();
-                
-                if (!buildData.success) {
-                    showStatus('Build failed: ' + (buildData.error || 'Unknown error'), 'error');
-                    return;
-                }
-                
-                showStatus('Build successful! Deploying...', 'info');
-                
-                // Then deploy
-                const deployResponse = await fetch('/api/deploy', { method: 'POST' });
-                const deployData = await deployResponse.json();
-                
-                if (deployData.success) {
-                    showStatus('Deployment started! Changes will be live in ~2 minutes', 'success');
-                    
-                    // Add to activity feed
-                    addActivity({
-                        icon: '🚀',
-                        text: 'Site built and deployed to production',
-                        time: 'Just now'
-                    });
-                    
-                    // Update system status
-                    updateStatusItem('Build', 'Deployed', 'good');
-                } else {
-                    showStatus('Deployment failed: ' + (deployData.error || 'Unknown error'), 'error');
-                }
+                const stored = localStorage.getItem(key);
+                return stored ? JSON.parse(stored).length || defaultValue : defaultValue;
             } catch (error) {
-                console.error('Deployment error:', error);
-                showStatus('Deployment failed - check console for details', 'error');
+                return defaultValue;
             }
         }
         
-        function showStatus(message, type) {
-            // Create a simple toast notification
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 12px 24px;
-                border-radius: 8px;
-                color: white;
-                font-weight: 500;
-                z-index: 10000;
-                transition: all 0.3s;
-                background: ${type === 'success' ? '#48bb78' : type === 'error' ? '#f56565' : '#667eea'};
-            `;
-            toast.textContent = message;
+        async function loadRecentActivity(user) {
+            const activityList = document.getElementById('activity-list');
             
-            document.body.appendChild(toast);
+            // Add login activity
+            const loginActivity = createActivityItem(
+                '👤',
+                `${user.username} logged in to the dashboard`,
+                'Just now'
+            );
             
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => document.body.removeChild(toast), 300);
-            }, 3000);
+            // Add other activities from localStorage if available
+            const activities = [loginActivity];
+            
+            // Check for recent posts
+            const recentPosts = getRecentItems('cms_posts_activity', 3);
+            recentPosts.forEach(post => {
+                activities.push(createActivityItem(
+                    '📝',
+                    `Post "${post.title}" was ${post.action}`,
+                    formatTime(post.timestamp)
+                ));
+            });
+            
+            // Update activity list
+            activityList.innerHTML = activities.map(activity => activity.outerHTML).join('');
         }
         
-        function initializeChart(chartData) {
-            const canvas = document.getElementById('visitsChart');
-            if (canvas && typeof Chart !== 'undefined') {
-                window.dashboardChart = new Chart(canvas.getContext('2d'), {
-                    type: 'line',
-                    data: {
-                        labels: chartData.labels,
-                        datasets: [{
-                            label: 'Visits',
-                            data: chartData.data,
-                            borderColor: '#667eea',
-                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: { beginAtZero: true }
-                        }
-                    }
-                });
-            }
-        }
-
-        // Helper functions for dashboard functionality
-        function updateStorageUsage(sizeMB) {
-            const storageElement = document.querySelector('.status-item .status-label:contains("Storage")');
-            if (storageElement) {
-                const valueElement = storageElement.parentElement.querySelector('.status-value');
-                const percentage = Math.min(Math.round((sizeMB / 100) * 100), 100); // Assume 100MB limit
-                valueElement.textContent = `${percentage}% (${sizeMB}MB)`;
-                valueElement.className = percentage > 80 ? 'status-value error' : 
-                                        percentage > 60 ? 'status-value warning' : 'status-value good';
-            }
-        }
-
-        function updateStatTrends(files) {
-            // Simple trend calculation based on file dates
-            const now = new Date();
-            const lastWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-            
-            const recentFiles = files.filter(f => f.date && new Date(f.date) > lastWeek);
-            const trendPercentage = Math.min(Math.round((recentFiles.length / files.length) * 100), 100);
-            
-            // Update trend indicators with real data
-            const trends = document.querySelectorAll('.stat-trend');
-            trends.forEach((trend, index) => {
-                if (trendPercentage > 5) {
-                    trend.textContent = `↑ ${trendPercentage}%`;
-                    trend.className = 'stat-trend up';
-                } else {
-                    trend.textContent = `→ ${trendPercentage}%`;
-                    trend.className = 'stat-trend';
-                }
-            });
-        }
-
-        function updateTopPages(topPages) {
-            // Add top pages info to activity or create a small widget
-            if (topPages.length > 0) {
-                const topPage = topPages[0];
-                addActivity({
-                    icon: '🏆',
-                    text: `Most popular page: "${topPage.path}" (${topPage.views} views)`,
-                    time: 'Analytics'
-                });
-            }
-        }
-
-        function openContent(contentPath) {
-            // Open content in editor
-            window.open(`simple-editor.html?file=${encodeURIComponent(contentPath)}`, '_blank');
-        }
-
-        function createNewContent(type = 'page') {
-            // Create new content based on type
-            const fileName = prompt(`Enter name for new ${type}:`);
-            if (fileName) {
-                const path = type === 'blog' ? `blog/${fileName}.md` : `${fileName}.md`;
-                window.open(`simple-editor.html?new=${encodeURIComponent(path)}&type=${type}`, '_blank');
-            }
-        }
-
-        // Refresh dashboard data
-        function refreshDashboard() {
-            showStatus('Refreshing dashboard...', 'info');
-            loadDashboardData().then(() => {
-                showStatus('Dashboard updated', 'success');
-            }).catch(() => {
-                showStatus('Failed to refresh dashboard', 'error');
-            });
-        }
-
-        // Add keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
-                    case 'r':
-                        e.preventDefault();
-                        refreshDashboard();
-                        break;
-                    case 'n':
-                        e.preventDefault();
-                        createNewContent('blog');
-                        break;
-                    case 'd':
-                        e.preventDefault();
-                        deployToProduction();
-                        break;
-                }
-            }
-        });
-
-        // Auto-refresh dashboard every 5 minutes
-        setInterval(() => {
-            loadDashboardData();
-        }, 5 * 60 * 1000);
-
-        // Loading state functions
-        function showLoadingState() {
-            // Add loading overlay
-            const loadingOverlay = document.createElement('div');
-            loadingOverlay.id = 'loadingOverlay';
-            loadingOverlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(255, 255, 255, 0.9);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 9999;
-                font-size: 18px;
-                color: var(--primary);
-            `;
-            loadingOverlay.innerHTML = `
-                <div style="text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 16px;">⏳</div>
-                    <div>Loading Dashboard...</div>
+        function createActivityItem(icon, text, time) {
+            const item = document.createElement('li');
+            item.className = 'activity-item';
+            item.innerHTML = `
+                <div class="activity-icon">${icon}</div>
+                <div class="activity-content">
+                    <div class="activity-text">${text}</div>
+                    <div class="activity-time">${time}</div>
                 </div>
             `;
-            document.body.appendChild(loadingOverlay);
-
-            // Add skeleton loading to stat cards
-            document.querySelectorAll('.stat-value').forEach(el => {
-                el.style.background = '#f0f0f0';
-                el.style.borderRadius = '4px';
-                el.style.animation = 'pulse 1.5s ease-in-out infinite alternate';
+            return item;
+        }
+        
+        function getRecentItems(key, limit = 5) {
+            try {
+                const items = JSON.parse(localStorage.getItem(key) || '[]');
+                return items
+                    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                    .slice(0, limit);
+            } catch (error) {
+                return [];
+            }
+        }
+        
+        function formatTime(timestamp) {
+            const now = new Date();
+            const time = new Date(timestamp);
+            const diff = now - time;
+            
+            if (diff < 60000) return 'Just now';
+            if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+            if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+            return `${Math.floor(diff / 86400000)}d ago`;
+        }
+        
+        function setupRealTimeUpdates() {
+            // Update stats every 30 seconds
+            setInterval(() => {
+                loadDashboardStats();
+            }, 30000);
+            
+            // Listen for storage changes from other tabs
+            window.addEventListener('storage', (e) => {
+                if (e.key && e.key.startsWith('cms_')) {
+                    loadDashboardStats();
+                }
             });
         }
-
-        function hideLoadingState() {
-            const overlay = document.getElementById('loadingOverlay');
-            if (overlay) {
-                overlay.remove();
-            }
-
-            // Remove skeleton loading
-            document.querySelectorAll('.stat-value').forEach(el => {
-                el.style.background = '';
-                el.style.animation = '';
-            });
+        
+        function showError(message) {
+            document.body.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 2rem;">
+                    <div>
+                        <h2 style="color: #e74c3c; margin-bottom: 1rem;">❌ Error</h2>
+                        <p style="color: #666; margin-bottom: 1rem;">${message}</p>
+                        <button onclick="location.reload()" style="padding: 0.5rem 1rem; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">Retry</button>
+                    </div>
+                </div>
+            `;
         }
     </script>
-
-    <style>
-        /* Additional responsive improvements */
-        @media (max-width: 576px) {
-            .main-content {
-                padding: 15px;
-                margin-left: 0;
-                margin-top: 60px;
-            }
-
-            .stats-row {
-                grid-template-columns: 1fr 1fr;
-                gap: 15px;
-            }
-
-            .stat-card {
-                padding: 20px 16px;
-            }
-
-            .stat-value {
-                font-size: 1.5rem;
-            }
-
-            .charts-row {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .chart-card,
-            .activity-feed,
-            .quick-actions,
-            .system-status {
-                padding: 20px;
-            }
-
-            .actions-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-            }
-
-            .action-card {
-                padding: 12px 16px;
-                min-height: 50px;
-                flex-direction: column;
-                text-align: center;
-                gap: 8px;
-            }
-
-            .action-icon {
-                font-size: 20px;
-            }
-
-            .action-text {
-                font-size: 0.8rem;
-            }
-
-            .status-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-            }
-
-            .activity-item {
-                padding: 10px;
-            }
-
-            .activity-icon {
-                width: 35px;
-                height: 35px;
-            }
-
-            .activity-text {
-                font-size: 13px;
-            }
-        }
-
-        /* Tablet improvements */
-        @media (max-width: 768px) and (min-width: 577px) {
-            .stats-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .actions-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        /* Loading animation */
-        @keyframes pulse {
-            from { opacity: 0.6; }
-            to { opacity: 1; }
-        }
-
-        /* Hover improvements for touch devices */
-        @media (hover: none) and (pointer: coarse) {
-            .stat-card:hover,
-            .action-card:hover,
-            .activity-item:hover {
-                transform: none;
-            }
-
-            .action-card:active {
-                background: var(--primary);
-                color: white;
-                transform: scale(0.98);
-            }
-        }
-    </style>
 </body>
 </html>
