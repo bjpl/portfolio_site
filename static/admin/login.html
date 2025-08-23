@@ -369,11 +369,18 @@
                 if (error.name === 'TypeError' || error.message.includes('fetch')) {
                     const hostname = window.location.hostname;
                     if (hostname.includes('netlify')) {
-                        errorMessage = 'Authentication service is initializing. Please try again in a moment.';
+                        // Redirect to demo mode for now
+                        errorMessage = 'Backend unavailable. Redirecting to demo mode...';
+                        setTimeout(() => {
+                            window.location.href = '/admin/demo-login.html';
+                        }, 2000);
                     } else if (hostname === 'localhost' || hostname === '127.0.0.1') {
                         errorMessage += 'Unable to connect to server. Please ensure the backend is running on port 3000.';
                     } else {
-                        errorMessage = 'Authentication service unavailable. Please try again.';
+                        errorMessage = 'Authentication service unavailable. Redirecting to demo mode...';
+                        setTimeout(() => {
+                            window.location.href = '/admin/demo-login.html';
+                        }, 2000);
                     }
                     
                     // Show backend status if config checker is available
