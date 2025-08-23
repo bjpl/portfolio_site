@@ -5,15 +5,71 @@
 hugo_stats.json
 /.hugo_build.lock
 
-# Node
+# Dependencies
 node_modules/
+*/node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json
-pnpm-lock.yaml
+lerna-debug.log*
+.npm
+.eslintcache
+.stylelintcache
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
-# Editor
+# Build outputs
+/public/
+/dist/
+/build/
+/out/
+/.next/
+/.nuxt/
+/.output/
+/.vuepress/dist/
+/.temp/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.staging
+.env.test
+.env.build
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.log
+logs/
+*.log.*
+*.log.gz
+*.log.*.*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like Istanbul
+coverage/
+*.lcov
+.nyc_output/
+lib-cov/
+
+# IDE files
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -24,68 +80,105 @@ pnpm-lock.yaml
 *.swp
 *.swo
 *~
+.project
+.settings/
+.metadata/
+*.sublime-workspace
+*.sublime-project
 
-# OS
+# OS files
 .DS_Store
+.DS_Store?
 Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
 Desktop.ini
-
-# Environment
-.env
-.env.local
-.env.*.local
-.env.production
-
-# Build
-/dist/
-/build/
-/out/
-*.log
-
-# Cache
-.cache/
-.temp/
-static/cache/
+$RECYCLE.BIN/
+*.lnk
 
 # Temporary files
-*.tmp.*
 *.tmp
+*.tmp.*
+*.bak
+*.backup
+*~
+.temp/
 .tmp/
+temp/
+tmp/
+*.swp
+*.swo
+.cache/
+nul
 
-# Testing
-coverage/
+# Database files
+*.sqlite
+*.sqlite3
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+*.db
+*.db-journal
+*.db-wal
+*.rdb
+
+# Test coverage
+/coverage/
 .nyc_output/
+junit.xml
+test-results/
+test-report.xml
+
+# Netlify
+.netlify/
+!.netlify.toml
+.netlify.toml.backup
+
+# Vercel
+.vercel/
+
+# Hugo specific
+public/
+resources/_gen/
+assets/jsconfig.json
+hugo_stats.json
+.hugo_build.lock
+
 # Content Management Tools
 static/tools/temp/
 static/tools/uploads/
 static/tools/*.log
+uploads/
+media/uploads/temp/
 
 # Backend specific
 backend/node_modules/
-backend/*.sqlite
-backend/*.sqlite-journal
-backend/.env
+backend/*.sqlite*
+backend/.env*
+!backend/.env.example
 backend/data/contacts/
 backend/data/backups/
 backend/uploads/temp/
+backend/logs/
+backend/users.json
 
-# Logs directory
-logs/
+# Authentication & Security
+auth.json
+secrets.json
+private-key.pem
+*.p12
+*.key
+*.crt
 
-# Test files
+# Mock and test data (keep examples)
 test-*.json
+mock-data.json
+!test-data.example.json
 
-# Claude settings
+# Claude Flow & AI tools
 .claude/settings.local.json
-
-# Temporary
-nul
-
-# Local Netlify folder
-.netlify
-
-# Claude Flow generated files
-.claude/settings.local.json
+.claude-flow/
 .mcp.json
 claude-flow.config.json
 .swarm/
@@ -98,13 +191,34 @@ memory/agents/*
 coordination/memory_bank/*
 coordination/subtasks/*
 coordination/orchestration/*
-*.db
-*.db-journal
-*.db-wal
-*.sqlite
-*.sqlite-journal
-*.sqlite-wal
 claude-flow
 claude-flow.bat
 claude-flow.ps1
 hive-mind-prompt-*.txt
+.roo/
+
+# Package manager lock files (optional - uncomment if needed)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Analytics and monitoring
+analytics/
+metrics/
+performance/
+trace.json
+*.trace
+
+# Build artifacts
+*.tsbuildinfo
+.turbo/
+
+# Supabase
+supabase/.branches/
+supabase/.temp/
+supabase/functions/_import_map.json
+
+# Local development
+.local/
+local.json
+development.json
