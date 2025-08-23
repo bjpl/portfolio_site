@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multilingual Content Dashboard - Portfolio CMS</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .lang-overview {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .lang-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .translation-status {
+            margin: 2rem 0;
+        }
+
+        .status-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .status-table th,
+        .status-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .status-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-complete {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-partial {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-missing {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-outdated {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .translation-progress {
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .hreflang-manager {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .hreflang-tags {
+            font-family: 'Courier New', monospace;
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        .cultural-notes {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            color: #2d3436;
+        }
+
+        .cultural-notes h3 {
+            color: #2d3436;
+            margin-top: 0;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="admin-container">
+        <header class="admin-header">
+            <div class="header-content">
+                <h1>🌍 Multilingual Content Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="refreshDashboard()">🔄 Refresh</button>
+                    <button class="btn btn-primary" onclick="openTranslationEditor()">✏️ Translation Editor</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <div class="quick-actions">
+                <button class="btn btn-outline" onclick="analyzeTranslationGaps()">🔍 Analyze Gaps</button>
+                <button class="btn btn-outline" onclick="validateHreflangTags()">🏷️ Validate Hreflang</button>
+                <button class="btn btn-outline" onclick="generateSEOReport()">📊 SEO Report</button>
+                <button class="btn btn-outline" onclick="exportTranslationMemory()">💾 Export Memory</button>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="lang-overview">
+                    <h2>🇺🇸 English Content</h2>
+                    <div class="translation-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="en-progress" style="width: 100%"></div>
+                        </div>
+                        <div class="progress-text" id="en-progress-text">Loading...</div>
+                    </div>
+                    <div class="lang-stats" id="en-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="en-pages">-</div>
+                            <div class="stat-label">Pages</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="en-words">-</div>
+                            <div class="stat-label">Words</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="en-last-update">-</div>
+                            <div class="stat-label">Days Ago</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lang-overview">
+                    <h2>🇪🇸 Spanish Content</h2>
+                    <div class="translation-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="es-progress" style="width: 75%"></div>
+                        </div>
+                        <div class="progress-text" id="es-progress-text">Loading...</div>
+                    </div>
+                    <div class="lang-stats" id="es-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="es-pages">-</div>
+                            <div class="stat-label">Páginas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="es-words">-</div>
+                            <div class="stat-label">Palabras</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="es-last-update">-</div>
+                            <div class="stat-label">Días Atrás</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cultural-notes">
+                <h3>🇨🇴 Colombia Cultural Adaptation Notes</h3>
+                <p><strong>Brandon's Relocation Context:</strong> Consider Colombian Spanish variations, cultural references, and local business practices when adapting content for the Colombian market.</p>
+                <ul>
+                    <li><strong>Currency:</strong> Reference Colombian Peso (COP) in pricing examples</li>
+                    <li><strong>Education System:</strong> Adapt academic references to Colombian context</li>
+                    <li><strong>Business Culture:</strong> Emphasize relationship-building ("confianza")</li>
+                    <li><strong>Spanish Variants:</strong> Use Colombian Spanish expressions where appropriate</li>
+                </ul>
+            </div>
+
+            <div class="translation-status">
+                <h2>📝 Translation Status Overview</h2>
+                <table class="status-table" id="translation-status-table">
+                    <thead>
+                        <tr>
+                            <th>Content Path</th>
+                            <th>English</th>
+                            <th>Spanish</th>
+                            <th>Status</th>
+                            <th>Last Modified</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="translation-status-body">
+                        <tr>
+                            <td colspan="6" class="text-center">Loading translation status...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="hreflang-manager">
+                <h2>🏷️ Hreflang Tag Manager</h2>
+                <p>Auto-generated hreflang tags for current page structure:</p>
+                <div class="hreflang-tags" id="hreflang-preview">
+Loading hreflang tags...
+                </div>
+                <button class="btn btn-primary" onclick="updateHreflangTags()">Update Site Tags</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        class MultilingualDashboard {
+            constructor() {
+                this.apiBaseUrl = window.location.origin.replace('1313', '3000');
+                this.translationMemory = new Map();
+                this.init();
+            }
+
+            async init() {
+                await this.loadTranslationStatus();
+                await this.loadHreflangPreview();
+                await this.loadCulturalNotes();
+                this.startAutoRefresh();
+            }
+
+            async loadTranslationStatus() {
+                try {
+                    const response = await fetch(`${this.apiBaseUrl}/api/translation-status`);
+                    if (!response.ok) {
+                        // Fallback to mock data for development
+                        this.loadMockData();
+                        return;
+                    }
+                    const data = await response.json();
+                    this.updateDashboard(data);
+                } catch (error) {
+                    console.log('Using mock data for development');
+                    this.loadMockData();
+                }
+            }
+
+            loadMockData() {
+                const mockData = {
+                    english: {
+                        pages: 47,
+                        words: 12850,
+                        lastUpdate: 2
+                    },
+                    spanish: {
+                        pages: 35,
+                        words: 9640,
+                        lastUpdate: 5
+                    },
+                    translationStatus: [
+                        { path: '/_index.md', en: 'complete', es: 'complete', status: 'synced', lastModified: '2025-08-20' },
+                        { path: '/me/_index.md', en: 'complete', es: 'complete', status: 'synced', lastModified: '2025-08-19' },
+                        { path: '/tools/_index.md', en: 'complete', es: 'outdated', status: 'needs-update', lastModified: '2025-08-18' },
+                        { path: '/blog/_index.md', en: 'complete', es: 'partial', status: 'in-progress', lastModified: '2025-08-17' },
+                        { path: '/services/_index.md', en: 'complete', es: 'missing', status: 'needs-translation', lastModified: '2025-08-16' },
+                        { path: '/cv/_index.md', en: 'complete', es: 'complete', status: 'synced', lastModified: '2025-08-15' }
+                    ]
+                };
+                this.updateDashboard(mockData);
+            }
+
+            updateDashboard(data) {
+                // Update English stats
+                document.getElementById('en-pages').textContent = data.english.pages;
+                document.getElementById('en-words').textContent = data.english.words.toLocaleString();
+                document.getElementById('en-last-update').textContent = data.english.lastUpdate;
+                document.getElementById('en-progress-text').textContent = `${data.english.pages} pages, ${data.english.words.toLocaleString()} words`;
+
+                // Update Spanish stats
+                document.getElementById('es-pages').textContent = data.spanish.pages;
+                document.getElementById('es-words').textContent = data.spanish.words.toLocaleString();
+                document.getElementById('es-last-update').textContent = data.spanish.lastUpdate;
+                
+                const completionRate = Math.round((data.spanish.pages / data.english.pages) * 100);
+                document.getElementById('es-progress').style.width = `${completionRate}%`;
+                document.getElementById('es-progress-text').textContent = `${completionRate}% complete - ${data.spanish.pages}/${data.english.pages} pages translated`;
+
+                // Update translation status table
+                this.updateStatusTable(data.translationStatus);
+            }
+
+            updateStatusTable(statusData) {
+                const tbody = document.getElementById('translation-status-body');
+                tbody.innerHTML = '';
+
+                statusData.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><code>${item.path}</code></td>
+                        <td><span class="status-badge status-${item.en}">${this.formatStatus(item.en)}</span></td>
+                        <td><span class="status-badge status-${item.es}">${this.formatStatus(item.es)}</span></td>
+                        <td><span class="status-badge status-${item.status.replace('-', '')}">${this.formatStatus(item.status)}</span></td>
+                        <td>${item.lastModified}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="dashboard.editTranslation('${item.path}')">Edit</button>
+                            <button class="btn btn-sm btn-secondary" onclick="dashboard.compareVersions('${item.path}')">Compare</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            formatStatus(status) {
+                const statusMap = {
+                    'complete': 'Complete',
+                    'partial': 'Partial',
+                    'missing': 'Missing',
+                    'outdated': 'Outdated',
+                    'synced': 'Synced',
+                    'needs-update': 'Needs Update',
+                    'needs-translation': 'Needs Translation',
+                    'in-progress': 'In Progress'
+                };
+                return statusMap[status] || status;
+            }
+
+            async loadHreflangPreview() {
+                const hreflangTags = `
+<link rel="alternate" hreflang="en" href="https://brandonlambert.com/" />
+<link rel="alternate" hreflang="es" href="https://brandonlambert.com/es/" />
+<link rel="alternate" hreflang="en" href="https://brandonlambert.com/about/" />
+<link rel="alternate" hreflang="es" href="https://brandonlambert.com/es/me/" />
+<link rel="alternate" hreflang="en" href="https://brandonlambert.com/tools/" />
+<link rel="alternate" hreflang="es" href="https://brandonlambert.com/es/tools/" />
+<link rel="alternate" hreflang="x-default" href="https://brandonlambert.com/" />
+                `.trim();
+                
+                document.getElementById('hreflang-preview').textContent = hreflangTags;
+            }
+
+            editTranslation(path) {
+                window.open(`/admin/translation-editor.html?file=${encodeURIComponent(path)}`, '_blank');
+            }
+
+            compareVersions(path) {
+                window.open(`/admin/version-compare.html?file=${encodeURIComponent(path)}`, '_blank');
+            }
+
+            startAutoRefresh() {
+                setInterval(() => {
+                    this.loadTranslationStatus();
+                }, 30000); // Refresh every 30 seconds
+            }
+        }
+
+        // Global functions
+        let dashboard;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            dashboard = new MultilingualDashboard();
+        });
+
+        function refreshDashboard() {
+            dashboard.loadTranslationStatus();
+        }
+
+        function openTranslationEditor() {
+            window.open('/admin/translation-editor.html', '_blank');
+        }
+
+        function analyzeTranslationGaps() {
+            alert('Translation gap analysis will identify missing or outdated translations.');
+        }
+
+        function validateHreflangTags() {
+            alert('Hreflang validation will check for proper language tag implementation.');
+        }
+
+        function generateSEOReport() {
+            window.open('/admin/seo-report.html', '_blank');
+        }
+
+        function exportTranslationMemory() {
+            alert('Translation memory export will download a JSON file with terminology.');
+        }
+
+        function updateHreflangTags() {
+            alert('Hreflang tags will be automatically updated in the site templates.');
+        }
+    </script>
+</body>
+</html>

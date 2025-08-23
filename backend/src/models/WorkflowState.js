@@ -50,7 +50,16 @@ module.exports = (sequelize, DataTypes) => {
         'client_approval',
         'publishing',
         'maintenance',
-        'archive'
+        'archive',
+        'educational_review',
+        'pedagogical_validation',
+        'student_testing',
+        'peer_workshop',
+        'cultural_adaptation',
+        'impact_assessment',
+        'portfolio_curation',
+        'creative_editing',
+        'multilingual_sync'
       ),
       allowNull: false,
     },

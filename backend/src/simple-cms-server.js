@@ -20,6 +20,9 @@ const PORT = process.env.PORT || 3000;
 // Import authentication addon
 const { addAuthEndpoints } = require('./auth-addon');
 
+// Import multilingual API endpoints
+const { addMultilingualEndpoints } = require('./multilingual-api');
+
 // Root directory for Hugo content
 const HUGO_ROOT = path.join(__dirname, '../../');
 const CONTENT_DIR = path.join(HUGO_ROOT, 'content');
@@ -488,6 +491,9 @@ async function getContentFiles(dir, baseDir = dir) {
 // Add authentication endpoints
 addAuthEndpoints(app);
 
+// Add multilingual management endpoints
+addMultilingualEndpoints(app, HUGO_ROOT, CONTENT_DIR);
+
 app.listen(PORT, () => {
     console.log(`
     ========================================
@@ -503,6 +509,11 @@ app.listen(PORT, () => {
     ✓ Real analytics tracking
     ✓ Contact form handling
     ✓ Hugo build & deploy
+    ✓ Multilingual content management
+    ✓ Translation status tracking
+    ✓ SEO analysis & optimization
+    ✓ Cultural adaptation notes
+    ✓ Hreflang tag generation
     ========================================
     `);
 });

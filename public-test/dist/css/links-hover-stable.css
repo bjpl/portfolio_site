@@ -1,0 +1,271 @@
+/* Stable hover menu with proper spacing and no flashing */
+
+/* ==============================================
+   HOVER MENU STYLES ONLY - Link wrapper styled in template
+   ============================================== */
+
+/* ==============================================
+   HOVER MENU - Fixed spacing and hit areas
+   ============================================== */
+.hover-menu {
+    /* Absolute positioning inside link */
+    position: absolute !important;
+    top: 50% !important;
+    right: 10px !important;
+    transform: translateY(-50%) !important;
+    
+    /* Container with fixed width for stability */
+    width: 110px !important;
+    height: 42px !important;
+    
+    /* Flex layout with proper spacing */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important; /* More space between icons */
+    padding: 6px 8px !important;
+    
+    /* Solid background for stability */
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+    
+    /* Initially hidden */
+    opacity: 0 !important;
+    visibility: hidden !important;
+    
+    /* Smooth transitions */
+    transition: opacity 0.25s ease, visibility 0.25s ease !important;
+    transition-delay: 0s !important;
+    
+    /* High z-index */
+    z-index: 1000 !important;
+    
+    /* Initially no pointer events */
+    pointer-events: none !important;
+}
+
+/* Show on hover with proper delays */
+a.link-item-wrapper:hover .hover-menu {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transition-delay: 0.15s !important; /* Slightly longer delay */
+}
+
+/* Keep menu visible when hovering */
+.hover-menu:hover {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transition-delay: 0s !important;
+}
+
+/* ==============================================
+   SOCIAL ICONS - Fixed spacing and hit areas
+   ============================================== */
+.social-icon {
+    /* Reset styles */
+    all: unset !important;
+    
+    /* Fixed dimensions with no overlap */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    max-width: 30px !important;
+    flex: 0 0 30px !important;
+    
+    /* Clean styling */
+    background: #f7f7f7 !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 1001 !important;
+    isolation: isolate !important; /* Prevent blending issues */
+}
+
+/* Hover state - no transform to prevent overlap */
+.social-icon:hover {
+    background: #ffffff !important;
+    border-color: currentColor !important;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Active state */
+.social-icon:active {
+    transform: scale(0.95) !important;
+    box-shadow: none !important;
+}
+
+/* Icon SVGs */
+.social-icon svg {
+    width: 16px !important;
+    height: 16px !important;
+    fill: currentColor !important;
+    pointer-events: none !important;
+    transition: fill 0.15s ease !important;
+    opacity: 0.8 !important;
+}
+
+.social-icon:hover svg {
+    opacity: 1 !important;
+}
+
+/* Platform-specific colors - stable */
+.social-icon.instagram {
+    color: #E1306C !important;
+}
+
+.social-icon.instagram:hover {
+    background: #fff0f4 !important;
+    border-color: #E1306C !important;
+}
+
+.social-icon.website {
+    color: #4A5568 !important;
+}
+
+.social-icon.website:hover {
+    background: #f7f8fa !important;
+    border-color: #4A5568 !important;
+}
+
+.social-icon.youtube {
+    color: #FF0000 !important;
+}
+
+.social-icon.youtube:hover {
+    background: #fff0f0 !important;
+    border-color: #FF0000 !important;
+}
+
+.social-icon.disabled {
+    opacity: 0.3 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+/* ==============================================
+   HOVER STABILITY - Prevent flashing
+   ============================================== */
+/* Stable hover area for the entire card */
+a.link-item-wrapper {
+    isolation: isolate !important;
+}
+
+/* Extended hit area for menu stability */
+.hover-menu::after {
+    content: '' !important;
+    position: absolute !important;
+    top: -10px !important;
+    right: -10px !important;
+    bottom: -10px !important;
+    left: -10px !important;
+    z-index: -1 !important;
+    pointer-events: auto !important;
+}
+
+/* Delay hiding when mouse leaves */
+a.link-item-wrapper:not(:hover) .hover-menu {
+    transition-delay: 0.4s !important; /* Longer delay */
+}
+
+/* Keep visible if hovering menu itself */
+a.link-item-wrapper .hover-menu:hover {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* Grid layout handled by main template - no override needed */
+
+/* ==============================================
+   RESPONSIVE DESIGN
+   ============================================== */
+@media (max-width: 768px) {
+    .hover-menu {
+        width: 105px !important;
+        height: 40px !important;
+        right: 8px !important;
+        gap: 5px !important;
+        padding: 5px 6px !important;
+    }
+    
+    .social-icon {
+        width: 28px !important;
+        height: 28px !important;
+        min-width: 28px !important;
+        max-width: 28px !important;
+    }
+    
+    .social-icon svg {
+        width: 15px !important;
+        height: 15px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hover-menu {
+        width: 100px !important;
+        height: 38px !important;
+        right: 6px !important;
+        gap: 4px !important;
+        padding: 4px 5px !important;
+    }
+    
+    .social-icon {
+        width: 26px !important;
+        height: 26px !important;
+        min-width: 26px !important;
+        max-width: 26px !important;
+    }
+    
+    .social-icon svg {
+        width: 14px !important;
+        height: 14px !important;
+    }
+}
+
+/* ==============================================
+   DARK MODE SUPPORT
+   ============================================== */
+
+[data-theme="dark"] .hover-menu {
+    background: rgba(31, 41, 55, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .social-icon svg {
+    opacity: 0.6 !important;
+}
+
+[data-theme="dark"] .social-icon:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .social-icon:hover svg {
+    opacity: 0.9 !important;
+}
+
+[data-theme="dark"] .social-icon.instagram:hover {
+    background: #E4405F !important;
+}
+
+[data-theme="dark"] .social-icon.website:hover {
+    background: #3B82F6 !important;
+}
+
+[data-theme="dark"] .social-icon.youtube:hover {
+    background: #FF0000 !important;
+}
+
+/* Animation handled by main template */

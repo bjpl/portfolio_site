@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #00ff00;
+        }
+        .test {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #333;
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .pending { color: #ffff00; }
+        button {
+            background: #333;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #00ff00;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 API Connection Test</h1>
+    
+    <div id="environment" class="test">
+        <strong>Environment:</strong> <span id="env-status">Detecting...</span>
+    </div>
+    
+    <div id="results"></div>
+    
+    <button onclick="testAll()">Run All Tests</button>
+    <button onclick="testLogin()">Test Login</button>
+    <button onclick="clearStorage()">Clear Storage</button>
+    
+    <script>
+        // Detect environment
+        const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+        const API_BASE = isProduction ? '/.netlify/functions' : 'http://localhost:3335/api';
+        
+        document.getElementById('env-status').textContent = isProduction 
+            ? `Production (${window.location.hostname})` 
+            : 'Local Development';
+        
+        function addResult(name, status, message) {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test ${status}`;
+            div.innerHTML = `
+                <strong>${name}:</strong> ${status.toUpperCase()}<br>
+                <small>${message}</small>
+            `;
+            results.appendChild(div);
+        }
+        
+        async function testHealth() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                addResult('Health Check', 'success', 
+                    `API Status: ${data.status} - ${data.message || data.timestamp}`);
+            } catch (error) {
+                addResult('Health Check', 'error', error.message);
+            }
+        }
+        
+        async function testLogin() {
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        emailOrUsername: 'admin',
+                        password: 'password123'
+                    })
+                });
+                const data = await response.json();
+                
+                if (data.success || data.token) {
+                    localStorage.setItem('adminToken', data.token || data.accessToken);
+                    localStorage.setItem('adminUser', JSON.stringify(data.user));
+                    addResult('Login Test', 'success', 
+                        `Logged in as ${data.user.username} (${data.user.role})`);
+                } else {
+                    addResult('Login Test', 'error', data.error || 'Login failed');
+                }
+            } catch (error) {
+                // Try demo mode
+                const demoToken = btoa(JSON.stringify({
+                    user: 'admin',
+                    exp: Date.now() + (24 * 60 * 60 * 1000)
+                }));
+                localStorage.setItem('adminToken', demoToken);
+                localStorage.setItem('demoMode', 'true');
+                addResult('Login Test', 'pending', 
+                    'API unavailable - Demo mode activated');
+            }
+        }
+        
+        function clearStorage() {
+            localStorage.clear();
+            document.getElementById('results').innerHTML = '';
+            addResult('Storage', 'success', 'Local storage cleared');
+        }
+        
+        async function testAll() {
+            document.getElementById('results').innerHTML = '';
+            await testHealth();
+            await testLogin();
+        }
+        
+        // Auto-run tests on load
+        testAll();
+    </script>
+</body>
+</html>

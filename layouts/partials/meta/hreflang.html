@@ -1,0 +1,89 @@
+{{/* Enhanced Hreflang Tag Generation for Multilingual SEO */}}
+{{- $currentPage := . -}}
+{{- $baseURL := site.BaseURL | strings.TrimSuffix "/" -}}
+{{- $currentLang := .Language.Lang -}}
+{{- $pageURL := .Permalink | strings.TrimPrefix $baseURL -}}
+
+{{/* Generate hreflang tags for all available languages */}}
+{{- range site.Languages -}}
+    {{- $lang := .Lang -}}
+    {{- $langURL := "" -}}
+    
+    {{/* Construct URL for this language */}}
+    {{- if eq $lang "en" -}}
+        {{/* English is at root */}}
+        {{- if eq $currentPage.Kind "home" -}}
+            {{- $langURL = $baseURL -}}
+        {{- else -}}
+            {{- $langURL = printf "%s%s" $baseURL ($pageURL | strings.TrimPrefix (printf "/%s" $currentLang)) -}}
+        {{- end -}}
+    {{- else -}}
+        {{/* Other languages have language prefix */}}
+        {{- if eq $currentPage.Kind "home" -}}
+            {{- $langURL = printf "%s/%s/" $baseURL $lang -}}
+        {{- else -}}
+            {{- $cleanURL := $pageURL | strings.TrimPrefix (printf "/%s" $currentLang) -}}
+            {{- $langURL = printf "%s/%s%s" $baseURL $lang $cleanURL -}}
+        {{- end -}}
+    {{- end -}}
+    
+    {{/* Check if this page exists in the target language */}}
+    {{- $pageExists := false -}}
+    {{- if eq $lang $currentLang -}}
+        {{- $pageExists = true -}}
+    {{- else if eq $lang "en" -}}
+        {{/* Check if English version exists */}}
+        {{- $pageExists = true -}} {{/* Assume English versions always exist */}}
+    {{- else -}}
+        {{/* Check if translation exists */}}
+        {{- $translationPath := printf "content/%s%s" $lang ($pageURL | strings.TrimPrefix (printf "/%s" $currentLang)) -}}
+        {{- $pageExists = fileExists $translationPath -}}
+    {{- end -}}
+    
+    {{/* Output hreflang tag if page exists */}}
+    {{- if $pageExists -}}
+        <link rel="alternate" hreflang="{{ $lang }}" href="{{ $langURL }}" />
+        {{/* Add regional variant for Spanish (Colombia) */}}
+        {{- if eq $lang "es" -}}
+            <link rel="alternate" hreflang="es-CO" href="{{ $langURL }}" />
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+
+{{/* Add x-default tag (usually English) */}}
+{{- if eq $currentPage.Kind "home" -}}
+    <link rel="alternate" hreflang="x-default" href="{{ $baseURL }}/" />
+{{- else -}}
+    {{- $defaultURL := printf "%s%s" $baseURL ($pageURL | strings.TrimPrefix (printf "/%s" $currentLang)) -}}
+    <link rel="alternate" hreflang="x-default" href="{{ $defaultURL }}" />
+{{- end -}}
+
+{{/* SEO Schema for multilingual content */}}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "inLanguage": "{{ $currentLang }}",
+    "url": "{{ .Permalink }}",
+    {{- if .Title -}}
+    "name": {{ .Title | jsonify }},
+    {{- end -}}
+    {{- if .Description -}}
+    "description": {{ .Description | jsonify }},
+    {{- end -}}
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": {{ site.Title | jsonify }},
+        "url": "{{ $baseURL }}/",
+        "inLanguage": ["en", "es"]
+    }
+    {{- if ne $currentLang "en" -}}
+    ,
+    "translationOfWork": {
+        "@type": "WebPage",
+        "inLanguage": "en",
+        "url": "{{ printf "%s%s" $baseURL ($pageURL | strings.TrimPrefix (printf "/%s" $currentLang)) }}"
+    }
+    {{- end -}}
+}
+</script>
