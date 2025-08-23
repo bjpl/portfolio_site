@@ -44,9 +44,12 @@
     "diff": "^5.1.0",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
+    "express-graphql": "^0.12.0",
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^7.1.5",
     "express-validator": "^7.0.1",
+    "graphql": "^16.8.1",
+    "graphql-iso-date": "^3.6.1",
     "gray-matter": "^4.0.3",
     "helmet": "^7.1.0",
     "ioredis": "^5.7.0",
@@ -65,7 +68,8 @@
     "winston": "^3.11.0",
     "winston-daily-rotate-file": "^4.7.1",
     "ws": "^8.18.3",
-    "xss": "^1.0.14"
+    "xss": "^1.0.14",
+    "yaml": "^2.4.5"
   },
   "devDependencies": {
     "@babel/core": "^7.28.3",
@@ -106,9 +110,6 @@
     "hooks": {
       "pre-commit": "lint-staged && npm run test:ci"
     }
-  },
-  "jest": {
-    "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"]
   },
   "engines": {
     "node": ">=16.0.0",

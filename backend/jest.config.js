@@ -161,11 +161,11 @@ module.exports = {
     url: 'http://localhost'
   },
   
-  // Watch plugins
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname'
-  ].filter(Boolean),
+  // Watch plugins (commented out as package may not be available)
+  // watchPlugins: [
+  //   'jest-watch-typeahead/filename',
+  //   'jest-watch-typeahead/testname'
+  // ].filter(Boolean),
   
   // Jest project configuration for different test types
   projects: [
@@ -199,32 +199,8 @@ module.exports = {
     }
   ],
   
-  // Reporter configuration
-  reporters: [
-    'default',
-    [
-      'jest-html-reporters',
-      {
-        publicPath: './coverage/html-report',
-        filename: 'report.html',
-        expand: true,
-        hideIcon: false,
-        pageTitle: 'Portfolio Backend Test Report'
-      }
-    ],
-    [
-      'jest-junit',
-      {
-        outputDirectory: './coverage/junit',
-        outputName: 'junit.xml',
-        ancestorSeparator: ' › ',
-        uniqueOutputName: 'false',
-        suiteNameTemplate: '{filepath}',
-        classNameTemplate: '{classname}',
-        titleTemplate: '{title}'
-      }
-    ]
-  ],
+  // Reporter configuration (using only built-in reporters)
+  reporters: ['default'],
   
   // Notify configuration
   notify: false,
@@ -233,10 +209,10 @@ module.exports = {
   // Error handling
   errorOnDeprecated: true,
   
-  // Snapshot serializers
-  snapshotSerializers: [
-    'jest-serializer-path'
-  ].filter(Boolean),
+  // Snapshot serializers (commented out as package may not be available)
+  // snapshotSerializers: [
+  //   'jest-serializer-path'
+  // ].filter(Boolean),
   
   // Mock configuration
   unmockedModulePathPatterns: [

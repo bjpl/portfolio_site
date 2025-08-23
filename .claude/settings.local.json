@@ -38,7 +38,9 @@
       "Bash(ping:*)",
       "Bash(ren:*)",
       "Bash(chmod:*)",
-      "Bash(scripts/deploy-api-fix.sh:*)"
+      "Bash(scripts/deploy-api-fix.sh:*)",
+      "Bash(npm test)",
+      "Bash(jest:*)"
     ],
     "deny": [],
     "additionalDirectories": [
