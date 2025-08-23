@@ -45,7 +45,12 @@
     // Verify token with backend
     async function verifyToken(token) {
         try {
-            const response = await fetch('http://localhost:3000/api/auth/me', {
+            // Use Netlify Functions when deployed
+            const authURL = window.location.hostname.includes('netlify.app') ?
+                '/.netlify/functions/auth-me' :
+                'http://localhost:3000/api/auth/me';
+            
+            const response = await fetch(authURL, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

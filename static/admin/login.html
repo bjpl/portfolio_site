@@ -194,6 +194,7 @@
             to { transform: rotate(360deg); }
         }
     </style>
+    <script src="/admin/js/api-config-netlify.js"></script>
 </head>
 <body>
     <!-- Toast Container -->
@@ -304,10 +305,12 @@
             setLoading(true);
             
             try {
-                // Use central API configuration
-                const apiURL = window.apiConfig ? 
-                    window.apiConfig.getURL('/auth/login') : 
-                    'http://localhost:3000/api/auth/login';
+                // Use central API configuration with Netlify support
+                const apiURL = window.APIConfig ? 
+                    window.APIConfig.getURL('/auth/login') : 
+                    (window.location.hostname.includes('netlify.app') ? 
+                        '/.netlify/functions/auth-login' : 
+                        'http://localhost:3000/api/auth/login');
                 
                 const response = await fetch(apiURL, {
                     method: 'POST',
