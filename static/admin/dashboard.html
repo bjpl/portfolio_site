@@ -548,8 +548,19 @@
     <script>
         // Dashboard initialization
         document.addEventListener('DOMContentLoaded', async () => {
-            // Load dashboard data immediately (no auth needed for simple CMS)
-            loadDashboardData();
+            // Show loading state
+            showLoadingState();
+            
+            try {
+                // Load dashboard data immediately (no auth needed for simple CMS)
+                await loadDashboardData();
+                hideLoadingState();
+                showStatus('Dashboard loaded successfully', 'success');
+            } catch (error) {
+                hideLoadingState();
+                showStatus('Failed to load dashboard data', 'error');
+                console.error('Dashboard initialization error:', error);
+            }
             
             // Initialize WebSocket for real-time updates
             if (window.apiClient) {
