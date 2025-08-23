@@ -83,6 +83,27 @@
   force = true
 
 [[redirects]]
+  from = "/api/auth/login"
+  to = "/.netlify/functions/auth"
+  status = 200
+  force = true
+  headers = {X-Forwarded-For = ":client_ip"}
+
+[[redirects]]
+  from = "/api/auth/logout"
+  to = "/.netlify/functions/auth"
+  status = 200
+  force = true
+  headers = {X-Forwarded-For = ":client_ip"}
+
+[[redirects]]
+  from = "/api/auth/refresh"
+  to = "/.netlify/functions/auth"
+  status = 200
+  force = true
+  headers = {X-Forwarded-For = ":client_ip"}
+
+[[redirects]]
   from = "/api/auth/*"
   to = "/.netlify/functions/auth"
   status = 200

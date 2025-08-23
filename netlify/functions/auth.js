@@ -59,7 +59,15 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const path = event.path.replace('/.netlify/functions/auth', '');
+    // Extract path from both direct function calls and API proxy routes
+    let path = '';
+    if (event.path.includes('/.netlify/functions/auth')) {
+      path = event.path.replace('/.netlify/functions/auth', '');
+    } else if (event.path.includes('/api/auth/')) {
+      path = '/' + event.path.split('/api/auth/')[1];
+    }
+    
+    console.log('Auth function called with path:', event.path, 'extracted path:', path);
     
     // Handle login
     if (path === '/login' || path === '') {
@@ -94,8 +102,7 @@ exports.handler = async (event, context) => {
         statusCode: 401,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': allowedOrigins.includes(event.headers.origin) ? event.headers.origin : allowedOrigins[0],
-          'Access-Control-Allow-Credentials': 'true'
+          'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
           success: false,
@@ -110,8 +117,7 @@ exports.handler = async (event, context) => {
         statusCode: 200,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': allowedOrigins.includes(event.headers.origin) ? event.headers.origin : allowedOrigins[0],
-          'Access-Control-Allow-Credentials': 'true'
+          'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
           success: true,
@@ -128,8 +134,7 @@ exports.handler = async (event, context) => {
         statusCode: 200,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': allowedOrigins.includes(event.headers.origin) ? event.headers.origin : allowedOrigins[0],
-          'Access-Control-Allow-Credentials': 'true'
+          'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
           success: true,
