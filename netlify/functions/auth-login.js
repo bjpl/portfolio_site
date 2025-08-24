@@ -37,9 +37,13 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const { emailOrUsername, password } = JSON.parse(event.body);
+    const body = JSON.parse(event.body);
+    const { emailOrUsername, email, username, password } = body;
     
-    if ((emailOrUsername === 'admin' || emailOrUsername === 'admin@portfolio.com') && 
+    // Handle different field name variations
+    const loginIdentifier = emailOrUsername || email || username;
+    
+    if ((loginIdentifier === 'admin' || loginIdentifier === 'admin@portfolio.com') && 
         password === 'password123') {
       
       const token = generateToken(ADMIN_USER);

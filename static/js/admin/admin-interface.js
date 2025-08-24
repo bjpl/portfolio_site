@@ -7,11 +7,16 @@ class AdminInterface {
     constructor() {
         this.currentView = 'dashboard';
         this.isInitialized = false;
+        this.configWaitAttempts = 0;
+        this.maxConfigWaitAttempts = 50; // 5 seconds max wait
         this.init();
     }
 
     async init() {
         if (this.isInitialized) return;
+        
+        // Wait for Supabase configuration to be available
+        await this.waitForSupabaseConfig();
         
         // Check API configuration first
         const configCheck = this.checkConfiguration();
@@ -777,6 +782,11 @@ class AdminInterface {
                         <p><strong>Supabase URL:</strong> ${configStatus.supabase?.url || 'Not configured'}</p>
                         <p><strong>Supabase Key:</strong> ${configStatus.supabase?.hasValidKey ? '✅ Valid' : '❌ Invalid or missing'}</p>
                         <p><strong>Environment Detection:</strong> ${this.getEnvironmentInfo()}</p>
+                        <p><strong>Config Source:</strong> ${
+                            configStatus.sources?.globalConfig ? 'Global Config (window.SUPABASE_CONFIG)' :
+                            configStatus.sources?.apiConfig ? 'API Config Manager' :
+                            'Hardcoded Fallback'
+                        }</p>
                     </div>
                 </div>
             </div>
@@ -829,6 +839,8 @@ class AdminInterface {
                     <p><strong>Current User:</strong> ${window.authManager?.getDisplayName?.() || 'Not authenticated'}</p>
                     <p><strong>API Client:</strong> ${window.apiClient ? 'Loaded' : 'Not loaded'}</p>
                     <p><strong>Config Manager:</strong> ${window.apiConfig ? 'Loaded' : 'Not loaded'}</p>
+                    <p><strong>Global Config:</strong> ${window.SUPABASE_CONFIG ? 'Available' : 'Not available'}</p>
+                    <p><strong>Config Wait Attempts:</strong> ${this.configWaitAttempts}/${this.maxConfigWaitAttempts}</p>
                 </div>
             </div>
         `;
@@ -1139,10 +1151,27 @@ class AdminInterface {
                 <div style="margin: 2rem 0;">
                     <p><strong>Supabase URL:</strong> ${configCheck.supabase?.url || 'Not detected'}</p>
                     <p><strong>Supabase Key:</strong> ${configCheck.supabase?.hasValidKey ? '✅ Valid' : '❌ Invalid'}</p>
+                    <p><strong>Config Source:</strong> ${
+                        configCheck.sources?.globalConfig ? '✅ Global Config (window.SUPABASE_CONFIG)' :
+                        configCheck.sources?.apiConfig ? '✅ API Config Manager' :
+                        '⚠️ Using hardcoded fallback values'
+                    }</p>
                 </div>
-                <div style="display: flex; gap: 1rem;">
+                <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 1rem; margin: 1rem 0; max-width: 600px;">
+                    <h3 style="margin: 0 0 0.5rem 0; color: #0c4a6e;">Expected Configuration:</h3>
+                    <p style="margin: 0.5rem 0; text-align: left; font-family: monospace; font-size: 0.9rem;">
+                        window.SUPABASE_CONFIG = {<br/>
+                        &nbsp;&nbsp;url: 'https://tdmzayzkqyegvfgxlolj.supabase.co',<br/>
+                        &nbsp;&nbsp;anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'<br/>
+                        };
+                    </p>
+                </div>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                     <button onclick="location.reload()" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">
                         Retry
+                    </button>
+                    <button onclick="window.adminInterface.testConfigConnection()" style="padding: 10px 20px; background: #059669; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                        Test Connection
                     </button>
                     <button onclick="window.location.href = '/'" style="padding: 10px 20px; background: #6b7280; color: white; border: none; border-radius: 6px; cursor: pointer;">
                         Go Home
@@ -1150,6 +1179,32 @@ class AdminInterface {
                 </div>
             </div>
         `;
+    }
+
+    /**
+     * Test configuration connection from error page
+     */
+    async testConfigConnection() {
+        try {
+            const config = this.getSupabaseConfig();
+            const response = await fetch(`${config.url}/rest/v1/`, {
+                method: 'HEAD',
+                headers: {
+                    'apikey': config.anonKey,
+                    'Authorization': `Bearer ${config.anonKey}`
+                },
+                timeout: 10000
+            });
+            
+            if (response.ok) {
+                alert('✅ Connection successful! The configuration is working.');
+                location.reload();
+            } else {
+                alert(`❌ Connection failed: HTTP ${response.status} ${response.statusText}`);
+            }
+        } catch (error) {
+            alert(`❌ Connection test failed: ${error.message}`);
+        }
     }
 
     showError(message) {
@@ -1165,18 +1220,125 @@ class AdminInterface {
     }
 
     /**
+     * Wait for Supabase configuration to be available
+     */
+    async waitForSupabaseConfig() {
+        return new Promise((resolve) => {
+            const checkConfig = () => {
+                if (window.SUPABASE_CONFIG || window.apiConfig || this.configWaitAttempts >= this.maxConfigWaitAttempts) {
+                    console.log('🔧 Admin Interface: Configuration check completed');
+                    resolve();
+                    return;
+                }
+                
+                this.configWaitAttempts++;
+                console.log(`🔧 Admin Interface: Waiting for configuration... (${this.configWaitAttempts}/${this.maxConfigWaitAttempts})`);
+                setTimeout(checkConfig, 100);
+            };
+            
+            checkConfig();
+        });
+    }
+
+    /**
+     * Get Supabase configuration from multiple sources
+     */
+    getSupabaseConfig() {
+        // Try window.SUPABASE_CONFIG first (from global config)
+        if (window.SUPABASE_CONFIG && window.SUPABASE_CONFIG.url && window.SUPABASE_CONFIG.anonKey) {
+            return window.SUPABASE_CONFIG;
+        }
+        
+        // Try window.apiConfig
+        if (window.apiConfig) {
+            const url = window.apiConfig.getSupabaseUrl?.();
+            const anonKey = window.apiConfig.getSupabaseAnonKey?.();
+            if (url && anonKey) {
+                return { url, anonKey };
+            }
+        }
+        
+        // Fallback to hardcoded values
+        return {
+            url: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
+            anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM'
+        };
+    }
+
+    /**
+     * Initialize API client if needed
+     */
+    initializeAPIClient() {
+        if (!window.apiClient) {
+            console.log('🔧 Admin Interface: Initializing API client...');
+            const config = this.getSupabaseConfig();
+            
+            // Create a basic API client if none exists
+            window.apiClient = {
+                request: async (endpoint, options = {}) => {
+                    const url = `${config.url}/rest/v1${endpoint}`;
+                    const response = await fetch(url, {
+                        method: options.method || 'GET',
+                        headers: {
+                            'apikey': config.anonKey,
+                            'Authorization': `Bearer ${config.anonKey}`,
+                            'Content-Type': 'application/json',
+                            ...options.headers
+                        },
+                        body: options.body ? JSON.stringify(options.body) : undefined
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    return response.json();
+                },
+                getStatus: () => ({
+                    configured: true,
+                    supabaseUrl: config.url,
+                    hasValidKey: config.anonKey.length > 100
+                })
+            };
+        }
+    }
+
+    /**
      * Check configuration validity
      */
     checkConfiguration() {
-        if (!window.apiConfig) {
-            return {
-                valid: false,
-                issues: ['API configuration manager not loaded'],
-                supabase: { url: null, hasValidKey: false, configured: false }
-            };
+        const config = this.getSupabaseConfig();
+        const issues = [];
+        
+        // Validate Supabase URL
+        if (!config.url || !config.url.startsWith('https://')) {
+            issues.push('Invalid Supabase URL - must be a valid HTTPS URL');
         }
         
-        return window.apiConfig.validate();
+        // Validate Supabase anonymous key
+        if (!config.anonKey || config.anonKey.length < 100) {
+            issues.push('Invalid Supabase anonymous key - must be a valid JWT token');
+        }
+        
+        // Check if API client is available
+        if (!window.apiClient) {
+            this.initializeAPIClient();
+        }
+        
+        return {
+            valid: issues.length === 0,
+            issues,
+            supabase: {
+                url: config.url,
+                hasValidKey: config.anonKey && config.anonKey.length > 100,
+                configured: true
+            },
+            sources: {
+                globalConfig: !!window.SUPABASE_CONFIG,
+                apiConfig: !!window.apiConfig,
+                fallback: !window.SUPABASE_CONFIG && !window.apiConfig
+            }
+        };
     }
 
     /**
@@ -1197,14 +1359,31 @@ class AdminInterface {
      */
     async testApiConnection() {
         try {
-            if (!window.apiClient) {
-                throw new Error('API client not available');
+            const config = this.getSupabaseConfig();
+            
+            if (!config.url || !config.anonKey) {
+                throw new Error('Supabase configuration not available');
             }
             
-            const response = await window.apiClient.request('/rest/v1/', { method: 'HEAD' });
+            // Test direct connection to Supabase REST API
+            const response = await fetch(`${config.url}/rest/v1/`, {
+                method: 'HEAD',
+                headers: {
+                    'apikey': config.anonKey,
+                    'Authorization': `Bearer ${config.anonKey}`
+                },
+                timeout: 10000
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
             window.loadingManager?.showSuccess?.('✅ API connection successful!') || 
                 alert('✅ API connection successful!');
+                
         } catch (error) {
+            console.error('API connection test failed:', error);
             window.errorBoundary?.showError?.(`❌ API connection failed: ${error.message}`) || 
                 alert(`❌ API connection failed: ${error.message}`);
         }

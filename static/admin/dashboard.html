@@ -6,7 +6,22 @@
     <title>Dashboard - Static CMS</title>
     
     <!-- Supabase Configuration (load first, before other scripts) -->
+    <script>
+    // Inline Supabase configuration as fallback
+    window.SUPABASE_CONFIG = {
+      url: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
+      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM'
+    };
+    </script>
     <script src="/js/config/supabase-config.js"></script>
+    <!-- Load essential admin configuration -->
+    <script src="/admin/js/config.js"></script>
+    <script src="/admin/js/api-config.js"></script>
+    <script src="/admin/js/unified-api-client.js"></script>
+    <script src="/admin/js/connection-validator.js"></script>
+    <script src="/admin/js/asset-loader.js"></script>
+    <script src="/admin/js/router.js"></script>
+    <script src="/admin/js/environment-checker.js"></script>
     
     <!-- Auth Styles -->
     <link rel="stylesheet" href="/css/auth/auth-styles.css">
@@ -534,29 +549,43 @@
         document.addEventListener('DOMContentLoaded', async () => {
             console.log('📊 Dashboard loading...');
             
-            // Wait for auth system
+            // Wait for essential systems to load
             let retries = 0;
             const maxRetries = 50;
             
-            while (!window.authService && retries < maxRetries) {
+            // Check for multiple auth systems
+            while (!window.authService && !window.AuthManager && !window.ClientAuth && retries < maxRetries) {
                 await new Promise(resolve => setTimeout(resolve, 100));
                 retries++;
             }
             
-            if (!window.authService) {
-                console.error('❌ Auth system not available');
+            const authSystem = window.authService || window.AuthManager || window.ClientAuth;
+            if (!authSystem) {
+                console.error('❌ No auth system available');
                 showError('Authentication system failed to load');
                 return;
             }
             
-            // Check authentication
-            if (!window.authService.isAuthenticated()) {
-                console.log('🔐 User not authenticated, redirecting to login');
-                window.location.href = `/login.html?returnTo=${encodeURIComponent(window.location.pathname)}`;
-                return;
+            // Check authentication with fallback
+            let isAuthenticated = false;
+            let user = null;
+            
+            if (window.authService && typeof window.authService.isAuthenticated === 'function') {
+                isAuthenticated = window.authService.isAuthenticated();
+                user = window.authService.getCurrentUser();
+            } else if (window.AuthManager && typeof window.AuthManager.isAuthenticated === 'function') {
+                isAuthenticated = window.AuthManager.isAuthenticated();
+                user = window.AuthManager.getUserInfo();
+            } else if (window.ClientAuth && typeof window.ClientAuth.isAuthenticated === 'function') {
+                isAuthenticated = window.ClientAuth.isAuthenticated();
+                user = window.ClientAuth.getCurrentUser();
             }
             
-            const user = window.authService.getCurrentUser();
+            if (!isAuthenticated) {
+                console.log('🔐 User not authenticated, redirecting to login');
+                window.location.href = `/admin/login.html?returnTo=${encodeURIComponent(window.location.pathname)}`;
+                return;
+            }
             console.log('✅ Dashboard loaded for user:', user);
             
             // Initialize dashboard

@@ -6,6 +6,13 @@
     <title>Admin Login - Portfolio Dashboard</title>
     
     <!-- Supabase Configuration (load first, before other scripts) -->
+    <script>
+    // Inline Supabase configuration as fallback
+    window.SUPABASE_CONFIG = {
+      url: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
+      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM'
+    };
+    </script>
     <script src="/js/config/supabase-config.js"></script>
     
     <style>
@@ -263,6 +270,7 @@
     <script src="js/toast.js"></script>
     <script src="js/auth-manager.js"></script>
     <script src="js/api-config.js"></script>
+    <script src="js/unified-api-client.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/logger.js"></script>
     <script src="js/modal-dialog.js"></script>
@@ -310,26 +318,42 @@
             setLoading(true);
             
             try {
-                // Wait for central config to be ready
-                if (!window.CentralAPIConfig || !window.CentralAPIConfig.initialized) {
+                // Wait for any available config to be ready
+                let configReady = false;
+                let apiURL = null;
+                
+                // Check multiple config sources
+                if (window.APIConfig && window.APIConfig.buildURL) {
+                    apiURL = window.APIConfig.buildURL('/auth-login');
+                    configReady = true;
+                } else if (window.CentralAPIConfig && window.CentralAPIConfig.initialized) {
+                    apiURL = window.CentralAPIConfig.getEndpointURL('/auth/login');
+                    configReady = true;
+                } else {
+                    // Wait for config
                     console.log('Waiting for API config to initialize...');
-                    await new Promise((resolve) => {
-                        const checkConfig = () => {
-                            if (window.CentralAPIConfig && window.CentralAPIConfig.initialized) {
-                                resolve();
-                            } else {
-                                setTimeout(checkConfig, 100);
-                            }
-                        };
-                        checkConfig();
-                    });
+                    let attempts = 0;
+                    while (attempts < 30 && !configReady) {
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                        if (window.APIConfig || (window.CentralAPIConfig && window.CentralAPIConfig.initialized)) {
+                            configReady = true;
+                        }
+                        attempts++;
+                    }
                 }
                 
-                // Use universal API configuration
-                const apiURL = window.CentralAPIConfig.getEndpointURL('/auth/login');
-                console.log(`Using universal API endpoint: ${apiURL}`);
-                console.log(`Environment: ${window.CentralAPIConfig.config.environment}`);
-                console.log(`Backend available: ${window.CentralAPIConfig.backendAvailable}`);
+                // Use best available API configuration
+                if (!apiURL) {
+                    // Fallback to Netlify functions
+                    apiURL = window.location.hostname.includes('netlify') 
+                        ? '/.netlify/functions/auth-login'
+                        : '/api/auth/login';
+                }
+                
+                console.log(`Using API endpoint: ${apiURL}`);
+                const configSource = window.APIConfig ? 'APIConfig' : 
+                                   window.CentralAPIConfig ? 'CentralAPIConfig' : 'Fallback';
+                console.log(`Config source: ${configSource}`);
                 
                 const response = await fetch(apiURL, {
                     method: 'POST',

@@ -8,9 +8,8 @@
 window.SUPABASE_CONFIG = {
   // Public configuration only - no sensitive keys
   url: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
-  // Note: ANON_KEY should be loaded from environment variables
-  // For now using placeholder - this should be replaced via build process
-  anonKey: process?.env?.SUPABASE_ANON_KEY || '{{SUPABASE_ANON_KEY}}',
+  // Anon key for client-side authentication
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM',
   
   // Auth configuration
   auth: {

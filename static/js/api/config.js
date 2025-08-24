@@ -18,9 +18,20 @@ class APIConfig {
     const isProduction = !hostname.includes('localhost') && !hostname.includes('127.0.0.1');
     const isNetlify = hostname.includes('netlify.app') || hostname.includes('netlify.com');
     
+    // Detect specific environment
+    let environmentName = 'unknown';
+    if (isNetlify) {
+      environmentName = 'netlify';
+    } else if (isProduction) {
+      environmentName = 'production';
+    } else {
+      environmentName = 'development';
+    }
+    
     return {
       // Environment detection
-      environment: isProduction ? 'production' : 'development',
+      environment: environmentName,
+      isProduction,
       isNetlify,
       
       // Supabase API endpoints configuration
@@ -180,7 +191,12 @@ class APIConfig {
    * Get Supabase anonymous key with fallback chain
    */
   getSupabaseAnonKey() {
-    // Try environment variables first
+    // Try window.SUPABASE_CONFIG first (from supabase-config.js)
+    if (window.SUPABASE_CONFIG?.anonKey && !window.SUPABASE_CONFIG.anonKey.includes('{{')) {
+      return window.SUPABASE_CONFIG.anonKey;
+    }
+    
+    // Try environment variables
     const envKey = window.ENV?.SUPABASE_ANON_KEY || 
                    window.process?.env?.VITE_SUPABASE_ANON_KEY ||
                    window.process?.env?.REACT_APP_SUPABASE_ANON_KEY ||
@@ -210,7 +226,12 @@ class APIConfig {
    * Get Supabase URL with fallback chain
    */
   getSupabaseUrl() {
-    // Try environment variables first
+    // Try window.SUPABASE_CONFIG first (from supabase-config.js)
+    if (window.SUPABASE_CONFIG?.url) {
+      return window.SUPABASE_CONFIG.url;
+    }
+    
+    // Try environment variables
     const envUrl = window.ENV?.SUPABASE_URL || 
                    window.process?.env?.VITE_SUPABASE_URL ||
                    window.process?.env?.REACT_APP_SUPABASE_URL ||
@@ -397,8 +418,33 @@ class APIConfig {
   }
 }
 
-// Create global configuration instance
-window.apiConfig = new APIConfig();
+// Create global configuration instance with proper initialization
+(function initializeAPIConfig() {
+  console.log('🚀 Initializing API Configuration...');
+  
+  // Wait for Supabase config if needed
+  if (window.SUPABASE_CONFIG) {
+    console.log('✅ Using existing Supabase configuration');
+    window.apiConfig = new APIConfig();
+    console.log('🎉 API Configuration initialized successfully');
+    console.log('🌍 Environment:', window.apiConfig.config.environment);
+  } else {
+    console.log('⏳ Waiting for Supabase configuration...');
+    window.addEventListener('supabaseConfigReady', function() {
+      window.apiConfig = new APIConfig();
+      console.log('🎉 API Configuration initialized after Supabase config load');
+      console.log('🌍 Environment:', window.apiConfig.config.environment);
+    });
+    
+    // Fallback initialization after short delay
+    setTimeout(function() {
+      if (!window.apiConfig) {
+        console.warn('⚠️ Initializing API config without Supabase config');
+        window.apiConfig = new APIConfig();
+      }
+    }, 100);
+  }
+})();
 
 // Export for modules
 if (typeof module !== 'undefined' && module.exports) {

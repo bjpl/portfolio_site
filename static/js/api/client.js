@@ -17,10 +17,40 @@ class UniversalAPIClient {
     this.healthStatus = new Map();
     this.isOnline = navigator.onLine;
     this.demoMode = false;
+    this.configInitialized = false;
     
-    this.initializeEndpoints();
-    this.setupEventListeners();
-    this.startHealthChecks();
+    // Wait for configuration before initializing
+    this.waitForConfiguration().then(() => {
+      this.initializeEndpoints();
+      this.setupEventListeners();
+      this.startHealthChecks();
+      this.configInitialized = true;
+      console.log('🚀 UniversalAPIClient fully initialized with configuration');
+    });
+  }
+  
+  /**
+   * Wait for Supabase configuration to be available
+   */
+  async waitForConfiguration() {
+    let attempts = 0;
+    const maxAttempts = 50; // 5 seconds max wait
+    
+    return new Promise((resolve) => {
+      const checkConfig = () => {
+        if (window.SUPABASE_CONFIG || window.apiConfig || attempts >= maxAttempts) {
+          console.log('🔧 API Client: Configuration check completed');
+          resolve();
+          return;
+        }
+        
+        attempts++;
+        console.log(`🔧 API Client: Waiting for configuration... (${attempts}/${maxAttempts})`);
+        setTimeout(checkConfig, 100);
+      };
+      
+      checkConfig();
+    });
   }
 
   /**
@@ -214,6 +244,15 @@ class UniversalAPIClient {
    * Make API request with retry logic and fallback chain
    */
   async request(endpoint, options = {}) {
+    // Wait for configuration if not yet initialized
+    if (!this.configInitialized) {
+      await this.waitForConfiguration();
+      if (!this.configInitialized) {
+        this.initializeEndpoints();
+        this.configInitialized = true;
+      }
+    }
+    
     const cacheKey = `${endpoint}_${JSON.stringify(options)}`;
     
     // Return cached response if available and fresh
@@ -345,6 +384,11 @@ class UniversalAPIClient {
    * Get Supabase anonymous key with comprehensive fallback chain
    */
   getSupabaseAnonKey() {
+    // Try window.SUPABASE_CONFIG first (from global config)
+    if (window.SUPABASE_CONFIG?.anonKey && window.SUPABASE_CONFIG.anonKey.length > 100) {
+      return window.SUPABASE_CONFIG.anonKey;
+    }
+    
     // Try multiple environment variable patterns
     const envKey = window.ENV?.SUPABASE_ANON_KEY || 
                    window.process?.env?.VITE_SUPABASE_ANON_KEY ||
@@ -470,6 +514,11 @@ class UniversalAPIClient {
    * Get Supabase URL with comprehensive fallback chain
    */
   getSupabaseUrl() {
+    // Try window.SUPABASE_CONFIG first (from global config)
+    if (window.SUPABASE_CONFIG?.url && window.SUPABASE_CONFIG.url.startsWith('https://')) {
+      return window.SUPABASE_CONFIG.url;
+    }
+    
     // Try multiple environment variable patterns
     const envUrl = window.ENV?.SUPABASE_URL || 
                    window.process?.env?.VITE_SUPABASE_URL ||
@@ -519,15 +568,32 @@ class UniversalAPIClient {
    */
   getDetailedStatus() {
     const status = this.getStatus();
+    const supabaseUrl = this.getSupabaseUrl();
+    const anonKey = this.getSupabaseAnonKey();
+    
     return {
       ...status,
       configuration: {
-        supabaseUrl: this.getSupabaseUrl(),
-        hasValidKey: this.getSupabaseAnonKey().length > 100,
+        supabaseUrl,
+        hasValidKey: anonKey && anonKey.length > 100,
         endpointsConfigured: this.endpoints.length,
-        environmentDetection: this.detectEnvironment()
+        environmentDetection: this.detectEnvironment(),
+        configSource: this.getConfigSource()
       }
     };
+  }
+  
+  /**
+   * Determine which configuration source is being used
+   */
+  getConfigSource() {
+    if (window.SUPABASE_CONFIG?.url && window.SUPABASE_CONFIG?.anonKey) {
+      return 'global-config';
+    }
+    if (window.apiConfig?.getSupabaseUrl && window.apiConfig?.getSupabaseAnonKey) {
+      return 'api-config-manager';
+    }
+    return 'hardcoded-fallback';
   }
 
   /**
