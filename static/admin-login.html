@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - Portfolio</title>
+    <title>Admin Login - Portfolio v2025-08-24-v4</title>
+    <!-- Cache Busting Meta Tags -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -329,6 +333,28 @@
             
             // Attach form handler
             document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        });
+    </script>
+    
+    <!-- Cache Busting Script -->
+    <script src="/js/admin/cache-buster.js?v=2025-08-24-v4"></script>
+    <script>
+        // Force cache busting on admin login
+        if (window.adminCacheBuster) {
+            window.adminCacheBuster.clearAdminCache();
+        }
+        
+        // Add timestamp to form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    // Clear any cached admin data before login
+                    if (window.adminCacheBuster) {
+                        window.adminCacheBuster.clearAdminCache();
+                    }
+                });
+            }
         });
     </script>
 </body>

@@ -14,14 +14,14 @@
     };
     </script>
     <script src="/js/config/supabase-config.js"></script>
-    <!-- Load essential admin configuration -->
+    <!-- Load essential admin configuration in correct order -->
+    <script src="/admin/js/loading-manager.js"></script>
+    <script src="/admin/js/client-auth.js"></script>
+    <script src="/admin/js/auth-manager.js"></script>
     <script src="/admin/js/config.js"></script>
-    <script src="/admin/js/api-config.js"></script>
-    <script src="/admin/js/unified-api-client.js"></script>
-    <script src="/admin/js/connection-validator.js"></script>
-    <script src="/admin/js/asset-loader.js"></script>
-    <script src="/admin/js/router.js"></script>
-    <script src="/admin/js/environment-checker.js"></script>
+    <script src="/admin/js/api-config.js" onerror="console.warn('api-config.js failed to load')"></script>
+    <script src="/admin/js/unified-api-client.js" onerror="console.warn('unified-api-client.js failed to load')"></script>
+    <script src="/admin/js/environment-checker.js" onerror="console.warn('environment-checker.js failed to load')"></script>
     
     <!-- Auth Styles -->
     <link rel="stylesheet" href="/css/auth/auth-styles.css">

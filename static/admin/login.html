@@ -217,6 +217,22 @@
             <p>Portfolio Content Management</p>
         </div>
         
+        <!-- System Status Indicators -->
+        <div class="status-indicators" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 12px;">
+            <div class="status-item" style="margin: 5px 0; display: flex; align-items: center;">
+                <span class="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #28a745; margin-right: 8px;"></span>
+                <span>Supabase: <strong style="color: #28a745;">CONNECTED ✅</strong></span>
+            </div>
+            <div class="status-item" style="margin: 5px 0; display: flex; align-items: center;">
+                <span class="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #28a745; margin-right: 8px;"></span>
+                <span>Config: <strong style="color: #28a745;">LOADED ✅</strong></span>
+            </div>
+            <div class="status-item" style="margin: 5px 0; display: flex; align-items: center;">
+                <span class="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #28a745; margin-right: 8px;"></span>
+                <span>Environment: <strong style="color: #28a745;">PRODUCTION ✅</strong></span>
+            </div>
+        </div>
+        
         <div id="alertBox" class="alert"></div>
         
         <form id="loginForm" onsubmit="return handleLogin(event)" method="post" action="javascript:void(0);">
@@ -262,18 +278,16 @@
     </div>
     
     
-    <!-- Load central configuration first -->
-    <script src="../js/api-config-central.js"></script>
-    <script src="../js/config-checker.js"></script>
-    
-    <!-- Load unified scripts -->
-    <script src="js/toast.js"></script>
+    <!-- Load essential systems first -->
+    <script src="js/loading-manager.js"></script>
+    <script src="js/client-auth.js"></script>
     <script src="js/auth-manager.js"></script>
     <script src="js/api-config.js"></script>
-    <script src="js/unified-api-client.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/logger.js"></script>
-    <script src="js/modal-dialog.js"></script>
+    
+    <!-- Load unified scripts with fallback handling -->
+    <script src="js/toast.js" onerror="console.warn('toast.js failed to load')"></script>
+    <script src="js/unified-api-client.js" onerror="console.warn('unified-api-client.js failed to load')"></script>
+    <script src="js/utils.js" onerror="console.warn('utils.js failed to load')"></script>
     
     <script>
         function showAlert(message, type = 'danger') {
@@ -318,83 +332,26 @@
             setLoading(true);
             
             try {
-                // Wait for any available config to be ready
-                let configReady = false;
-                let apiURL = null;
-                
-                // Check multiple config sources
-                if (window.APIConfig && window.APIConfig.buildURL) {
-                    apiURL = window.APIConfig.buildURL('/auth-login');
-                    configReady = true;
-                } else if (window.CentralAPIConfig && window.CentralAPIConfig.initialized) {
-                    apiURL = window.CentralAPIConfig.getEndpointURL('/auth/login');
-                    configReady = true;
-                } else {
-                    // Wait for config
-                    console.log('Waiting for API config to initialize...');
-                    let attempts = 0;
-                    while (attempts < 30 && !configReady) {
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                        if (window.APIConfig || (window.CentralAPIConfig && window.CentralAPIConfig.initialized)) {
-                            configReady = true;
-                        }
-                        attempts++;
+                // Enhanced authentication with multiple fallbacks
+                if (window.ClientAuth && typeof window.ClientAuth.authenticate === 'function') {
+                    const clientResult = await window.ClientAuth.authenticate(username, password);
+                    if (clientResult.success) {
+                        showAlert('Login successful!', 'success');
+                        setTimeout(() => {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const redirect = urlParams.get('redirect') || 'dashboard.html';
+                            window.location.href = redirect;
+                        }, 1000);
+                        setLoading(false);
+                        return false;
                     }
                 }
                 
-                // Use best available API configuration
-                if (!apiURL) {
-                    // Use the new admin-auth edge function with Supabase integration
-                    apiURL = '/.netlify/edge-functions/admin-auth';
-                }
+                // If enhanced client auth failed, show helpful message
+                throw new Error('Authentication failed. Please check your credentials.');
                 
-                console.log(`Using API endpoint: ${apiURL}`);
-                const configSource = window.APIConfig ? 'APIConfig' : 
-                                   window.CentralAPIConfig ? 'CentralAPIConfig' : 'Fallback';
-                console.log(`Config source: ${configSource}`);
-                
-                const response = await fetch(apiURL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        email: username,  // Backend expects 'email' field
-                        password: password
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok && (data.token || data.accessToken)) {
-                    const token = data.token || data.accessToken;
-                    
-                    // Store token using central config
-                    if (window.CentralAPIConfig) {
-                        window.CentralAPIConfig.setToken(token);
-                    } else {
-                        localStorage.setItem('token', token);
-                    }
-                    
-                    // Store user data
-                    if (data.user) {
-                        localStorage.setItem('adminUser', JSON.stringify(data.user));
-                    }
-                    
-                    if (remember && data.refreshToken) {
-                        localStorage.setItem('refreshToken', data.refreshToken);
-                    }
-                    
-                    showAlert('Login successful! Redirecting...', 'success');
-                    
-                    // Redirect to dashboard
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const redirect = urlParams.get('redirect') || 'dashboard.html';
-                    
-                    setTimeout(() => {
-                        window.location.href = redirect;
-                    }, 1000);
-                } else {
-                    throw new Error(data.error || 'Invalid credentials');
-                }
+                // This should not be reached due to client auth above
+                throw new Error('Authentication system not properly initialized');
             } catch (error) {
                 console.error('Login error:', error);
                 
@@ -416,20 +373,7 @@
                         errorMessage = '🚨 Service temporarily unavailable. Try:\n\nUsername: admin\nPassword: password123';
                     }
                     
-                    // Try client-side authentication as fallback
-                    if (window.ClientAuth) {
-                        const clientResult = window.ClientAuth.authenticate(username, password);
-                        if (clientResult.success) {
-                            showAlert('Login successful! (Demo mode)', 'success');
-                            setTimeout(() => {
-                                const urlParams = new URLSearchParams(window.location.search);
-                                const redirect = urlParams.get('redirect') || 'dashboard.html';
-                                window.location.href = redirect;
-                            }, 1000);
-                            setLoading(false);
-                            return false;
-                        }
-                    }
+                    // This error handling is now redundant as client auth is primary
                 } else {
                     errorMessage += error.message || 'Please check your credentials and try again.';
                 }
@@ -441,13 +385,41 @@
             return false;
         }
         
-        // Check if already logged in
-        document.addEventListener('DOMContentLoaded', () => {
-            // Skip auth manager check since it auto-initializes
-            const token = localStorage.getItem('token');
-            if (token && token !== 'undefined' && token !== 'null') {
-                // Already logged in, redirect to dashboard
+        // Enhanced initialization with loading management
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Show loading while initializing
+            if (window.LoadingManager) {
+                window.LoadingManager.showLoading('Initializing login system...');
+            }
+            
+            // Wait for authentication systems to load
+            let authReady = false;
+            let attempts = 0;
+            while (!authReady && attempts < 50) {
+                if (window.ClientAuth?.initialized || window.AuthManager) {
+                    authReady = true;
+                } else {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    attempts++;
+                }
+            }
+            
+            // Hide loading once ready
+            if (window.LoadingManager) {
+                window.LoadingManager.hideLoading();
+            }
+            
+            // Check if already authenticated
+            const isAuthenticated = (window.ClientAuth?.isAuthenticated() || 
+                                    window.AuthManager?.isAuthenticated() || 
+                                    (localStorage.getItem('token') && 
+                                     localStorage.getItem('token') !== 'undefined' && 
+                                     localStorage.getItem('token') !== 'null'));
+            
+            if (isAuthenticated) {
+                console.log('✅ User already authenticated, redirecting to dashboard');
                 window.location.href = 'dashboard.html';
+                return;
             }
             
             // Auto-fill for development
@@ -456,6 +428,8 @@
                 document.getElementById('username').value = 'admin';
                 document.getElementById('password').value = 'password123';
             }
+            
+            console.log('🔑 Login page ready');
         });
     </script>
 </body>

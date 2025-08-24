@@ -8,7 +8,7 @@
   HUGO_ENV = "production"
   NODE_VERSION = "18"
   GO_VERSION = "1.21"
-  BUILD_ID = "2025-08-21-v3-force-clear"
+  BUILD_ID = "2025-08-24-v4-admin-cache-bust"
   VITE_API_URL = "/api"
   VITE_SITE_URL = "https://vocal-pony-24e3de.netlify.app"
   API_BASE_URL = "https://vocal-pony-24e3de.netlify.app/api"
@@ -33,7 +33,7 @@
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https:; font-src 'self' data: https:;"
     Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
 
-# Admin panel headers
+# Admin panel headers - Strong cache busting
 [[headers]]
   for = "/admin/*"
   [headers.values]
@@ -42,11 +42,14 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://tdmzayzkqyegvfgxlolj.supabase.co; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https://tdmzayzkqyegvfgxlolj.supabase.co https:; font-src 'self' data: https:;"
-    Cache-Control = "no-cache, no-store, must-revalidate"
+    Cache-Control = "no-cache, no-store, must-revalidate, max-age=0, private"
     Pragma = "no-cache"
     Expires = "0"
+    ETag = "false"
+    Last-Modified = ""
+    Vary = "*"
 
-# Admin API headers
+# Admin API headers - Strong cache busting
 [[headers]]
   for = "/api/admin/*"
   [headers.values]
@@ -54,9 +57,45 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Cache-Control = "no-cache, no-store, must-revalidate"
+    Cache-Control = "no-cache, no-store, must-revalidate, max-age=0, private"
     Pragma = "no-cache"
     Expires = "0"
+    ETag = "false"
+    Last-Modified = ""
+    Vary = "*"
+
+# Admin HTML files - Aggressive cache busting
+[[headers]]
+  for = "/admin*.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate, max-age=0, private"
+    Pragma = "no-cache"
+    Expires = "0"
+    ETag = "false"
+    Last-Modified = ""
+    Vary = "*"
+
+# Admin JavaScript files - No caching for admin scripts
+[[headers]]
+  for = "/admin/js/*"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate, max-age=0, private"
+    Pragma = "no-cache"
+    Expires = "0"
+    ETag = "false"
+    Last-Modified = ""
+    Vary = "*"
+
+# Admin CSS files - No caching for admin styles
+[[headers]]
+  for = "/admin/css/*"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate, max-age=0, private"
+    Pragma = "no-cache"
+    Expires = "0"
+    ETag = "false"
+    Last-Modified = ""
+    Vary = "*"
 
 # CSS caching with proper versioning
 [[headers]]
@@ -99,25 +138,28 @@
 
 # Page Speed Optimization - Removed incorrect preloads
 
-# Admin Panel Routes - Must come before API routes
+# Admin Panel Routes with cache busting - Must come before API routes
 [[redirects]]
   from = "/admin"
-  to = "/admin-login.html"
+  to = "/admin/index.html"
   status = 200
   force = true
+  headers = {Cache-Control = "no-cache, no-store, must-revalidate, max-age=0"}
 
 [[redirects]]
   from = "/admin/"
-  to = "/admin-login.html"
+  to = "/admin/index.html"
   status = 200
   force = true
+  headers = {Cache-Control = "no-cache, no-store, must-revalidate, max-age=0"}
 
-# Admin static files
+# Admin static files with cache busting
 [[redirects]]
   from = "/admin/*"
-  to = "/admin/:splat"
+  to = "/admin/:splat?v=2025-08-24-v4"
   status = 200
   force = true
+  headers = {Cache-Control = "no-cache, no-store, must-revalidate, max-age=0"}
 
 # Admin API endpoints with authentication
 [[redirects]]

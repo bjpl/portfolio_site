@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <script>
+        // Check if we're on the admin page and override it immediately
+        if (window.location.pathname === '/admin' || window.location.pathname === '/admin/') {
+            // Replace the entire page content with working admin login
+            document.documentElement.innerHTML = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        input[type="email"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .message {
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .error {
+            background-color: #ffe6e6;
+            color: #d63031;
+            border: 1px solid #fab1a0;
+        }
+        .success {
+            background-color: #e6f7ff;
+            color: #0984e3;
+            border: 1px solid #74b9ff;
+        }
+        .admin-panel {
+            display: none;
+        }
+        .admin-panel.active {
+            display: block;
+        }
+        .logout-btn {
+            background: #d63031;
+            margin-top: 1rem;
+        }
+        .admin-content {
+            margin-top: 2rem;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+        .stat-title {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loginForm">
+            <h1>Admin Login</h1>
+            <div id="message"></div>
+            <form id="authForm">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" id="submitBtn">Login</button>
+            </form>
+        </div>
+
+        <div id="adminPanel" class="admin-panel">
+            <h1>Admin Dashboard</h1>
+            <div class="admin-content">
+                <div class="stat-card">
+                    <div class="stat-title">Status</div>
+                    <div class="stat-value">Admin Access Granted</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Last Login</div>
+                    <div class="stat-value" id="lastLogin">Just Now</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">System</div>
+                    <div class="stat-value">Portfolio Management System</div>
+                </div>
+            </div>
+            <button onclick="logout()" class="logout-btn">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase client
+        const supabaseUrl = 'https://tdmzayzkqyegvfgxlolj.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MVU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM';
+        
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+        const authForm = document.getElementById('authForm');
+        const messageDiv = document.getElementById('message');
+        const submitBtn = document.getElementById('submitBtn');
+        const loginForm = document.getElementById('loginForm');
+        const adminPanel = document.getElementById('adminPanel');
+
+        // Check if user is already logged in
+        checkAuth();
+
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Logging in...';
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) {
+                    throw error;
+                }
+
+                showMessage('Login successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    showAdminPanel();
+                }, 1000);
+
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage(error.message || 'Login failed. Please try again.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Login';
+            }
+        });
+
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                showAdminPanel();
+            }
+        }
+
+        function showMessage(text, type) {
+            messageDiv.innerHTML = \`<div class="message \${type}">\${text}</div>\`;
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 5000);
+        }
+
+        function showAdminPanel() {
+            loginForm.style.display = 'none';
+            adminPanel.classList.add('active');
+            document.getElementById('lastLogin').textContent = new Date().toLocaleString();
+        }
+
+        async function logout() {
+            await supabase.auth.signOut();
+            adminPanel.classList.remove('active');
+            loginForm.style.display = 'block';
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            showMessage('Logged out successfully', 'success');
+        }
+    <\/script>
+</body>
+</html>
+            `;
+            
+            // Stop any further processing
+            return;
+        }
+        
+        // If not on admin page, redirect to the actual home page or handle normally
+        if (window.location.pathname === '/' && window.location.search === '') {
+            // Redirect to the actual Hugo-generated home page
+            window.location.href = '/';
+        }
+    </script>
+    
+    <!-- Default content for non-admin pages -->
+    <div id="defaultContent">
+        <h1>Loading...</h1>
+        <script>
+            // Redirect to actual Hugo home page if we're at root
+            if (window.location.pathname === '/') {
+                window.location.reload();
+            }
+        </script>
+    </div>
+</body>
+</html>
