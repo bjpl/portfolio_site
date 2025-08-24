@@ -324,7 +324,10 @@ class AdminPageValidator {
                 }
 
                 // Check for environment reporting
-                if (!content.includes('PRODUCTION') || !content.includes('development')) {
+                const hasProductionLabel = content.includes('Environment: PRODUCTION') || content.includes('PRODUCTION');
+                const hasDevelopmentLabel = content.includes('Environment: development') || content.includes('development');
+                
+                if (!hasProductionLabel || !hasDevelopmentLabel) {
                     issues.push('Environment checker missing proper environment labels');
                     allPassed = false;
                 }
