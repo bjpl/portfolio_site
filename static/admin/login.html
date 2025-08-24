@@ -344,10 +344,8 @@
                 
                 // Use best available API configuration
                 if (!apiURL) {
-                    // Fallback to Netlify functions
-                    apiURL = window.location.hostname.includes('netlify') 
-                        ? '/.netlify/functions/auth-login'
-                        : '/api/auth/login';
+                    // Use the new admin-auth edge function with Supabase integration
+                    apiURL = '/.netlify/edge-functions/admin-auth';
                 }
                 
                 console.log(`Using API endpoint: ${apiURL}`);

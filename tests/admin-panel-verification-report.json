@@ -1,0 +1,205 @@
+{
+  "passed": 32,
+  "failed": 0,
+  "warnings": 1,
+  "details": [
+    {
+      "test": "File exists: netlify/functions/auth-login.js",
+      "status": "pass",
+      "message": "Found",
+      "details": ""
+    },
+    {
+      "test": "File exists: public/admin/login.html",
+      "status": "pass",
+      "message": "Found",
+      "details": ""
+    },
+    {
+      "test": "File exists: public/admin/dashboard.html",
+      "status": "pass",
+      "message": "Found",
+      "details": ""
+    },
+    {
+      "test": "File exists: public/admin/js/auth-manager.js",
+      "status": "pass",
+      "message": "Found",
+      "details": ""
+    },
+    {
+      "test": "File exists: netlify/functions/utils/supabase-config.js",
+      "status": "pass",
+      "message": "Found",
+      "details": ""
+    },
+    {
+      "test": "File exists: supabase/config.toml",
+      "status": "pass",
+      "message": "Found",
+      "details": ""
+    },
+    {
+      "test": "File exists: .env",
+      "status": "pass",
+      "message": "Found",
+      "details": ""
+    },
+    {
+      "test": "File exists: netlify.toml",
+      "status": "pass",
+      "message": "Found",
+      "details": ""
+    },
+    {
+      "test": "Environment var: SUPABASE_URL",
+      "status": "pass",
+      "message": "Configured",
+      "details": ""
+    },
+    {
+      "test": "Environment var: SUPABASE_ANON_KEY",
+      "status": "pass",
+      "message": "Configured",
+      "details": ""
+    },
+    {
+      "test": "Environment var: SUPABASE_SERVICE_KEY",
+      "status": "pass",
+      "message": "Configured",
+      "details": ""
+    },
+    {
+      "test": "Supabase URL",
+      "status": "pass",
+      "message": "Correct instance URL",
+      "details": ""
+    },
+    {
+      "test": "Auth login function",
+      "status": "pass",
+      "message": "Function exported correctly",
+      "details": ""
+    },
+    {
+      "test": "Auth login test",
+      "status": "pass",
+      "message": "Function executes successfully",
+      "details": ""
+    },
+    {
+      "test": "Supabase connectivity",
+      "status": "pass",
+      "message": "Can reach Supabase API",
+      "details": ""
+    },
+    {
+      "test": "Supabase auth endpoint",
+      "status": "pass",
+      "message": "Auth service reachable",
+      "details": ""
+    },
+    {
+      "test": "Login form element: id=\"loginForm\"",
+      "status": "pass",
+      "message": "Found",
+      "details": ""
+    },
+    {
+      "test": "Login form element: id=\"username\"",
+      "status": "pass",
+      "message": "Found",
+      "details": ""
+    },
+    {
+      "test": "Login form element: id=\"password\"",
+      "status": "pass",
+      "message": "Found",
+      "details": ""
+    },
+    {
+      "test": "Login form element: handleLogin",
+      "status": "pass",
+      "message": "Found",
+      "details": ""
+    },
+    {
+      "test": "Login form element: SUPABASE_CONFIG",
+      "status": "pass",
+      "message": "Found",
+      "details": ""
+    },
+    {
+      "test": "Form security",
+      "status": "pass",
+      "message": "Form submission properly handled",
+      "details": ""
+    },
+    {
+      "test": "Dashboard page",
+      "status": "pass",
+      "message": "dashboard.html found",
+      "details": ""
+    },
+    {
+      "test": "Netlify redirect: /api/auth/login",
+      "status": "pass",
+      "message": "Configured",
+      "details": ""
+    },
+    {
+      "test": "Netlify redirect: /api/auth/logout",
+      "status": "pass",
+      "message": "Configured",
+      "details": ""
+    },
+    {
+      "test": "Netlify redirect: /.netlify/functions/auth-login",
+      "status": "pass",
+      "message": "Configured",
+      "details": ""
+    },
+    {
+      "test": "Function directory",
+      "status": "pass",
+      "message": "Correctly configured",
+      "details": ""
+    },
+    {
+      "test": "Netlify deployment",
+      "status": "pass",
+      "message": "Site is accessible",
+      "details": ""
+    },
+    {
+      "test": "Production login",
+      "status": "pass",
+      "message": "Admin login works on production",
+      "details": ""
+    },
+    {
+      "test": "Security - netlify/functions/auth-login.js",
+      "status": "warn",
+      "message": "Demo password found (acceptable for demo)",
+      "details": ""
+    },
+    {
+      "test": "Security - public/admin/login.html",
+      "status": "pass",
+      "message": "No obvious security issues",
+      "details": ""
+    },
+    {
+      "test": "Security - public/js/config/supabase-config.js",
+      "status": "pass",
+      "message": "No obvious security issues",
+      "details": ""
+    },
+    {
+      "test": "Security headers",
+      "status": "pass",
+      "message": "Security headers configured",
+      "details": ""
+    }
+  ]
+}

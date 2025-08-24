@@ -33,6 +33,31 @@
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https:; font-src 'self' data: https:;"
     Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
 
+# Admin panel headers
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://tdmzayzkqyegvfgxlolj.supabase.co; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https://tdmzayzkqyegvfgxlolj.supabase.co https:; font-src 'self' data: https:;"
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+    Expires = "0"
+
+# Admin API headers
+[[headers]]
+  for = "/api/admin/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+    Expires = "0"
+
 # CSS caching with proper versioning
 [[headers]]
   for = "/css/main.css"
@@ -74,6 +99,34 @@
 
 # Page Speed Optimization - Removed incorrect preloads
 
+# Admin Panel Routes - Must come before API routes
+[[redirects]]
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/admin/"
+  to = "/admin/index.html"
+  status = 200
+  force = true
+
+# Admin static files
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/:splat"
+  status = 200
+  force = true
+
+# Admin API endpoints with authentication
+[[redirects]]
+  from = "/api/admin/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+  force = true
+  headers = {X-Forwarded-For = ":client_ip"}
+
 # API Proxy Rules for Production Deployment
 # Route API calls to Netlify Functions
 [[redirects]]
@@ -85,6 +138,13 @@
 [[redirects]]
   from = "/api/auth/login"
   to = "/.netlify/functions/auth-login"
+  status = 200
+  force = true
+  headers = {X-Forwarded-For = ":client_ip"}
+
+[[redirects]]
+  from = "/api/admin-auth"
+  to = "/.netlify/edge-functions/admin-auth"
   status = 200
   force = true
   headers = {X-Forwarded-For = ":client_ip"}
@@ -143,10 +203,24 @@
   status = 200
   force = false
 
+# Static file serving for admin assets
 [[redirects]]
-  from = "/admin/*"
-  to = "/admin/:splat"
+  from = "/admin/js/*"
+  to = "/admin/js/:splat"
   status = 200
+  force = true
+
+[[redirects]]
+  from = "/admin/css/*"
+  to = "/admin/css/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/admin/utils/*"
+  to = "/admin/utils/:splat"
+  status = 200
+  force = true
 
 # Domain Redirects
 [[redirects]]
@@ -177,6 +251,10 @@
   path = "/api/auth/login"
 
 [[edge_functions]]
+  function = "admin-auth"
+  path = "/api/admin-auth"
+
+[[edge_functions]]
   function = "auth-verify"
   path = "/api/auth/verify"
 
@@ -184,22 +262,27 @@
   function = "auth-logout"
   path = "/api/auth/logout"
 
-# Temporarily disabled auth-middleware due to parsing issues
-# [[edge_functions]]
-#   function = "auth-middleware"
-#   path = "/admin/*"
-#   
-# [[edge_functions]]
-#   function = "auth-middleware"
-#   path = "/api/admin/*"
+# Admin authentication middleware
+[[edge_functions]]
+  function = "auth-middleware"
+  path = "/admin/dashboard.html"
 
-# [[edge_functions]]
-#   function = "auth-middleware"
-#   path = "/api/portfolio/*"
+[[edge_functions]]
+  function = "auth-middleware"
+  path = "/admin/*/index.html"
 
-# [[edge_functions]]
-#   function = "auth-middleware"
-#   path = "/api/content/*"
+[[edge_functions]]
+  function = "auth-middleware"
+  path = "/api/admin/*"
+
+# Protected API endpoints
+[[edge_functions]]
+  function = "auth-middleware"
+  path = "/api/portfolio/*"
+
+[[edge_functions]]
+  function = "auth-middleware"
+  path = "/api/content/*"
 
 [[edge_functions]]
   function = "test-edge"
@@ -213,6 +296,15 @@
   timeout = 30
 
 [functions."auth"]
+  timeout = 30
+
+[functions."content"]
+  timeout = 30
+
+[functions."portfolio"]
+  timeout = 30
+
+[functions."media"]
   timeout = 30
 
 # Build Plugins (disabled for local development to avoid Node.js version conflicts)

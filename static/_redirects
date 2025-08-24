@@ -19,12 +19,14 @@
 /api/portfolio/*    /.netlify/functions/portfolio   200
 /api/media/*        /.netlify/functions/media       200
 
-# Admin Panel Redirects
-/admin              /admin/login.html               200
-/admin/             /admin/login.html               200
-/admin/index        /admin/dashboard.html           200
+# Admin Panel Redirects - Route to index.html which redirects to dashboard
+/admin              /admin/index.html               200
+/admin/             /admin/index.html               200
 
-# Admin Panel SPA Routing
+# Admin API endpoints with authentication
+/api/admin/*        /.netlify/functions/:splat      200
+
+# Admin Panel SPA Routing - Preserve all admin routes as-is
 /admin/*            /admin/:splat                   200
 
 # API Fallback - Catch any unmatched API routes
