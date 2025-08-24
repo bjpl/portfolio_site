@@ -79,7 +79,7 @@ class APIConfig {
       
       // Supabase specific configuration
       supabase: {
-        anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIzNDQ4MzMsImV4cCI6MjA0NzkyMDgzM30.lJc1u0YlmtlbTK4bMbK9FcPyOkJFJiHJqfgFqBFYC5Q',
+        anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM',
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: true,
@@ -177,17 +177,52 @@ class APIConfig {
   }
 
   /**
-   * Get Supabase anonymous key
+   * Get Supabase anonymous key with fallback chain
    */
   getSupabaseAnonKey() {
-    return this.config.supabase?.anonKey || window.ENV?.SUPABASE_ANON_KEY;
+    // Try environment variables first
+    const envKey = window.ENV?.SUPABASE_ANON_KEY || 
+                   window.process?.env?.VITE_SUPABASE_ANON_KEY ||
+                   window.process?.env?.REACT_APP_SUPABASE_ANON_KEY ||
+                   window.process?.env?.SUPABASE_ANON_KEY;
+    
+    if (envKey && envKey !== 'undefined') {
+      return envKey;
+    }
+    
+    // Fallback to hardcoded key for reliability
+    return this.config.supabase?.anonKey || 
+           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM';
   }
 
   /**
-   * Get Supabase configuration
+   * Get Supabase configuration with environment detection
    */
   getSupabaseConfig() {
-    return this.config.supabase;
+    return {
+      ...this.config.supabase,
+      url: this.getSupabaseUrl(),
+      anonKey: this.getSupabaseAnonKey()
+    };
+  }
+
+  /**
+   * Get Supabase URL with fallback chain
+   */
+  getSupabaseUrl() {
+    // Try environment variables first
+    const envUrl = window.ENV?.SUPABASE_URL || 
+                   window.process?.env?.VITE_SUPABASE_URL ||
+                   window.process?.env?.REACT_APP_SUPABASE_URL ||
+                   window.process?.env?.SUPABASE_URL;
+    
+    if (envUrl && envUrl !== 'undefined') {
+      return envUrl;
+    }
+    
+    // Fallback to hardcoded URL for reliability
+    return this.config.endpoints?.supabase?.url || 
+           'https://tdmzayzkqyegvfgxlolj.supabase.co';
   }
 
   /**
@@ -301,10 +336,22 @@ class APIConfig {
   }
 
   /**
-   * Validate configuration
+   * Validate configuration including Supabase setup
    */
   validate() {
     const issues = [];
+    
+    // Check Supabase configuration
+    const supabaseUrl = this.getSupabaseUrl();
+    const supabaseKey = this.getSupabaseAnonKey();
+    
+    if (!supabaseUrl || !supabaseUrl.startsWith('https://')) {
+      issues.push('Invalid or missing Supabase URL');
+    }
+    
+    if (!supabaseKey || supabaseKey.length < 100) {
+      issues.push('Invalid or missing Supabase anonymous key');
+    }
     
     // Check required fields
     if (!this.config.endpoints.local) {
@@ -323,7 +370,12 @@ class APIConfig {
     
     return {
       valid: issues.length === 0,
-      issues
+      issues,
+      supabase: {
+        url: supabaseUrl,
+        hasValidKey: supabaseKey && supabaseKey.length > 100,
+        configured: issues.filter(i => i.includes('Supabase')).length === 0
+      }
     };
   }
 

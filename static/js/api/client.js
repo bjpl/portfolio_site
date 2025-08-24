@@ -36,9 +36,9 @@ class UniversalAPIClient {
       // 1. Supabase Production (primary)
       {
         name: 'supabase-production',
-        url: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
-        restUrl: 'https://tdmzayzkqyegvfgxlolj.supabase.co/rest/v1',
-        authUrl: 'https://tdmzayzkqyegvfgxlolj.supabase.co/auth/v1',
+        url: this.getSupabaseUrl(),
+        restUrl: `${this.getSupabaseUrl()}/rest/v1`,
+        authUrl: `${this.getSupabaseUrl()}/auth/v1`,
         priority: 1,
         detect: () => true
       },
@@ -47,8 +47,8 @@ class UniversalAPIClient {
       {
         name: 'supabase-edge',
         url: `${protocol}//${hostname}/.netlify/edge-functions/supabase`,
-        restUrl: 'https://tdmzayzkqyegvfgxlolj.supabase.co/rest/v1',
-        authUrl: 'https://tdmzayzkqyegvfgxlolj.supabase.co/auth/v1',
+        restUrl: `${this.getSupabaseUrl()}/rest/v1`,
+        authUrl: `${this.getSupabaseUrl()}/auth/v1`,
         priority: 2,
         detect: () => hostname.includes('netlify.app') || hostname.includes('netlify.com')
       },
@@ -342,11 +342,30 @@ class UniversalAPIClient {
   }
 
   /**
-   * Get Supabase anonymous key
+   * Get Supabase anonymous key with comprehensive fallback chain
    */
   getSupabaseAnonKey() {
-    return window.ENV?.SUPABASE_ANON_KEY || 
-           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIzNDQ4MzMsImV4cCI6MjA0NzkyMDgzM30.lJc1u0YlmtlbTK4bMbK9FcPyOkJFJiHJqfgFqBFYC5Q';
+    // Try multiple environment variable patterns
+    const envKey = window.ENV?.SUPABASE_ANON_KEY || 
+                   window.process?.env?.VITE_SUPABASE_ANON_KEY ||
+                   window.process?.env?.REACT_APP_SUPABASE_ANON_KEY ||
+                   window.process?.env?.SUPABASE_ANON_KEY ||
+                   window.process?.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (envKey && envKey !== 'undefined' && envKey.length > 100) {
+      return envKey;
+    }
+    
+    // Try to get from API config if available
+    if (window.apiConfig?.getSupabaseAnonKey) {
+      const configKey = window.apiConfig.getSupabaseAnonKey();
+      if (configKey && configKey.length > 100) {
+        return configKey;
+      }
+    }
+    
+    // Fallback to hardcoded key (updated with correct key)
+    return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM';
   }
 
   /**
@@ -448,6 +467,33 @@ class UniversalAPIClient {
   }
 
   /**
+   * Get Supabase URL with comprehensive fallback chain
+   */
+  getSupabaseUrl() {
+    // Try multiple environment variable patterns
+    const envUrl = window.ENV?.SUPABASE_URL || 
+                   window.process?.env?.VITE_SUPABASE_URL ||
+                   window.process?.env?.REACT_APP_SUPABASE_URL ||
+                   window.process?.env?.SUPABASE_URL ||
+                   window.process?.env?.NEXT_PUBLIC_SUPABASE_URL;
+    
+    if (envUrl && envUrl !== 'undefined' && envUrl.startsWith('https://')) {
+      return envUrl;
+    }
+    
+    // Try to get from API config if available
+    if (window.apiConfig?.getSupabaseUrl) {
+      const configUrl = window.apiConfig.getSupabaseUrl();
+      if (configUrl && configUrl.startsWith('https://')) {
+        return configUrl;
+      }
+    }
+    
+    // Fallback to hardcoded URL
+    return 'https://tdmzayzkqyegvfgxlolj.supabase.co';
+  }
+
+  /**
    * Utility: Force endpoint switch (for testing)
    */
   async switchToEndpoint(endpointName) {
@@ -466,6 +512,36 @@ class UniversalAPIClient {
         }
       }
     }
+  }
+
+  /**
+   * Get detailed status including configuration validation
+   */
+  getDetailedStatus() {
+    const status = this.getStatus();
+    return {
+      ...status,
+      configuration: {
+        supabaseUrl: this.getSupabaseUrl(),
+        hasValidKey: this.getSupabaseAnonKey().length > 100,
+        endpointsConfigured: this.endpoints.length,
+        environmentDetection: this.detectEnvironment()
+      }
+    };
+  }
+
+  /**
+   * Detect current environment
+   */
+  detectEnvironment() {
+    const hostname = window.location.hostname;
+    if (hostname.includes('netlify.app') || hostname.includes('netlify.com')) {
+      return 'netlify-production';
+    }
+    if (hostname.includes('localhost') || hostname.includes('127.0.0.1')) {
+      return 'local-development';
+    }
+    return 'production';
   }
 }
 

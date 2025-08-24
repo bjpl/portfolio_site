@@ -5,7 +5,8 @@
   "main": "test-supabase.js",
   "scripts": {
     "test:supabase": "node test-supabase.js",
-    "test:all": "node test-supabase.js"
+    "test:admin-panel": "node test-admin-panel.js",
+    "test:all": "node test-supabase.js && node test-admin-panel.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.56.0"

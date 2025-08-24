@@ -2,6 +2,46 @@
 
 This directory contains administrative scripts for managing the portfolio site infrastructure.
 
+## 🧪 Testing Scripts
+
+### `test-admin-panel.js` - **NEW**
+Comprehensive admin panel testing and debugging script that:
+- ✅ Tests Supabase connection and authentication 
+- ✅ Validates admin panel JavaScript files
+- ✅ Checks configuration and environment
+- ✅ Provides detailed error reporting with solutions
+- ✅ Tests authentication with brandon.lambert87@gmail.com
+
+**Usage:**
+```bash
+# Node.js (cross-platform)
+node test-admin-panel.js
+
+# PowerShell (Windows)
+.\test-admin-panel.ps1
+
+# Batch file (Windows)
+test-admin-panel.bat
+
+# NPM script
+npm run test:admin-panel
+```
+
+**Features:**
+- 🔗 Supabase connection testing
+- 🔐 Authentication verification with brandon.lambert87@gmail.com
+- 📁 Admin panel file structure validation
+- 🔧 JavaScript loading and syntax checks
+- 🌐 Network connectivity testing
+- 🗄️ Database schema validation
+- 📊 Comprehensive reporting with solutions
+
+### `test-supabase.js`
+Basic Supabase connectivity and CRUD operations testing.
+
+### `test-admin-login.js`
+Simple admin authentication testing.
+
 ## 🔐 create-admin.js
 
 Creates an admin user in Supabase with proper role assignment and profile setup.

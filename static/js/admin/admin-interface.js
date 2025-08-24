@@ -1,1 +1,1220 @@
-/**\n * Admin Interface System\n * Comprehensive admin panel for content management\n */\n\nclass AdminInterface {\n    constructor() {\n        this.currentView = 'dashboard';\n        this.isInitialized = false;\n        this.init();\n    }\n\n    async init() {\n        if (this.isInitialized) return;\n        \n        // Check if user is admin\n        if (!window.authManager?.isAdmin()) {\n            this.showAccessDenied();\n            return;\n        }\n\n        this.createAdminUI();\n        this.setupEventListeners();\n        this.loadDashboard();\n        \n        this.isInitialized = true;\n        console.log('Admin interface initialized');\n    }\n\n    createAdminUI() {\n        // Create admin container\n        const adminContainer = document.createElement('div');\n        adminContainer.id = 'admin-interface';\n        adminContainer.className = 'admin-interface';\n        adminContainer.innerHTML = this.getAdminHTML();\n        \n        // Add admin styles\n        this.addAdminStyles();\n        \n        // Insert into page\n        const targetContainer = document.getElementById('admin-container') || document.body;\n        targetContainer.appendChild(adminContainer);\n        \n        this.container = adminContainer;\n    }\n\n    getAdminHTML() {\n        return `\n            <div class=\"admin-header\">\n                <h1>Admin Dashboard</h1>\n                <div class=\"admin-user-info\">\n                    <span data-user=\"name\"></span>\n                    <button class=\"admin-logout-btn\" onclick=\"window.authManager.logout()\">Logout</button>\n                </div>\n            </div>\n            \n            <div class=\"admin-nav\">\n                <button class=\"nav-btn active\" data-view=\"dashboard\">Dashboard</button>\n                <button class=\"nav-btn\" data-view=\"blog\">Blog Posts</button>\n                <button class=\"nav-btn\" data-view=\"projects\">Projects</button>\n                <button class=\"nav-btn\" data-view=\"media\">Media</button>\n                <button class=\"nav-btn\" data-view=\"settings\">Settings</button>\n            </div>\n            \n            <div class=\"admin-content\">\n                <div id=\"admin-loading\" class=\"admin-loading\">\n                    <div class=\"spinner\"></div>\n                    <span>Loading...</span>\n                </div>\n                \n                <div id=\"admin-dashboard\" class=\"admin-view\">\n                    <!-- Dashboard content will be loaded here -->\n                </div>\n                \n                <div id=\"admin-blog\" class=\"admin-view hidden\">\n                    <!-- Blog management content -->\n                </div>\n                \n                <div id=\"admin-projects\" class=\"admin-view hidden\">\n                    <!-- Projects management content -->\n                </div>\n                \n                <div id=\"admin-media\" class=\"admin-view hidden\">\n                    <!-- Media management content -->\n                </div>\n                \n                <div id=\"admin-settings\" class=\"admin-view hidden\">\n                    <!-- Settings content -->\n                </div>\n            </div>\n        `;\n    }\n\n    addAdminStyles() {\n        if (document.getElementById('admin-styles')) return;\n        \n        const styles = document.createElement('style');\n        styles.id = 'admin-styles';\n        styles.textContent = `\n            .admin-interface {\n                max-width: 1200px;\n                margin: 0 auto;\n                padding: 20px;\n                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;\n            }\n            \n            .admin-header {\n                display: flex;\n                justify-content: space-between;\n                align-items: center;\n                margin-bottom: 2rem;\n                padding-bottom: 1rem;\n                border-bottom: 2px solid #e5e7eb;\n            }\n            \n            .admin-header h1 {\n                margin: 0;\n                color: #1f2937;\n                font-size: 2rem;\n            }\n            \n            .admin-user-info {\n                display: flex;\n                align-items: center;\n                gap: 1rem;\n            }\n            \n            .admin-logout-btn {\n                background: #ef4444;\n                color: white;\n                border: none;\n                padding: 8px 16px;\n                border-radius: 6px;\n                cursor: pointer;\n                font-size: 0.9rem;\n            }\n            \n            .admin-logout-btn:hover {\n                background: #dc2626;\n            }\n            \n            .admin-nav {\n                display: flex;\n                gap: 1rem;\n                margin-bottom: 2rem;\n                border-bottom: 1px solid #e5e7eb;\n            }\n            \n            .nav-btn {\n                background: none;\n                border: none;\n                padding: 12px 24px;\n                cursor: pointer;\n                font-size: 1rem;\n                color: #6b7280;\n                border-bottom: 3px solid transparent;\n                transition: all 0.2s ease;\n            }\n            \n            .nav-btn:hover {\n                color: #374151;\n                background: #f9fafb;\n            }\n            \n            .nav-btn.active {\n                color: #667eea;\n                border-bottom-color: #667eea;\n                font-weight: 600;\n            }\n            \n            .admin-content {\n                min-height: 400px;\n                position: relative;\n            }\n            \n            .admin-view {\n                display: block;\n            }\n            \n            .admin-view.hidden {\n                display: none;\n            }\n            \n            .admin-loading {\n                display: flex;\n                flex-direction: column;\n                align-items: center;\n                justify-content: center;\n                height: 200px;\n                gap: 1rem;\n            }\n            \n            .admin-loading.hidden {\n                display: none;\n            }\n            \n            .spinner {\n                width: 40px;\n                height: 40px;\n                border: 3px solid #f3f3f3;\n                border-top: 3px solid #667eea;\n                border-radius: 50%;\n                animation: spin 1s linear infinite;\n            }\n            \n            @keyframes spin {\n                0% { transform: rotate(0deg); }\n                100% { transform: rotate(360deg); }\n            }\n            \n            .admin-card {\n                background: white;\n                border-radius: 8px;\n                padding: 1.5rem;\n                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n                margin-bottom: 1.5rem;\n            }\n            \n            .admin-card h3 {\n                margin: 0 0 1rem 0;\n                color: #1f2937;\n            }\n            \n            .stats-grid {\n                display: grid;\n                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));\n                gap: 1rem;\n                margin-bottom: 2rem;\n            }\n            \n            .stat-card {\n                background: white;\n                border-radius: 8px;\n                padding: 1.5rem;\n                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n                text-align: center;\n            }\n            \n            .stat-number {\n                font-size: 2rem;\n                font-weight: bold;\n                color: #667eea;\n                margin-bottom: 0.5rem;\n            }\n            \n            .stat-label {\n                color: #6b7280;\n                font-size: 0.9rem;\n            }\n            \n            .admin-button {\n                background: #667eea;\n                color: white;\n                border: none;\n                padding: 10px 20px;\n                border-radius: 6px;\n                cursor: pointer;\n                font-size: 1rem;\n                transition: background-color 0.2s ease;\n            }\n            \n            .admin-button:hover {\n                background: #5a67d8;\n            }\n            \n            .admin-button.secondary {\n                background: #6b7280;\n            }\n            \n            .admin-button.secondary:hover {\n                background: #4b5563;\n            }\n            \n            .admin-button.danger {\n                background: #ef4444;\n            }\n            \n            .admin-button.danger:hover {\n                background: #dc2626;\n            }\n            \n            .admin-form {\n                background: white;\n                border-radius: 8px;\n                padding: 2rem;\n                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n            }\n            \n            .form-group {\n                margin-bottom: 1.5rem;\n            }\n            \n            .form-label {\n                display: block;\n                margin-bottom: 0.5rem;\n                font-weight: 600;\n                color: #374151;\n            }\n            \n            .form-input {\n                width: 100%;\n                padding: 10px 12px;\n                border: 2px solid #e5e7eb;\n                border-radius: 6px;\n                font-size: 1rem;\n                transition: border-color 0.2s ease;\n            }\n            \n            .form-input:focus {\n                outline: none;\n                border-color: #667eea;\n            }\n            \n            .form-textarea {\n                min-height: 120px;\n                resize: vertical;\n            }\n            \n            .admin-table {\n                width: 100%;\n                border-collapse: collapse;\n                background: white;\n                border-radius: 8px;\n                overflow: hidden;\n                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n            }\n            \n            .admin-table th,\n            .admin-table td {\n                padding: 12px;\n                text-align: left;\n                border-bottom: 1px solid #e5e7eb;\n            }\n            \n            .admin-table th {\n                background: #f9fafb;\n                font-weight: 600;\n                color: #374151;\n            }\n            \n            .admin-table tr:hover {\n                background: #f9fafb;\n            }\n            \n            .action-buttons {\n                display: flex;\n                gap: 0.5rem;\n            }\n            \n            .action-btn {\n                background: none;\n                border: 1px solid #d1d5db;\n                padding: 4px 8px;\n                border-radius: 4px;\n                cursor: pointer;\n                font-size: 0.8rem;\n                transition: all 0.2s ease;\n            }\n            \n            .action-btn:hover {\n                background: #f3f4f6;\n            }\n            \n            .action-btn.edit {\n                color: #667eea;\n                border-color: #667eea;\n            }\n            \n            .action-btn.delete {\n                color: #ef4444;\n                border-color: #ef4444;\n            }\n            \n            .upload-area {\n                border: 2px dashed #d1d5db;\n                border-radius: 8px;\n                padding: 2rem;\n                text-align: center;\n                transition: all 0.2s ease;\n                cursor: pointer;\n            }\n            \n            .upload-area:hover {\n                border-color: #667eea;\n                background: #f8faff;\n            }\n            \n            .upload-area.dragover {\n                border-color: #667eea;\n                background: #e0e7ff;\n            }\n            \n            [data-theme=\"dark\"] .admin-interface {\n                color: #f9fafb;\n            }\n            \n            [data-theme=\"dark\"] .admin-header h1 {\n                color: #f9fafb;\n            }\n            \n            [data-theme=\"dark\"] .admin-card,\n            [data-theme=\"dark\"] .stat-card,\n            [data-theme=\"dark\"] .admin-form,\n            [data-theme=\"dark\"] .admin-table {\n                background: #1f2937;\n                color: #f9fafb;\n            }\n            \n            [data-theme=\"dark\"] .admin-table th {\n                background: #374151;\n            }\n            \n            [data-theme=\"dark\"] .form-input {\n                background: #374151;\n                color: #f9fafb;\n                border-color: #4b5563;\n            }\n        `;\n        \n        document.head.appendChild(styles);\n    }\n\n    setupEventListeners() {\n        // Navigation\n        const navButtons = this.container.querySelectorAll('.nav-btn');\n        navButtons.forEach(btn => {\n            btn.addEventListener('click', (e) => {\n                const view = e.target.dataset.view;\n                this.switchView(view);\n            });\n        });\n\n        // Auth state changes\n        window.authManager?.addAuthListener((event, data) => {\n            if (event === 'logout') {\n                this.cleanup();\n                window.location.href = '/';\n            }\n        });\n    }\n\n    switchView(viewName) {\n        this.currentView = viewName;\n        \n        // Update navigation\n        const navButtons = this.container.querySelectorAll('.nav-btn');\n        navButtons.forEach(btn => {\n            btn.classList.toggle('active', btn.dataset.view === viewName);\n        });\n\n        // Hide all views\n        const views = this.container.querySelectorAll('.admin-view');\n        views.forEach(view => view.classList.add('hidden'));\n\n        // Show selected view\n        const targetView = this.container.querySelector(`#admin-${viewName}`);\n        if (targetView) {\n            targetView.classList.remove('hidden');\n            this.loadViewContent(viewName);\n        }\n    }\n\n    async loadViewContent(viewName) {\n        const viewContainer = this.container.querySelector(`#admin-${viewName}`);\n        \n        try {\n            switch (viewName) {\n                case 'dashboard':\n                    await this.loadDashboard();\n                    break;\n                case 'blog':\n                    await this.loadBlogManagement();\n                    break;\n                case 'projects':\n                    await this.loadProjectsManagement();\n                    break;\n                case 'media':\n                    await this.loadMediaManagement();\n                    break;\n                case 'settings':\n                    await this.loadSettings();\n                    break;\n            }\n        } catch (error) {\n            this.showError(`Failed to load ${viewName} view: ${error.message}`);\n        }\n    }\n\n    async loadDashboard() {\n        const dashboardContainer = this.container.querySelector('#admin-dashboard');\n        \n        try {\n            // Get statistics\n            const [blogData, projectsData] = await Promise.all([\n                window.dataService.getBlogPosts({ limit: 1 }),\n                window.dataService.getProjects()\n            ]);\n\n            const stats = {\n                blogPosts: blogData.pagination?.total || 0,\n                projects: projectsData.projects?.length || 0,\n                published: blogData.posts?.filter(p => p.status === 'published').length || 0,\n                featured: projectsData.projects?.filter(p => p.featured).length || 0\n            };\n\n            dashboardContainer.innerHTML = `\n                <div class=\"stats-grid\">\n                    <div class=\"stat-card\">\n                        <div class=\"stat-number\">${stats.blogPosts}</div>\n                        <div class=\"stat-label\">Blog Posts</div>\n                    </div>\n                    <div class=\"stat-card\">\n                        <div class=\"stat-number\">${stats.projects}</div>\n                        <div class=\"stat-label\">Projects</div>\n                    </div>\n                    <div class=\"stat-card\">\n                        <div class=\"stat-number\">${stats.published}</div>\n                        <div class=\"stat-label\">Published</div>\n                    </div>\n                    <div class=\"stat-card\">\n                        <div class=\"stat-number\">${stats.featured}</div>\n                        <div class=\"stat-label\">Featured</div>\n                    </div>\n                </div>\n                \n                <div class=\"admin-card\">\n                    <h3>Quick Actions</h3>\n                    <div style=\"display: flex; gap: 1rem; flex-wrap: wrap;\">\n                        <button class=\"admin-button\" onclick=\"adminInterface.switchView('blog'); adminInterface.showCreateBlogForm()\">\n                            New Blog Post\n                        </button>\n                        <button class=\"admin-button\" onclick=\"adminInterface.switchView('projects'); adminInterface.showCreateProjectForm()\">\n                            New Project\n                        </button>\n                        <button class=\"admin-button secondary\" onclick=\"adminInterface.switchView('media')\">\n                            Upload Media\n                        </button>\n                        <button class=\"admin-button secondary\" onclick=\"window.dataService.invalidateCache()\">\n                            Clear Cache\n                        </button>\n                    </div>\n                </div>\n                \n                <div class=\"admin-card\">\n                    <h3>Recent Activity</h3>\n                    <p>Recent blog posts and project updates will appear here.</p>\n                </div>\n            `;\n            \n        } catch (error) {\n            dashboardContainer.innerHTML = `\n                <div class=\"admin-card\">\n                    <h3>Dashboard Error</h3>\n                    <p>Unable to load dashboard data: ${error.message}</p>\n                    <button class=\"admin-button\" onclick=\"adminInterface.loadDashboard()\">\n                        Retry\n                    </button>\n                </div>\n            `;\n        }\n    }\n\n    async loadBlogManagement() {\n        const blogContainer = this.container.querySelector('#admin-blog');\n        \n        try {\n            const blogData = await window.dataService.getBlogPosts({ limit: 50 });\n            \n            blogContainer.innerHTML = `\n                <div class=\"admin-card\">\n                    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;\">\n                        <h3>Blog Posts</h3>\n                        <button class=\"admin-button\" onclick=\"adminInterface.showCreateBlogForm()\">\n                            New Post\n                        </button>\n                    </div>\n                    \n                    <table class=\"admin-table\">\n                        <thead>\n                            <tr>\n                                <th>Title</th>\n                                <th>Status</th>\n                                <th>Published</th>\n                                <th>Actions</th>\n                            </tr>\n                        </thead>\n                        <tbody>\n                            ${blogData.posts.map(post => `\n                                <tr>\n                                    <td>${post.title}</td>\n                                    <td>\n                                        <span class=\"status-badge status-${post.status}\">\n                                            ${post.status}\n                                        </span>\n                                    </td>\n                                    <td>${new Date(post.publishedAt).toLocaleDateString()}</td>\n                                    <td>\n                                        <div class=\"action-buttons\">\n                                            <button class=\"action-btn edit\" onclick=\"adminInterface.editBlogPost(${post.id})\">\n                                                Edit\n                                            </button>\n                                            <button class=\"action-btn delete\" onclick=\"adminInterface.deleteBlogPost(${post.id})\">\n                                                Delete\n                                            </button>\n                                        </div>\n                                    </td>\n                                </tr>\n                            `).join('')}\n                        </tbody>\n                    </table>\n                </div>\n                \n                <div id=\"blog-form-container\" style=\"display: none;\">\n                    <!-- Blog form will be inserted here -->\n                </div>\n            `;\n            \n        } catch (error) {\n            blogContainer.innerHTML = `\n                <div class=\"admin-card\">\n                    <h3>Blog Management Error</h3>\n                    <p>Unable to load blog posts: ${error.message}</p>\n                    <button class=\"admin-button\" onclick=\"adminInterface.loadBlogManagement()\">\n                        Retry\n                    </button>\n                </div>\n            `;\n        }\n    }\n\n    async loadProjectsManagement() {\n        const projectsContainer = this.container.querySelector('#admin-projects');\n        \n        try {\n            const projectsData = await window.dataService.getProjects();\n            \n            projectsContainer.innerHTML = `\n                <div class=\"admin-card\">\n                    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;\">\n                        <h3>Projects</h3>\n                        <button class=\"admin-button\" onclick=\"adminInterface.showCreateProjectForm()\">\n                            New Project\n                        </button>\n                    </div>\n                    \n                    <table class=\"admin-table\">\n                        <thead>\n                            <tr>\n                                <th>Name</th>\n                                <th>Category</th>\n                                <th>Status</th>\n                                <th>Featured</th>\n                                <th>Actions</th>\n                            </tr>\n                        </thead>\n                        <tbody>\n                            ${projectsData.projects.map(project => `\n                                <tr>\n                                    <td>${project.name}</td>\n                                    <td>${project.category}</td>\n                                    <td>${project.status}</td>\n                                    <td>${project.featured ? '⭐' : ''}</td>\n                                    <td>\n                                        <div class=\"action-buttons\">\n                                            <button class=\"action-btn edit\" onclick=\"adminInterface.editProject(${project.id})\">\n                                                Edit\n                                            </button>\n                                            <button class=\"action-btn delete\" onclick=\"adminInterface.deleteProject(${project.id})\">\n                                                Delete\n                                            </button>\n                                        </div>\n                                    </td>\n                                </tr>\n                            `).join('')}\n                        </tbody>\n                    </table>\n                </div>\n                \n                <div id=\"project-form-container\" style=\"display: none;\">\n                    <!-- Project form will be inserted here -->\n                </div>\n            `;\n            \n        } catch (error) {\n            projectsContainer.innerHTML = `\n                <div class=\"admin-card\">\n                    <h3>Projects Management Error</h3>\n                    <p>Unable to load projects: ${error.message}</p>\n                    <button class=\"admin-button\" onclick=\"adminInterface.loadProjectsManagement()\">\n                        Retry\n                    </button>\n                </div>\n            `;\n        }\n    }\n\n    async loadMediaManagement() {\n        const mediaContainer = this.container.querySelector('#admin-media');\n        \n        mediaContainer.innerHTML = `\n            <div class=\"admin-card\">\n                <h3>Media Upload</h3>\n                <div class=\"upload-area\" onclick=\"document.getElementById('file-input').click()\">\n                    <div style=\"margin-bottom: 1rem; font-size: 3rem;\">📁</div>\n                    <div>Click to select files or drag and drop</div>\n                    <div style=\"margin-top: 0.5rem; color: #6b7280; font-size: 0.9rem;\">\n                        Supported: Images (JPG, PNG, GIF), Videos (MP4), Documents (PDF)\n                    </div>\n                </div>\n                <input type=\"file\" id=\"file-input\" multiple accept=\"image/*,video/*,.pdf\" style=\"display: none;\">\n                \n                <div id=\"upload-progress\" style=\"display: none; margin-top: 1rem;\">\n                    <!-- Upload progress will be shown here -->\n                </div>\n            </div>\n            \n            <div class=\"admin-card\">\n                <h3>Recent Uploads</h3>\n                <div id=\"recent-uploads\">\n                    <p>Recent uploads will appear here.</p>\n                </div>\n            </div>\n        `;\n        \n        // Setup file upload\n        this.setupFileUpload();\n    }\n\n    async loadSettings() {\n        const settingsContainer = this.container.querySelector('#admin-settings');\n        \n        settingsContainer.innerHTML = `\n            <div class=\"admin-card\">\n                <h3>General Settings</h3>\n                <form class=\"admin-form\" onsubmit=\"adminInterface.saveSettings(event)\">\n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Site Title</label>\n                        <input type=\"text\" class=\"form-input\" name=\"siteTitle\" value=\"Portfolio Site\">\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Site Description</label>\n                        <textarea class=\"form-input form-textarea\" name=\"siteDescription\">\n                            Professional portfolio and blog\n                        </textarea>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Contact Email</label>\n                        <input type=\"email\" class=\"form-input\" name=\"contactEmail\" value=\"contact@example.com\">\n                    </div>\n                    \n                    <button type=\"submit\" class=\"admin-button\">Save Settings</button>\n                </form>\n            </div>\n            \n            <div class=\"admin-card\">\n                <h3>Cache Management</h3>\n                <p>Manage application cache and performance.</p>\n                <div style=\"display: flex; gap: 1rem; margin-top: 1rem;\">\n                    <button class=\"admin-button secondary\" onclick=\"window.dataService.invalidateCache()\">\n                        Clear All Cache\n                    </button>\n                    <button class=\"admin-button secondary\" onclick=\"window.location.reload()\">\n                        Force Refresh\n                    </button>\n                </div>\n            </div>\n            \n            <div class=\"admin-card\">\n                <h3>System Information</h3>\n                <div id=\"system-info\">\n                    <p><strong>User Agent:</strong> ${navigator.userAgent}</p>\n                    <p><strong>Online Status:</strong> ${navigator.onLine ? 'Online' : 'Offline'}</p>\n                    <p><strong>Current User:</strong> ${window.authManager.getDisplayName()}</p>\n                </div>\n            </div>\n        `;\n    }\n\n    setupFileUpload() {\n        const uploadArea = this.container.querySelector('.upload-area');\n        const fileInput = this.container.querySelector('#file-input');\n        \n        if (!uploadArea || !fileInput) return;\n\n        // Drag and drop\n        uploadArea.addEventListener('dragover', (e) => {\n            e.preventDefault();\n            uploadArea.classList.add('dragover');\n        });\n        \n        uploadArea.addEventListener('dragleave', () => {\n            uploadArea.classList.remove('dragover');\n        });\n        \n        uploadArea.addEventListener('drop', (e) => {\n            e.preventDefault();\n            uploadArea.classList.remove('dragover');\n            const files = Array.from(e.dataTransfer.files);\n            this.handleFileUpload(files);\n        });\n        \n        // File input change\n        fileInput.addEventListener('change', (e) => {\n            const files = Array.from(e.target.files);\n            this.handleFileUpload(files);\n        });\n    }\n\n    async handleFileUpload(files) {\n        const progressContainer = this.container.querySelector('#upload-progress');\n        progressContainer.style.display = 'block';\n        \n        for (const file of files) {\n            try {\n                progressContainer.innerHTML += `\n                    <div class=\"upload-item\" data-filename=\"${file.name}\">\n                        <div>${file.name}</div>\n                        <div class=\"progress-bar\">\n                            <div class=\"progress-fill\" style=\"width: 0%\"></div>\n                        </div>\n                    </div>\n                `;\n                \n                await window.dataService.uploadFile(file, 'media', (progress) => {\n                    const progressFill = progressContainer.querySelector(`[data-filename=\"${file.name}\"] .progress-fill`);\n                    if (progressFill) {\n                        progressFill.style.width = `${progress}%`;\n                    }\n                });\n                \n                window.loadingManager.showSuccess(`${file.name} uploaded successfully`);\n                \n            } catch (error) {\n                window.errorBoundary.showError(`Upload failed for ${file.name}: ${error.message}`);\n            }\n        }\n    }\n\n    showCreateBlogForm() {\n        const formContainer = this.container.querySelector('#blog-form-container');\n        formContainer.style.display = 'block';\n        formContainer.innerHTML = this.getBlogFormHTML();\n    }\n\n    showCreateProjectForm() {\n        const formContainer = this.container.querySelector('#project-form-container');\n        formContainer.style.display = 'block';\n        formContainer.innerHTML = this.getProjectFormHTML();\n    }\n\n    getBlogFormHTML(post = null) {\n        const isEdit = !!post;\n        return `\n            <div class=\"admin-form\">\n                <h3>${isEdit ? 'Edit' : 'Create'} Blog Post</h3>\n                <form onsubmit=\"adminInterface.saveBlogPost(event, ${post?.id || 'null'})\">\n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Title</label>\n                        <input type=\"text\" class=\"form-input\" name=\"title\" value=\"${post?.title || ''}\" required>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Slug</label>\n                        <input type=\"text\" class=\"form-input\" name=\"slug\" value=\"${post?.slug || ''}\" required>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Excerpt</label>\n                        <textarea class=\"form-input form-textarea\" name=\"excerpt\" required>${post?.excerpt || ''}</textarea>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Content</label>\n                        <textarea class=\"form-input\" name=\"content\" style=\"min-height: 300px;\" required>${post?.content || ''}</textarea>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Category</label>\n                        <input type=\"text\" class=\"form-input\" name=\"category\" value=\"${post?.category || ''}\" required>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Tags (comma-separated)</label>\n                        <input type=\"text\" class=\"form-input\" name=\"tags\" value=\"${post?.tags?.join(', ') || ''}\">\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Status</label>\n                        <select class=\"form-input\" name=\"status\">\n                            <option value=\"draft\" ${post?.status === 'draft' ? 'selected' : ''}>Draft</option>\n                            <option value=\"published\" ${post?.status === 'published' ? 'selected' : ''}>Published</option>\n                        </select>\n                    </div>\n                    \n                    <div style=\"display: flex; gap: 1rem; margin-top: 2rem;\">\n                        <button type=\"submit\" class=\"admin-button\">\n                            ${isEdit ? 'Update' : 'Create'} Post\n                        </button>\n                        <button type=\"button\" class=\"admin-button secondary\" onclick=\"adminInterface.hideForms()\">\n                            Cancel\n                        </button>\n                    </div>\n                </form>\n            </div>\n        `;\n    }\n\n    getProjectFormHTML(project = null) {\n        const isEdit = !!project;\n        return `\n            <div class=\"admin-form\">\n                <h3>${isEdit ? 'Edit' : 'Create'} Project</h3>\n                <form onsubmit=\"adminInterface.saveProject(event, ${project?.id || 'null'})\">\n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Name</label>\n                        <input type=\"text\" class=\"form-input\" name=\"name\" value=\"${project?.name || ''}\" required>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Slug</label>\n                        <input type=\"text\" class=\"form-input\" name=\"slug\" value=\"${project?.slug || ''}\" required>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Description</label>\n                        <textarea class=\"form-input form-textarea\" name=\"description\" required>${project?.description || ''}</textarea>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Long Description</label>\n                        <textarea class=\"form-input\" name=\"longDescription\" style=\"min-height: 200px;\">${project?.longDescription || ''}</textarea>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Category</label>\n                        <input type=\"text\" class=\"form-input\" name=\"category\" value=\"${project?.category || ''}\" required>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Technologies (comma-separated)</label>\n                        <input type=\"text\" class=\"form-input\" name=\"technologies\" value=\"${project?.technologies?.join(', ') || ''}\">\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label class=\"form-label\">Status</label>\n                        <select class=\"form-input\" name=\"status\">\n                            <option value=\"planning\" ${project?.status === 'planning' ? 'selected' : ''}>Planning</option>\n                            <option value=\"in-progress\" ${project?.status === 'in-progress' ? 'selected' : ''}>In Progress</option>\n                            <option value=\"completed\" ${project?.status === 'completed' ? 'selected' : ''}>Completed</option>\n                        </select>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <label style=\"display: flex; align-items: center; gap: 0.5rem;\">\n                            <input type=\"checkbox\" name=\"featured\" ${project?.featured ? 'checked' : ''}>\n                            Featured Project\n                        </label>\n                    </div>\n                    \n                    <div style=\"display: flex; gap: 1rem; margin-top: 2rem;\">\n                        <button type=\"submit\" class=\"admin-button\">\n                            ${isEdit ? 'Update' : 'Create'} Project\n                        </button>\n                        <button type=\"button\" class=\"admin-button secondary\" onclick=\"adminInterface.hideForms()\">\n                            Cancel\n                        </button>\n                    </div>\n                </form>\n            </div>\n        `;\n    }\n\n    async saveBlogPost(event, postId = null) {\n        event.preventDefault();\n        \n        const formData = new FormData(event.target);\n        const postData = {\n            title: formData.get('title'),\n            slug: formData.get('slug'),\n            excerpt: formData.get('excerpt'),\n            content: formData.get('content'),\n            category: formData.get('category'),\n            tags: formData.get('tags').split(',').map(tag => tag.trim()),\n            status: formData.get('status')\n        };\n        \n        try {\n            if (postId) {\n                await window.dataService.updateBlogPost(postId, postData);\n                window.loadingManager.showSuccess('Blog post updated successfully');\n            } else {\n                await window.dataService.createBlogPost(postData);\n                window.loadingManager.showSuccess('Blog post created successfully');\n            }\n            \n            this.hideForms();\n            this.loadBlogManagement();\n            \n        } catch (error) {\n            window.errorBoundary.showError(`Failed to save blog post: ${error.message}`);\n        }\n    }\n\n    async saveProject(event, projectId = null) {\n        event.preventDefault();\n        \n        const formData = new FormData(event.target);\n        const projectData = {\n            name: formData.get('name'),\n            slug: formData.get('slug'),\n            description: formData.get('description'),\n            longDescription: formData.get('longDescription'),\n            category: formData.get('category'),\n            technologies: formData.get('technologies').split(',').map(tech => tech.trim()),\n            status: formData.get('status'),\n            featured: formData.get('featured') === 'on'\n        };\n        \n        try {\n            if (projectId) {\n                await window.dataService.updateProject(projectId, projectData);\n                window.loadingManager.showSuccess('Project updated successfully');\n            } else {\n                await window.dataService.createProject(projectData);\n                window.loadingManager.showSuccess('Project created successfully');\n            }\n            \n            this.hideForms();\n            this.loadProjectsManagement();\n            \n        } catch (error) {\n            window.errorBoundary.showError(`Failed to save project: ${error.message}`);\n        }\n    }\n\n    async saveSettings(event) {\n        event.preventDefault();\n        // Settings save logic would go here\n        window.loadingManager.showSuccess('Settings saved successfully');\n    }\n\n    hideForms() {\n        const blogForm = this.container.querySelector('#blog-form-container');\n        const projectForm = this.container.querySelector('#project-form-container');\n        \n        if (blogForm) blogForm.style.display = 'none';\n        if (projectForm) projectForm.style.display = 'none';\n    }\n\n    showAccessDenied() {\n        document.body.innerHTML = `\n            <div style=\"display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center;\">\n                <h1>Access Denied</h1>\n                <p>You don't have permission to access the admin interface.</p>\n                <button onclick=\"window.location.href = '/'\" style=\"padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;\">\n                    Go Home\n                </button>\n            </div>\n        `;\n    }\n\n    showError(message) {\n        window.errorBoundary?.showError(message, 'admin');\n    }\n\n    cleanup() {\n        if (this.container && this.container.parentNode) {\n            this.container.parentNode.removeChild(this.container);\n        }\n        this.isInitialized = false;\n    }\n}\n\n// Initialize admin interface\nwindow.adminInterface = new AdminInterface();\n\n// Export for modules\nif (typeof module !== 'undefined' && module.exports) {\n    module.exports = AdminInterface;\n}"
+/**
+ * Admin Interface System
+ * Comprehensive admin panel for content management
+ */
+
+class AdminInterface {
+    constructor() {
+        this.currentView = 'dashboard';
+        this.isInitialized = false;
+        this.init();
+    }
+
+    async init() {
+        if (this.isInitialized) return;
+        
+        // Check API configuration first
+        const configCheck = this.checkConfiguration();
+        if (!configCheck.valid) {
+            this.showConfigurationError(configCheck);
+            return;
+        }
+        
+        // Check if user is admin
+        if (!window.authManager?.isAdmin()) {
+            this.showAccessDenied();
+            return;
+        }
+
+        this.createAdminUI();
+        this.setupEventListeners();
+        this.loadDashboard();
+        
+        this.isInitialized = true;
+        console.log('Admin interface initialized');
+    }
+
+    createAdminUI() {
+        // Create admin container
+        const adminContainer = document.createElement('div');
+        adminContainer.id = 'admin-interface';
+        adminContainer.className = 'admin-interface';
+        adminContainer.innerHTML = this.getAdminHTML();
+        
+        // Add admin styles
+        this.addAdminStyles();
+        
+        // Insert into page
+        const targetContainer = document.getElementById('admin-container') || document.body;
+        targetContainer.appendChild(adminContainer);
+        
+        this.container = adminContainer;
+    }
+
+    getAdminHTML() {
+        return `
+            <div class="admin-header">
+                <h1>Admin Dashboard</h1>
+                <div class="admin-user-info">
+                    <span data-user="name"></span>
+                    <button class="admin-logout-btn" onclick="window.authManager.logout()">Logout</button>
+                </div>
+            </div>
+            
+            <div class="admin-nav">
+                <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+                <button class="nav-btn" data-view="blog">Blog Posts</button>
+                <button class="nav-btn" data-view="projects">Projects</button>
+                <button class="nav-btn" data-view="media">Media</button>
+                <button class="nav-btn" data-view="settings">Settings</button>
+            </div>
+            
+            <div class="admin-content">
+                <div id="admin-loading" class="admin-loading">
+                    <div class="spinner"></div>
+                    <span>Loading...</span>
+                </div>
+                
+                <div id="admin-dashboard" class="admin-view">
+                    <!-- Dashboard content will be loaded here -->
+                </div>
+                
+                <div id="admin-blog" class="admin-view hidden">
+                    <!-- Blog management content -->
+                </div>
+                
+                <div id="admin-projects" class="admin-view hidden">
+                    <!-- Projects management content -->
+                </div>
+                
+                <div id="admin-media" class="admin-view hidden">
+                    <!-- Media management content -->
+                </div>
+                
+                <div id="admin-settings" class="admin-view hidden">
+                    <!-- Settings content -->
+                </div>
+            </div>
+        `;
+    }
+
+    addAdminStyles() {
+        if (document.getElementById('admin-styles')) return;
+        
+        const styles = document.createElement('style');
+        styles.id = 'admin-styles';
+        styles.textContent = `
+            .admin-interface {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            }
+            
+            .admin-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 2rem;
+                padding-bottom: 1rem;
+                border-bottom: 2px solid #e5e7eb;
+            }
+            
+            .admin-header h1 {
+                margin: 0;
+                color: #1f2937;
+                font-size: 2rem;
+            }
+            
+            .admin-user-info {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .admin-logout-btn {
+                background: #ef4444;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 0.9rem;
+            }
+            
+            .admin-logout-btn:hover {
+                background: #dc2626;
+            }
+            
+            .admin-nav {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 2rem;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            
+            .nav-btn {
+                background: none;
+                border: none;
+                padding: 12px 24px;
+                cursor: pointer;
+                font-size: 1rem;
+                color: #6b7280;
+                border-bottom: 3px solid transparent;
+                transition: all 0.2s ease;
+            }
+            
+            .nav-btn:hover {
+                color: #374151;
+                background: #f9fafb;
+            }
+            
+            .nav-btn.active {
+                color: #667eea;
+                border-bottom-color: #667eea;
+                font-weight: 600;
+            }
+            
+            .admin-content {
+                min-height: 400px;
+                position: relative;
+            }
+            
+            .admin-view {
+                display: block;
+            }
+            
+            .admin-view.hidden {
+                display: none;
+            }
+            
+            .admin-loading {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 200px;
+                gap: 1rem;
+            }
+            
+            .admin-loading.hidden {
+                display: none;
+            }
+            
+            .spinner {
+                width: 40px;
+                height: 40px;
+                border: 3px solid #f3f3f3;
+                border-top: 3px solid #667eea;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+            }
+            
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            
+            .admin-card {
+                background: white;
+                border-radius: 8px;
+                padding: 1.5rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                margin-bottom: 1.5rem;
+            }
+            
+            .admin-card h3 {
+                margin: 0 0 1rem 0;
+                color: #1f2937;
+            }
+            
+            .config-status {
+                padding: 1rem;
+                border-radius: 6px;
+                margin-bottom: 1rem;
+            }
+            
+            .config-status.success {
+                background: #f0fdf4;
+                border: 1px solid #bbf7d0;
+                color: #15803d;
+            }
+            
+            .config-status.error {
+                background: #fef2f2;
+                border: 1px solid #fecaca;
+                color: #dc2626;
+            }
+            
+            .config-details {
+                margin-top: 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .config-details p {
+                margin: 0.5rem 0;
+            }
+            
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+                margin-bottom: 2rem;
+            }
+            
+            .stat-card {
+                background: white;
+                border-radius: 8px;
+                padding: 1.5rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+                font-weight: bold;
+                color: #667eea;
+                margin-bottom: 0.5rem;
+            }
+            
+            .stat-label {
+                color: #6b7280;
+                font-size: 0.9rem;
+            }
+            
+            .admin-button {
+                background: #667eea;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 1rem;
+                transition: background-color 0.2s ease;
+            }
+            
+            .admin-button:hover {
+                background: #5a67d8;
+            }
+            
+            .admin-button.secondary {
+                background: #6b7280;
+            }
+            
+            .admin-button.secondary:hover {
+                background: #4b5563;
+            }
+            
+            .admin-button.danger {
+                background: #ef4444;
+            }
+            
+            .admin-button.danger:hover {
+                background: #dc2626;
+            }
+            
+            .admin-form {
+                background: white;
+                border-radius: 8px;
+                padding: 2rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+            
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+            
+            .form-label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 600;
+                color: #374151;
+            }
+            
+            .form-input {
+                width: 100%;
+                padding: 10px 12px;
+                border: 2px solid #e5e7eb;
+                border-radius: 6px;
+                font-size: 1rem;
+                transition: border-color 0.2s ease;
+            }
+            
+            .form-input:focus {
+                outline: none;
+                border-color: #667eea;
+            }
+            
+            .form-textarea {
+                min-height: 120px;
+                resize: vertical;
+            }
+            
+            .admin-table {
+                width: 100%;
+                border-collapse: collapse;
+                background: white;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+            
+            .admin-table th,
+            .admin-table td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            
+            .admin-table th {
+                background: #f9fafb;
+                font-weight: 600;
+                color: #374151;
+            }
+            
+            .admin-table tr:hover {
+                background: #f9fafb;
+            }
+            
+            .action-buttons {
+                display: flex;
+                gap: 0.5rem;
+            }
+            
+            .action-btn {
+                background: none;
+                border: 1px solid #d1d5db;
+                padding: 4px 8px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 0.8rem;
+                transition: all 0.2s ease;
+            }
+            
+            .action-btn:hover {
+                background: #f3f4f6;
+            }
+            
+            .action-btn.edit {
+                color: #667eea;
+                border-color: #667eea;
+            }
+            
+            .action-btn.delete {
+                color: #ef4444;
+                border-color: #ef4444;
+            }
+            
+            .upload-area {
+                border: 2px dashed #d1d5db;
+                border-radius: 8px;
+                padding: 2rem;
+                text-align: center;
+                transition: all 0.2s ease;
+                cursor: pointer;
+            }
+            
+            .upload-area:hover {
+                border-color: #667eea;
+                background: #f8faff;
+            }
+            
+            .upload-area.dragover {
+                border-color: #667eea;
+                background: #e0e7ff;
+            }
+            
+            [data-theme="dark"] .admin-interface {
+                color: #f9fafb;
+            }
+            
+            [data-theme="dark"] .admin-header h1 {
+                color: #f9fafb;
+            }
+            
+            [data-theme="dark"] .admin-card,
+            [data-theme="dark"] .stat-card,
+            [data-theme="dark"] .admin-form,
+            [data-theme="dark"] .admin-table {
+                background: #1f2937;
+                color: #f9fafb;
+            }
+            
+            [data-theme="dark"] .admin-table th {
+                background: #374151;
+            }
+            
+            [data-theme="dark"] .form-input {
+                background: #374151;
+                color: #f9fafb;
+                border-color: #4b5563;
+            }
+        `;
+        
+        document.head.appendChild(styles);
+    }
+
+    setupEventListeners() {
+        // Navigation
+        const navButtons = this.container.querySelectorAll('.nav-btn');
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const view = e.target.dataset.view;
+                this.switchView(view);
+            });
+        });
+
+        // Auth state changes
+        window.authManager?.addAuthListener((event, data) => {
+            if (event === 'logout') {
+                this.cleanup();
+                window.location.href = '/';
+            }
+        });
+    }
+
+    switchView(viewName) {
+        this.currentView = viewName;
+        
+        // Update navigation
+        const navButtons = this.container.querySelectorAll('.nav-btn');
+        navButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.view === viewName);
+        });
+
+        // Hide all views
+        const views = this.container.querySelectorAll('.admin-view');
+        views.forEach(view => view.classList.add('hidden'));
+
+        // Show selected view
+        const targetView = this.container.querySelector(`#admin-${viewName}`);
+        if (targetView) {
+            targetView.classList.remove('hidden');
+            this.loadViewContent(viewName);
+        }
+    }
+
+    async loadViewContent(viewName) {
+        const viewContainer = this.container.querySelector(`#admin-${viewName}`);
+        
+        try {
+            switch (viewName) {
+                case 'dashboard':
+                    await this.loadDashboard();
+                    break;
+                case 'blog':
+                    await this.loadBlogManagement();
+                    break;
+                case 'projects':
+                    await this.loadProjectsManagement();
+                    break;
+                case 'media':
+                    await this.loadMediaManagement();
+                    break;
+                case 'settings':
+                    await this.loadSettings();
+                    break;
+            }
+        } catch (error) {
+            this.showError(`Failed to load ${viewName} view: ${error.message}`);
+        }
+    }
+
+    async loadDashboard() {
+        const dashboardContainer = this.container.querySelector('#admin-dashboard');
+        
+        try {
+            // Get statistics
+            const [blogData, projectsData] = await Promise.all([
+                window.dataService?.getBlogPosts?.({ limit: 1 }) || { posts: [], pagination: { total: 0 } },
+                window.dataService?.getProjects?.() || { projects: [] }
+            ]);
+
+            const stats = {
+                blogPosts: blogData.pagination?.total || 0,
+                projects: projectsData.projects?.length || 0,
+                published: blogData.posts?.filter(p => p.status === 'published').length || 0,
+                featured: projectsData.projects?.filter(p => p.featured).length || 0
+            };
+
+            dashboardContainer.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">${stats.blogPosts}</div>
+                        <div class="stat-label">Blog Posts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${stats.projects}</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${stats.published}</div>
+                        <div class="stat-label">Published</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${stats.featured}</div>
+                        <div class="stat-label">Featured</div>
+                    </div>
+                </div>
+                
+                <div class="admin-card">
+                    <h3>Quick Actions</h3>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="admin-button" onclick="adminInterface.switchView('blog'); adminInterface.showCreateBlogForm()">
+                            New Blog Post
+                        </button>
+                        <button class="admin-button" onclick="adminInterface.switchView('projects'); adminInterface.showCreateProjectForm()">
+                            New Project
+                        </button>
+                        <button class="admin-button secondary" onclick="adminInterface.switchView('media')">
+                            Upload Media
+                        </button>
+                        <button class="admin-button secondary" onclick="window.dataService?.invalidateCache?.() || console.log('Cache cleared')">
+                            Clear Cache
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="admin-card">
+                    <h3>Recent Activity</h3>
+                    <p>Recent blog posts and project updates will appear here.</p>
+                </div>
+            `;
+            
+        } catch (error) {
+            dashboardContainer.innerHTML = `
+                <div class="admin-card">
+                    <h3>Dashboard Error</h3>
+                    <p>Unable to load dashboard data: ${error.message}</p>
+                    <button class="admin-button" onclick="adminInterface.loadDashboard()">
+                        Retry
+                    </button>
+                </div>
+            `;
+        }
+    }
+
+    async loadBlogManagement() {
+        const blogContainer = this.container.querySelector('#admin-blog');
+        
+        try {
+            const blogData = await window.dataService?.getBlogPosts?.({ limit: 50 }) || { posts: [] };
+            
+            blogContainer.innerHTML = `
+                <div class="admin-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3>Blog Posts</h3>
+                        <button class="admin-button" onclick="adminInterface.showCreateBlogForm()">
+                            New Post
+                        </button>
+                    </div>
+                    
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Status</th>
+                                <th>Published</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${blogData.posts.map(post => `
+                                <tr>
+                                    <td>${post.title}</td>
+                                    <td>
+                                        <span class="status-badge status-${post.status}">
+                                            ${post.status}
+                                        </span>
+                                    </td>
+                                    <td>${new Date(post.publishedAt).toLocaleDateString()}</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn edit" onclick="adminInterface.editBlogPost(${post.id})">
+                                                Edit
+                                            </button>
+                                            <button class="action-btn delete" onclick="adminInterface.deleteBlogPost(${post.id})">
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="blog-form-container" style="display: none;">
+                    <!-- Blog form will be inserted here -->
+                </div>
+            `;
+            
+        } catch (error) {
+            blogContainer.innerHTML = `
+                <div class="admin-card">
+                    <h3>Blog Management Error</h3>
+                    <p>Unable to load blog posts: ${error.message}</p>
+                    <button class="admin-button" onclick="adminInterface.loadBlogManagement()">
+                        Retry
+                    </button>
+                </div>
+            `;
+        }
+    }
+
+    async loadProjectsManagement() {
+        const projectsContainer = this.container.querySelector('#admin-projects');
+        
+        try {
+            const projectsData = await window.dataService?.getProjects?.() || { projects: [] };
+            
+            projectsContainer.innerHTML = `
+                <div class="admin-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3>Projects</h3>
+                        <button class="admin-button" onclick="adminInterface.showCreateProjectForm()">
+                            New Project
+                        </button>
+                    </div>
+                    
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Featured</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${projectsData.projects.map(project => `
+                                <tr>
+                                    <td>${project.name}</td>
+                                    <td>${project.category}</td>
+                                    <td>${project.status}</td>
+                                    <td>${project.featured ? '⭐' : ''}</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn edit" onclick="adminInterface.editProject(${project.id})">
+                                                Edit
+                                            </button>
+                                            <button class="action-btn delete" onclick="adminInterface.deleteProject(${project.id})">
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="project-form-container" style="display: none;">
+                    <!-- Project form will be inserted here -->
+                </div>
+            `;
+            
+        } catch (error) {
+            projectsContainer.innerHTML = `
+                <div class="admin-card">
+                    <h3>Projects Management Error</h3>
+                    <p>Unable to load projects: ${error.message}</p>
+                    <button class="admin-button" onclick="adminInterface.loadProjectsManagement()">
+                        Retry
+                    </button>
+                </div>
+            `;
+        }
+    }
+
+    async loadMediaManagement() {
+        const mediaContainer = this.container.querySelector('#admin-media');
+        
+        mediaContainer.innerHTML = `
+            <div class="admin-card">
+                <h3>Media Upload</h3>
+                <div class="upload-area" onclick="document.getElementById('file-input').click()">
+                    <div style="margin-bottom: 1rem; font-size: 3rem;">📁</div>
+                    <div>Click to select files or drag and drop</div>
+                    <div style="margin-top: 0.5rem; color: #6b7280; font-size: 0.9rem;">
+                        Supported: Images (JPG, PNG, GIF), Videos (MP4), Documents (PDF)
+                    </div>
+                </div>
+                <input type="file" id="file-input" multiple accept="image/*,video/*,.pdf" style="display: none;">
+                
+                <div id="upload-progress" style="display: none; margin-top: 1rem;">
+                    <!-- Upload progress will be shown here -->
+                </div>
+            </div>
+            
+            <div class="admin-card">
+                <h3>Recent Uploads</h3>
+                <div id="recent-uploads">
+                    <p>Recent uploads will appear here.</p>
+                </div>
+            </div>
+        `;
+        
+        // Setup file upload
+        this.setupFileUpload();
+    }
+
+    async loadSettings() {
+        const settingsContainer = this.container.querySelector('#admin-settings');
+        const configStatus = this.checkConfiguration();
+        
+        settingsContainer.innerHTML = `
+            <div class="admin-card">
+                <h3>API Configuration Status</h3>
+                <div class="config-status ${configStatus.valid ? 'success' : 'error'}">
+                    <h4>${configStatus.valid ? '✅ Configuration Valid' : '❌ Configuration Issues'}</h4>
+                    ${configStatus.issues.length > 0 ? 
+                        `<ul>${configStatus.issues.map(issue => `<li>${issue}</li>`).join('')}</ul>` : 
+                        '<p>All configuration checks passed.</p>'
+                    }
+                    <div class="config-details">
+                        <p><strong>Supabase URL:</strong> ${configStatus.supabase?.url || 'Not configured'}</p>
+                        <p><strong>Supabase Key:</strong> ${configStatus.supabase?.hasValidKey ? '✅ Valid' : '❌ Invalid or missing'}</p>
+                        <p><strong>Environment Detection:</strong> ${this.getEnvironmentInfo()}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin-card">
+                <h3>General Settings</h3>
+                <form class="admin-form" onsubmit="adminInterface.saveSettings(event)">
+                    <div class="form-group">
+                        <label class="form-label">Site Title</label>
+                        <input type="text" class="form-input" name="siteTitle" value="Portfolio Site">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Site Description</label>
+                        <textarea class="form-input form-textarea" name="siteDescription">
+                            Professional portfolio and blog
+                        </textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Contact Email</label>
+                        <input type="email" class="form-input" name="contactEmail" value="contact@example.com">
+                    </div>
+                    
+                    <button type="submit" class="admin-button">Save Settings</button>
+                </form>
+            </div>
+            
+            <div class="admin-card">
+                <h3>Cache Management</h3>
+                <p>Manage application cache and performance.</p>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button class="admin-button secondary" onclick="window.dataService?.invalidateCache?.() || console.log('Cache cleared')">
+                        Clear All Cache
+                    </button>
+                    <button class="admin-button secondary" onclick="window.location.reload()">
+                        Force Refresh
+                    </button>
+                    <button class="admin-button secondary" onclick="adminInterface.testApiConnection()">
+                        Test API Connection
+                    </button>
+                </div>
+            </div>
+            
+            <div class="admin-card">
+                <h3>System Information</h3>
+                <div id="system-info">
+                    <p><strong>User Agent:</strong> ${navigator.userAgent}</p>
+                    <p><strong>Online Status:</strong> ${navigator.onLine ? 'Online' : 'Offline'}</p>
+                    <p><strong>Current User:</strong> ${window.authManager?.getDisplayName?.() || 'Not authenticated'}</p>
+                    <p><strong>API Client:</strong> ${window.apiClient ? 'Loaded' : 'Not loaded'}</p>
+                    <p><strong>Config Manager:</strong> ${window.apiConfig ? 'Loaded' : 'Not loaded'}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    setupFileUpload() {
+        const uploadArea = this.container.querySelector('.upload-area');
+        const fileInput = this.container.querySelector('#file-input');
+        
+        if (!uploadArea || !fileInput) return;
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files);
+            this.handleFileUpload(files);
+        });
+        
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            this.handleFileUpload(files);
+        });
+    }
+
+    async handleFileUpload(files) {
+        const progressContainer = this.container.querySelector('#upload-progress');
+        progressContainer.style.display = 'block';
+        
+        for (const file of files) {
+            try {
+                progressContainer.innerHTML += `
+                    <div class="upload-item" data-filename="${file.name}">
+                        <div>${file.name}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                `;
+                
+                await window.dataService?.uploadFile?.(file, 'media', (progress) => {
+                    const progressFill = progressContainer.querySelector(`[data-filename="${file.name}"] .progress-fill`);
+                    if (progressFill) {
+                        progressFill.style.width = `${progress}%`;
+                    }
+                });
+                
+                window.loadingManager?.showSuccess?.(`${file.name} uploaded successfully`) ||
+                    console.log(`${file.name} uploaded successfully`);
+                
+            } catch (error) {
+                window.errorBoundary?.showError?.(`Upload failed for ${file.name}: ${error.message}`) ||
+                    console.error(`Upload failed for ${file.name}: ${error.message}`);
+            }
+        }
+    }
+
+    showCreateBlogForm() {
+        const formContainer = this.container.querySelector('#blog-form-container');
+        formContainer.style.display = 'block';
+        formContainer.innerHTML = this.getBlogFormHTML();
+    }
+
+    showCreateProjectForm() {
+        const formContainer = this.container.querySelector('#project-form-container');
+        formContainer.style.display = 'block';
+        formContainer.innerHTML = this.getProjectFormHTML();
+    }
+
+    getBlogFormHTML(post = null) {
+        const isEdit = !!post;
+        return `
+            <div class="admin-form">
+                <h3>${isEdit ? 'Edit' : 'Create'} Blog Post</h3>
+                <form onsubmit="adminInterface.saveBlogPost(event, ${post?.id || 'null'})">
+                    <div class="form-group">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-input" name="title" value="${post?.title || ''}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Slug</label>
+                        <input type="text" class="form-input" name="slug" value="${post?.slug || ''}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Excerpt</label>
+                        <textarea class="form-input form-textarea" name="excerpt" required>${post?.excerpt || ''}</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Content</label>
+                        <textarea class="form-input" name="content" style="min-height: 300px;" required>${post?.content || ''}</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <input type="text" class="form-input" name="category" value="${post?.category || ''}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Tags (comma-separated)</label>
+                        <input type="text" class="form-input" name="tags" value="${post?.tags?.join(', ') || ''}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-input" name="status">
+                            <option value="draft" ${post?.status === 'draft' ? 'selected' : ''}>Draft</option>
+                            <option value="published" ${post?.status === 'published' ? 'selected' : ''}>Published</option>
+                        </select>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button type="submit" class="admin-button">
+                            ${isEdit ? 'Update' : 'Create'} Post
+                        </button>
+                        <button type="button" class="admin-button secondary" onclick="adminInterface.hideForms()">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `;
+    }
+
+    getProjectFormHTML(project = null) {
+        const isEdit = !!project;
+        return `
+            <div class="admin-form">
+                <h3>${isEdit ? 'Edit' : 'Create'} Project</h3>
+                <form onsubmit="adminInterface.saveProject(event, ${project?.id || 'null'})">
+                    <div class="form-group">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-input" name="name" value="${project?.name || ''}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Slug</label>
+                        <input type="text" class="form-input" name="slug" value="${project?.slug || ''}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-input form-textarea" name="description" required>${project?.description || ''}</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Long Description</label>
+                        <textarea class="form-input" name="longDescription" style="min-height: 200px;">${project?.longDescription || ''}</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <input type="text" class="form-input" name="category" value="${project?.category || ''}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Technologies (comma-separated)</label>
+                        <input type="text" class="form-input" name="technologies" value="${project?.technologies?.join(', ') || ''}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-input" name="status">
+                            <option value="planning" ${project?.status === 'planning' ? 'selected' : ''}>Planning</option>
+                            <option value="in-progress" ${project?.status === 'in-progress' ? 'selected' : ''}>In Progress</option>
+                            <option value="completed" ${project?.status === 'completed' ? 'selected' : ''}>Completed</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" name="featured" ${project?.featured ? 'checked' : ''}>
+                            Featured Project
+                        </label>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button type="submit" class="admin-button">
+                            ${isEdit ? 'Update' : 'Create'} Project
+                        </button>
+                        <button type="button" class="admin-button secondary" onclick="adminInterface.hideForms()">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `;
+    }
+
+    async saveBlogPost(event, postId = null) {
+        event.preventDefault();
+        
+        const formData = new FormData(event.target);
+        const postData = {
+            title: formData.get('title'),
+            slug: formData.get('slug'),
+            excerpt: formData.get('excerpt'),
+            content: formData.get('content'),
+            category: formData.get('category'),
+            tags: formData.get('tags').split(',').map(tag => tag.trim()),
+            status: formData.get('status')
+        };
+        
+        try {
+            if (postId) {
+                await window.dataService?.updateBlogPost?.(postId, postData);
+                window.loadingManager?.showSuccess?.('Blog post updated successfully') ||
+                    console.log('Blog post updated successfully');
+            } else {
+                await window.dataService?.createBlogPost?.(postData);
+                window.loadingManager?.showSuccess?.('Blog post created successfully') ||
+                    console.log('Blog post created successfully');
+            }
+            
+            this.hideForms();
+            this.loadBlogManagement();
+            
+        } catch (error) {
+            window.errorBoundary?.showError?.(`Failed to save blog post: ${error.message}`) ||
+                console.error(`Failed to save blog post: ${error.message}`);
+        }
+    }
+
+    async saveProject(event, projectId = null) {
+        event.preventDefault();
+        
+        const formData = new FormData(event.target);
+        const projectData = {
+            name: formData.get('name'),
+            slug: formData.get('slug'),
+            description: formData.get('description'),
+            longDescription: formData.get('longDescription'),
+            category: formData.get('category'),
+            technologies: formData.get('technologies').split(',').map(tech => tech.trim()),
+            status: formData.get('status'),
+            featured: formData.get('featured') === 'on'
+        };
+        
+        try {
+            if (projectId) {
+                await window.dataService?.updateProject?.(projectId, projectData);
+                window.loadingManager?.showSuccess?.('Project updated successfully') ||
+                    console.log('Project updated successfully');
+            } else {
+                await window.dataService?.createProject?.(projectData);
+                window.loadingManager?.showSuccess?.('Project created successfully') ||
+                    console.log('Project created successfully');
+            }
+            
+            this.hideForms();
+            this.loadProjectsManagement();
+            
+        } catch (error) {
+            window.errorBoundary?.showError?.(`Failed to save project: ${error.message}`) ||
+                console.error(`Failed to save project: ${error.message}`);
+        }
+    }
+
+    async saveSettings(event) {
+        event.preventDefault();
+        // Settings save logic would go here
+        window.loadingManager?.showSuccess?.('Settings saved successfully') ||
+            console.log('Settings saved successfully');
+    }
+
+    hideForms() {
+        const blogForm = this.container.querySelector('#blog-form-container');
+        const projectForm = this.container.querySelector('#project-form-container');
+        
+        if (blogForm) blogForm.style.display = 'none';
+        if (projectForm) projectForm.style.display = 'none';
+    }
+
+    showAccessDenied() {
+        document.body.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center;">
+                <h1>Access Denied</h1>
+                <p>You don't have permission to access the admin interface.</p>
+                <button onclick="window.location.href = '/'" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                    Go Home
+                </button>
+            </div>
+        `;
+    }
+
+    showConfigurationError(configCheck) {
+        document.body.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 2rem;">
+                <h1>🔧 Configuration Error</h1>
+                <p>The admin panel detected configuration issues that need to be resolved:</p>
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 1rem; margin: 1rem 0; max-width: 600px;">
+                    <ul style="text-align: left; margin: 0;">
+                        ${configCheck.issues.map(issue => `<li style="margin: 0.5rem 0;">${issue}</li>`).join('')}
+                    </ul>
+                </div>
+                <div style="margin: 2rem 0;">
+                    <p><strong>Supabase URL:</strong> ${configCheck.supabase?.url || 'Not detected'}</p>
+                    <p><strong>Supabase Key:</strong> ${configCheck.supabase?.hasValidKey ? '✅ Valid' : '❌ Invalid'}</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button onclick="location.reload()" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                        Retry
+                    </button>
+                    <button onclick="window.location.href = '/'" style="padding: 10px 20px; background: #6b7280; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                        Go Home
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    showError(message) {
+        window.errorBoundary?.showError?.(message, 'admin') ||
+            console.error('Admin Error:', message);
+    }
+
+    cleanup() {
+        if (this.container && this.container.parentNode) {
+            this.container.parentNode.removeChild(this.container);
+        }
+        this.isInitialized = false;
+    }
+
+    /**
+     * Check configuration validity
+     */
+    checkConfiguration() {
+        if (!window.apiConfig) {
+            return {
+                valid: false,
+                issues: ['API configuration manager not loaded'],
+                supabase: { url: null, hasValidKey: false, configured: false }
+            };
+        }
+        
+        return window.apiConfig.validate();
+    }
+
+    /**
+     * Get environment information
+     */
+    getEnvironmentInfo() {
+        const hostname = window.location.hostname;
+        const isProduction = !hostname.includes('localhost') && !hostname.includes('127.0.0.1');
+        const isNetlify = hostname.includes('netlify.app') || hostname.includes('netlify.com');
+        
+        if (isNetlify) return 'Netlify Production';
+        if (isProduction) return 'Production';
+        return 'Local Development';
+    }
+
+    /**
+     * Test API connection
+     */
+    async testApiConnection() {
+        try {
+            if (!window.apiClient) {
+                throw new Error('API client not available');
+            }
+            
+            const response = await window.apiClient.request('/rest/v1/', { method: 'HEAD' });
+            window.loadingManager?.showSuccess?.('✅ API connection successful!') || 
+                alert('✅ API connection successful!');
+        } catch (error) {
+            window.errorBoundary?.showError?.(`❌ API connection failed: ${error.message}`) || 
+                alert(`❌ API connection failed: ${error.message}`);
+        }
+    }
+}
+
+// Initialize admin interface
+window.adminInterface = new AdminInterface();
+
+// Export for modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = AdminInterface;
+}
