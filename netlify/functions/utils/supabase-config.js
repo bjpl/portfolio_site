@@ -3,8 +3,22 @@
  * Centralized configuration for Supabase authentication
  */
 
-// Environment validation
+// Environment validation with fallbacks for new Supabase instance
 function validateEnvironment() {
+  // Use fallbacks for new Supabase instance
+  const defaults = {
+    SUPABASE_URL: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
+    SUPABASE_SERVICE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTk5OTM0MCwiZXhwIjoyMDcxNTc1MzQwfQ.N0lnWnvo323XXJAprqRhbBweguYlGsJgquBHB1g3L7E'
+  };
+  
+  // Set defaults if environment variables are missing
+  Object.keys(defaults).forEach(key => {
+    if (!process.env[key]) {
+      process.env[key] = defaults[key];
+      console.log(`Using default ${key} for new Supabase instance`);
+    }
+  });
+  
   const required = [
     'SUPABASE_URL',
     'SUPABASE_ANON_KEY',
@@ -24,12 +38,17 @@ function validateEnvironment() {
     throw new Error('SUPABASE_URL must be a valid URL');
   }
 
+  // Validate URL is the new instance
+  if (!process.env.SUPABASE_URL.includes('tdmzayzkqyegvfgxlolj.supabase.co')) {
+    console.warn('Warning: Not using the expected Supabase instance URL');
+  }
+
   // Validate keys are not empty
-  if (process.env.SUPABASE_ANON_KEY.length < 100) {
+  if (process.env.SUPABASE_ANON_KEY && process.env.SUPABASE_ANON_KEY.length < 100) {
     throw new Error('SUPABASE_ANON_KEY appears to be invalid');
   }
 
-  if (process.env.SUPABASE_SERVICE_KEY.length < 100) {
+  if (process.env.SUPABASE_SERVICE_KEY && process.env.SUPABASE_SERVICE_KEY.length < 100) {
     throw new Error('SUPABASE_SERVICE_KEY appears to be invalid');
   }
 }

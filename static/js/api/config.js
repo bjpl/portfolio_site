@@ -1,6 +1,7 @@
 /**
  * API Configuration Manager
- * Centralized configuration for all API settings
+ * Centralized configuration for Supabase backend integration
+ * Version: 4.0.0 - Supabase Backend Configuration
  */
 
 class APIConfig {
@@ -22,12 +23,19 @@ class APIConfig {
       environment: isProduction ? 'production' : 'development',
       isNetlify,
       
-      // API endpoints configuration
+      // Supabase API endpoints configuration
       endpoints: {
-        primary: isNetlify ? `${window.location.origin}/.netlify/functions` : null,
-        fallback: isProduction ? `${window.location.origin}/.netlify/functions` : null,
-        local: 'http://localhost:3001/api',
-        localAlt: 'http://localhost:8080/api'
+        supabase: {
+          url: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
+          rest: 'https://tdmzayzkqyegvfgxlolj.supabase.co/rest/v1',
+          auth: 'https://tdmzayzkqyegvfgxlolj.supabase.co/auth/v1',
+          realtime: 'wss://tdmzayzkqyegvfgxlolj.supabase.co/realtime/v1/websocket',
+          storage: 'https://tdmzayzkqyegvfgxlolj.supabase.co/storage/v1'
+        },
+        primary: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
+        fallback: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
+        local: 'http://localhost:54321', // Local Supabase
+        localAlt: 'http://localhost:3001/api' // Alternative local API
       },
       
       // Retry configuration
@@ -43,10 +51,11 @@ class APIConfig {
         defaultTTL: 300000, // 5 minutes
         maxSize: 100,
         endpoints: {
-          '/health': 60000,    // 1 minute
-          '/blog': 600000,     // 10 minutes
-          '/projects': 600000, // 10 minutes
-          '/contact': 0        // No cache
+          '/rest/v1/': 60000,        // 1 minute for health
+          '/rest/v1/blogs': 600000,   // 10 minutes
+          '/rest/v1/projects': 600000, // 10 minutes
+          '/rest/v1/contacts': 0,     // No cache
+          '/auth/v1/user': 300000     // 5 minutes for user data
         }
       },
       
@@ -58,13 +67,24 @@ class APIConfig {
         successThreshold: 1
       },
       
-      // Request configuration
+      // Supabase request configuration
       request: {
         timeout: 10000,      // 10 seconds
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          'apikey': this.getSupabaseAnonKey()
         }
+      },
+      
+      // Supabase specific configuration
+      supabase: {
+        anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIzNDQ4MzMsImV4cCI6MjA0NzkyMDgzM30.lJc1u0YlmtlbTK4bMbK9FcPyOkJFJiHJqfgFqBFYC5Q',
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true,
+        schema: 'public',
+        maxRetries: 3
       },
       
       // Demo mode configuration
@@ -138,14 +158,36 @@ class APIConfig {
     
     switch (type) {
       case 'primary':
-        return endpoints.primary || endpoints.fallback || endpoints.local;
+        return endpoints.supabase.url || endpoints.primary;
+      case 'rest':
+        return endpoints.supabase.rest;
+      case 'auth':
+        return endpoints.supabase.auth;
+      case 'realtime':
+        return endpoints.supabase.realtime;
+      case 'storage':
+        return endpoints.supabase.storage;
       case 'fallback':
-        return endpoints.fallback || endpoints.local;
+        return endpoints.fallback;
       case 'local':
         return endpoints.local;
       default:
-        return endpoints[type] || endpoints.primary;
+        return endpoints[type] || endpoints.supabase.url;
     }
+  }
+
+  /**
+   * Get Supabase anonymous key
+   */
+  getSupabaseAnonKey() {
+    return this.config.supabase?.anonKey || window.ENV?.SUPABASE_ANON_KEY;
+  }
+
+  /**
+   * Get Supabase configuration
+   */
+  getSupabaseConfig() {
+    return this.config.supabase;
   }
 
   /**

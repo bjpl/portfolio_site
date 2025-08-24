@@ -1,0 +1,21 @@
+{
+  "name": "portfolio-test-scripts",
+  "version": "1.0.0",
+  "description": "Test scripts for portfolio site infrastructure",
+  "main": "test-supabase.js",
+  "scripts": {
+    "test:supabase": "node test-supabase.js",
+    "test:all": "node test-supabase.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.56.0"
+  },
+  "keywords": [
+    "testing",
+    "supabase",
+    "portfolio",
+    "infrastructure"
+  ],
+  "author": "Portfolio Site",
+  "license": "MIT"
+}

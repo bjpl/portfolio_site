@@ -1,6 +1,7 @@
 /**
- * Universal API Client with Smart Environment Detection
- * Handles all environments seamlessly with fallback chain and error resilience
+ * Universal API Client with Supabase Integration
+ * Handles Supabase backend with smart fallback and error resilience
+ * Version: 4.0.0 - Supabase Backend Integration
  */
 
 class UniversalAPIClient {
@@ -30,41 +31,39 @@ class UniversalAPIClient {
     const protocol = window.location.protocol;
     const port = window.location.port;
     
-    // Build endpoint chain with priorities
+    // Build Supabase endpoint chain with priorities
     this.endpoints = [
-      // 1. Netlify Functions (production/preview)
+      // 1. Supabase Production (primary)
       {
-        name: 'netlify',
-        url: `${protocol}//${hostname}/.netlify/functions`,
+        name: 'supabase-production',
+        url: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
+        restUrl: 'https://tdmzayzkqyegvfgxlolj.supabase.co/rest/v1',
+        authUrl: 'https://tdmzayzkqyegvfgxlolj.supabase.co/auth/v1',
         priority: 1,
+        detect: () => true
+      },
+      
+      // 2. Supabase via Edge Functions (enhanced security)
+      {
+        name: 'supabase-edge',
+        url: `${protocol}//${hostname}/.netlify/edge-functions/supabase`,
+        restUrl: 'https://tdmzayzkqyegvfgxlolj.supabase.co/rest/v1',
+        authUrl: 'https://tdmzayzkqyegvfgxlolj.supabase.co/auth/v1',
+        priority: 2,
         detect: () => hostname.includes('netlify.app') || hostname.includes('netlify.com')
       },
       
-      // 2. Custom domain with Netlify Functions
+      // 3. Local development (if configured)
       {
-        name: 'production',
-        url: `${protocol}//${hostname}/.netlify/functions`,
-        priority: 2,
-        detect: () => !hostname.includes('localhost') && !hostname.includes('127.0.0.1')
-      },
-      
-      // 3. Local backend server
-      {
-        name: 'local',
-        url: 'http://localhost:3001/api',
+        name: 'local-supabase',
+        url: 'http://localhost:54321',
+        restUrl: 'http://localhost:54321/rest/v1',
+        authUrl: 'http://localhost:54321/auth/v1',
         priority: 3,
-        detect: () => hostname.includes('localhost') || hostname.includes('127.0.0.1')
+        detect: () => hostname.includes('localhost') && this.isSupabaseLocalRunning()
       },
       
-      // 4. Alternative local port
-      {
-        name: 'local-alt',
-        url: 'http://localhost:8080/api',
-        priority: 4,
-        detect: () => hostname.includes('localhost') || hostname.includes('127.0.0.1')
-      },
-      
-      // 5. Demo mode (always available as last resort)
+      // 4. Demo mode (always available as last resort)
       {
         name: 'demo',
         url: 'demo://mock',
@@ -143,14 +142,36 @@ class UniversalAPIClient {
     if (endpoint.name === 'demo') return true;
     
     try {
-      const response = await fetch(`${endpoint.url}/health`, {
-        method: 'GET',
+      // For Supabase, check the REST API health
+      const healthUrl = endpoint.restUrl || `${endpoint.url}/rest/v1`;
+      const response = await fetch(healthUrl, {
+        method: 'HEAD',
         timeout: 5000,
-        signal: AbortSignal.timeout(5000)
+        signal: AbortSignal.timeout(5000),
+        headers: {
+          'apikey': this.getSupabaseAnonKey(),
+          'Accept': 'application/json'
+        }
       });
       return response.ok;
     } catch (error) {
       this.healthStatus.set(endpoint.name, false);
+      return false;
+    }
+  }
+
+  /**
+   * Check if local Supabase is running
+   */
+  async isSupabaseLocalRunning() {
+    try {
+      const response = await fetch('http://localhost:54321/rest/v1/', {
+        method: 'HEAD',
+        timeout: 2000,
+        signal: AbortSignal.timeout(2000)
+      });
+      return response.ok;
+    } catch {
       return false;
     }
   }
@@ -246,16 +267,29 @@ class UniversalAPIClient {
   }
 
   /**
-   * Make request with exponential backoff retry
+   * Make Supabase request with authentication and retry logic
    */
   async requestWithRetry(apiEndpoint, endpoint, options, attempt = 1) {
     try {
-      const url = `${apiEndpoint.url}${endpoint}`;
+      // Determine the correct URL based on endpoint type
+      let url;
+      if (endpoint.startsWith('/auth/')) {
+        url = `${apiEndpoint.authUrl || apiEndpoint.url + '/auth/v1'}${endpoint.replace('/auth', '')}`;
+      } else if (endpoint.startsWith('/rest/') || endpoint.startsWith('/projects') || endpoint.startsWith('/blogs')) {
+        url = `${apiEndpoint.restUrl || apiEndpoint.url + '/rest/v1'}${endpoint.replace('/rest/v1', '')}`;
+      } else {
+        url = `${apiEndpoint.url}${endpoint}`;
+      }
+      
+      // Get authentication headers
+      const authHeaders = this.getSupabaseAuthHeaders();
       
       const response = await fetch(url, {
         method: options.method || 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          ...authHeaders,
           ...options.headers
         },
         body: options.body ? JSON.stringify(options.body) : undefined,
@@ -263,7 +297,8 @@ class UniversalAPIClient {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`HTTP ${response.status}: ${errorData.message || response.statusText}`);
       }
 
       const result = await response.json();
@@ -282,6 +317,62 @@ class UniversalAPIClient {
       await this.sleep(delay);
       
       return this.requestWithRetry(apiEndpoint, endpoint, options, attempt + 1);
+    }
+  }
+
+  /**
+   * Get Supabase authentication headers
+   */
+  getSupabaseAuthHeaders() {
+    const headers = {};
+    
+    // Always include the anon key
+    const anonKey = this.getSupabaseAnonKey();
+    if (anonKey) {
+      headers['apikey'] = anonKey;
+    }
+    
+    // Include access token if user is authenticated
+    const accessToken = this.getSupabaseAccessToken();
+    if (accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+    
+    return headers;
+  }
+
+  /**
+   * Get Supabase anonymous key
+   */
+  getSupabaseAnonKey() {
+    return window.ENV?.SUPABASE_ANON_KEY || 
+           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIzNDQ4MzMsImV4cCI6MjA0NzkyMDgzM30.lJc1u0YlmtlbTK4bMbK9FcPyOkJFJiHJqfgFqBFYC5Q';
+  }
+
+  /**
+   * Get Supabase access token from session
+   */
+  getSupabaseAccessToken() {
+    try {
+      // Try to get from Supabase client if available
+      if (window.supabase?.auth?.getSession) {
+        const session = window.supabase.auth.getSession();
+        return session?.data?.session?.access_token;
+      }
+      
+      // Fallback to localStorage
+      const keys = Object.keys(localStorage).filter(key => key.startsWith('sb-') && key.includes('auth-token'));
+      for (const key of keys) {
+        const session = JSON.parse(localStorage.getItem(key) || '{}');
+        if (session.access_token) {
+          return session.access_token;
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.warn('Error getting Supabase access token:', error);
+      return null;
     }
   }
 

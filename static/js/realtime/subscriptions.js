@@ -43,11 +43,10 @@ class RealtimeSubscriptions {
    * Get Supabase configuration from environment
    */
   async getSupabaseConfig() {
-    // In production, these would come from environment variables
-    // For demo purposes, using mock configuration
+    // Production Supabase configuration
     return {
-      url: 'https://your-project.supabase.co',
-      anonKey: 'your-anon-key'
+      url: window.ENV?.SUPABASE_URL || 'https://tdmzayzkqyegvfgxlolj.supabase.co',
+      anonKey: window.ENV?.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM'
     };
   }
 

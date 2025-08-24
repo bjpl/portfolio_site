@@ -1,7 +1,7 @@
 /**
  * Universal API Configuration
  * Single source of truth for all API endpoints and environments
- * Version: 3.0.0 - Fixed for vocal-pony-24e3de.netlify.app
+ * Version: 4.0.0 - Updated for Supabase backend integration
  */
 
 class CentralAPIConfig {
@@ -39,21 +39,30 @@ class CentralAPIConfig {
             isNetlify: isNetlify,
             isProduction: !isDev && !isNetlify,
 
-            // API Base URLs - Fixed for Netlify routing
+            // Supabase API Configuration
             api: {
                 development: {
-                    http: 'http://localhost:3000/api',
-                    ws: 'ws://localhost:3000/ws'
+                    http: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
+                    rest: 'https://tdmzayzkqyegvfgxlolj.supabase.co/rest/v1',
+                    auth: 'https://tdmzayzkqyegvfgxlolj.supabase.co/auth/v1',
+                    realtime: 'wss://tdmzayzkqyegvfgxlolj.supabase.co/realtime/v1/websocket',
+                    storage: 'https://tdmzayzkqyegvfgxlolj.supabase.co/storage/v1'
                 },
                 netlify: {
-                    // Use direct .netlify/functions path for Netlify
-                    http: '/.netlify/functions',
-                    functionsPath: '/.netlify/functions',
-                    ws: null // WebSocket not available on Netlify
+                    // Supabase through Netlify Edge Functions for enhanced security
+                    http: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
+                    rest: 'https://tdmzayzkqyegvfgxlolj.supabase.co/rest/v1',
+                    auth: 'https://tdmzayzkqyegvfgxlolj.supabase.co/auth/v1',
+                    functionsPath: '/.netlify/edge-functions',
+                    realtime: 'wss://tdmzayzkqyegvfgxlolj.supabase.co/realtime/v1/websocket',
+                    storage: 'https://tdmzayzkqyegvfgxlolj.supabase.co/storage/v1'
                 },
                 production: {
-                    http: '/api',
-                    ws: `wss://${hostname}/ws`
+                    http: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
+                    rest: 'https://tdmzayzkqyegvfgxlolj.supabase.co/rest/v1',
+                    auth: 'https://tdmzayzkqyegvfgxlolj.supabase.co/auth/v1',
+                    realtime: 'wss://tdmzayzkqyegvfgxlolj.supabase.co/realtime/v1/websocket',
+                    storage: 'https://tdmzayzkqyegvfgxlolj.supabase.co/storage/v1'
                 }
             },
 
@@ -85,18 +94,39 @@ class CentralAPIConfig {
      */
     getAPIBaseURL() {
         const env = this.config.environment;
-        if (env === 'netlify') {
-            return this.config.api[env]?.http || '/api';
-        }
         return this.config.api[env]?.http || this.config.api.production.http;
     }
 
     /**
-     * Get WebSocket URL
+     * Get Supabase REST API URL
+     */
+    getSupabaseRestURL() {
+        const env = this.config.environment;
+        return this.config.api[env]?.rest || this.config.api.production.rest;
+    }
+
+    /**
+     * Get Supabase Auth URL
+     */
+    getSupabaseAuthURL() {
+        const env = this.config.environment;
+        return this.config.api[env]?.auth || this.config.api.production.auth;
+    }
+
+    /**
+     * Get Supabase Storage URL
+     */
+    getSupabaseStorageURL() {
+        const env = this.config.environment;
+        return this.config.api[env]?.storage || this.config.api.production.storage;
+    }
+
+    /**
+     * Get WebSocket URL (Supabase Realtime)
      */
     getWebSocketURL() {
         const env = this.config.environment;
-        return this.config.api[env]?.ws;
+        return this.config.api[env]?.realtime;
     }
 
     /**
@@ -123,19 +153,29 @@ class CentralAPIConfig {
     }
 
     /**
-     * Map API endpoints to Netlify function names
+     * Map API endpoints to Supabase endpoints
      */
-    mapToNetlifyFunction(endpoint) {
+    mapToSupabaseEndpoint(endpoint) {
         const mappings = {
-            '/auth/login': 'auth-login',
-            '/auth/me': 'auth-me',
-            '/auth/logout': 'auth-logout',
-            '/auth/refresh': 'auth-refresh',
-            '/health': 'env-check',
-            '/contact': 'contact'
+            // Auth endpoints
+            '/auth/login': '/auth/v1/token?grant_type=password',
+            '/auth/signup': '/auth/v1/signup',
+            '/auth/me': '/auth/v1/user',
+            '/auth/logout': '/auth/v1/logout',
+            '/auth/refresh': '/auth/v1/token?grant_type=refresh_token',
+            '/auth/reset': '/auth/v1/recover',
+            
+            // Data endpoints
+            '/projects': '/rest/v1/projects',
+            '/blogs': '/rest/v1/blogs', 
+            '/contacts': '/rest/v1/contacts',
+            '/users': '/rest/v1/profiles',
+            
+            // Health check
+            '/health': '/rest/v1/'
         };
         
-        return mappings[endpoint] || endpoint.replace(/^//, '').replace(/\//g, '-');
+        return mappings[endpoint] || endpoint;
     }
 
     /**
@@ -181,15 +221,9 @@ class CentralAPIConfig {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-            // Use appropriate health endpoint based on environment
-            let healthURL;
-            if (this.config.isNetlify) {
-                healthURL = '/.netlify/functions/env-check';
-            } else if (this.config.isDevelopment) {
-                healthURL = 'http://localhost:3000/api/health';
-            } else {
-                healthURL = '/api/health';
-            }
+            // Use Supabase health endpoint
+            const baseURL = this.getSupabaseRestURL();
+            const healthURL = `${baseURL}/`;
 
             const response = await fetch(healthURL, {
                 method: 'GET',
@@ -325,20 +359,58 @@ class CentralAPIConfig {
     }
 
     /**
-     * Token management
+     * Supabase token management
      */
     getToken() {
-        return localStorage.getItem('token') || localStorage.getItem('accessToken');
+        // Try to get from Supabase session first
+        const session = this.getSupabaseSession();
+        if (session?.access_token) {
+            return session.access_token;
+        }
+        // Fallback to localStorage
+        return localStorage.getItem('supabase.auth.token') || localStorage.getItem('token');
     }
 
     setToken(token) {
         localStorage.setItem('token', token);
+        // Also update Supabase token if needed
+        if (window.supabase?.auth) {
+            localStorage.setItem('supabase.auth.token', token);
+        }
     }
 
     clearToken() {
+        // Clear all possible token storage locations
         localStorage.removeItem('token');
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem('supabase.auth.token');
+        // Clear Supabase session
+        Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('sb-')) {
+                localStorage.removeItem(key);
+            }
+        });
+    }
+
+    /**
+     * Get Supabase session from localStorage
+     */
+    getSupabaseSession() {
+        try {
+            // Supabase stores session with project ref as key
+            const keys = Object.keys(localStorage).filter(key => key.startsWith('sb-'));
+            for (const key of keys) {
+                if (key.includes('auth-token')) {
+                    const session = JSON.parse(localStorage.getItem(key));
+                    return session;
+                }
+            }
+            return null;
+        } catch (error) {
+            console.warn('Error reading Supabase session:', error);
+            return null;
+        }
     }
 
     /**

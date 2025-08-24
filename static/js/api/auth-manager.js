@@ -1,6 +1,7 @@
 /**
  * Authentication Manager
- * Handles user authentication state and provides auth utilities
+ * Handles Supabase user authentication state and provides auth utilities
+ * Version: 4.0.0 - Supabase Integration
  */
 
 class AuthManager {
@@ -33,25 +34,92 @@ class AuthManager {
 
     async checkAuthStatus() {
         try {
-            const response = await this.api.request('/auth/me', { skipCache: true });
-            if (response.success && response.user) {
-                this.currentUser = response.user;
-                this.isAuthenticated = true;
-                this.notifyListeners('login', response.user);
+            // Check for Supabase session first
+            const supabaseSession = this.getSupabaseSession();
+            if (supabaseSession?.access_token) {
+                // Verify with Supabase API
+                const response = await this.api.request('/auth/v1/user', { 
+                    skipCache: true,
+                    headers: {
+                        'Authorization': `Bearer ${supabaseSession.access_token}`
+                    }
+                });
+                
+                if (response && !response.error) {
+                    this.currentUser = response;
+                    this.isAuthenticated = true;
+                    this.notifyListeners('login', response);
+                }
             }
         } catch (error) {
-            console.log('No authenticated user found');
+            console.log('No authenticated user found:', error.message);
+            this.clearAuthState();
         }
+    }
+
+    /**
+     * Get Supabase session from localStorage
+     */
+    getSupabaseSession() {
+        try {
+            // Supabase stores sessions with project ref in the key
+            const keys = Object.keys(localStorage).filter(key => 
+                key.startsWith('sb-') && key.includes('auth-token')
+            );
+            
+            for (const key of keys) {
+                const session = JSON.parse(localStorage.getItem(key) || '{}');
+                if (session.access_token && session.expires_at > Date.now() / 1000) {
+                    return session;
+                }
+            }
+            return null;
+        } catch (error) {
+            console.warn('Error reading Supabase session:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Clear authentication state
+     */
+    clearAuthState() {
+        this.currentUser = null;
+        this.isAuthenticated = false;
+        this.clearSupabaseSession();
+    }
+
+    /**
+     * Clear Supabase session data
+     */
+    clearSupabaseSession() {
+        // Clear all Supabase session keys
+        Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('sb-')) {
+                localStorage.removeItem(key);
+            }
+        });
     }
 
     async login(credentials) {
         try {
-            const response = await this.api.login(credentials);
-            if (response.success) {
-                // User data will be set via event listener
-                return { success: true, user: response.user };
+            // Use Supabase auth endpoint
+            const response = await this.api.request('/auth/v1/token?grant_type=password', {
+                method: 'POST',
+                body: {
+                    email: credentials.email || credentials.username,
+                    password: credentials.password
+                },
+                skipCache: true
+            });
+            
+            if (response.access_token) {
+                // Store session and get user data
+                this.storeSupabaseSession(response);
+                await this.checkAuthStatus();
+                return { success: true, user: this.currentUser };
             } else {
-                throw new Error(response.message || 'Login failed');
+                throw new Error(response.error_description || response.error || 'Login failed');
             }
         } catch (error) {
             console.error('Login error:', error);
@@ -59,13 +127,50 @@ class AuthManager {
         }
     }
 
+    /**
+     * Store Supabase session in localStorage
+     */
+    storeSupabaseSession(authResponse) {
+        const session = {
+            access_token: authResponse.access_token,
+            refresh_token: authResponse.refresh_token,
+            expires_in: authResponse.expires_in,
+            expires_at: Math.floor(Date.now() / 1000) + authResponse.expires_in,
+            token_type: authResponse.token_type || 'bearer',
+            user: authResponse.user
+        };
+        
+        // Use the same key format as Supabase client
+        const projectRef = 'tdmzayzkqyegvfgxlolj'; // Our Supabase project ref
+        const key = `sb-${projectRef}-auth-token`;
+        localStorage.setItem(key, JSON.stringify(session));
+    }
+
     async register(userData) {
         try {
-            const response = await this.api.register(userData);
-            if (response.success) {
-                return { success: true, message: response.message };
+            // Use Supabase auth signup endpoint
+            const response = await this.api.request('/auth/v1/signup', {
+                method: 'POST',
+                body: {
+                    email: userData.email,
+                    password: userData.password,
+                    data: userData.metadata || {}
+                },
+                skipCache: true
+            });
+            
+            if (response.user || response.id) {
+                // Registration successful - may require email confirmation
+                return { 
+                    success: true, 
+                    message: response.confirmation_sent_at ? 
+                        'Please check your email to confirm your account' : 
+                        'Registration successful',
+                    user: response.user,
+                    confirmationRequired: !!response.confirmation_sent_at
+                };
             } else {
-                throw new Error(response.message || 'Registration failed');
+                throw new Error(response.error_description || response.error || 'Registration failed');
             }
         } catch (error) {
             console.error('Registration error:', error);
@@ -75,23 +180,40 @@ class AuthManager {
 
     async logout() {
         try {
-            await this.api.logout();
-            // User state will be cleared via event listener
-            return { success: true };
+            const session = this.getSupabaseSession();
+            if (session?.access_token) {
+                // Call Supabase logout endpoint
+                await this.api.request('/auth/v1/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${session.access_token}`
+                    },
+                    skipCache: true
+                });
+            }
         } catch (error) {
             console.error('Logout error:', error);
-            // Still clear local state even if server request fails
-            this.currentUser = null;
-            this.isAuthenticated = false;
+        } finally {
+            // Always clear local state
+            this.clearAuthState();
             this.notifyListeners('logout');
-            throw error;
         }
+        
+        return { success: true };
     }
 
     async resetPassword(email) {
         try {
-            const response = await this.api.post('/auth/reset-password', { email });
-            return response;
+            const response = await this.api.request('/auth/v1/recover', {
+                method: 'POST',
+                body: { email },
+                skipCache: true
+            });
+            
+            return {
+                success: true,
+                message: 'Password reset email sent. Please check your inbox.'
+            };
         } catch (error) {
             console.error('Password reset error:', error);
             throw error;
@@ -168,7 +290,8 @@ class AuthManager {
 
     // Utility methods
     getToken() {
-        return this.api.auth.token;
+        const session = this.getSupabaseSession();
+        return session?.access_token || null;
     }
 
     getUser() {

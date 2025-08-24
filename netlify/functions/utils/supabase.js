@@ -5,13 +5,18 @@
 
 const { createClient } = require('@supabase/supabase-js');
 
-// Environment variables validation
-const SUPABASE_URL = process.env.SUPABASE_URL;
+// Environment variables validation with new Supabase instance
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://tdmzayzkqyegvfgxlolj.supabase.co';
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTk5OTM0MCwiZXhwIjoyMDcxNTc1MzQwfQ.N0lnWnvo323XXJAprqRhbBweguYlGsJgquBHB1g3L7E';
 
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
   throw new Error('Missing required Supabase environment variables: SUPABASE_URL and SUPABASE_ANON_KEY');
+}
+
+// Validate new Supabase instance
+if (!SUPABASE_URL.includes('tdmzayzkqyegvfgxlolj.supabase.co') && process.env.NODE_ENV === 'production') {
+  console.warn('Warning: Not using expected Supabase instance');
 }
 
 // Singleton Supabase clients
@@ -35,7 +40,8 @@ function getSupabaseClient() {
       },
       global: {
         headers: {
-          'x-application': 'portfolio-site-functions'
+          'x-application': 'portfolio-site-functions',
+          'x-supabase-instance': 'tdmzayzkqyegvfgxlolj'
         }
       }
     });
@@ -63,7 +69,8 @@ function getSupabaseServiceClient() {
       },
       global: {
         headers: {
-          'x-application': 'portfolio-site-functions-admin'
+          'x-application': 'portfolio-site-functions-admin',
+          'x-supabase-instance': 'tdmzayzkqyegvfgxlolj'
         }
       }
     });

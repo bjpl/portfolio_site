@@ -7,11 +7,13 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Public environment variables (safe for client-side)
-const supabaseUrl = window.ENV?.SUPABASE_URL || 'YOUR_SUPABASE_URL';
-const supabaseAnonKey = window.ENV?.SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY';
+const supabaseUrl = window.ENV?.SUPABASE_URL || 'https://tdmzayzkqyegvfgxlolj.supabase.co';
+const supabaseAnonKey = window.ENV?.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM';
 
 if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes('YOUR_')) {
   console.warn('Supabase client not configured. Please set SUPABASE_URL and SUPABASE_ANON_KEY');
+} else {
+  console.log('Supabase client configured successfully');
 }
 
 // Public client for frontend use

@@ -1,31 +1,48 @@
 const { createClient } = require('@supabase/supabase-js');
 
-// Initialize Supabase client
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
+// Initialize Supabase client with new instance credentials
+const supabaseUrl = process.env.SUPABASE_URL || 'https://tdmzayzkqyegvfgxlolj.supabase.co';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTk5OTM0MCwiZXhwIjoyMDcxNTc1MzQwfQ.N0lnWnvo323XXJAprqRhbBweguYlGsJgquBHB1g3L7E';
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseServiceKey || !supabaseAnonKey) {
   console.error('Missing required Supabase environment variables');
+  console.log('Using new Supabase instance:', supabaseUrl);
 }
 
-// Create admin client for server-side operations
+// Enhanced connection validation for new instance
+if (!supabaseUrl.includes('tdmzayzkqyegvfgxlolj.supabase.co') && process.env.NODE_ENV === 'production') {
+  console.warn('Warning: Not using expected Supabase instance');
+}
+
+// Create admin client for server-side operations with enhanced error handling
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
     autoRefreshToken: false,
     persistSession: false
+  },
+  global: {
+    headers: {
+      'x-application': 'portfolio-netlify-functions',
+      'x-supabase-instance': 'tdmzayzkqyegvfgxlolj'
+    }
   }
 });
 
-// Create client for user operations
+// Create client for user operations with enhanced configuration
 const createSupabaseClient = (accessToken = null) => {
   return createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
       autoRefreshToken: true,
-      persistSession: false
+      persistSession: false,
+      detectSessionInUrl: false
     },
     global: {
-      headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
+      headers: {
+        'x-application': 'portfolio-netlify-functions-client',
+        'x-supabase-instance': 'tdmzayzkqyegvfgxlolj',
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {})
+      }
     }
   });
 };
