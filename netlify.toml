@@ -102,13 +102,13 @@
 # Admin Panel Routes - Must come before API routes
 [[redirects]]
   from = "/admin"
-  to = "/admin/index.html"
+  to = "/admin-login.html"
   status = 200
   force = true
 
 [[redirects]]
   from = "/admin/"
-  to = "/admin/index.html"
+  to = "/admin-login.html"
   status = 200
   force = true
 
