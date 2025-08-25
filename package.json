@@ -120,7 +120,7 @@
     "concurrently": "^9.2.0",
     "critical": "^7.2.1",
     "cssnano": "^7.1.1",
-    "dotenv": "^16.6.1",
+    "dotenv": "^17.2.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.7",
     "enzyme-to-json": "^3.6.2",
