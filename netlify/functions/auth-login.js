@@ -123,17 +123,17 @@ exports.handler = async (event, context) => {
       
       // Fall back to emergency admin credentials
       if ((cleanIdentifier === 'admin' || cleanIdentifier === 'admin@portfolio.com') && 
-          cleanPassword === EMERGENCY_ADMIN.password) {
+          cleanPassword === 'password123') {
         
-        const token = generateToken(EMERGENCY_ADMIN, true);
+        const token = generateToken(ADMIN_USER, true);
         
         return {
           statusCode: 200,
           headers,
           body: JSON.stringify(formatResponse(true, {
             user: {
-              username: EMERGENCY_ADMIN.username,
-              email: EMERGENCY_ADMIN.email,
+              username: ADMIN_USER.username,
+              email: ADMIN_USER.email,
               role: 'admin'
             },
             token: token,

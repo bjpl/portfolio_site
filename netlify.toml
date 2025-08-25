@@ -57,6 +57,11 @@
   NEXT_PUBLIC_SUPABASE_URL = "https://tdmzayzkqyegvfgxlolj.supabase.co"
   SUPABASE_URL = "https://tdmzayzkqyegvfgxlolj.supabase.co"
   
+  # Admin Panel Configuration
+  ADMIN_PANEL_ENABLED = "true"
+  ADMIN_CACHE_BUSTING = "true"
+  ADMIN_EMERGENCY_ACCESS = "true"
+  
   # Feature Flags for Production
   ENABLE_ANALYTICS = "true"
   ENABLE_CONTACT_FORM = "true"
@@ -256,13 +261,20 @@
   force = true
   headers = {Cache-Control = "no-cache, no-store, must-revalidate, max-age=0"}
 
-# Admin static files with cache busting
+# Admin static files with enhanced cache busting
 [[redirects]]
   from = "/admin/*"
-  to = "/admin/:splat?v=2025-08-24-v4"
+  to = "/admin/:splat?v=2025-08-25-v5"
   status = 200
   force = true
-  headers = {Cache-Control = "no-cache, no-store, must-revalidate, max-age=0"}
+  headers = {Cache-Control = "no-cache, no-store, must-revalidate, max-age=0, private"}
+  
+# Admin integration test page
+[[redirects]]
+  from = "/admin/test"
+  to = "/tests/admin-integration-test.html"
+  status = 200
+  force = false
 
 # Admin API endpoints with authentication
 [[redirects]]

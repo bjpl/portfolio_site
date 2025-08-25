@@ -1,0 +1,34 @@
+{
+  "timestamp": "2025-08-25T04:05:35.507Z",
+  "database_url": "https://tdmzayzkqyegvfgxlolj.supabase.co",
+  "environment": "development",
+  "deployment_target": "netlify",
+  "test_results": {
+    "connectivity": false,
+    "schema": true,
+    "authentication": false,
+    "rls": true,
+    "performance": true,
+    "fixes_applied": [
+      "environment_variables_validated",
+      "attempted_create_profiles",
+      "attempted_create_projects",
+      "attempted_create_blog_posts",
+      "attempted_create_contact_messages",
+      "attempted_create_analytics_events",
+      "cors_configuration_checked",
+      "rls_profiles_configured",
+      "rls_projects_configured",
+      "rls_blog_posts_configured",
+      "performance_monitoring_enabled"
+    ]
+  },
+  "recommendations": [
+    "Check network connectivity to Supabase instance",
+    "Verify SUPABASE_URL is correct",
+    "Verify SUPABASE_ANON_KEY is valid",
+    "Check authentication configuration in Supabase dashboard"
+  ],
+  "health_score": 60,
+  "status": "WARNING"
+}
