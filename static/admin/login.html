@@ -5,8 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - Portfolio Dashboard</title>
     
-    <!-- CRITICAL: Client Configuration - MUST load first for browser compatibility -->
-    <script src="/js/config/client-config.js"></script>
+    <!-- Inline configuration script - MUST load first -->
+    <script>
+    window.SITE_CONFIG = {
+        isNetlify: window.location.hostname.includes('netlify.app'),
+        apiBase: window.location.hostname.includes('netlify.app') ? '/.netlify/functions' : '/api',
+        supabaseUrl: 'https://tdmzayzkqyegvfgxlolj.supabase.co'
+    };
+    </script>
+    
+    <!-- Configuration scripts in proper loading order -->
+    <script src="/js/config/init-config.js"></script>
+    <script src="/js/config/api-config.js"></script>
+    <script src="/js/unified-api-client.js"></script>
     
     <!-- Legacy compatibility scripts -->
     <script src="/js/config/supabase-config.js"></script>
