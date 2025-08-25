@@ -5,14 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - Portfolio Dashboard</title>
     
-    <!-- Supabase Configuration (load first, before other scripts) -->
-    <script>
-    // Inline Supabase configuration as fallback
-    window.SUPABASE_CONFIG = {
-      url: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
-      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM'
-    };
-    </script>
+    <!-- CRITICAL: Client Configuration - MUST load first for browser compatibility -->
+    <script src="/js/config/client-config.js"></script>
+    
+    <!-- Legacy compatibility scripts -->
     <script src="/js/config/supabase-config.js"></script>
     
     <style>
@@ -278,16 +274,163 @@
     </div>
     
     
-    <!-- Load essential systems first -->
-    <script src="js/loading-manager.js"></script>
-    <script src="js/client-auth.js"></script>
-    <script src="js/auth-manager.js"></script>
-    <script src="js/api-config.js"></script>
-    
-    <!-- Load unified scripts with fallback handling -->
-    <script src="js/toast.js" onerror="console.warn('toast.js failed to load')"></script>
-    <script src="js/unified-api-client.js" onerror="console.warn('unified-api-client.js failed to load')"></script>
-    <script src="js/utils.js" onerror="console.warn('utils.js failed to load')"></script>
+    <!-- Script Loading Manager - Initialize proper loading order -->
+    <script>
+    window.ScriptLoadingManager = {
+        dependencies: new Map(),
+        loaded: new Set(),
+        retryAttempts: 3,
+        retryDelay: 1000,
+
+        // Load script with retry logic
+        async loadScript(src, options = {}) {
+            const { required = true, timeout = 10000, retries = this.retryAttempts } = options;
+            
+            if (this.loaded.has(src)) {
+                return Promise.resolve();
+            }
+
+            for (let attempt = 0; attempt <= retries; attempt++) {
+                try {
+                    await this.loadSingleScript(src, timeout);
+                    this.loaded.add(src);
+                    console.log(`✅ Loaded: ${src}`);
+                    return;
+                } catch (error) {
+                    console.warn(`⚠️ Failed to load ${src} (attempt ${attempt + 1}/${retries + 1}):`, error.message);
+                    if (attempt < retries) {
+                        await this.delay(this.retryDelay * (attempt + 1));
+                    }
+                }
+            }
+
+            if (required) {
+                throw new Error(`Required script failed to load: ${src}`);
+            }
+            console.warn(`⚠️ Optional script failed to load: ${src}`);
+        },
+
+        // Load single script with timeout
+        loadSingleScript(src, timeout) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = () => reject(new Error(`Script load error: ${src}`));
+                
+                const timeoutId = setTimeout(() => {
+                    reject(new Error(`Script load timeout: ${src}`));
+                }, timeout);
+                
+                script.onload = () => {
+                    clearTimeout(timeoutId);
+                    resolve();
+                };
+                
+                document.head.appendChild(script);
+            });
+        },
+
+        // Load scripts in sequence
+        async loadSequence(scripts) {
+            for (const script of scripts) {
+                if (typeof script === 'string') {
+                    await this.loadScript(script);
+                } else {
+                    await this.loadScript(script.src, script.options || {});
+                }
+            }
+        },
+
+        // Wait for global to be available
+        async waitForGlobal(globalName, timeout = 10000) {
+            const startTime = Date.now();
+            while (!window[globalName] && Date.now() - startTime < timeout) {
+                await this.delay(100);
+            }
+            if (!window[globalName]) {
+                throw new Error(`Global ${globalName} not available within timeout`);
+            }
+            return window[globalName];
+        },
+
+        // Delay utility
+        delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    };
+    </script>
+
+    <!-- Initialize proper script loading order -->
+    <script>
+    window.addEventListener('DOMContentLoaded', async () => {
+        try {
+            console.log('🔄 Starting script initialization sequence...');
+            
+            // Phase 1: Core Configuration
+            console.log('📋 Phase 1: Loading core configuration...');
+            await window.ScriptLoadingManager.loadSequence([
+                { src: 'js/loading-manager.js', options: { required: true } },
+                { src: '/js/config/supabase-config.js', options: { required: false } },
+                { src: 'js/api-config.js', options: { required: true } }
+            ]);
+            
+            // Wait for LoadingManager to be ready
+            const LoadingManager = await window.ScriptLoadingManager.waitForGlobal('LoadingManager');
+            LoadingManager.showLoading('Initializing authentication system...');
+            
+            // Phase 2: Authentication Systems
+            console.log('🔐 Phase 2: Loading authentication systems...');
+            await window.ScriptLoadingManager.loadSequence([
+                { src: 'js/unified-auth-manager.js', options: { required: true } },
+                { src: '/admin/client-auth.js', options: { required: false } },
+                { src: '/admin/js/api-config-netlify.js', options: { required: false } }
+            ]);
+            
+            // Wait for authentication to be ready
+            const UnifiedAuthManager = await window.ScriptLoadingManager.waitForGlobal('UnifiedAuthManager');
+            if (!UnifiedAuthManager.initialized) {
+                await UnifiedAuthManager.init();
+            }
+            
+            // Phase 3: API and Utility Scripts
+            console.log('🔧 Phase 3: Loading API and utilities...');
+            await window.ScriptLoadingManager.loadSequence([
+                { src: 'js/unified-api-client.js', options: { required: false } },
+                { src: 'js/toast.js', options: { required: false } },
+                { src: 'js/utils.js', options: { required: false } }
+            ]);
+            
+            // Phase 4: Configuration Checker (after everything else)
+            console.log('✅ Phase 4: Loading configuration checker...');
+            await window.ScriptLoadingManager.loadSequence([
+                { src: '/js/core/config-checker.js', options: { required: false } }
+            ]);
+            
+            // Wait for config checker and run validation
+            if (window.ConfigChecker) {
+                await window.ConfigChecker.init();
+            }
+            
+            LoadingManager.hideLoading();
+            console.log('✅ All systems initialized successfully!');
+            
+            // Update status indicators
+            updateStatusIndicators();
+            
+        } catch (error) {
+            console.error('❌ Failed to initialize login system:', error);
+            if (window.LoadingManager) {
+                window.LoadingManager.showError(
+                    'Initialization Failed',
+                    `Failed to load required scripts: ${error.message}. Please refresh the page.`
+                );
+            } else {
+                alert(`Login system initialization failed: ${error.message}\n\nPlease refresh the page.`);
+            }
+        }
+    });
+    </script>
     
     <script>
         function showAlert(message, type = 'danger') {
@@ -313,14 +456,14 @@
             btnLoader.style.display = isLoading ? 'inline-block' : 'none';
         }
         
-        // Unified login handler
+        // Enhanced login handler with unified authentication
         async function handleLogin(event) {
             if (event) {
                 event.preventDefault();
                 event.stopPropagation();
             }
             
-            const username = document.getElementById('username').value;
+            const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             const remember = document.getElementById('remember').checked;
             
@@ -332,105 +475,145 @@
             setLoading(true);
             
             try {
-                // Enhanced authentication with multiple fallbacks
-                if (window.ClientAuth && typeof window.ClientAuth.authenticate === 'function') {
-                    const clientResult = await window.ClientAuth.authenticate(username, password);
-                    if (clientResult.success) {
-                        showAlert('Login successful!', 'success');
-                        setTimeout(() => {
-                            const urlParams = new URLSearchParams(window.location.search);
-                            const redirect = urlParams.get('redirect') || 'dashboard.html';
-                            window.location.href = redirect;
-                        }, 1000);
-                        setLoading(false);
-                        return false;
-                    }
+                // Wait for authentication manager to initialize
+                if (!window.UnifiedAuthManager.initialized) {
+                    await window.UnifiedAuthManager.init();
                 }
                 
-                // If enhanced client auth failed, show helpful message
-                throw new Error('Authentication failed. Please check your credentials.');
+                // Authenticate with unified manager
+                const authResult = await window.UnifiedAuthManager.authenticate(username, password);
                 
-                // This should not be reached due to client auth above
-                throw new Error('Authentication system not properly initialized');
+                if (authResult.success) {
+                    const authMethod = authResult.method === 'supabase' ? 'Supabase' : 
+                                     authResult.method === 'fallback' ? 'Emergency' : 'System';
+                    showAlert(`${authMethod} login successful! Redirecting...`, 'success');
+                    
+                    // Store remember preference if needed
+                    if (remember) {
+                        localStorage.setItem('rememberLogin', 'true');
+                    }
+                    
+                    // Redirect after short delay
+                    setTimeout(() => {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const redirect = urlParams.get('returnTo') || urlParams.get('redirect') || 'dashboard.html';
+                        window.location.href = redirect;
+                    }, 1000);
+                    
+                } else {
+                    throw new Error(authResult.error || 'Invalid credentials');
+                }
+                
             } catch (error) {
                 console.error('Login error:', error);
                 
-                // Show specific error message based on the error
-                let errorMessage = 'Login failed. ';
+                let errorMessage = 'Login failed: ';
                 
-                if (error.name === 'TypeError' || error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    // Backend is unavailable, provide helpful guidance
-                    console.log('🔄 Network error during authentication');
-                    
+                if (error.message.includes('fetch') || error.message.includes('network') || error.name === 'TypeError') {
                     const hostname = window.location.hostname;
-                    const isNetlify = hostname.includes('netlify.app') || hostname === 'vocal-pony-24e3de.netlify.app';
+                    const isNetlify = hostname.includes('netlify.app');
                     
                     if (isNetlify) {
-                        errorMessage = '🚨 Authentication service is temporarily offline. Please try these credentials:\n\nUsername: admin\nPassword: password123\n\nOr use the demo access below.';
-                    } else if (hostname === 'localhost' || hostname === '127.0.0.1') {
-                        errorMessage = 'Local backend not running. Start the server with:\n\ncd backend && npm start\n\nOr continue with demo credentials: admin/password123';
+                        errorMessage = '🚨 Supabase service temporarily unavailable.\n\nTry emergency credentials:\n- Username: admin / Password: portfolio2024!\n- Username: demo / Password: demo123';
+                    } else if (hostname.includes('localhost')) {
+                        errorMessage = 'Backend service not available.\n\nUse emergency access or check if services are running.';
                     } else {
-                        errorMessage = '🚨 Service temporarily unavailable. Try:\n\nUsername: admin\nPassword: password123';
+                        errorMessage = 'Authentication service unavailable.\n\nTry emergency credentials below.';
                     }
-                    
-                    // This error handling is now redundant as client auth is primary
+                } else if (error.message.includes('Invalid login credentials') || error.message.includes('Invalid credentials')) {
+                    errorMessage = 'Invalid email or password.\n\nPlease check your credentials or use emergency access.';
                 } else {
-                    errorMessage += error.message || 'Please check your credentials and try again.';
+                    errorMessage += error.message || 'Unknown error occurred.';
                 }
                 
                 showAlert(errorMessage);
+            } finally {
                 setLoading(false);
             }
             
             return false;
         }
         
-        // Enhanced initialization with loading management
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Show loading while initializing
-            if (window.LoadingManager) {
-                window.LoadingManager.showLoading('Initializing login system...');
-            }
+        // Enhanced initialization - this runs after script loading manager
+        async function initializeLoginSystem() {
+            console.log('🔑 Initializing login system...');
             
-            // Wait for authentication systems to load
-            let authReady = false;
-            let attempts = 0;
-            while (!authReady && attempts < 50) {
-                if (window.ClientAuth?.initialized || window.AuthManager) {
-                    authReady = true;
-                } else {
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                    attempts++;
+            try {
+                // Wait for UnifiedAuthManager to be fully ready
+                if (!window.UnifiedAuthManager?.initialized) {
+                    console.log('⏳ Waiting for UnifiedAuthManager initialization...');
+                    let attempts = 0;
+                    while ((!window.UnifiedAuthManager?.initialized) && attempts < 30) {
+                        await new Promise(resolve => setTimeout(resolve, 200));
+                        attempts++;
+                    }
                 }
+                
+                // Check if already authenticated
+                if (window.UnifiedAuthManager?.isAuthenticated()) {
+                    console.log('✅ User already authenticated, redirecting to dashboard');
+                    showAlert('Already logged in. Redirecting...', 'success');
+                    setTimeout(() => {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const redirect = urlParams.get('returnTo') || urlParams.get('redirect') || 'dashboard.html';
+                        window.location.href = redirect;
+                    }, 1000);
+                    return;
+                }
+                
+                // Auto-fill for development
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('autofill') === 'true' || window.location.hostname.includes('localhost')) {
+                    document.getElementById('username').value = 'admin';
+                    document.getElementById('password').value = 'portfolio2024!';
+                }
+                
+                console.log('🔑 Login system ready');
+                
+            } catch (error) {
+                console.error('❌ Login system initialization error:', error);
+            }
+        }
+        
+        // Run after a short delay to ensure all scripts are loaded
+        setTimeout(initializeLoginSystem, 500);
+        
+        // Update status indicators based on actual configuration
+        function updateStatusIndicators() {
+            const indicators = {
+                supabase: document.querySelector('.status-item:nth-child(1) strong'),
+                config: document.querySelector('.status-item:nth-child(2) strong'),
+                environment: document.querySelector('.status-item:nth-child(3) strong')
+            };
+            
+            // Supabase status
+            if (window.SUPABASE_CONFIG?.url && window.SUPABASE_CONFIG?.anonKey) {
+                indicators.supabase.textContent = 'CONNECTED ✅';
+                indicators.supabase.style.color = '#28a745';
+            } else {
+                indicators.supabase.textContent = 'NOT CONFIGURED ⚠️';
+                indicators.supabase.style.color = '#ffc107';
             }
             
-            // Hide loading once ready
-            if (window.LoadingManager) {
-                window.LoadingManager.hideLoading();
+            // Config status
+            if (window.CentralAPIConfig || window.unifiedApiClient) {
+                indicators.config.textContent = 'LOADED ✅';
+                indicators.config.style.color = '#28a745';
+            } else {
+                indicators.config.textContent = 'PARTIAL ⚠️';
+                indicators.config.style.color = '#ffc107';
             }
             
-            // Check if already authenticated
-            const isAuthenticated = (window.ClientAuth?.isAuthenticated() || 
-                                    window.AuthManager?.isAuthenticated() || 
-                                    (localStorage.getItem('token') && 
-                                     localStorage.getItem('token') !== 'undefined' && 
-                                     localStorage.getItem('token') !== 'null'));
-            
-            if (isAuthenticated) {
-                console.log('✅ User already authenticated, redirecting to dashboard');
-                window.location.href = 'dashboard.html';
-                return;
+            // Environment detection
+            const hostname = window.location.hostname;
+            if (hostname.includes('netlify.app')) {
+                indicators.environment.textContent = 'NETLIFY ✅';
+            } else if (hostname.includes('localhost')) {
+                indicators.environment.textContent = 'DEVELOPMENT ✅';
+            } else {
+                indicators.environment.textContent = 'PRODUCTION ✅';
             }
-            
-            // Auto-fill for development
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('autofill') === 'true') {
-                document.getElementById('username').value = 'admin';
-                document.getElementById('password').value = 'password123';
-            }
-            
-            console.log('🔑 Login page ready');
-        });
+        }
     </script>
 </body>
 </html>

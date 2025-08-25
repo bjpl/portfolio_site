@@ -1,9 +1,12 @@
 /**
- * Emergency Client-Only Authentication System
- * Works immediately without any backend dependencies
+ * Enhanced Client Authentication System
+ * Integrates with Supabase backend while maintaining emergency fallback
+ * Version: 2.0 - Supabase Integration
  */
 
 const ClientAuth = {
+    initialized: false,
+    supabaseAvailable: false,
     // Default credentials (for production emergency access)
     defaultCredentials: {
         'admin': 'portfolio2024!',
@@ -12,8 +15,153 @@ const ClientAuth = {
         'user': 'user123'
     },
 
-    // Generate a fake JWT token for client-side use
-    generateToken(username) {
+    // Initialize the authentication system
+    async init() {
+        if (this.initialized) return;
+        
+        // Check for build-time configuration first (preferred)
+        if (window.CONFIG) {
+            this.supabaseAvailable = !!(window.CONFIG.SUPABASE_URL && window.CONFIG.SUPABASE_ANON_KEY);
+            console.log('✅ ClientAuth: Using build-time configuration from window.CONFIG');
+        } else {
+            // Fallback to legacy Supabase config
+            this.supabaseAvailable = !!(window.SUPABASE_CONFIG?.url && window.SUPABASE_CONFIG?.anonKey);
+            console.log('⚠️ ClientAuth: Using legacy SUPABASE_CONFIG fallback');
+        }
+        
+        if (this.supabaseAvailable) {
+            console.log('✅ ClientAuth: Supabase configuration detected and validated');
+        } else {
+            console.log('⚠️ ClientAuth: No valid Supabase config - using emergency fallback mode');
+        }
+        
+        this.initialized = true;
+    },
+
+    // Authenticate with Supabase or fallback
+    async authenticate(username, password) {
+        await this.init();
+        
+        // Try Supabase authentication first
+        if (this.supabaseAvailable) {
+            try {
+                const result = await this.authenticateWithSupabase(username, password);
+                if (result.success) {
+                    return result;
+                }
+            } catch (error) {
+                console.warn('Supabase auth failed, trying fallback:', error.message);
+            }
+        }
+        
+        // Fallback to client-side authentication
+        return this.authenticateWithFallback(username, password);
+    },
+
+    // Authenticate with Supabase
+    async authenticateWithSupabase(email, password) {
+        // Use build-time configuration if available, fallback to legacy
+        const supabaseURL = window.CONFIG?.SUPABASE_URL || window.SUPABASE_CONFIG?.url;
+        const supabaseKey = window.CONFIG?.SUPABASE_ANON_KEY || window.SUPABASE_CONFIG?.anonKey;
+        
+        if (!supabaseURL || !supabaseKey) {
+            throw new Error('Supabase configuration not available');
+        }
+        
+        const authUrl = `${supabaseURL}/auth/v1/token?grant_type=password`;
+        
+        try {
+            const response = await fetch(authUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': supabaseKey,
+                    'Authorization': `Bearer ${supabaseKey}`
+                },
+                body: JSON.stringify({
+                    email: email.includes('@') ? email : `${email}@portfolio.com`,
+                    password: password
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error_description || errorData.error || `HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            // Store Supabase session data
+            localStorage.setItem('token', data.access_token);
+            localStorage.setItem('refreshToken', data.refresh_token);
+            localStorage.setItem('authMethod', 'supabase');
+            localStorage.setItem('loginTime', new Date().toISOString());
+            localStorage.setItem('supabase-session', JSON.stringify(data));
+            
+            // Store user data
+            if (data.user) {
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: data.user.id,
+                    email: data.user.email,
+                    username: data.user.user_metadata?.username || data.user.email.split('@')[0],
+                    role: data.user.app_metadata?.role || 'user',
+                    profile: data.user.user_metadata || {}
+                }));
+            }
+
+            return {
+                success: true,
+                token: data.access_token,
+                user: {
+                    id: data.user.id,
+                    email: data.user.email,
+                    username: data.user.user_metadata?.username || data.user.email.split('@')[0],
+                    role: data.user.app_metadata?.role || 'user'
+                },
+                method: 'supabase'
+            };
+        } catch (error) {
+            console.error('Supabase authentication failed:', error);
+            throw error;
+        }
+    },
+
+    // Fallback client-side authentication
+    authenticateWithFallback(username, password) {
+        // Check against default credentials
+        if (this.defaultCredentials[username] === password) {
+            const token = this.generateFallbackToken(username);
+            
+            // Store authentication data
+            localStorage.setItem('token', token);
+            localStorage.setItem('username', username);
+            localStorage.setItem('authMethod', 'client-side');
+            localStorage.setItem('loginTime', new Date().toISOString());
+            
+            const user = {
+                username: username,
+                email: `${username}@portfolio.com`,
+                role: username === 'admin' ? 'admin' : 'user'
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            return {
+                success: true,
+                token: token,
+                user: user,
+                method: 'fallback'
+            };
+        }
+        
+        return {
+            success: false,
+            error: 'Invalid credentials'
+        };
+    },
+
+    // Generate a fallback JWT token for client-side use
+    generateFallbackToken(username) {
         const header = btoa(JSON.stringify({
             "alg": "HS256",
             "typ": "JWT"
@@ -33,54 +181,60 @@ const ClientAuth = {
         return `${header}.${payload}.${signature}`;
     },
 
-    // Authenticate user with client-side validation
-    authenticate(username, password) {
-        // Check against default credentials
-        if (this.defaultCredentials[username] === password) {
-            const token = this.generateToken(username);
-            
-            // Store authentication data
-            localStorage.setItem('token', token);
-            localStorage.setItem('username', username);
-            localStorage.setItem('authMethod', 'client-side');
-            localStorage.setItem('loginTime', new Date().toISOString());
-            
-            return {
-                success: true,
-                token: token,
-                user: {
-                    username: username,
-                    email: `${username}@portfolio.com`,
-                    role: username === 'admin' ? 'admin' : 'user'
-                }
-            };
-        }
-        
-        return {
-            success: false,
-            error: 'Invalid credentials'
-        };
-    },
 
     // Check if user is authenticated
     isAuthenticated() {
         const token = localStorage.getItem('token');
         const authMethod = localStorage.getItem('authMethod');
         
-        return token && authMethod === 'client-side';
+        if (!token) return false;
+        
+        // Validate token if it's a JWT
+        if (authMethod === 'supabase' || authMethod === 'client-side') {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                const now = Math.floor(Date.now() / 1000);
+                
+                // Check if token is expired
+                if (payload.exp && payload.exp < now) {
+                    this.logout();
+                    return false;
+                }
+                
+                return true;
+            } catch (error) {
+                // Invalid token format
+                this.logout();
+                return false;
+            }
+        }
+        
+        return !!(token && authMethod);
     },
 
     // Get current user info
     getCurrentUser() {
         if (!this.isAuthenticated()) return null;
         
+        // Try to get stored user data first
+        const storedUser = localStorage.getItem('currentUser');
+        if (storedUser) {
+            try {
+                return JSON.parse(storedUser);
+            } catch (error) {
+                console.warn('Failed to parse stored user data');
+            }
+        }
+        
+        // Fallback to token parsing
         const token = localStorage.getItem('token');
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             return {
-                username: payload.username,
+                id: payload.sub || payload.user_id,
+                username: payload.username || payload.email?.split('@')[0],
                 email: payload.email,
-                role: payload.role
+                role: payload.role || 'user'
             };
         } catch (e) {
             return {
@@ -92,12 +246,42 @@ const ClientAuth = {
     },
 
     // Logout
-    logout() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
-        localStorage.removeItem('authMethod');
-        localStorage.removeItem('loginTime');
-        localStorage.removeItem('refreshToken');
+    async logout() {
+        const authMethod = localStorage.getItem('authMethod');
+        
+        // If Supabase session, try to logout from Supabase
+        if (authMethod === 'supabase' && this.supabaseAvailable) {
+            try {
+                const supabaseConfig = window.SUPABASE_CONFIG;
+                const token = localStorage.getItem('token');
+                
+                await fetch(`${supabaseConfig.url}/auth/v1/logout`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': supabaseConfig.anonKey,
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            } catch (error) {
+                console.warn('Supabase logout failed:', error);
+            }
+        }
+        
+        // Clear all local storage
+        const keysToRemove = [
+            'token', 'refreshToken', 'username', 'authMethod', 'loginTime',
+            'currentUser', 'supabase-session'
+        ];
+        
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+        
+        // Clear any Supabase session keys
+        Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('sb-')) {
+                localStorage.removeItem(key);
+            }
+        });
     },
 
     // Initialize emergency bypass
@@ -156,22 +340,27 @@ const ClientAuth = {
     },
 
     // Perform emergency login
-    performEmergencyLogin(username) {
+    async performEmergencyLogin(username) {
         const password = this.defaultCredentials[username];
-        const result = this.authenticate(username, password);
         
-        if (result.success) {
-            // Show success message
-            this.showMessage('Emergency login successful! Redirecting...', 'success');
+        try {
+            const result = await this.authenticate(username, password);
             
-            // Redirect after delay
-            setTimeout(() => {
-                const urlParams = new URLSearchParams(window.location.search);
-                const redirect = urlParams.get('redirect') || '/admin/dashboard.html';
-                window.location.href = redirect;
-            }, 1000);
-        } else {
-            this.showMessage('Emergency login failed', 'error');
+            if (result.success) {
+                // Show success message
+                this.showMessage(`${result.method === 'supabase' ? 'Supabase' : 'Emergency'} login successful! Redirecting...`, 'success');
+                
+                // Redirect after delay
+                setTimeout(() => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirect = urlParams.get('redirect') || '/admin/dashboard.html';
+                    window.location.href = redirect;
+                }, 1000);
+            } else {
+                this.showMessage('Login failed: ' + (result.error || 'Unknown error'), 'error');
+            }
+        } catch (error) {
+            this.showMessage('Login error: ' + error.message, 'error');
         }
     },
 
@@ -211,9 +400,12 @@ const ClientAuth = {
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => ClientAuth.initEmergencyBypass());
+    document.addEventListener('DOMContentLoaded', async () => {
+        await ClientAuth.init();
+        ClientAuth.initEmergencyBypass();
+    });
 } else {
-    ClientAuth.initEmergencyBypass();
+    ClientAuth.init().then(() => ClientAuth.initEmergencyBypass());
 }
 
 // Make globally available

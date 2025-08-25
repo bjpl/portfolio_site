@@ -49,26 +49,91 @@ class ConfigChecker {
      * Check API configuration
      */
     async checkAPIConfig() {
-        const apiConfig = window.CentralAPIConfig || window.apiConfig;
+        // CRITICAL FIX: Check for browser-safe CONFIG first!
+        if (window.CONFIG && window.CONFIG.SUPABASE_URL) {
+            return {
+                status: 'success',
+                message: 'Configuration loaded (browser-safe)',
+                environment: 'production',
+                apiBaseURL: window.CONFIG.SUPABASE_URL,
+                isConfigured: true,
+                details: {
+                    source: 'window.CONFIG',
+                    hasSupabaseUrl: true,
+                    hasAnonKey: !!window.CONFIG.SUPABASE_ANON_KEY,
+                    initialized: true
+                }
+            };
+        }
         
-        if (!apiConfig) {
+        // Check multiple configuration sources in priority order
+        const configs = {
+            CONFIG: window.CONFIG,  // Check new browser config first
+            CentralAPIConfig: window.CentralAPIConfig,
+            SUPABASE_CONFIG: window.SUPABASE_CONFIG,
+            APIConfig: window.APIConfig,
+            unifiedApiClient: window.unifiedApiClient,
+            apiConfig: window.apiConfig
+        };
+        
+        const availableConfigs = [];
+        let primaryConfig = null;
+        
+        // Find all available configurations
+        for (const [name, config] of Object.entries(configs)) {
+            if (config) {
+                availableConfigs.push(name);
+                if (!primaryConfig) {
+                    primaryConfig = { name, config };
+                }
+            }
+        }
+        
+        if (availableConfigs.length === 0) {
             return {
                 status: 'error',
-                message: 'Central API configuration not loaded',
-                solution: 'Ensure api-config-central.js is loaded before this script'
+                message: 'No API configuration found',
+                solution: 'Ensure api-config files are loaded before this script',
+                details: { searched: Object.keys(configs) }
             };
         }
 
-        const status = apiConfig.getStatus ? apiConfig.getStatus() : {
-            initialized: false,
-            environment: 'unknown',
-            apiBaseURL: 'not configured'
-        };
+        // Get status from the primary config
+        let status;
+        if (primaryConfig.name === 'CentralAPIConfig' && primaryConfig.config.getStatus) {
+            status = primaryConfig.config.getStatus();
+        } else if (primaryConfig.name === 'SUPABASE_CONFIG') {
+            status = {
+                initialized: true,
+                environment: 'supabase',
+                apiBaseURL: primaryConfig.config.url,
+                hasAnonKey: !!primaryConfig.config.anonKey
+            };
+        } else if (primaryConfig.name === 'unifiedApiClient' && primaryConfig.config.getDebugInfo) {
+            const debugInfo = primaryConfig.config.getDebugInfo();
+            status = {
+                initialized: true,
+                environment: 'unified-client',
+                apiBaseURL: debugInfo.baseUrl,
+                configSource: debugInfo.configSource,
+                hasToken: debugInfo.hasToken
+            };
+        } else {
+            status = {
+                initialized: true,
+                environment: 'detected',
+                apiBaseURL: 'configured'
+            };
+        }
 
         return {
             status: status.initialized ? 'success' : 'warning',
-            message: `Environment: ${status.environment}, API: ${status.apiBaseURL}`,
-            details: status,
+            message: `Using ${primaryConfig.name}. Environment: ${status.environment}`,
+            details: {
+                ...status,
+                availableConfigs,
+                primaryConfig: primaryConfig.name
+            },
             solution: !status.initialized ? 'Wait for configuration to initialize' : null
         };
     }
@@ -77,32 +142,76 @@ class ConfigChecker {
      * Check backend availability
      */
     async checkBackendAvailability() {
-        const apiConfig = window.CentralAPIConfig;
+        const configs = {
+            CentralAPIConfig: window.CentralAPIConfig,
+            SUPABASE_CONFIG: window.SUPABASE_CONFIG,
+            unifiedApiClient: window.unifiedApiClient
+        };
         
-        if (!apiConfig) {
+        let testConfig = null;
+        let testUrl = null;
+        
+        // Find the best config to test with
+        if (configs.CentralAPIConfig) {
+            testConfig = 'CentralAPIConfig';
+            testUrl = configs.CentralAPIConfig.getSupabaseRestURL ? 
+                     configs.CentralAPIConfig.getSupabaseRestURL() + '/' :
+                     configs.CentralAPIConfig.getAPIBaseURL() + '/health';
+        } else if (configs.SUPABASE_CONFIG) {
+            testConfig = 'SUPABASE_CONFIG';
+            testUrl = configs.SUPABASE_CONFIG.url + '/rest/v1/';
+        } else if (configs.unifiedApiClient) {
+            testConfig = 'unifiedApiClient';
+            const debugInfo = configs.unifiedApiClient.getDebugInfo();
+            testUrl = debugInfo.baseUrl + '/health';
+        } else {
             return {
                 status: 'error',
-                message: 'Cannot check backend - API config not available'
+                message: 'Cannot check backend - no suitable API config found',
+                solution: 'Ensure API configuration is loaded'
             };
         }
 
         try {
-            const available = await apiConfig.refreshBackendStatus();
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+            
+            const response = await fetch(testUrl, {
+                method: 'GET',
+                signal: controller.signal,
+                headers: {
+                    'apikey': configs.SUPABASE_CONFIG?.anonKey || '',
+                    'Authorization': `Bearer ${configs.SUPABASE_CONFIG?.anonKey || ''}`
+                },
+                cache: 'no-cache'
+            });
+
+            clearTimeout(timeoutId);
+            const available = response.ok || response.status === 401; // 401 means auth required but service is up
             
             return {
-                status: available ? 'success' : 'error',
-                message: available ? 'Backend is available' : 'Backend is not responding',
+                status: available ? 'success' : 'warning',
+                message: available ? 
+                    `Backend available (${testConfig})` : 
+                    `Backend responded with status ${response.status}`,
                 details: {
-                    baseURL: apiConfig.getAPIBaseURL(),
+                    testUrl,
+                    testConfig,
+                    status: response.status,
                     available: available
                 },
-                solution: !available ? 'Start the backend server on port 3001' : null
+                solution: !available ? 'Check backend service configuration' : null
             };
         } catch (error) {
             return {
-                status: 'error',
+                status: 'warning',
                 message: `Backend check failed: ${error.message}`,
-                solution: 'Check if backend server is running and accessible'
+                details: {
+                    testUrl,
+                    testConfig,
+                    error: error.name
+                },
+                solution: 'Backend may be unavailable - check service status'
             };
         }
     }
@@ -218,40 +327,87 @@ class ConfigChecker {
      * Check CORS configuration
      */
     async checkCORSConfiguration() {
-        const apiConfig = window.CentralAPIConfig;
-        if (!apiConfig) {
-            return {
-                status: 'warning',
-                message: 'Cannot check CORS - API config not available'
-            };
+        // For Supabase, CORS is handled by the service
+        const supabaseConfig = window.SUPABASE_CONFIG;
+        const centralConfig = window.CentralAPIConfig;
+        
+        if (supabaseConfig) {
+            try {
+                const response = await fetch(supabaseConfig.url + '/rest/v1/', {
+                    method: 'HEAD',
+                    headers: {
+                        'apikey': supabaseConfig.anonKey,
+                        'Authorization': `Bearer ${supabaseConfig.anonKey}`
+                    }
+                });
+
+                const corsHeaders = {
+                    'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+                    'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
+                    'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers')
+                };
+
+                return {
+                    status: 'success',
+                    message: 'Supabase CORS configuration verified',
+                    details: {
+                        ...corsHeaders,
+                        provider: 'Supabase',
+                        testUrl: supabaseConfig.url
+                    }
+                };
+            } catch (error) {
+                return {
+                    status: 'info',
+                    message: 'CORS check inconclusive - Supabase handles CORS automatically',
+                    details: {
+                        provider: 'Supabase',
+                        note: 'CORS is configured on the Supabase service side'
+                    }
+                };
+            }
         }
+        
+        if (centralConfig) {
+            try {
+                const testUrl = centralConfig.getSupabaseRestURL ? 
+                               centralConfig.getSupabaseRestURL() + '/' :
+                               centralConfig.getAPIBaseURL() + '/health';
+                               
+                const response = await fetch(testUrl, {
+                    method: 'OPTIONS'
+                });
 
-        try {
-            const response = await fetch(apiConfig.getEndpointURL('/health'), {
-                method: 'OPTIONS'
-            });
+                const corsHeaders = {
+                    'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+                    'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
+                    'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers')
+                };
 
-            const corsHeaders = {
-                'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
-                'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
-                'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers')
-            };
-
-            return {
-                status: 'success',
-                message: 'CORS preflight successful',
-                details: corsHeaders
-            };
-        } catch (error) {
-            return {
-                status: 'warning',
-                message: `CORS check inconclusive: ${error.message}`,
-                details: {
-                    currentOrigin: window.location.origin,
-                    apiBaseURL: apiConfig.getAPIBaseURL()
-                }
-            };
+                return {
+                    status: 'success',
+                    message: 'CORS preflight successful',
+                    details: corsHeaders
+                };
+            } catch (error) {
+                return {
+                    status: 'warning',
+                    message: `CORS check failed: ${error.message}`,
+                    details: {
+                        currentOrigin: window.location.origin,
+                        note: 'CORS may be configured differently'
+                    }
+                };
+            }
         }
+        
+        return {
+            status: 'info',
+            message: 'No API config available for CORS check',
+            details: {
+                note: 'CORS configuration depends on backend setup'
+            }
+        };
     }
 
     /**

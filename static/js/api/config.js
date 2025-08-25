@@ -188,25 +188,26 @@ class APIConfig {
   }
 
   /**
-   * Get Supabase anonymous key with fallback chain
+   * Get Supabase anonymous key with browser-safe fallback chain
    */
   getSupabaseAnonKey() {
-    // Try window.SUPABASE_CONFIG first (from supabase-config.js)
+    // Try CLIENT_CONFIG first (most reliable for browsers)
+    if (window.CLIENT_CONFIG?.SUPABASE_ANON_KEY) {
+      return window.CLIENT_CONFIG.SUPABASE_ANON_KEY;
+    }
+    
+    // Try window.SUPABASE_CONFIG second (from supabase-config.js)
     if (window.SUPABASE_CONFIG?.anonKey && !window.SUPABASE_CONFIG.anonKey.includes('{{')) {
       return window.SUPABASE_CONFIG.anonKey;
     }
     
-    // Try environment variables
-    const envKey = window.ENV?.SUPABASE_ANON_KEY || 
-                   window.process?.env?.VITE_SUPABASE_ANON_KEY ||
-                   window.process?.env?.REACT_APP_SUPABASE_ANON_KEY ||
-                   window.process?.env?.SUPABASE_ANON_KEY;
-    
+    // Try window.ENV (client-safe environment variables)
+    const envKey = window.ENV?.SUPABASE_ANON_KEY;
     if (envKey && envKey !== 'undefined') {
       return envKey;
     }
     
-    // Fallback to hardcoded key for reliability
+    // Final fallback to hardcoded key for reliability
     return this.config.supabase?.anonKey || 
            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM';
   }
@@ -223,25 +224,26 @@ class APIConfig {
   }
 
   /**
-   * Get Supabase URL with fallback chain
+   * Get Supabase URL with browser-safe fallback chain
    */
   getSupabaseUrl() {
-    // Try window.SUPABASE_CONFIG first (from supabase-config.js)
+    // Try CLIENT_CONFIG first (most reliable for browsers)
+    if (window.CLIENT_CONFIG?.SUPABASE_URL) {
+      return window.CLIENT_CONFIG.SUPABASE_URL;
+    }
+    
+    // Try window.SUPABASE_CONFIG second (from supabase-config.js)
     if (window.SUPABASE_CONFIG?.url) {
       return window.SUPABASE_CONFIG.url;
     }
     
-    // Try environment variables
-    const envUrl = window.ENV?.SUPABASE_URL || 
-                   window.process?.env?.VITE_SUPABASE_URL ||
-                   window.process?.env?.REACT_APP_SUPABASE_URL ||
-                   window.process?.env?.SUPABASE_URL;
-    
+    // Try window.ENV (client-safe environment variables)
+    const envUrl = window.ENV?.SUPABASE_URL;
     if (envUrl && envUrl !== 'undefined') {
       return envUrl;
     }
     
-    // Fallback to hardcoded URL for reliability
+    // Final fallback to hardcoded URL for reliability
     return this.config.endpoints?.supabase?.url || 
            'https://tdmzayzkqyegvfgxlolj.supabase.co';
   }

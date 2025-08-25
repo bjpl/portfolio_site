@@ -5,19 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Static CMS</title>
     
-    <!-- Supabase Configuration (load first, before other scripts) -->
-    <script>
-    // Inline Supabase configuration as fallback
-    window.SUPABASE_CONFIG = {
-      url: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
-      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM'
-    };
-    </script>
+    <!-- CRITICAL: Client Configuration - MUST load first for browser compatibility -->
+    <script src="/js/config/client-config.js"></script>
+    
+    <!-- Legacy compatibility scripts -->
     <script src="/js/config/supabase-config.js"></script>
     <!-- Load essential admin configuration in correct order -->
     <script src="/admin/js/loading-manager.js"></script>
-    <script src="/admin/js/client-auth.js"></script>
-    <script src="/admin/js/auth-manager.js"></script>
+    <script src="/admin/js/unified-auth-manager.js"></script>
+    <script src="/admin/js/auth-guard.js"></script>
     <script src="/admin/js/config.js"></script>
     <script src="/admin/js/api-config.js" onerror="console.warn('api-config.js failed to load')"></script>
     <script src="/admin/js/unified-api-client.js" onerror="console.warn('unified-api-client.js failed to load')"></script>
@@ -549,70 +545,100 @@
         document.addEventListener('DOMContentLoaded', async () => {
             console.log('📊 Dashboard loading...');
             
-            // Wait for essential systems to load
-            let retries = 0;
-            const maxRetries = 50;
-            
-            // Check for multiple auth systems
-            while (!window.authService && !window.AuthManager && !window.ClientAuth && retries < maxRetries) {
-                await new Promise(resolve => setTimeout(resolve, 100));
-                retries++;
+            try {
+                // Wait for unified auth manager to initialize
+                if (!window.UnifiedAuthManager.initialized) {
+                    await window.UnifiedAuthManager.init();
+                }
+                
+                // Check authentication
+                if (!window.UnifiedAuthManager.isAuthenticated()) {
+                    console.log('🔐 User not authenticated, redirecting to login');
+                    window.location.href = `/admin/login.html?returnTo=${encodeURIComponent(window.location.pathname)}`;
+                    return;
+                }
+                
+                const user = window.UnifiedAuthManager.getCurrentUser();
+                console.log('✅ Dashboard loaded for user:', user);
+                
+                // Initialize dashboard
+                await initializeDashboard(user);
+                
+                // Hide loading screen and show content
+                document.getElementById('loading-screen').style.display = 'none';
+                document.querySelectorAll('.auth-logged-in-only').forEach(el => {
+                    el.style.display = el.tagName === 'HEADER' ? 'flex' : 'block';
+                });
+                
+            } catch (error) {
+                console.error('❌ Dashboard initialization failed:', error);
+                showError('Dashboard failed to load. Please try logging in again.');
             }
-            
-            const authSystem = window.authService || window.AuthManager || window.ClientAuth;
-            if (!authSystem) {
-                console.error('❌ No auth system available');
-                showError('Authentication system failed to load');
-                return;
-            }
-            
-            // Check authentication with fallback
-            let isAuthenticated = false;
-            let user = null;
-            
-            if (window.authService && typeof window.authService.isAuthenticated === 'function') {
-                isAuthenticated = window.authService.isAuthenticated();
-                user = window.authService.getCurrentUser();
-            } else if (window.AuthManager && typeof window.AuthManager.isAuthenticated === 'function') {
-                isAuthenticated = window.AuthManager.isAuthenticated();
-                user = window.AuthManager.getUserInfo();
-            } else if (window.ClientAuth && typeof window.ClientAuth.isAuthenticated === 'function') {
-                isAuthenticated = window.ClientAuth.isAuthenticated();
-                user = window.ClientAuth.getCurrentUser();
-            }
-            
-            if (!isAuthenticated) {
-                console.log('🔐 User not authenticated, redirecting to login');
-                window.location.href = `/admin/login.html?returnTo=${encodeURIComponent(window.location.pathname)}`;
-                return;
-            }
-            console.log('✅ Dashboard loaded for user:', user);
-            
-            // Initialize dashboard
-            await initializeDashboard(user);
-            
-            // Hide loading screen and show content
-            document.getElementById('loading-screen').style.display = 'none';
-            document.querySelectorAll('.auth-logged-in-only').forEach(el => {
-                el.style.display = el.tagName === 'HEADER' ? 'flex' : 'block';
-            });
         });
         
         async function initializeDashboard(user) {
-            // Update user display name
-            const displayNameEl = document.getElementById('user-display-name');
-            if (displayNameEl) {
-                displayNameEl.textContent = user.profile?.displayName || user.username;
+            try {
+                // Update user display name
+                const displayNameEl = document.getElementById('user-display-name');
+                if (displayNameEl) {
+                    displayNameEl.textContent = user.profile?.displayName || user.username || user.email?.split('@')[0];
+                }
+                
+                // Create logout button in header
+                createLogoutButton(user);
+                
+                // Load stats
+                await loadDashboardStats();
+                
+                // Load recent activity
+                await loadRecentActivity(user);
+                
+                // Set up real-time updates
+                setupRealTimeUpdates();
+                
+                console.log('✅ Dashboard initialized successfully');
+                
+            } catch (error) {
+                console.error('❌ Dashboard initialization error:', error);
             }
-            
-            // Load stats
-            await loadDashboardStats();
-            
-            // Load recent activity
-            await loadRecentActivity(user);
-            
-            // Set up real-time updates
-            setupRealTimeUpdates();
+        }
+        
+        function createLogoutButton(user) {
+            const userMenuContainer = document.getElementById('user-menu-container');
+            if (userMenuContainer) {
+                userMenuContainer.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">
+                            ${user.profile?.displayName || user.username || user.email?.split('@')[0]}
+                        </span>
+                        <button onclick="handleLogout()" style="
+                            padding: 0.5rem 1rem;
+                            background: var(--error-color);
+                            color: white;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 0.9rem;
+                        ">
+                            Logout
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        async function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                try {
+                    await window.UnifiedAuthManager.logout();
+                    window.location.href = '/admin/login.html';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    // Force logout by clearing storage and redirecting
+                    localStorage.clear();
+                    window.location.href = '/admin/login.html';
+                }
+            }
         }
         
         async function loadDashboardStats() {

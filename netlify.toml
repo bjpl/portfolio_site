@@ -3,18 +3,50 @@
   publish = "public"
   base = ""
 
+# =============================================================================
+# NETLIFY BUILD ENVIRONMENT VARIABLES
+# =============================================================================
+# These are build-time environment variables available during the build process
+# For runtime secrets, use Netlify's environment variable dashboard
 [build.environment]
+  # Core Build Settings
   HUGO_VERSION = "0.121.0"
   HUGO_ENV = "production"
   NODE_VERSION = "18"
   GO_VERSION = "1.21"
-  BUILD_ID = "2025-08-24-v4-admin-cache-bust"
+  NODE_ENV = "production"
+  
+  # Build Identification
+  BUILD_ID = "2025-08-25-unified-env-config"
+  
+  # Site Configuration (Public - safe for client-side)
   VITE_API_URL = "/api"
   VITE_SITE_URL = "https://vocal-pony-24e3de.netlify.app"
   API_BASE_URL = "https://vocal-pony-24e3de.netlify.app/api"
+  SITE_URL = "https://vocal-pony-24e3de.netlify.app"
+  
+  # Netlify Specific
   NETLIFY_FUNCTIONS_URL = "https://vocal-pony-24e3de.netlify.app/.netlify/functions"
+  
+  # CORS Configuration
   CORS_ORIGIN = "https://vocal-pony-24e3de.netlify.app"
-  NODE_ENV = "production"
+  ALLOWED_ORIGINS = "https://vocal-pony-24e3de.netlify.app"
+  
+  # Supabase Public Configuration (Safe for build-time)
+  NEXT_PUBLIC_SUPABASE_URL = "https://tdmzayzkqyegvfgxlolj.supabase.co"
+  SUPABASE_URL = "https://tdmzayzkqyegvfgxlolj.supabase.co"
+  
+  # Feature Flags for Production
+  ENABLE_ANALYTICS = "true"
+  ENABLE_CONTACT_FORM = "true"
+  ENABLE_SEARCH = "true"
+  ENABLE_BLOG = "true"
+  DEBUG = "false"
+  MAINTENANCE_MODE = "false"
+  
+  # Performance Settings
+  COMPRESSION_ENABLED = "true"
+  CACHE_TTL = "300"
   
 [context.production]
   command = "rm -rf public && hugo --minify --cleanDestinationDir --gc"

@@ -219,21 +219,36 @@ class CentralAPIConfig {
 
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 3000);
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-            // Use Supabase health endpoint
+            // Use Supabase health endpoint with proper authentication
             const baseURL = this.getSupabaseRestURL();
             const healthURL = `${baseURL}/`;
+            
+            // Get Supabase config for authentication headers
+            const supabaseConfig = window.SUPABASE_CONFIG;
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            
+            // Add Supabase authentication if available
+            if (supabaseConfig?.anonKey) {
+                headers['apikey'] = supabaseConfig.anonKey;
+                headers['Authorization'] = `Bearer ${supabaseConfig.anonKey}`;
+            }
 
             const response = await fetch(healthURL, {
                 method: 'GET',
+                headers,
                 signal: controller.signal,
                 cache: 'no-cache'
             });
 
             clearTimeout(timeoutId);
             
-            return response.ok;
+            // Supabase returns 401 when not authenticated but service is up
+            // This is actually a good sign - it means the service is responding
+            return response.ok || response.status === 401;
             
         } catch (error) {
             if (retryCount < maxRetries - 1) {
@@ -252,8 +267,20 @@ class CentralAPIConfig {
      * Make authenticated request
      */
     async makeRequest(endpoint, options = {}) {
-        const url = this.getEndpointURL(endpoint);
+        let url;
+        
+        // Handle different endpoint types
+        if (endpoint.startsWith('http')) {
+            url = endpoint;
+        } else if (endpoint.startsWith('/auth/') || endpoint.startsWith('/rest/')) {
+            // Direct Supabase API endpoints
+            url = this.getSupabaseRestURL().replace('/rest/v1', '') + endpoint;
+        } else {
+            url = this.getEndpointURL(endpoint);
+        }
+        
         const token = this.getToken();
+        const supabaseConfig = window.SUPABASE_CONFIG;
 
         const config = {
             headers: {
@@ -264,8 +291,15 @@ class CentralAPIConfig {
             ...options
         };
 
+        // Add authentication headers
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
+        }
+        
+        // Add Supabase API key if available and no token
+        if (!token && supabaseConfig?.anonKey) {
+            config.headers['apikey'] = supabaseConfig.anonKey;
+            config.headers['Authorization'] = `Bearer ${supabaseConfig.anonKey}`;
         }
 
         try {
@@ -273,7 +307,7 @@ class CentralAPIConfig {
             
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.message || errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+                throw new Error(errorData.message || errorData.error_description || errorData.error || `HTTP ${response.status}: ${response.statusText}`);
             }
 
             const contentType = response.headers.get('content-type');
@@ -441,18 +475,33 @@ class CentralAPIConfig {
      */
     validateConfig() {
         const issues = [];
+        const supabaseConfig = window.SUPABASE_CONFIG;
         
         if (!this.getAPIBaseURL()) {
             issues.push('No API base URL configured');
         }
+        
+        if (!supabaseConfig) {
+            issues.push('Supabase configuration not found');
+        } else {
+            if (!supabaseConfig.url) {
+                issues.push('Supabase URL not configured');
+            }
+            if (!supabaseConfig.anonKey) {
+                issues.push('Supabase anonymous key not configured');
+            }
+        }
 
         if (this.config.isDevelopment && !this.backendAvailable) {
-            issues.push('Development mode but backend not available');
+            // This is now more of a warning than an error since we have Supabase
+            console.warn('Development mode but backend not available - using Supabase directly');
         }
 
         return {
             valid: issues.length === 0,
-            issues
+            issues,
+            warnings: this.config.isDevelopment && !this.backendAvailable ? 
+                     ['Backend unavailable - using direct Supabase connection'] : []
         };
     }
 
@@ -460,12 +509,19 @@ class CentralAPIConfig {
      * Get configuration status
      */
     getStatus() {
+        const supabaseConfig = window.SUPABASE_CONFIG;
+        
         return {
             initialized: this.initialized,
             environment: this.config.environment,
             apiBaseURL: this.getAPIBaseURL(),
+            supabaseRestURL: this.getSupabaseRestURL(),
+            supabaseAuthURL: this.getSupabaseAuthURL(),
             webSocketURL: this.getWebSocketURL(),
             backendAvailable: this.backendAvailable,
+            hasSupabaseConfig: !!supabaseConfig,
+            hasSupabaseKey: !!(supabaseConfig?.anonKey),
+            hasToken: !!this.getToken(),
             validation: this.validateConfig()
         };
     }

@@ -1,0 +1,42 @@
+{{/*
+Simple Configuration Injection - No environment variables needed
+This version works without any getenv calls, avoiding Hugo security restrictions
+*/}}
+
+<!-- Build-time Configuration (Simple Version) -->
+<script>
+  // Global configuration - hardcoded for reliability
+  window.CONFIG = {
+    // Supabase Configuration
+    SUPABASE_URL: "https://tdmzayzkqyegvfgxlolj.supabase.co",
+    SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM",
+    
+    // Mark as configured
+    isConfigured: true,
+    initialized: true,
+    
+    // API Base URL
+    API_URL: "https://tdmzayzkqyegvfgxlolj.supabase.co",
+    
+    // Build info
+    BUILD_TIME: "{{ now.Format "2006-01-02T15:04:05Z07:00" }}",
+    HUGO_VERSION: "{{ hugo.Version }}",
+    
+    // Site info  
+    SITE: {
+      BASE_URL: "{{ .Site.BaseURL }}",
+      TITLE: "{{ .Site.Title }}",
+      LANGUAGE: "{{ .Site.Language.Lang }}"
+    }
+  };
+  
+  // Make it available in multiple ways for compatibility
+  window.SUPABASE_CONFIG = window.CONFIG;
+  window.CentralAPIConfig = window.CONFIG;
+  window.APIConfig = window.CONFIG;
+  
+  // Mark configuration as ready
+  window.CONFIG_READY = true;
+  
+  console.log('✅ Simple configuration loaded successfully');
+</script>
