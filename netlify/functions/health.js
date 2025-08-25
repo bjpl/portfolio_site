@@ -3,12 +3,95 @@
  * Universal endpoint with Supabase connection monitoring
  */
 
-const { 
-  checkSupabaseHealth, 
-  formatResponse, 
-  getStandardHeaders, 
-  handleCORS 
-} = require('./utils/supabase');
+const { createClient } = require('@supabase/supabase-js');
+
+// Utility functions (same as in auth-login for consistency)
+const formatResponse = (success, data = null, message = '', error = null, statusCode = 200) => ({
+  success,
+  data,
+  message,
+  error,
+  timestamp: new Date().toISOString(),
+  statusCode
+});
+
+const getStandardHeaders = () => ({
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Content-Type': 'application/json'
+});
+
+const handleCORS = (event) => {
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: getStandardHeaders(),
+      body: ''
+    };
+  }
+  return null;
+};
+
+// Initialize Supabase client with fallbacks
+const getSupabaseClient = () => {
+  const supabaseUrl = process.env.SUPABASE_URL || 
+                      process.env.NEXT_PUBLIC_SUPABASE_URL || 
+                      'https://tdmzayzkqyegvfgxlolj.supabase.co';
+                      
+  const supabaseKey = process.env.SUPABASE_ANON_KEY || 
+                      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM';
+  
+  return createClient(supabaseUrl, supabaseKey, {
+    auth: { autoRefreshToken: false, persistSession: false }
+  });
+};
+
+// Simple health check for Supabase
+const checkSupabaseHealth = async () => {
+  const startTime = Date.now();
+  
+  try {
+    const supabase = getSupabaseClient();
+    
+    // Simple query to check connection
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id')
+      .limit(1);
+    
+    const latency = Date.now() - startTime;
+    
+    if (error && error.code === 'PGRST116') {
+      return {
+        healthy: false,
+        latency,
+        error: 'Database schema not initialized - tables missing',
+        needsMigration: true
+      };
+    }
+    
+    if (error) {
+      return {
+        healthy: false,
+        latency,
+        error: error.message
+      };
+    }
+    
+    return {
+      healthy: true,
+      latency
+    };
+  } catch (error) {
+    return {
+      healthy: false,
+      latency: Date.now() - startTime,
+      error: error.message
+    };
+  }
+};
 
 exports.handler = async (event, context) => {
   // Handle CORS preflight

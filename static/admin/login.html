@@ -5,22 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - Portfolio Dashboard</title>
     
-    <!-- Inline configuration script - MUST load first -->
-    <script>
-    window.SITE_CONFIG = {
-        isNetlify: window.location.hostname.includes('netlify.app'),
-        apiBase: window.location.hostname.includes('netlify.app') ? '/.netlify/functions' : '/api',
-        supabaseUrl: 'https://tdmzayzkqyegvfgxlolj.supabase.co'
-    };
-    </script>
-    
-    <!-- Configuration scripts in proper loading order -->
-    <script src="/js/config/init-config.js"></script>
-    <script src="/js/config/api-config.js"></script>
-    <script src="/js/unified-api-client.js"></script>
-    
-    <!-- Legacy compatibility scripts -->
-    <script src="/js/config/supabase-config.js"></script>
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -212,8 +196,7 @@
             to { transform: rotate(360deg); }
         }
     </style>
-    <script src="/admin/js/api-config-netlify.js"></script>
-    <script src="/admin/client-auth.js"></script>
+    <script src="/admin/js/api-config.js"></script>
 </head>
 <body>
     <!-- Toast Container -->
@@ -224,19 +207,14 @@
             <p>Portfolio Content Management</p>
         </div>
         
-        <!-- System Status Indicators -->
-        <div class="status-indicators" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 12px;">
-            <div class="status-item" style="margin: 5px 0; display: flex; align-items: center;">
-                <span class="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #28a745; margin-right: 8px;"></span>
-                <span>Supabase: <strong style="color: #28a745;">CONNECTED ✅</strong></span>
+        <!-- Connection Status -->
+        <div class="connection-status" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 12px;">
+            <div id="connectionIndicator" style="margin: 5px 0; display: flex; align-items: center;">
+                <span id="statusDot" style="width: 8px; height: 8px; border-radius: 50%; background: #ffc107; margin-right: 8px;"></span>
+                <span>Connection: <strong id="connectionText" style="color: #ffc107;">CHECKING...</strong></span>
             </div>
-            <div class="status-item" style="margin: 5px 0; display: flex; align-items: center;">
-                <span class="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #28a745; margin-right: 8px;"></span>
-                <span>Config: <strong style="color: #28a745;">LOADED ✅</strong></span>
-            </div>
-            <div class="status-item" style="margin: 5px 0; display: flex; align-items: center;">
-                <span class="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #28a745; margin-right: 8px;"></span>
-                <span>Environment: <strong style="color: #28a745;">PRODUCTION ✅</strong></span>
+            <div style="margin: 10px 0;">
+                <button type="button" onclick="testConnectionNow()" style="padding: 5px 10px; font-size: 11px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer;">Test Connection</button>
             </div>
         </div>
         
@@ -277,6 +255,11 @@
                 <span id="btnText">Sign In</span>
                 <span id="btnLoader" style="display: none;" class="loading"></span>
             </button>
+            
+            <!-- Fallback Auth Button -->
+            <button type="button" onclick="tryFallbackAuth()" class="btn" style="width: 100%; margin-top: 10px; background: #6c757d; color: white; border: none; padding: 10px;">
+                Try Fallback Authentication
+            </button>
         </form>
         
         <div class="form-footer">
@@ -285,161 +268,39 @@
     </div>
     
     
-    <!-- Script Loading Manager - Initialize proper loading order -->
+    <!-- Simple Connection Test -->
     <script>
-    window.ScriptLoadingManager = {
-        dependencies: new Map(),
-        loaded: new Set(),
-        retryAttempts: 3,
-        retryDelay: 1000,
-
-        // Load script with retry logic
-        async loadScript(src, options = {}) {
-            const { required = true, timeout = 10000, retries = this.retryAttempts } = options;
-            
-            if (this.loaded.has(src)) {
-                return Promise.resolve();
-            }
-
-            for (let attempt = 0; attempt <= retries; attempt++) {
-                try {
-                    await this.loadSingleScript(src, timeout);
-                    this.loaded.add(src);
-                    console.log(`✅ Loaded: ${src}`);
-                    return;
-                } catch (error) {
-                    console.warn(`⚠️ Failed to load ${src} (attempt ${attempt + 1}/${retries + 1}):`, error.message);
-                    if (attempt < retries) {
-                        await this.delay(this.retryDelay * (attempt + 1));
-                    }
-                }
-            }
-
-            if (required) {
-                throw new Error(`Required script failed to load: ${src}`);
-            }
-            console.warn(`⚠️ Optional script failed to load: ${src}`);
-        },
-
-        // Load single script with timeout
-        loadSingleScript(src, timeout) {
-            return new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = src;
-                script.onload = resolve;
-                script.onerror = () => reject(new Error(`Script load error: ${src}`));
-                
-                const timeoutId = setTimeout(() => {
-                    reject(new Error(`Script load timeout: ${src}`));
-                }, timeout);
-                
-                script.onload = () => {
-                    clearTimeout(timeoutId);
-                    resolve();
-                };
-                
-                document.head.appendChild(script);
-            });
-        },
-
-        // Load scripts in sequence
-        async loadSequence(scripts) {
-            for (const script of scripts) {
-                if (typeof script === 'string') {
-                    await this.loadScript(script);
-                } else {
-                    await this.loadScript(script.src, script.options || {});
-                }
-            }
-        },
-
-        // Wait for global to be available
-        async waitForGlobal(globalName, timeout = 10000) {
-            const startTime = Date.now();
-            while (!window[globalName] && Date.now() - startTime < timeout) {
-                await this.delay(100);
-            }
-            if (!window[globalName]) {
-                throw new Error(`Global ${globalName} not available within timeout`);
-            }
-            return window[globalName];
-        },
-
-        // Delay utility
-        delay(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-    };
-    </script>
-
-    <!-- Initialize proper script loading order -->
-    <script>
-    window.addEventListener('DOMContentLoaded', async () => {
+    async function testConnectionNow() {
+        const statusDot = document.getElementById('statusDot');
+        const connectionText = document.getElementById('connectionText');
+        
+        // Show testing state
+        statusDot.style.background = '#ffc107';
+        connectionText.textContent = 'TESTING...';
+        connectionText.style.color = '#ffc107';
+        
         try {
-            console.log('🔄 Starting script initialization sequence...');
+            const isConnected = await window.APIConfig.testConnection();
             
-            // Phase 1: Core Configuration
-            console.log('📋 Phase 1: Loading core configuration...');
-            await window.ScriptLoadingManager.loadSequence([
-                { src: 'js/loading-manager.js', options: { required: true } },
-                { src: '/js/config/supabase-config.js', options: { required: false } },
-                { src: 'js/api-config.js', options: { required: true } }
-            ]);
-            
-            // Wait for LoadingManager to be ready
-            const LoadingManager = await window.ScriptLoadingManager.waitForGlobal('LoadingManager');
-            LoadingManager.showLoading('Initializing authentication system...');
-            
-            // Phase 2: Authentication Systems
-            console.log('🔐 Phase 2: Loading authentication systems...');
-            await window.ScriptLoadingManager.loadSequence([
-                { src: 'js/unified-auth-manager.js', options: { required: true } },
-                { src: '/admin/client-auth.js', options: { required: false } },
-                { src: '/admin/js/api-config-netlify.js', options: { required: false } }
-            ]);
-            
-            // Wait for authentication to be ready
-            const UnifiedAuthManager = await window.ScriptLoadingManager.waitForGlobal('UnifiedAuthManager');
-            if (!UnifiedAuthManager.initialized) {
-                await UnifiedAuthManager.init();
-            }
-            
-            // Phase 3: API and Utility Scripts
-            console.log('🔧 Phase 3: Loading API and utilities...');
-            await window.ScriptLoadingManager.loadSequence([
-                { src: 'js/unified-api-client.js', options: { required: false } },
-                { src: 'js/toast.js', options: { required: false } },
-                { src: 'js/utils.js', options: { required: false } }
-            ]);
-            
-            // Phase 4: Configuration Checker (after everything else)
-            console.log('✅ Phase 4: Loading configuration checker...');
-            await window.ScriptLoadingManager.loadSequence([
-                { src: '/js/core/config-checker.js', options: { required: false } }
-            ]);
-            
-            // Wait for config checker and run validation
-            if (window.ConfigChecker) {
-                await window.ConfigChecker.init();
-            }
-            
-            LoadingManager.hideLoading();
-            console.log('✅ All systems initialized successfully!');
-            
-            // Update status indicators
-            updateStatusIndicators();
-            
-        } catch (error) {
-            console.error('❌ Failed to initialize login system:', error);
-            if (window.LoadingManager) {
-                window.LoadingManager.showError(
-                    'Initialization Failed',
-                    `Failed to load required scripts: ${error.message}. Please refresh the page.`
-                );
+            if (isConnected) {
+                statusDot.style.background = '#28a745';
+                connectionText.textContent = 'CONNECTED ✅';
+                connectionText.style.color = '#28a745';
             } else {
-                alert(`Login system initialization failed: ${error.message}\n\nPlease refresh the page.`);
+                statusDot.style.background = '#dc3545';
+                connectionText.textContent = 'FAILED ❌';
+                connectionText.style.color = '#dc3545';
             }
+        } catch (error) {
+            statusDot.style.background = '#dc3545';
+            connectionText.textContent = 'ERROR ❌';
+            connectionText.style.color = '#dc3545';
         }
+    }
+    
+    // Test connection on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(testConnectionNow, 500);
     });
     </script>
     
@@ -467,7 +328,7 @@
             btnLoader.style.display = isLoading ? 'inline-block' : 'none';
         }
         
-        // Enhanced login handler with unified authentication
+        // Simple login handler
         async function handleLogin(event) {
             if (event) {
                 event.preventDefault();
@@ -476,7 +337,6 @@
             
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
-            const remember = document.getElementById('remember').checked;
             
             if (!username || !password) {
                 showAlert('Please enter username and password');
@@ -486,58 +346,35 @@
             setLoading(true);
             
             try {
-                // Wait for authentication manager to initialize
-                if (!window.UnifiedAuthManager.initialized) {
-                    await window.UnifiedAuthManager.init();
-                }
+                // Try main auth endpoint first
+                const response = await fetch(window.APIConfig.getBaseURL() + window.APIConfig.endpoints.login, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
                 
-                // Authenticate with unified manager
-                const authResult = await window.UnifiedAuthManager.authenticate(username, password);
-                
-                if (authResult.success) {
-                    const authMethod = authResult.method === 'supabase' ? 'Supabase' : 
-                                     authResult.method === 'fallback' ? 'Emergency' : 'System';
-                    showAlert(`${authMethod} login successful! Redirecting...`, 'success');
+                if (response.ok) {
+                    const data = await response.json();
+                    showAlert('Login successful! Redirecting...', 'success');
                     
-                    // Store remember preference if needed
-                    if (remember) {
-                        localStorage.setItem('rememberLogin', 'true');
+                    // Store token if provided
+                    if (data.token) {
+                        localStorage.setItem('auth_token', data.token);
                     }
                     
-                    // Redirect after short delay
+                    // Redirect after delay
                     setTimeout(() => {
-                        const urlParams = new URLSearchParams(window.location.search);
-                        const redirect = urlParams.get('returnTo') || urlParams.get('redirect') || 'dashboard.html';
-                        window.location.href = redirect;
+                        window.location.href = 'dashboard.html';
                     }, 1000);
-                    
                 } else {
-                    throw new Error(authResult.error || 'Invalid credentials');
+                    throw new Error('Invalid credentials');
                 }
                 
             } catch (error) {
                 console.error('Login error:', error);
-                
-                let errorMessage = 'Login failed: ';
-                
-                if (error.message.includes('fetch') || error.message.includes('network') || error.name === 'TypeError') {
-                    const hostname = window.location.hostname;
-                    const isNetlify = hostname.includes('netlify.app');
-                    
-                    if (isNetlify) {
-                        errorMessage = '🚨 Supabase service temporarily unavailable.\n\nTry emergency credentials:\n- Username: admin / Password: portfolio2024!\n- Username: demo / Password: demo123';
-                    } else if (hostname.includes('localhost')) {
-                        errorMessage = 'Backend service not available.\n\nUse emergency access or check if services are running.';
-                    } else {
-                        errorMessage = 'Authentication service unavailable.\n\nTry emergency credentials below.';
-                    }
-                } else if (error.message.includes('Invalid login credentials') || error.message.includes('Invalid credentials')) {
-                    errorMessage = 'Invalid email or password.\n\nPlease check your credentials or use emergency access.';
-                } else {
-                    errorMessage += error.message || 'Unknown error occurred.';
-                }
-                
-                showAlert(errorMessage);
+                showAlert('Login failed. Try fallback authentication below.');
             } finally {
                 setLoading(false);
             }
@@ -545,86 +382,52 @@
             return false;
         }
         
-        // Enhanced initialization - this runs after script loading manager
-        async function initializeLoginSystem() {
-            console.log('🔑 Initializing login system...');
+        // Fallback authentication
+        async function tryFallbackAuth() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                showAlert('Please enter username and password first');
+                return;
+            }
             
             try {
-                // Wait for UnifiedAuthManager to be fully ready
-                if (!window.UnifiedAuthManager?.initialized) {
-                    console.log('⏳ Waiting for UnifiedAuthManager initialization...');
-                    let attempts = 0;
-                    while ((!window.UnifiedAuthManager?.initialized) && attempts < 30) {
-                        await new Promise(resolve => setTimeout(resolve, 200));
-                        attempts++;
-                    }
-                }
+                // Try simple auth endpoint
+                const response = await fetch(window.APIConfig.getBaseURL() + window.APIConfig.endpoints.simpleAuth, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
                 
-                // Check if already authenticated
-                if (window.UnifiedAuthManager?.isAuthenticated()) {
-                    console.log('✅ User already authenticated, redirecting to dashboard');
-                    showAlert('Already logged in. Redirecting...', 'success');
+                if (response.ok) {
+                    showAlert('Fallback login successful! Redirecting...', 'success');
+                    localStorage.setItem('auth_fallback', 'true');
                     setTimeout(() => {
-                        const urlParams = new URLSearchParams(window.location.search);
-                        const redirect = urlParams.get('returnTo') || urlParams.get('redirect') || 'dashboard.html';
-                        window.location.href = redirect;
+                        window.location.href = 'dashboard.html';
                     }, 1000);
-                    return;
+                } else {
+                    throw new Error('Fallback auth failed');
                 }
-                
-                // Auto-fill for development
-                const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.get('autofill') === 'true' || window.location.hostname.includes('localhost')) {
-                    document.getElementById('username').value = 'admin';
-                    document.getElementById('password').value = 'portfolio2024!';
-                }
-                
-                console.log('🔑 Login system ready');
                 
             } catch (error) {
-                console.error('❌ Login system initialization error:', error);
+                console.error('Fallback auth error:', error);
+                showAlert('Both main and fallback authentication failed.');
             }
         }
         
-        // Run after a short delay to ensure all scripts are loaded
-        setTimeout(initializeLoginSystem, 500);
-        
-        // Update status indicators based on actual configuration
-        function updateStatusIndicators() {
-            const indicators = {
-                supabase: document.querySelector('.status-item:nth-child(1) strong'),
-                config: document.querySelector('.status-item:nth-child(2) strong'),
-                environment: document.querySelector('.status-item:nth-child(3) strong')
-            };
+        // Simple initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🔑 Simple login system ready');
             
-            // Supabase status
-            if (window.SUPABASE_CONFIG?.url && window.SUPABASE_CONFIG?.anonKey) {
-                indicators.supabase.textContent = 'CONNECTED ✅';
-                indicators.supabase.style.color = '#28a745';
-            } else {
-                indicators.supabase.textContent = 'NOT CONFIGURED ⚠️';
-                indicators.supabase.style.color = '#ffc107';
+            // Auto-fill for development
+            if (window.location.hostname.includes('localhost')) {
+                document.getElementById('username').value = 'admin';
+                document.getElementById('password').value = 'portfolio2024!';
             }
-            
-            // Config status
-            if (window.CentralAPIConfig || window.unifiedApiClient) {
-                indicators.config.textContent = 'LOADED ✅';
-                indicators.config.style.color = '#28a745';
-            } else {
-                indicators.config.textContent = 'PARTIAL ⚠️';
-                indicators.config.style.color = '#ffc107';
-            }
-            
-            // Environment detection
-            const hostname = window.location.hostname;
-            if (hostname.includes('netlify.app')) {
-                indicators.environment.textContent = 'NETLIFY ✅';
-            } else if (hostname.includes('localhost')) {
-                indicators.environment.textContent = 'DEVELOPMENT ✅';
-            } else {
-                indicators.environment.textContent = 'PRODUCTION ✅';
-            }
-        }
+        });
     </script>
 </body>
 </html>

@@ -452,7 +452,16 @@
 [functions."auth-me"]
   timeout = 30
 
+[functions."auth-logout"]
+  timeout = 30
+
+[functions."test-auth"]
+  timeout = 30
+
 [functions."auth"]
+  timeout = 30
+
+[functions."health"]
   timeout = 30
 
 [functions."content"]
