@@ -27,6 +27,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Portfolio">
     
+    <!-- Netlify Identity Widget for CMS Authentication -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    
     <!-- Configuration merge script for Hugo + Client config compatibility -->
     <script>
         // Merge Hugo CONFIG with CLIENT_CONFIG for complete compatibility
@@ -118,6 +121,19 @@
         });
         
         // Language switching is handled by language-switcher-fix.js
+    </script>
+    
+    <!-- Netlify Identity redirect handling -->
+    <script>
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
+            });
+        }
     </script>
     
 </body>

@@ -1,0 +1,99 @@
+# Decap CMS Configuration for Hugo Portfolio Site
+backend:
+  name: git-gateway
+  branch: main # Branch to update (optional; defaults to master)
+
+# Netlify Identity for authentication
+media_folder: "static/images" # Media files will be stored in the repo under static/images
+public_folder: "/images" # The src attribute for uploaded media will begin with /images
+
+# Collections define the structure for the different content types on your site
+collections:
+  - name: "posts" # Used in routes, e.g., /admin/collections/blog
+    label: "Blog Posts" # Used in the UI
+    folder: "content/posts" # The path to the folder where the documents are stored
+    create: true # Allow users to create new documents in this collection
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # Filename template, e.g., YYYY-MM-DD-title.md
+    fields: # The fields for each document, usually in front matter
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Draft", name: "draft", widget: "boolean", default: false}
+      - {label: "Tags", name: "tags", widget: "list", default: []}
+      - {label: "Categories", name: "categories", widget: "list", default: []}
+      - {label: "Description", name: "description", widget: "text", required: false}
+      - {label: "Featured Image", name: "image", widget: "image", required: false}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "projects" # Used in routes
+    label: "Projects" # Used in the UI
+    folder: "content/projects" # The path to the folder where the documents are stored
+    create: true # Allow users to create new documents in this collection
+    slug: "{{slug}}" # Filename template
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Date", name: "date", widget: "datetime"}
+      - {label: "Draft", name: "draft", widget: "boolean", default: false}
+      - {label: "Tags", name: "tags", widget: "list", default: []}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Project URL", name: "project_url", widget: "string", required: false}
+      - {label: "GitHub URL", name: "github_url", widget: "string", required: false}
+      - {label: "Featured Image", name: "image", widget: "image", required: false}
+      - {label: "Technologies", name: "technologies", widget: "list", default: []}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "pages"
+    label: "Pages"
+    files:
+      - label: "About Page"
+        name: "about"
+        file: "content/about.md"
+        fields:
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Date", name: "date", widget: "datetime"}
+          - {label: "Draft", name: "draft", widget: "boolean", default: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Contact Page"
+        name: "contact"
+        file: "content/contact.md"
+        fields:
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Date", name: "date", widget: "datetime"}
+          - {label: "Draft", name: "draft", widget: "boolean", default: false}
+          - {label: "Email", name: "email", widget: "string"}
+          - {label: "Phone", name: "phone", widget: "string", required: false}
+          - {label: "Location", name: "location", widget: "string", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - label: "Site Configuration"
+        name: "config"
+        file: "config.yml"
+        fields:
+          - {label: "Site Title", name: "title", widget: "string"}
+          - {label: "Base URL", name: "baseURL", widget: "string"}
+          - {label: "Language Code", name: "languageCode", widget: "string"}
+          - {label: "Theme", name: "theme", widget: "string"}
+          - label: "Params"
+            name: "params"
+            widget: "object"
+            fields:
+              - {label: "Author", name: "author", widget: "string"}
+              - {label: "Description", name: "description", widget: "text"}
+              - {label: "Keywords", name: "keywords", widget: "string"}
+
+# Site preview configuration
+site_url: https://your-site.netlify.app # Your site's URL
+display_url: https://your-site.netlify.app # URL to display in the admin UI
+
+# Editorial workflow (optional - enables draft, review, and publish states)
+publish_mode: editorial_workflow
+
+# Media library settings
+media_library:
+  name: uploadcare
+  config:
+    publicKey: "your-uploadcare-public-key" # Replace with your Uploadcare public key
+    multiple: false
+    tabs: 'file camera url facebook gdrive gphotos dropbox instagram'
