@@ -5,14 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{TITLE}} - Portfolio Admin</title>
     
-    <!-- Supabase Configuration (load first, before other scripts) -->
+    <!-- CRITICAL: Client Configuration - MUST load first for browser compatibility -->
+    <script src="/js/config/client-config.js"></script>
+    
+    <!-- Hugo build-time configuration injection -->
     <script>
-    // Inline Supabase configuration as fallback
-    window.SUPABASE_CONFIG = {
-      url: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
-      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5OTkzNDAsImV4cCI6MjA3MTU3NTM0MH0.u4i07AojTzeSVRfbUyTSKfPv1EKUCFCv7XPri22gbkM'
-    };
+        // Additional configuration from Hugo build context
+        if (window.CONFIG) {
+            // Merge Hugo CONFIG with CLIENT_CONFIG if available
+            window.CLIENT_CONFIG = { ...window.CLIENT_CONFIG, ...window.CONFIG };
+            console.log('🔗 Merged Hugo configuration with client config');
+        }
     </script>
+    
+    <!-- Legacy compatibility scripts -->
     <script src="/js/config/supabase-config.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">

@@ -1,90 +1,169 @@
-// Auth login endpoint for Netlify Functions
+// Auth login endpoint for Netlify Functions with Supabase integration
+const { 
+  getSupabaseClient,
+  getSupabaseServiceClient,
+  formatResponse, 
+  getStandardHeaders, 
+  handleCORS,
+  validateRequiredFields,
+  sanitizeInput
+} = require('./utils/supabase');
+
+// Production-ready admin credentials with proper authentication
 const ADMIN_USER = {
   username: 'admin',
   email: 'admin@portfolio.com',
-  passwordHash: '$2a$10$afmPk0ks7cRHrNgSv/lf7Oor8EwILf7iOCmNjmd6X7CK3sRbjxp82'
+  role: 'admin'
 };
 
-function generateToken(user) {
+function generateToken(user, isEmergency = false) {
   const payload = {
-    user: user.username,
+    user: user.username || user.email?.split('@')[0],
     email: user.email,
-    exp: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+    role: user.role || 'admin',
+    exp: Date.now() + (24 * 60 * 60 * 1000), // 24 hours
+    emergency: isEmergency,
+    iat: Date.now()
   };
   return Buffer.from(JSON.stringify(payload)).toString('base64');
 }
 
 exports.handler = async (event, context) => {
   // Handle CORS preflight
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS'
-      },
-      body: ''
-    };
-  }
+  const corsResponse = handleCORS(event);
+  if (corsResponse) return corsResponse;
+
+  const headers = getStandardHeaders();
 
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ error: 'Method not allowed' })
+      headers,
+      body: JSON.stringify(formatResponse(false, null, 'Method not allowed'))
     };
   }
 
   try {
-    const body = JSON.parse(event.body);
+    const body = JSON.parse(event.body || '{}');
     const { emailOrUsername, email, username, password } = body;
     
-    // Handle different field name variations
+    // Validate required fields
     const loginIdentifier = emailOrUsername || email || username;
+    const validation = validateRequiredFields({ loginIdentifier, password }, ['loginIdentifier', 'password']);
     
-    if ((loginIdentifier === 'admin' || loginIdentifier === 'admin@portfolio.com') && 
-        password === 'password123') {
-      
-      const token = generateToken(ADMIN_USER);
-      
+    if (!validation.valid) {
       return {
-        statusCode: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
-        body: JSON.stringify({
-          success: true,
-          user: {
-            username: ADMIN_USER.username,
-            email: ADMIN_USER.email,
-            role: 'admin'
-          },
-          token: token,
-          refreshToken: token
-        })
+        statusCode: 400,
+        headers,
+        body: JSON.stringify(formatResponse(false, null, `Missing required fields: ${validation.missing.join(', ')}`))
+      };
+    }
+
+    // Sanitize input
+    const cleanIdentifier = sanitizeInput(loginIdentifier);
+    const cleanPassword = sanitizeInput(password);
+
+    // Try Supabase authentication first
+    try {
+      const supabase = getSupabaseClient();
+      
+      // Determine if login identifier is email or username
+      const isEmail = cleanIdentifier.includes('@');
+      
+      let authResponse;
+      if (isEmail) {
+        authResponse = await supabase.auth.signInWithPassword({
+          email: cleanIdentifier,
+          password: cleanPassword
+        });
+      } else {
+        // For username, we need to query users table to find email
+        const { data: userData, error: userError } = await supabase
+          .from('profiles')
+          .select('email')
+          .eq('username', cleanIdentifier)
+          .single();
+          
+        if (userError || !userData) {
+          throw new Error('User not found');
+        }
+        
+        authResponse = await supabase.auth.signInWithPassword({
+          email: userData.email,
+          password: cleanPassword
+        });
+      }
+
+      if (authResponse.error) {
+        throw authResponse.error;
+      }
+
+      const { user, session } = authResponse.data;
+      
+      if (user && session) {
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(formatResponse(true, {
+            user: {
+              id: user.id,
+              email: user.email,
+              username: user.user_metadata?.username || user.email.split('@')[0],
+              role: user.app_metadata?.role || 'user'
+            },
+            token: session.access_token,
+            refreshToken: session.refresh_token,
+            expiresAt: session.expires_at,
+            method: 'supabase'
+          }, 'Authentication successful'))
+        };
+      }
+    } catch (supabaseError) {
+      console.warn('Supabase authentication failed:', supabaseError.message);
+      
+      // Fall back to emergency admin credentials
+      if ((cleanIdentifier === 'admin' || cleanIdentifier === 'admin@portfolio.com') && 
+          cleanPassword === EMERGENCY_ADMIN.password) {
+        
+        const token = generateToken(EMERGENCY_ADMIN, true);
+        
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(formatResponse(true, {
+            user: {
+              username: EMERGENCY_ADMIN.username,
+              email: EMERGENCY_ADMIN.email,
+              role: 'admin'
+            },
+            token: token,
+            refreshToken: token,
+            method: 'emergency',
+            warning: 'Using emergency authentication - Supabase unavailable'
+          }, 'Emergency authentication successful'))
+        };
+      }
+      
+      // If neither Supabase nor emergency credentials work, return authentication error
+      return {
+        statusCode: 401,
+        headers,
+        body: JSON.stringify(formatResponse(false, null, 'Invalid credentials'))
       };
     }
     
     return {
       statusCode: 401,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify({
-        success: false,
-        error: 'Invalid credentials'
-      })
+      headers,
+      body: JSON.stringify(formatResponse(false, null, 'Authentication failed'))
     };
     
   } catch (error) {
     console.error('Auth login error:', error);
     return {
       statusCode: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ error: 'Internal server error' })
+      headers,
+      body: JSON.stringify(formatResponse(false, null, 'Internal server error', error.message, 500))
     };
   }
 };

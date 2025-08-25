@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills & Experience Management Matrix</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #7c3aed;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-gray: #f8fafc;
+            --medium-gray: #64748b;
+            --border-color: #e2e8f0;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .dashboard-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .skills-matrix {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .matrix-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 8px 16px;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .tab-button.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .tab-button:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .skill-card {
+            background: var(--light-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            background: white;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .skill-level {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .skill-level.beginner { background: var(--danger-color); }
+        .skill-level.intermediate { background: var(--warning-color); }
+        .skill-level.advanced { background: var(--primary-color); }
+        .skill-level.expert { background: var(--success-color); }
+
+        .skill-progress {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .skill-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .years-experience {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .endorsements {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .endorsement-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .endorsement-btn:hover, .endorsement-btn.endorsed {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        .certifications {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .cert-item {
+            background: var(--light-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cert-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .cert-details {
+            flex: 1;
+        }
+
+        .cert-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .cert-issuer {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .skills-gap-analyzer {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .gap-analysis {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .current-skills, .target-skills {
+            padding: 20px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .skill-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .skill-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .skill-list li:last-child {
+            border-bottom: none;
+        }
+
+        .gap-indicator {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .gap-indicator.minor { background: var(--success-color); color: white; }
+        .gap-indicator.moderate { background: var(--warning-color); color: white; }
+        .gap-indicator.major { background: var(--danger-color); color: white; }
+
+        .skills-showcase {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .showcase-item {
+            background: var(--light-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .showcase-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            background: white;
+        }
+
+        .showcase-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .project-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .skills-used {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .skill-tag {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background: var(--medium-gray);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .floating-actions {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .fab {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        .fab-primary {
+            background: var(--primary-color);
+        }
+
+        .fab-success {
+            background: var(--success-color);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gap-analysis {
+                grid-template-columns: 1fr;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .showcase-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> Skills & Experience Matrix</h1>
+            <p>Comprehensive skills management, tracking, and career development dashboard</p>
+        </div>
+
+        <!-- Dashboard Overview -->
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h3><i class="fas fa-chart-bar"></i> Skills Overview</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalSkills">42</div>
+                        <div class="stat-label">Total Skills</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="expertSkills">8</div>
+                        <div class="stat-label">Expert Level</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="certifications">12</div>
+                        <div class="stat-label">Certifications</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalExperience">15</div>
+                        <div class="stat-label">Years Experience</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <h3><i class="fas fa-trophy"></i> Recent Achievements</h3>
+                <div id="recentAchievements">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <i class="fas fa-medal" style="color: var(--success-color);"></i>
+                        <span>AWS Solutions Architect Certified</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <i class="fas fa-star" style="color: var(--warning-color);"></i>
+                        <span>JavaScript Expert Level Achieved</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-thumbs-up" style="color: var(--primary-color);"></i>
+                        <span>React Skills Endorsed by 5 colleagues</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills Matrix -->
+        <div class="skills-matrix">
+            <div class="matrix-header">
+                <h3><i class="fas fa-th-large"></i> Skills Matrix</h3>
+                <div class="category-tabs">
+                    <button class="tab-button active" data-category="all">All</button>
+                    <button class="tab-button" data-category="languages">Languages</button>
+                    <button class="tab-button" data-category="edtech">EdTech</button>
+                    <button class="tab-button" data-category="design">Design</button>
+                    <button class="tab-button" data-category="frameworks">Frameworks</button>
+                    <button class="tab-button" data-category="tools">Tools</button>
+                </div>
+            </div>
+            <div class="skills-grid" id="skillsGrid">
+                <!-- Skills will be dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Certifications -->
+        <div class="certifications">
+            <h3><i class="fas fa-certificate"></i> Certifications & Credentials</h3>
+            <div class="cert-grid" id="certGrid">
+                <!-- Certifications will be dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Skills Gap Analyzer -->
+        <div class="skills-gap-analyzer">
+            <h3><i class="fas fa-analytics"></i> Skills Gap Analysis</h3>
+            <div class="gap-analysis">
+                <div class="current-skills">
+                    <h4><i class="fas fa-user-check"></i> Current Skills Profile</h4>
+                    <ul class="skill-list" id="currentSkillsList">
+                        <!-- Current skills will be populated -->
+                    </ul>
+                </div>
+                <div class="target-skills">
+                    <h4><i class="fas fa-target"></i> Career Goal Requirements</h4>
+                    <ul class="skill-list" id="targetSkillsList">
+                        <!-- Target skills will be populated -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills Showcase -->
+        <div class="skills-showcase">
+            <h3><i class="fas fa-project-diagram"></i> Skills Showcase</h3>
+            <div class="showcase-grid" id="showcaseGrid">
+                <!-- Project showcase will be dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Floating Action Buttons -->
+        <div class="floating-actions">
+            <button class="fab fab-primary" onclick="openModal('addSkillModal')" title="Add Skill">
+                <i class="fas fa-plus"></i>
+            </button>
+            <button class="fab fab-success" onclick="openModal('addProjectModal')" title="Add Project">
+                <i class="fas fa-folder-plus"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Add Skill Modal -->
+    <div id="addSkillModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('addSkillModal')">&times;</button>
+            <h3>Add New Skill</h3>
+            <form id="addSkillForm">
+                <div class="form-group">
+                    <label for="skillName">Skill Name</label>
+                    <input type="text" id="skillName" required>
+                </div>
+                <div class="form-group">
+                    <label for="skillCategory">Category</label>
+                    <select id="skillCategory" required>
+                        <option value="languages">Programming Languages</option>
+                        <option value="edtech">Educational Technology</option>
+                        <option value="design">Design & UX</option>
+                        <option value="frameworks">Frameworks & Libraries</option>
+                        <option value="tools">Tools & Platforms</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="skillLevel">Proficiency Level</label>
+                    <select id="skillLevel" required>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                        <option value="expert">Expert</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="yearsExp">Years of Experience</label>
+                    <input type="number" id="yearsExp" min="0" max="50" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Skill</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Project Modal -->
+    <div id="addProjectModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('addProjectModal')">&times;</button>
+            <h3>Add Project Showcase</h3>
+            <form id="addProjectForm">
+                <div class="form-group">
+                    <label for="projectTitle">Project Title</label>
+                    <input type="text" id="projectTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectDescription">Description</label>
+                    <textarea id="projectDescription" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="projectSkills">Skills Used (comma-separated)</label>
+                    <input type="text" id="projectSkills" placeholder="JavaScript, React, Node.js" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectUrl">Project URL (optional)</label>
+                    <input type="url" id="projectUrl">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Project</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Skills Data
+        let skillsData = [
+            { name: 'JavaScript', category: 'languages', level: 'expert', proficiency: 95, years: 8, endorsements: 12 },
+            { name: 'Python', category: 'languages', level: 'advanced', proficiency: 85, years: 6, endorsements: 8 },
+            { name: 'React', category: 'frameworks', level: 'expert', proficiency: 90, years: 5, endorsements: 15 },
+            { name: 'Vue.js', category: 'frameworks', level: 'advanced', proficiency: 80, years: 3, endorsements: 7 },
+            { name: 'Node.js', category: 'frameworks', level: 'advanced', proficiency: 85, years: 4, endorsements: 10 },
+            { name: 'Canvas LMS', category: 'edtech', level: 'expert', proficiency: 95, years: 7, endorsements: 20 },
+            { name: 'Moodle', category: 'edtech', level: 'advanced', proficiency: 80, years: 4, endorsements: 12 },
+            { name: 'Articulate 360', category: 'edtech', level: 'expert', proficiency: 90, years: 5, endorsements: 18 },
+            { name: 'Adobe Creative Suite', category: 'design', level: 'advanced', proficiency: 85, years: 6, endorsements: 14 },
+            { name: 'Figma', category: 'design', level: 'expert', proficiency: 90, years: 4, endorsements: 16 },
+            { name: 'Docker', category: 'tools', level: 'intermediate', proficiency: 70, years: 2, endorsements: 5 },
+            { name: 'AWS', category: 'tools', level: 'advanced', proficiency: 80, years: 3, endorsements: 9 }
+        ];
+
+        let certificationsData = [
+            { name: 'AWS Solutions Architect', issuer: 'Amazon Web Services', icon: 'cloud' },
+            { name: 'Certified ScrumMaster', issuer: 'Scrum Alliance', icon: 'tasks' },
+            { name: 'Google Analytics IQ', issuer: 'Google', icon: 'chart-bar' },
+            { name: 'Adobe Certified Expert', issuer: 'Adobe Systems', icon: 'palette' },
+            { name: 'Microsoft Azure Fundamentals', issuer: 'Microsoft', icon: 'cloud-upload-alt' },
+            { name: 'Certified Ethical Hacker', issuer: 'EC-Council', icon: 'shield-alt' }
+        ];
+
+        let projectsData = [
+            {
+                title: 'Learning Management System',
+                description: 'Custom LMS built for educational institutions with advanced analytics',
+                skills: ['JavaScript', 'React', 'Node.js', 'MongoDB'],
+                url: 'https://github.com/example/lms'
+            },
+            {
+                title: 'E-Learning Content Authoring Tool',
+                description: 'SCORM-compliant content creation platform',
+                skills: ['Vue.js', 'Python', 'Canvas API', 'SCORM'],
+                url: 'https://github.com/example/authoring-tool'
+            },
+            {
+                title: 'Student Performance Dashboard',
+                description: 'Real-time analytics dashboard for tracking student progress',
+                skills: ['React', 'D3.js', 'Express', 'PostgreSQL'],
+                url: 'https://github.com/example/dashboard'
+            }
+        ];
+
+        let careerGoalSkills = [
+            { name: 'Machine Learning', level: 'advanced', gap: 'major' },
+            { name: 'Kubernetes', level: 'intermediate', gap: 'moderate' },
+            { name: 'GraphQL', level: 'advanced', gap: 'minor' },
+            { name: 'TypeScript', level: 'expert', gap: 'minor' },
+            { name: 'DevOps', level: 'advanced', gap: 'moderate' }
+        ];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            renderSkills();
+            renderCertifications();
+            renderGapAnalysis();
+            renderShowcase();
+            setupEventListeners();
+        });
+
+        function renderSkills(category = 'all') {
+            const skillsGrid = document.getElementById('skillsGrid');
+            const filteredSkills = category === 'all' 
+                ? skillsData 
+                : skillsData.filter(skill => skill.category === category);
+
+            skillsGrid.innerHTML = filteredSkills.map(skill => `
+                <div class="skill-card" data-category="${skill.category}">
+                    <div class="skill-header">
+                        <span class="skill-name">${skill.name}</span>
+                        <span class="skill-level ${skill.level}">${skill.level}</span>
+                    </div>
+                    <div class="skill-progress">
+                        <div class="progress-fill" style="width: ${skill.proficiency}%"></div>
+                    </div>
+                    <div class="skill-meta">
+                        <div class="years-experience">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>${skill.years} years</span>
+                        </div>
+                        <div class="endorsements">
+                            <button class="endorsement-btn" onclick="endorseSkill('${skill.name}')">
+                                <i class="fas fa-thumbs-up"></i> ${skill.endorsements}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Update stats
+            updateStats();
+        }
+
+        function renderCertifications() {
+            const certGrid = document.getElementById('certGrid');
+            certGrid.innerHTML = certificationsData.map(cert => `
+                <div class="cert-item">
+                    <div class="cert-icon">
+                        <i class="fas fa-${cert.icon}"></i>
+                    </div>
+                    <div class="cert-details">
+                        <div class="cert-name">${cert.name}</div>
+                        <div class="cert-issuer">${cert.issuer}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderGapAnalysis() {
+            const currentSkillsList = document.getElementById('currentSkillsList');
+            const targetSkillsList = document.getElementById('targetSkillsList');
+
+            // Current skills (top skills by proficiency)
+            const topSkills = skillsData
+                .sort((a, b) => b.proficiency - a.proficiency)
+                .slice(0, 8);
+
+            currentSkillsList.innerHTML = topSkills.map(skill => `
+                <li>
+                    <span>${skill.name}</span>
+                    <span class="skill-level ${skill.level}">${skill.level}</span>
+                </li>
+            `).join('');
+
+            // Target skills with gap indicators
+            targetSkillsList.innerHTML = careerGoalSkills.map(skill => `
+                <li>
+                    <span>${skill.name}</span>
+                    <span class="gap-indicator ${skill.gap}">${skill.gap} gap</span>
+                </li>
+            `).join('');
+        }
+
+        function renderShowcase() {
+            const showcaseGrid = document.getElementById('showcaseGrid');
+            showcaseGrid.innerHTML = projectsData.map(project => `
+                <div class="showcase-item">
+                    <div class="showcase-header">
+                        <div class="project-title">${project.title}</div>
+                        ${project.url ? `<a href="${project.url}" target="_blank" style="color: var(--primary-color);"><i class="fas fa-external-link-alt"></i></a>` : ''}
+                    </div>
+                    <div class="project-description">${project.description}</div>
+                    <div class="skills-used">
+                        ${project.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setupEventListeners() {
+            // Category tab switching
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    renderSkills(this.dataset.category);
+                });
+            });
+
+            // Form submissions
+            document.getElementById('addSkillForm').addEventListener('submit', handleAddSkill);
+            document.getElementById('addProjectForm').addEventListener('submit', handleAddProject);
+        }
+
+        function handleAddSkill(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const newSkill = {
+                name: formData.get('skillName') || document.getElementById('skillName').value,
+                category: formData.get('skillCategory') || document.getElementById('skillCategory').value,
+                level: formData.get('skillLevel') || document.getElementById('skillLevel').value,
+                years: parseInt(formData.get('yearsExp') || document.getElementById('yearsExp').value),
+                proficiency: calculateProficiency(formData.get('skillLevel') || document.getElementById('skillLevel').value),
+                endorsements: 0
+            };
+
+            skillsData.push(newSkill);
+            renderSkills();
+            closeModal('addSkillModal');
+            e.target.reset();
+            showNotification('Skill added successfully!');
+        }
+
+        function handleAddProject(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const skills = (formData.get('projectSkills') || document.getElementById('projectSkills').value)
+                .split(',').map(s => s.trim());
+            
+            const newProject = {
+                title: formData.get('projectTitle') || document.getElementById('projectTitle').value,
+                description: formData.get('projectDescription') || document.getElementById('projectDescription').value,
+                skills: skills,
+                url: formData.get('projectUrl') || document.getElementById('projectUrl').value
+            };
+
+            projectsData.push(newProject);
+            renderShowcase();
+            closeModal('addProjectModal');
+            e.target.reset();
+            showNotification('Project added successfully!');
+        }
+
+        function calculateProficiency(level) {
+            const levels = {
+                'beginner': 25,
+                'intermediate': 50,
+                'advanced': 80,
+                'expert': 95
+            };
+            return levels[level] || 50;
+        }
+
+        function endorseSkill(skillName) {
+            const skill = skillsData.find(s => s.name === skillName);
+            if (skill) {
+                skill.endorsements++;
+                renderSkills();
+                showNotification(`${skillName} endorsed!`);
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('totalSkills').textContent = skillsData.length;
+            document.getElementById('expertSkills').textContent = skillsData.filter(s => s.level === 'expert').length;
+            document.getElementById('certifications').textContent = certificationsData.length;
+            document.getElementById('totalExperience').textContent = Math.max(...skillsData.map(s => s.years));
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--success-color);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: var(--shadow);
+                z-index: 1001;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); }
+                to { transform: translateX(0); }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); }
+                to { transform: translateX(100%); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

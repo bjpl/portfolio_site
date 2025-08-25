@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Management Dashboard</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .media-dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+        }
+        
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .media-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        
+        .media-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .media-thumbnail {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+        
+        .media-info {
+            padding: 15px;
+        }
+        
+        .media-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .media-meta {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .media-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        
+        .tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            height: fit-content;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .upload-zone {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+            cursor: pointer;
+        }
+        
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--primary-color);
+            background: #f8f9fa;
+        }
+        
+        .search-filters {
+            margin-bottom: 20px;
+        }
+        
+        .filter-group {
+            margin-bottom: 15px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .analytics-panel {
+            margin-top: 30px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s;
+            width: 0%;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .alert {
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .optimization-recommendations {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .recommendation {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .recommendation-title {
+            font-weight: 600;
+            color: #856404;
+        }
+        
+        .recommendation-description {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin: 5px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .media-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="media-dashboard">
+        <div class="dashboard-header">
+            <h1>Media Management Dashboard</h1>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" onclick="optimizeStorage()">Optimize Storage</button>
+                <button class="btn btn-secondary" onclick="exportAnalytics()">Export Analytics</button>
+            </div>
+        </div>
+
+        <!-- Statistics Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalFiles">0</div>
+                <div class="stat-label">Total Files</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalSize">0 MB</div>
+                <div class="stat-label">Storage Used</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalViews">0</div>
+                <div class="stat-label">Total Views (7d)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgLoadTime">0ms</div>
+                <div class="stat-label">Avg Load Time</div>
+            </div>
+        </div>
+
+        <!-- Optimization Recommendations -->
+        <div id="recommendationsPanel" class="optimization-recommendations" style="display: none;">
+            <h3>Optimization Recommendations</h3>
+            <div id="recommendationsList"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Media Grid -->
+            <div>
+                <div id="mediaGrid" class="media-grid">
+                    <!-- Media items will be loaded here -->
+                </div>
+                
+                <div id="loadingIndicator" style="text-align: center; padding: 40px;">
+                    <div class="loading"></div>
+                    <p>Loading media...</p>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Upload Zone -->
+                <div class="upload-zone" id="uploadZone">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">📁</div>
+                    <p><strong>Drop files here or click to browse</strong></p>
+                    <p style="font-size: 0.9rem; color: #666;">Supports images, videos, and documents up to 100MB</p>
+                    <input type="file" id="fileInput" multiple accept="image/*,video/*,audio/*,.pdf" style="display: none;">
+                </div>
+                
+                <div class="progress-bar" id="uploadProgress" style="display: none;">
+                    <div class="progress-fill" id="uploadProgressFill"></div>
+                </div>
+                <div id="uploadStatus" style="display: none; margin-top: 10px;"></div>
+
+                <!-- Search and Filters -->
+                <div class="search-filters">
+                    <h3>Search & Filter</h3>
+                    
+                    <div class="filter-group">
+                        <label for="searchInput">Search</label>
+                        <input type="text" id="searchInput" placeholder="Search by name, tags, or content...">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="typeFilter">File Type</label>
+                        <select id="typeFilter">
+                            <option value="">All Types</option>
+                            <option value="image">Images</option>
+                            <option value="video">Videos</option>
+                            <option value="audio">Audio</option>
+                            <option value="application">Documents</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="tagsFilter">Tags</label>
+                        <input type="text" id="tagsFilter" placeholder="Enter tags (comma-separated)">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="dateFilter">Upload Date</label>
+                        <select id="dateFilter">
+                            <option value="">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn" onclick="applyFilters()" style="width: 100%; margin-top: 15px;">Apply Filters</button>
+                </div>
+
+                <!-- Quick Actions -->
+                <div style="margin-top: 30px;">
+                    <h3>Quick Actions</h3>
+                    <button class="btn" onclick="selectAll()" style="width: 100%; margin-bottom: 10px;">Select All</button>
+                    <button class="btn btn-secondary" onclick="clearSelection()" style="width: 100%; margin-bottom: 10px;">Clear Selection</button>
+                    <button class="btn btn-danger" onclick="deleteSelected()" style="width: 100%;">Delete Selected</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Panel -->
+        <div class="analytics-panel">
+            <h2>Analytics Overview</h2>
+            <div class="chart-container">
+                <canvas id="analyticsChart"></canvas>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div>
+                    <h4>Top Formats</h4>
+                    <div id="topFormats"></div>
+                </div>
+                <div>
+                    <h4>Device Breakdown</h4>
+                    <div id="deviceBreakdown"></div>
+                </div>
+                <div>
+                    <h4>Performance Metrics</h4>
+                    <div id="performanceMetrics"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Media Detail Modal -->
+    <div class="modal" id="mediaModal">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 id="modalTitle">Media Details</h2>
+                <button onclick="closeModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            </div>
+            
+            <div id="modalContent">
+                <!-- Content will be populated dynamically -->
+            </div>
+            
+            <div style="margin-top: 20px; text-align: right;">
+                <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+                <button class="btn" onclick="downloadMedia()">Download</button>
+                <button class="btn btn-danger" onclick="deleteMedia()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        class MediaDashboard {
+            constructor() {
+                this.selectedItems = new Set();
+                this.currentMedia = [];
+                this.currentFilters = {};
+                this.chart = null;
+                
+                this.init();
+            }
+            
+            async init() {
+                this.setupEventListeners();
+                await this.loadMedia();
+                // Skip analytics for now as they require different API endpoints
+                // await this.loadAnalytics();
+                // await this.loadRecommendations();
+            }
+            
+            setupEventListeners() {
+                // Upload zone events
+                const uploadZone = document.getElementById('uploadZone');
+                const fileInput = document.getElementById('fileInput');
+                
+                uploadZone.addEventListener('click', () => fileInput.click());
+                uploadZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadZone.classList.add('dragover');
+                });
+                uploadZone.addEventListener('dragleave', () => {
+                    uploadZone.classList.remove('dragover');
+                });
+                uploadZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadZone.classList.remove('dragover');
+                    this.handleFiles(e.dataTransfer.files);
+                });
+                
+                fileInput.addEventListener('change', (e) => {
+                    this.handleFiles(e.target.files);
+                });
+                
+                // Search input with debounce
+                let searchTimeout;
+                document.getElementById('searchInput').addEventListener('input', (e) => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        this.applyFilters();
+                    }, 500);
+                });
+            }
+            
+            updateStats() {
+                const totalSize = this.currentMedia.reduce((sum, file) => sum + file.size, 0);
+                document.getElementById('totalFiles').textContent = this.currentMedia.length;
+                document.getElementById('totalSize').textContent = this.formatFileSize(totalSize);
+                document.getElementById('totalViews').textContent = 'N/A';
+                document.getElementById('avgLoadTime').textContent = 'N/A';
+            }
+            
+            async loadMedia(filters = {}) {
+                const loadingIndicator = document.getElementById('loadingIndicator');
+                loadingIndicator.style.display = 'block';
+                
+                try {\n                    const params = new URLSearchParams({\n                        limit: 50,\n                        ...filters\n                    });\n                    \n                    const response = await fetch(`/api/media/search?${params}`);\n                    const data = await response.json();\n                    \n                    if (data.success) {\n                        this.currentMedia = data.results;\n                        this.renderMediaGrid(data.results);\n                    }\n                } catch (error) {\n                    console.error('Failed to load media:', error);\n                    this.showAlert('Failed to load media', 'error');\n                } finally {\n                    loadingIndicator.style.display = 'none';\n                }\n            }\n            \n            renderMediaGrid(media) {\n                const grid = document.getElementById('mediaGrid');\n                \n                if (media.length === 0) {\n                    grid.innerHTML = '<div style=\"text-align: center; padding: 40px; color: #666; grid-column: 1 / -1;\">No media files found</div>';\n                    return;\n                }\n                \n                grid.innerHTML = media.map(item => {\n                    const isSelected = this.selectedItems.has(item.id);\n                    const thumbnail = this.getThumbnailUrl(item);\n                    const tags = Array.isArray(item.tags) ? item.tags : [];\n                    \n                    return `\n                        <div class=\"media-item ${isSelected ? 'selected' : ''}\" \n                             onclick=\"mediaManager.selectItem(${item.id}, event)\" \n                             ondblclick=\"mediaManager.openMediaDetail(${item.id})\">\n                            <div class=\"media-thumbnail\">\n                                ${thumbnail ? \n                                    `<img src=\"${thumbnail}\" alt=\"${item.alt_text || item.original_name}\" style=\"width: 100%; height: 100%; object-fit: cover;\">` :\n                                    `<div style=\"font-size: 2rem;\">${this.getFileTypeIcon(item.mime_type)}</div>`\n                                }\n                            </div>\n                            <div class=\"media-info\">\n                                <div class=\"media-title\" title=\"${item.original_name}\">${item.original_name}</div>\n                                <div class=\"media-meta\">\n                                    ${this.formatFileSize(item.file_size)} • ${new Date(item.uploaded_at).toLocaleDateString()}\n                                </div>\n                                <div class=\"media-tags\">\n                                    ${tags.slice(0, 3).map(tag => `<span class=\"tag\">${tag}</span>`).join('')}\n                                    ${tags.length > 3 ? `<span class=\"tag\">+${tags.length - 3}</span>` : ''}\n                                </div>\n                            </div>\n                        </div>\n                    `;\n                }).join('');\n            }\n            \n            getThumbnailUrl(item) {\n                if (item.thumbnail_url) {\n                    return item.thumbnail_url;\n                }\n                \n                if (item.mime_type.startsWith('image/')) {\n                    return `/uploads/${item.file_name}`;\n                }\n                \n                return null;\n            }\n            \n            getFileTypeIcon(mimeType) {\n                if (mimeType.startsWith('image/')) return '🖼️';\n                if (mimeType.startsWith('video/')) return '🎥';\n                if (mimeType.startsWith('audio/')) return '🎵';\n                if (mimeType === 'application/pdf') return '📄';\n                return '📎';\n            }\n            \n            async handleFiles(files) {\n                if (files.length === 0) return;\n                \n                const formData = new FormData();\n                for (let file of files) {\n                    formData.append('files', file);\n                }\n                \n                // Show progress\n                const progressBar = document.getElementById('uploadProgress');\n                const progressFill = document.getElementById('uploadProgressFill');\n                const statusDiv = document.getElementById('uploadStatus');\n                \n                progressBar.style.display = 'block';\n                statusDiv.style.display = 'block';\n                statusDiv.innerHTML = `Uploading ${files.length} file(s)...`;\n                \n                try {\n                    const xhr = new XMLHttpRequest();\n                    \n                    xhr.upload.addEventListener('progress', (e) => {\n                        if (e.lengthComputable) {\n                            const percent = (e.loaded / e.total) * 100;\n                            progressFill.style.width = percent + '%';\n                        }\n                    });\n                    \n                    xhr.addEventListener('load', () => {\n                        const response = JSON.parse(xhr.responseText);\n                        \n                        if (response.success) {\n                            this.showAlert(`Successfully uploaded ${response.uploaded} file(s)`, 'success');\n                            this.loadMedia(); // Refresh grid\n                            this.loadStats(); // Refresh stats\n                        } else {\n                            this.showAlert('Upload failed', 'error');\n                        }\n                        \n                        // Hide progress\n                        setTimeout(() => {\n                            progressBar.style.display = 'none';\n                            statusDiv.style.display = 'none';\n                        }, 2000);\n                    });\n                    \n                    xhr.addEventListener('error', () => {\n                        this.showAlert('Upload failed', 'error');\n                        progressBar.style.display = 'none';\n                        statusDiv.style.display = 'none';\n                    });\n                    \n                    xhr.open('POST', '/api/media/upload');\n                    xhr.send(formData);\n                    \n                } catch (error) {\n                    console.error('Upload error:', error);\n                    this.showAlert('Upload failed', 'error');\n                    progressBar.style.display = 'none';\n                    statusDiv.style.display = 'none';\n                }\n            }\n            \n            selectItem(id, event) {\n                if (event.ctrlKey || event.metaKey) {\n                    // Multi-select with Ctrl/Cmd\n                    if (this.selectedItems.has(id)) {\n                        this.selectedItems.delete(id);\n                    } else {\n                        this.selectedItems.add(id);\n                    }\n                } else {\n                    // Single select\n                    this.selectedItems.clear();\n                    this.selectedItems.add(id);\n                }\n                \n                this.updateSelection();\n            }\n            \n            updateSelection() {\n                document.querySelectorAll('.media-item').forEach(item => {\n                    const id = parseInt(item.getAttribute('onclick').match(/\\d+/)[0]);\n                    if (this.selectedItems.has(id)) {\n                        item.classList.add('selected');\n                    } else {\n                        item.classList.remove('selected');\n                    }\n                });\n            }\n            \n            async openMediaDetail(id) {\n                const media = this.currentMedia.find(m => m.id === id);\n                if (!media) return;\n                \n                const modal = document.getElementById('mediaModal');\n                const title = document.getElementById('modalTitle');\n                const content = document.getElementById('modalContent');\n                \n                title.textContent = media.original_name;\n                \n                // Build detailed view\n                let detailHtml = `\n                    <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 20px;\">\n                        <div>\n                            <h4>Preview</h4>\n                            ${this.renderMediaPreview(media)}\n                        </div>\n                        <div>\n                            <h4>Details</h4>\n                            <table style=\"width: 100%; border-collapse: collapse;\">\n                                <tr><td><strong>File Name:</strong></td><td>${media.original_name}</td></tr>\n                                <tr><td><strong>File Size:</strong></td><td>${this.formatFileSize(media.file_size)}</td></tr>\n                                <tr><td><strong>MIME Type:</strong></td><td>${media.mime_type}</td></tr>\n                                <tr><td><strong>Uploaded:</strong></td><td>${new Date(media.uploaded_at).toLocaleString()}</td></tr>\n                                ${media.width ? `<tr><td><strong>Dimensions:</strong></td><td>${media.width} × ${media.height}</td></tr>` : ''}\n                                ${media.duration ? `<tr><td><strong>Duration:</strong></td><td>${this.formatDuration(media.duration)}</td></tr>` : ''}\n                                <tr><td><strong>Usage Count:</strong></td><td>${media.usage_count || 0}</td></tr>\n                            </table>\n                            \n                            <h4 style=\"margin-top: 20px;\">Tags</h4>\n                            <div class=\"media-tags\">\n                                ${(media.tags || []).map(tag => `<span class=\"tag\">${tag}</span>`).join('')}\n                            </div>\n                            \n                            <h4 style=\"margin-top: 20px;\">Alt Text</h4>\n                            <input type=\"text\" value=\"${media.alt_text || ''}\" style=\"width: 100%; padding: 8px;\" \n                                   onchange=\"mediaManager.updateAltText(${media.id}, this.value)\">\n                        </div>\n                    </div>\n                `;\n                \n                if (media.variants) {\n                    detailHtml += `\n                        <h4 style=\"margin-top: 20px;\">Available Variants</h4>\n                        <div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;\">\n                            ${media.variants.map(variant => `\n                                <div style=\"border: 1px solid #ddd; padding: 10px; border-radius: 4px;\">\n                                    <strong>${variant.preset}</strong><br>\n                                    <small>${variant.width} × ${variant.height}</small><br>\n                                    <a href=\"${variant.webp || variant.jpeg}\" target=\"_blank\">View</a>\n                                </div>\n                            `).join('')}\n                        </div>\n                    `;\n                }\n                \n                content.innerHTML = detailHtml;\n                modal.style.display = 'block';\n                \n                // Track view\n                try {\n                    await fetch(`/api/media/${id}`);\n                } catch (error) {\n                    console.error('Failed to track view:', error);\n                }\n            }\n            \n            renderMediaPreview(media) {\n                if (media.mime_type.startsWith('image/')) {\n                    return `<img src=\"/uploads/${media.file_name}\" style=\"max-width: 100%; height: auto; border-radius: 4px;\" alt=\"${media.alt_text || media.original_name}\">`;\n                } else if (media.mime_type.startsWith('video/')) {\n                    return `<video controls style=\"max-width: 100%; height: auto; border-radius: 4px;\">\n                                <source src=\"/uploads/${media.file_name}\" type=\"${media.mime_type}\">\n                                Your browser does not support the video tag.\n                            </video>`;\n                } else if (media.mime_type.startsWith('audio/')) {\n                    return `<audio controls style=\"width: 100%;\">\n                                <source src=\"/uploads/${media.file_name}\" type=\"${media.mime_type}\">\n                                Your browser does not support the audio tag.\n                            </audio>`;\n                } else {\n                    return `<div style=\"text-align: center; padding: 40px; background: #f5f5f5; border-radius: 4px;\">\n                                <div style=\"font-size: 3rem; margin-bottom: 10px;\">${this.getFileTypeIcon(media.mime_type)}</div>\n                                <p>Preview not available</p>\n                            </div>`;\n                }\n            }\n            \n            async applyFilters() {\n                const filters = {\n                    q: document.getElementById('searchInput').value,\n                    type: document.getElementById('typeFilter').value,\n                    tags: document.getElementById('tagsFilter').value\n                };\n                \n                // Date filter\n                const dateFilter = document.getElementById('dateFilter').value;\n                if (dateFilter) {\n                    const now = new Date();\n                    switch (dateFilter) {\n                        case 'today':\n                            filters.dateFrom = new Date(now.setHours(0,0,0,0)).toISOString();\n                            break;\n                        case 'week':\n                            filters.dateFrom = new Date(now.setDate(now.getDate() - 7)).toISOString();\n                            break;\n                        case 'month':\n                            filters.dateFrom = new Date(now.setMonth(now.getMonth() - 1)).toISOString();\n                            break;\n                        case 'year':\n                            filters.dateFrom = new Date(now.setFullYear(now.getFullYear() - 1)).toISOString();\n                            break;\n                    }\n                }\n                \n                // Remove empty filters\n                Object.keys(filters).forEach(key => {\n                    if (!filters[key]) delete filters[key];\n                });\n                \n                this.currentFilters = filters;\n                await this.loadMedia(filters);\n            }\n            \n            async loadAnalytics() {\n                try {\n                    const [dashboardResponse, timeSeriesResponse] = await Promise.all([\n                        fetch('/api/media/analytics/dashboard?timeframe=7d'),\n                        fetch('/api/media/analytics/timeseries?timeframe=7d&interval=day')\n                    ]);\n                    \n                    const dashboardData = await dashboardResponse.json();\n                    const timeSeriesData = await timeSeriesResponse.json();\n                    \n                    if (dashboardData.success) {\n                        this.updateAnalyticsStats(dashboardData.data.overview);\n                        this.renderFormatBreakdown(dashboardData.data.formatPerformance);\n                        this.renderDeviceBreakdown(dashboardData.data.deviceBreakdown);\n                        this.renderPerformanceMetrics(dashboardData.data.performanceMetrics);\n                    }\n                    \n                    if (timeSeriesData.success) {\n                        this.renderChart(timeSeriesData.data);\n                    }\n                } catch (error) {\n                    console.error('Failed to load analytics:', error);\n                }\n            }\n            \n            updateAnalyticsStats(overview) {\n                document.getElementById('totalViews').textContent = overview.totalViews || 0;\n                document.getElementById('avgLoadTime').textContent = (overview.avgLoadTime || 0) + 'ms';\n            }\n            \n            renderChart(data) {\n                const ctx = document.getElementById('analyticsChart').getContext('2d');\n                \n                if (this.chart) {\n                    this.chart.destroy();\n                }\n                \n                this.chart = new Chart(ctx, {\n                    type: 'line',\n                    data: {\n                        labels: data.map(d => new Date(d.time_bucket).toLocaleDateString()),\n                        datasets: [{\n                            label: 'Views',\n                            data: data.map(d => d.views),\n                            borderColor: 'rgb(75, 192, 192)',\n                            tension: 0.1\n                        }, {\n                            label: 'Unique Sessions',\n                            data: data.map(d => d.unique_sessions),\n                            borderColor: 'rgb(255, 99, 132)',\n                            tension: 0.1\n                        }]\n                    },\n                    options: {\n                        responsive: true,\n                        maintainAspectRatio: false,\n                        scales: {\n                            y: {\n                                beginAtZero: true\n                            }\n                        }\n                    }\n                });\n            }\n            \n            async loadRecommendations() {\n                try {\n                    const response = await fetch('/api/media/analytics/recommendations');\n                    const data = await response.json();\n                    \n                    if (data.success && data.recommendations.length > 0) {\n                        this.renderRecommendations(data.recommendations);\n                    }\n                } catch (error) {\n                    console.error('Failed to load recommendations:', error);\n                }\n            }\n            \n            renderRecommendations(recommendations) {\n                const panel = document.getElementById('recommendationsPanel');\n                const list = document.getElementById('recommendationsList');\n                \n                list.innerHTML = recommendations.map(rec => `\n                    <div class=\"recommendation\">\n                        <div class=\"recommendation-title\">${rec.title}</div>\n                        <div class=\"recommendation-description\">${rec.description}</div>\n                        <div style=\"font-size: 0.8rem; color: #6c757d; margin-top: 5px;\">\n                            <strong>Suggestion:</strong> ${rec.suggestion}\n                        </div>\n                    </div>\n                `).join('');\n                \n                panel.style.display = 'block';\n            }\n            \n            showAlert(message, type = 'success') {\n                const alert = document.createElement('div');\n                alert.className = `alert alert-${type}`;\n                alert.textContent = message;\n                \n                document.body.insertBefore(alert, document.body.firstChild);\n                \n                setTimeout(() => {\n                    alert.remove();\n                }, 5000);\n            }\n            \n            formatFileSize(bytes) {\n                if (bytes === 0) return '0 B';\n                const k = 1024;\n                const sizes = ['B', 'KB', 'MB', 'GB'];\n                const i = Math.floor(Math.log(bytes) / Math.log(k));\n                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];\n            }\n            \n            formatDuration(seconds) {\n                const hours = Math.floor(seconds / 3600);\n                const minutes = Math.floor((seconds % 3600) / 60);\n                const secs = Math.floor(seconds % 60);\n                \n                if (hours > 0) {\n                    return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;\n                }\n                return `${minutes}:${secs.toString().padStart(2, '0')}`;\n            }\n        }\n        \n        // Global functions for button handlers\n        let mediaManager;\n        \n        document.addEventListener('DOMContentLoaded', () => {\n            mediaManager = new MediaDashboard();\n        });\n        \n        function applyFilters() {\n            mediaManager.applyFilters();\n        }\n        \n        function selectAll() {\n            mediaManager.currentMedia.forEach(media => {\n                mediaManager.selectedItems.add(media.id);\n            });\n            mediaManager.updateSelection();\n        }\n        \n        function clearSelection() {\n            mediaManager.selectedItems.clear();\n            mediaManager.updateSelection();\n        }\n        \n        async function deleteSelected() {\n            if (mediaManager.selectedItems.size === 0) {\n                alert('No items selected');\n                return;\n            }\n            \n            if (!confirm(`Delete ${mediaManager.selectedItems.size} selected item(s)?`)) {\n                return;\n            }\n            \n            const promises = Array.from(mediaManager.selectedItems).map(id => \n                fetch(`/api/media/${id}`, { method: 'DELETE' })\n            );\n            \n            try {\n                await Promise.all(promises);\n                mediaManager.showAlert('Selected items deleted successfully', 'success');\n                mediaManager.selectedItems.clear();\n                mediaManager.loadMedia();\n                mediaManager.loadStats();\n            } catch (error) {\n                mediaManager.showAlert('Failed to delete some items', 'error');\n            }\n        }\n        \n        async function optimizeStorage() {\n            if (!confirm('This will remove unused media variants and compress old images. Continue?')) {\n                return;\n            }\n            \n            try {\n                const response = await fetch('/api/media/optimize', {\n                    method: 'POST',\n                    headers: { 'Content-Type': 'application/json' },\n                    body: JSON.stringify({\n                        removeUnused: true,\n                        compressOldImages: true,\n                        removeOldVariants: true\n                    })\n                });\n                \n                const data = await response.json();\n                \n                if (data.success) {\n                    mediaManager.showAlert(data.message, 'success');\n                    mediaManager.loadStats();\n                } else {\n                    mediaManager.showAlert('Optimization failed', 'error');\n                }\n            } catch (error) {\n                mediaManager.showAlert('Optimization failed', 'error');\n            }\n        }\n        \n        async function exportAnalytics() {\n            try {\n                const response = await fetch('/api/media/analytics/dashboard?timeframe=30d');\n                const data = await response.json();\n                \n                if (data.success) {\n                    const blob = new Blob([JSON.stringify(data.data, null, 2)], { type: 'application/json' });\n                    const url = URL.createObjectURL(blob);\n                    const a = document.createElement('a');\n                    a.href = url;\n                    a.download = `media-analytics-${new Date().toISOString().split('T')[0]}.json`;\n                    a.click();\n                    URL.revokeObjectURL(url);\n                }\n            } catch (error) {\n                mediaManager.showAlert('Export failed', 'error');\n            }\n        }\n        \n        function closeModal() {\n            document.getElementById('mediaModal').style.display = 'none';\n        }\n        \n        // Close modal when clicking outside\n        document.getElementById('mediaModal').addEventListener('click', (e) => {\n            if (e.target.id === 'mediaModal') {\n                closeModal();\n            }\n        });\n    </script>\n</body>\n</html>"}

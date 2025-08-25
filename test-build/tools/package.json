@@ -1,0 +1,10 @@
+{
+  "name": "hugo-content-tools",
+  "version": "1.0.0",
+  "description": "Content management tools for Hugo",
+  "scripts": {
+    "serve": "hugo server -D",
+    "build": "hugo --minify",
+    "tools": "start http://localhost:1313/tools/"
+  }
+}

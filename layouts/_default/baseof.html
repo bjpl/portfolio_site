@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}</title>
     
+    {{/* CRITICAL: Configuration injection MUST be first for immediate availability */}}
+    {{ partial "config-injection-simple.html" . }}
+    
+    {{/* Client-side configuration loading - MUST load immediately */}}
+    <script src="/js/config/client-config.js"></script>
+    
     {{ partial "seo.html" . }}
     {{ partial "google-analytics.html" . }}
     
@@ -21,10 +27,27 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Portfolio">
     
-    <!-- Supabase Configuration (load first, before other scripts) -->
+    <!-- Configuration merge script for Hugo + Client config compatibility -->
+    <script>
+        // Merge Hugo CONFIG with CLIENT_CONFIG for complete compatibility
+        if (typeof window !== 'undefined') {
+            window.addEventListener('DOMContentLoaded', function() {
+                if (window.CONFIG && window.CLIENT_CONFIG) {
+                    // Merge configurations without overwriting critical client config
+                    window.CLIENT_CONFIG.HUGO = window.CONFIG;
+                    console.log('🔗 Hugo configuration merged with client config');
+                }
+            });
+        }
+    </script>
+    
+    <!-- Legacy compatibility scripts (fallback support) -->
     <script src="/js/config/supabase-config.js"></script>
     
-    <!-- Enhanced Universal API System -->
+    <!-- Configuration-aware API Client (uses merged configuration) -->
+    <script defer src="/js/api/config-client.js"></script>
+    
+    <!-- Enhanced Universal API System (legacy) -->
     <script defer src="/js/api/index.js"></script>
     
     <!-- WebSocket Real-time Communication -->

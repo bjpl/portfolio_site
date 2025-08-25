@@ -1,0 +1,421 @@
+/* Final comprehensive fix for links page */
+
+/* ==============================================
+   CRITICAL RESETS - OVERRIDE EVERYTHING
+   ============================================== */
+* {
+    box-sizing: border-box !important;
+}
+
+/* ==============================================
+   LINK WRAPPER - MAIN CONTAINER
+   ============================================== */
+a.link-item-wrapper,
+.link-item-wrapper {
+    /* Force flex layout */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    position: relative !important;
+    
+    /* Fixed dimensions - no variation allowed */
+    width: 100% !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    max-height: 56px !important;
+    
+    /* Padding with reserved space for hover menu */
+    padding: 12px 16px !important;
+    padding-right: 130px !important;
+    
+    /* Clean visual design */
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    
+    /* Hide overflow */
+    overflow: hidden !important;
+    
+    /* Smooth transitions */
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+a.link-item-wrapper:hover,
+.link-item-wrapper:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    border-color: #6366f1 !important;
+}
+
+/* ==============================================
+   TEXT CONTENT - FORCE TRUNCATION
+   ============================================== */
+a.link-item-wrapper,
+.link-item-wrapper > a:first-child,
+.link-item-wrapper > span:first-child,
+.link-display {
+    /* Block-level with strict width */
+    display: block !important;
+    flex: 1 !important;
+    max-width: calc(100% - 10px) !important;
+    
+    /* Force single line with ellipsis */
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    
+    /* Text appearance */
+    color: #374151 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 32px !important;
+    text-decoration: none !important;
+    
+    /* Remove margins/padding */
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-right: 10px !important;
+    
+    /* Transition */
+    transition: color 0.2s ease !important;
+}
+
+a.link-item-wrapper:hover,
+.link-item-wrapper:hover > a:first-child,
+.link-item-wrapper:hover > span:first-child,
+.link-item-wrapper:hover .link-display {
+    color: #4f46e5 !important;
+}
+
+/* ==============================================
+   HOVER MENU - ABSOLUTE POSITIONED CONTAINER
+   ============================================== */
+.hover-menu {
+    /* Absolute positioning */
+    position: absolute !important;
+    top: 50% !important;
+    right: 16px !important;
+    transform: translateY(-50%) !important;
+    
+    /* Container dimensions */
+    width: 100px !important;
+    height: 36px !important;
+    
+    /* Flex layout for icons */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    padding: 5px !important;
+    
+    /* Glass-morphism effect */
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+    
+    /* Initially hidden */
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    
+    /* Smooth transition */
+    transition: all 0.2s ease !important;
+    
+    /* High z-index */
+    z-index: 1000 !important;
+}
+
+/* Show on hover */
+a.link-item-wrapper:hover .hover-menu,
+.link-item-wrapper:hover .hover-menu {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* ==============================================
+   SOCIAL ICONS - COMPACT AND CLEAN
+   ============================================== */
+.social-icon {
+    /* Force reset all inherited styles */
+    all: unset !important;
+    
+    /* Icon dimensions */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    max-width: 26px !important;
+    min-height: 26px !important;
+    max-height: 26px !important;
+    flex-shrink: 0 !important;
+    
+    /* Visual styling */
+    background: white !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    text-decoration: none !important;
+}
+
+.social-icon:hover {
+    transform: scale(1.15) !important;
+}
+
+/* Icon SVGs */
+.social-icon svg {
+    width: 16px !important;
+    height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+    fill: currentColor !important;
+    pointer-events: none !important;
+}
+
+/* Platform-specific colors */
+.social-icon.instagram {
+    color: #E4405F !important;
+}
+
+.social-icon.instagram:hover {
+    background: #E4405F !important;
+    color: white !important;
+}
+
+.social-icon.instagram:hover svg {
+    fill: white !important;
+}
+
+.social-icon.website {
+    color: #3B82F6 !important;
+}
+
+.social-icon.website:hover {
+    background: #3B82F6 !important;
+    color: white !important;
+}
+
+.social-icon.website:hover svg {
+    fill: white !important;
+}
+
+.social-icon.youtube {
+    color: #FF0000 !important;
+}
+
+.social-icon.youtube:hover {
+    background: #FF0000 !important;
+    color: white !important;
+}
+
+.social-icon.youtube:hover svg {
+    fill: white !important;
+}
+
+.social-icon.disabled {
+    opacity: 0.3 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+/* ==============================================
+   GRID LAYOUT
+   ============================================== */
+.link-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+    gap: 14px !important;
+    margin: 24px 0 !important;
+    padding: 10px !important;
+}
+
+/* ==============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================== */
+@media (max-width: 768px) {
+    .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+        gap: 12px !important;
+    }
+    
+    .link-item-wrapper {
+        height: 52px !important;
+        min-height: 52px !important;
+        max-height: 52px !important;
+        padding: 10px 14px !important;
+        padding-right: 120px !important;
+    }
+    
+    .hover-menu {
+        width: 94px !important;
+        height: 34px !important;
+        right: 12px !important;
+        gap: 5px !important;
+        padding: 4px !important;
+    }
+    
+    .social-icon {
+        width: 24px !important;
+        height: 24px !important;
+        min-width: 24px !important;
+        max-width: 24px !important;
+        min-height: 24px !important;
+        max-height: 24px !important;
+    }
+    
+    .social-icon svg {
+        width: 14px !important;
+        height: 14px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .link-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+        padding: 0 !important;
+    }
+    
+    .link-item-wrapper {
+        height: 50px !important;
+        min-height: 50px !important;
+        max-height: 50px !important;
+        padding: 8px 12px !important;
+        padding-right: 115px !important;
+    }
+    
+    .link-item-wrapper > a:first-child,
+    .link-item-wrapper > span:first-child,
+    .link-display {
+        font-size: 13px !important;
+        line-height: 34px !important;
+    }
+    
+    .hover-menu {
+        width: 90px !important;
+        height: 32px !important;
+        right: 10px !important;
+        gap: 4px !important;
+        padding: 3px !important;
+    }
+    
+    .social-icon {
+        width: 22px !important;
+        height: 22px !important;
+        min-width: 22px !important;
+        max-width: 22px !important;
+        min-height: 22px !important;
+        max-height: 22px !important;
+    }
+    
+    .social-icon svg {
+        width: 13px !important;
+        height: 13px !important;
+    }
+}
+
+/* ==============================================
+   DARK MODE SUPPORT
+   ============================================== */
+[data-theme="dark"] a.link-item-wrapper,
+[data-theme="dark"] .link-item-wrapper {
+    background: #1f2937 !important;
+    border-color: #374151 !important;
+}
+
+[data-theme="dark"] a.link-item-wrapper:hover,
+.link-item-wrapper:hover {
+    background: #111827 !important;
+    border-color: #6366f1 !important;
+}
+
+[data-theme="dark"] .link-item-wrapper > a:first-child,
+[data-theme="dark"] .link-item-wrapper > span:first-child,
+[data-theme="dark"] .link-display {
+    color: #e5e7eb !important;
+}
+
+[data-theme="dark"] .link-item-wrapper:hover > a:first-child,
+[data-theme="dark"] .link-item-wrapper:hover > span:first-child,
+[data-theme="dark"] .link-item-wrapper:hover .link-display {
+    color: #a5b4fc !important;
+}
+
+[data-theme="dark"] .hover-menu {
+    background: rgba(31, 41, 55, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .social-icon {
+    background: #374151 !important;
+}
+
+[data-theme="dark"] .social-icon:hover {
+    background: #4b5563 !important;
+}
+
+/* ==============================================
+   FORCE OVERRIDES - ABSOLUTE PRIORITY
+   ============================================== */
+.link-item-wrapper {
+    position: relative !important;
+}
+
+.link-item-wrapper > * {
+    position: static !important;
+}
+
+.hover-menu {
+    position: absolute !important;
+}
+
+/* Prevent any text wrapping */
+.link-item-wrapper * {
+    word-wrap: normal !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+}
+
+/* Ensure hover menu stays above everything */
+.hover-menu {
+    z-index: 9999 !important;
+}
+
+/* ==============================================
+   ANIMATION
+   ============================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.link-item-wrapper {
+    animation: fadeIn 0.3s ease backwards;
+}
+
+.link-item-wrapper:nth-child(n+1):nth-child(-n+10) {
+    animation-delay: calc(0.02s * var(--index));
+}
+
+/* CSS counter for animation delay */
+.link-grid {
+    counter-reset: item;
+}
+
+.link-item-wrapper {
+    counter-increment: item;
+    --index: counter(item);
+}

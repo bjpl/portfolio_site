@@ -1,7 +1,23 @@
 [build]
-  command = "rm -rf public && hugo --minify --cleanDestinationDir --gc"
+  command = "npm run build:production"
   publish = "public"
   base = ""
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF"
+  
+# Build environment optimization
+[build.processing]
+  skip_processing = false
+  
+[build.processing.css]
+  bundle = true
+  minify = true
+  
+[build.processing.js]
+  bundle = true
+  minify = true
+  
+[build.processing.html]
+  pretty_urls = true
 
 # =============================================================================
 # NETLIFY BUILD ENVIRONMENT VARIABLES
@@ -18,6 +34,11 @@
   
   # Build Identification
   BUILD_ID = "2025-08-25-unified-env-config"
+  
+  # Build Performance
+  NETLIFY_USE_YARN = "false"
+  HUGO_CACHEDIR = "/opt/build/cache/hugo"
+  NETLIFY_FUNCTIONS_ENABLED = "true"
   
   # Site Configuration (Public - safe for client-side)
   VITE_API_URL = "/api"
@@ -49,12 +70,31 @@
   CACHE_TTL = "300"
   
 [context.production]
-  command = "rm -rf public && hugo --minify --cleanDestinationDir --gc"
+  command = "npm run build:production"
   
+  [context.production.environment]
+    HUGO_ENV = "production"
+    NODE_ENV = "production"
+    BUILD_MODE = "production"
+    HUGO_ENABLEGITINFO = "true"
+    
 [context.branch-deploy]
-  command = "rm -rf public && hugo --minify --cleanDestinationDir --gc"
+  command = "npm run build:staging"
+  
+  [context.branch-deploy.environment]
+    HUGO_ENV = "staging"
+    NODE_ENV = "development"
+    BUILD_MODE = "staging"
+    
+[context.deploy-preview]
+  command = "npm run build:preview"
+  
+  [context.deploy-preview.environment]
+    HUGO_ENV = "development"
+    NODE_ENV = "development"
+    BUILD_MODE = "preview"
 
-# Security Headers
+# Security Headers - Enhanced Security
 [[headers]]
   for = "/*"
   [headers.values]
@@ -62,8 +102,11 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https:; font-src 'self' data: https:;"
-    Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Cross-Origin-Embedder-Policy = "require-corp"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https:; font-src 'self' data: https:; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none';"
+    Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), interest-cohort=()"
 
 # Admin panel headers - Strong cache busting
 [[headers]]
@@ -167,6 +210,34 @@
   for = "*.png"
   [headers.values]
     Cache-Control = "public, max-age=31536000"
+
+# WebP Images - Modern format optimization
+[[headers]]
+  for = "*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+    Vary = "Accept"
+
+# AVIF Images - Next-gen format
+[[headers]]
+  for = "*.avif"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+    Vary = "Accept"
+
+# Form Handling Security
+[[headers]]
+  for = "/contact"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    X-Frame-Options = "DENY"
+
+[[headers]]
+  for = "/api/contact"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Access-Control-Allow-Methods = "POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
 
 # Page Speed Optimization - Removed incorrect preloads
 
@@ -381,19 +452,31 @@
 [functions."media"]
   timeout = 30
 
-# Build Plugins (disabled for local development to avoid Node.js version conflicts)
+# Build Plugins Configuration
+# Enable these plugins for production builds after testing
+# Disabled by default to avoid local development conflicts
+
+# Performance monitoring
 # [[plugins]]
 #   package = "@netlify/plugin-lighthouse"
+#   [plugins.inputs]
+#     thresholds = { performance = 0.8, accessibility = 0.9, best-practices = 0.8, seo = 0.9 }
 
+# Hugo resource caching for faster builds
 # [[plugins]]
 #   package = "netlify-plugin-hugo-cache-resources"
 
+# SEO - Submit sitemap to search engines
 # [[plugins]]
 #   package = "netlify-plugin-submit-sitemap"
-
 #   [plugins.inputs]
 #     baseUrl = "https://vocal-pony-24e3de.netlify.app"
 #     sitemapPath = "/sitemap.xml"
+#     providers = ["google", "bing"]
+
+# Form processing and spam protection
+[[plugins]]
+  package = "netlify-plugin-form-submissions"
 
 # Development Settings
 [dev]

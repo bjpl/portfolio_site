@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Logs - Admin Dashboard</title>
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .audit-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .audit-table th,
+        .audit-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .audit-table th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .audit-table tr:hover {
+            background: #f9fafb;
+        }
+        
+        .risk-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .risk-low { background: #d1fae5; color: #065f46; }
+        .risk-medium { background: #fef3c7; color: #92400e; }
+        .risk-high { background: #fee2e2; color: #991b1b; }
+        .risk-critical { background: #fde2e2; color: #7f1d1d; }
+        
+        .event-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .event-auth { background: #dbeafe; color: #1e40af; }
+        .event-security { background: #fee2e2; color: #991b1b; }
+        .event-data { background: #d1fae5; color: #065f46; }
+        .event-admin { background: #f3e8ff; color: #6b21a8; }
+        
+        .filters-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            min-width: 150px;
+        }
+        
+        .filter-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .filter-group input,
+        .filter-group select {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+        
+        .details-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .details-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            min-width: 500px;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        
+        .detail-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.25rem;
+        }
+        
+        .detail-value {
+            color: #6b7280;
+            font-family: monospace;
+            background: #f9fafb;
+            padding: 0.5rem;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+        
+        .pagination button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .pagination button:hover {
+            background: #f9fafb;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .pagination .current-page {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .realtime-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+        }
+        
+        .realtime-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ef4444;
+        }
+        
+        .realtime-indicator.active {
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <nav class="admin-nav">
+            <div class="nav-brand">
+                <h1>Admin Dashboard</h1>
+            </div>
+            <div class="nav-links">
+                <a href="/admin/">Dashboard</a>
+                <a href="/admin/portfolio.html">Portfolio</a>
+                <a href="/admin/bulk-upload.html">Bulk Upload</a>
+                <a href="/admin/analytics.html">Analytics</a>
+                <a href="/admin/user-management.html">Users</a>
+                <a href="/admin/audit-logs.html" class="active">Audit Logs</a>
+                <a href="#" onclick="AuthManager.logout()">Logout</a>
+            </div>
+        </nav>
+        
+        <main class="admin-content">
+            <div class="page-header">
+                <h1>Audit Logs</h1>
+                <div class="page-actions">
+                    <div class="realtime-toggle">
+                        <div class="realtime-indicator" id="realtimeIndicator"></div>
+                        <label>
+                            <input type="checkbox" id="realtimeToggle" onchange="toggleRealtime()">
+                            Real-time
+                        </label>
+                    </div>
+                    <div class="export-buttons">
+                        <button class="btn btn-secondary" onclick="exportLogs('json')">
+                            Export JSON
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportLogs('csv')">
+                            Export CSV
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Statistics -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalLogs">0</div>
+                    <div class="stat-label">Total Events</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="securityEvents">0</div>
+                    <div class="stat-label">Security Events</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="highRiskEvents">0</div>
+                    <div class="stat-label">High Risk Events</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="todayEvents">0</div>
+                    <div class="stat-label">Today's Events</div>
+                </div>
+            </div>
+            
+            <!-- Filters -->
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <label for="searchInput">Search</label>
+                    <input type="text" id="searchInput" placeholder="Search logs..." onkeyup="debounceFilter()">
+                </div>
+                <div class="filter-group">
+                    <label for="eventTypeFilter">Event Type</label>
+                    <select id="eventTypeFilter" onchange="filterLogs()">
+                        <option value="">All Events</option>
+                        <option value="user_login">User Login</option>
+                        <option value="user_logout">User Logout</option>
+                        <option value="login_failed">Login Failed</option>
+                        <option value="password_changed">Password Changed</option>
+                        <option value="access_denied">Access Denied</option>
+                        <option value="data_created">Data Created</option>
+                        <option value="data_updated">Data Updated</option>
+                        <option value="data_deleted">Data Deleted</option>
+                        <option value="security_violation">Security Violation</option>
+                        <option value="brute_force_attempt">Brute Force</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="riskLevelFilter">Risk Level</label>
+                    <select id="riskLevelFilter" onchange="filterLogs()">
+                        <option value="">All Levels</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="userFilter">User</label>
+                    <input type="text" id="userFilter" placeholder="User ID or email" onkeyup="debounceFilter()">
+                </div>
+                <div class="filter-group">
+                    <label for="ipFilter">IP Address</label>
+                    <input type="text" id="ipFilter" placeholder="IP address" onkeyup="debounceFilter()">
+                </div>
+                <div class="filter-group">
+                    <label for="startDate">Start Date</label>
+                    <input type="datetime-local" id="startDate" onchange="filterLogs()">
+                </div>
+                <div class="filter-group">
+                    <label for="endDate">End Date</label>
+                    <input type="datetime-local" id="endDate" onchange="filterLogs()">
+                </div>
+                <div class="filter-group">
+                    <label for="pageSize">Page Size</label>
+                    <select id="pageSize" onchange="filterLogs()">
+                        <option value="25">25</option>
+                        <option value="50" selected>50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Audit Logs Table -->
+            <div class="table-container">
+                <table class="audit-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Event Type</th>
+                            <th>User</th>
+                            <th>IP Address</th>
+                            <th>Risk Level</th>
+                            <th>Details</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="auditTableBody">
+                        <!-- Audit logs will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Loading State -->
+            <div id="loadingState" style="display: none; text-align: center; padding: 2rem;">
+                <p>Loading audit logs...</p>
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" style="display: none; text-align: center; padding: 2rem;">
+                <p>No audit logs found.</p>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <!-- Pagination will be generated here -->
+            </div>
+        </main>
+    </div>
+    
+    <!-- Details Modal -->
+    <div id="detailsModal" class="details-modal">
+        <div class="details-content">
+            <h2>Audit Log Details</h2>
+            <div id="detailsContent">
+                <!-- Details will be loaded here -->
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeDetailsModal()">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/auth-manager.js"></script>
+    <script>
+        let currentPage = 1;
+        let currentFilters = {};
+        let realtimeEnabled = false;
+        let realtimeInterval = null;
+        let filterTimeout = null;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!AuthManager.requireAuth()) return;
+            
+            loadAuditLogs();
+            loadAuditStats();
+        });
+        
+        // Load audit logs
+        async function loadAuditLogs(page = 1) {
+            try {
+                showLoading(true);
+                
+                const params = new URLSearchParams({
+                    page,
+                    limit: document.getElementById('pageSize').value,
+                    ...currentFilters
+                });
+                
+                const response = await AuthManager.authenticatedFetch(`/api/admin/audit-logs?${params}`);
+                const data = await response.json();
+                
+                renderAuditLogs(data.auditLogs || []);
+                renderPagination(data.pagination || {});
+                
+                currentPage = page;
+                showLoading(false);
+            } catch (error) {
+                console.error('Failed to load audit logs:', error);
+                showError('Failed to load audit logs: ' + error.message);
+                showLoading(false);
+            }
+        }
+        
+        // Load audit statistics
+        async function loadAuditStats() {
+            try {
+                const response = await AuthManager.authenticatedFetch('/api/admin/audit-logs/stats');
+                const stats = await response.json();
+                
+                document.getElementById('totalLogs').textContent = stats.total || 0;
+                document.getElementById('securityEvents').textContent = stats.security || 0;
+                document.getElementById('highRiskEvents').textContent = stats.highRisk || 0;
+                document.getElementById('todayEvents').textContent = stats.today || 0;
+            } catch (error) {
+                console.error('Failed to load audit stats:', error);
+            }
+        }
+        
+        // Render audit logs table
+        function renderAuditLogs(logs) {
+            const tbody = document.getElementById('auditTableBody');
+            const emptyState = document.getElementById('emptyState');
+            const tableContainer = document.querySelector('.table-container');
+            
+            if (logs.length === 0) {
+                tableContainer.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            tableContainer.style.display = 'block';
+            emptyState.style.display = 'none';
+            
+            tbody.innerHTML = logs.map(log => {
+                const timestamp = new Date(log.timestamp).toLocaleString();
+                const eventCategory = getEventCategory(log.eventType);
+                const userDisplay = log.user ? 
+                    `${log.user.firstName || ''} ${log.user.lastName || ''} (${log.user.email})`.trim() :
+                    log.userId || 'System';
+                
+                return `
+                    <tr>
+                        <td>${timestamp}</td>
+                        <td>
+                            <span class="event-badge event-${eventCategory}">
+                                ${log.eventType.replace(/_/g, ' ').toUpperCase()}
+                            </span>
+                        </td>
+                        <td>${userDisplay}</td>
+                        <td>${log.ipAddress || 'N/A'}</td>
+                        <td>
+                            <span class="risk-badge risk-${log.riskLevel}">
+                                ${log.riskLevel.toUpperCase()}
+                            </span>
+                        </td>
+                        <td>
+                            <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                ${log.endpoint || 'N/A'}
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn-sm btn-primary" onclick="showDetails('${log.id}')">
+                                Details
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // Get event category for styling
+        function getEventCategory(eventType) {
+            if (eventType.includes('login') || eventType.includes('register') || eventType.includes('logout')) {
+                return 'auth';
+            }
+            if (eventType.includes('security') || eventType.includes('brute_force') || eventType.includes('violation')) {
+                return 'security';
+            }
+            if (eventType.includes('data') || eventType.includes('created') || eventType.includes('updated') || eventType.includes('deleted')) {
+                return 'data';
+            }
+            if (eventType.includes('admin') || eventType.includes('role') || eventType.includes('permission')) {
+                return 'admin';
+            }
+            return 'default';
+        }
+        
+        // Render pagination
+        function renderPagination(pagination) {
+            const container = document.getElementById('pagination');
+            
+            if (!pagination.pages || pagination.pages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            const { page, pages, total } = pagination;
+            let html = '';
+            
+            // Previous button
+            html += `<button ${page <= 1 ? 'disabled' : ''} onclick="loadAuditLogs(${page - 1})">
+                        Previous
+                     </button>`;
+            
+            // Page numbers
+            for (let i = Math.max(1, page - 2); i <= Math.min(pages, page + 2); i++) {
+                html += `<button class="${i === page ? 'current-page' : ''}" onclick="loadAuditLogs(${i})">
+                            ${i}
+                         </button>`;
+            }
+            
+            // Next button
+            html += `<button ${page >= pages ? 'disabled' : ''} onclick="loadAuditLogs(${page + 1})">
+                        Next
+                     </button>`;
+            
+            // Info
+            html += `<span style="margin-left: 1rem; color: #6b7280;">
+                        Page ${page} of ${pages} (${total} total)
+                     </span>`;
+            
+            container.innerHTML = html;
+        }
+        
+        // Show audit log details
+        async function showDetails(logId) {
+            try {
+                const response = await AuthManager.authenticatedFetch(`/api/admin/audit-logs/${logId}`);
+                const log = await response.json();
+                
+                const details = log.details ? 
+                    (typeof log.details === 'string' ? JSON.parse(log.details) : log.details) : {};
+                
+                const detailsHtml = `
+                    <div class="detail-item">
+                        <div class="detail-label">Event ID</div>
+                        <div class="detail-value">${log.id}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Event Type</div>
+                        <div class="detail-value">${log.eventType}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Timestamp</div>
+                        <div class="detail-value">${new Date(log.timestamp).toLocaleString()}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">User</div>
+                        <div class="detail-value">${log.user ? `${log.user.email} (${log.user.id})` : log.userId || 'System'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">IP Address</div>
+                        <div class="detail-value">${log.ipAddress || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">User Agent</div>
+                        <div class="detail-value">${log.userAgent || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Endpoint</div>
+                        <div class="detail-value">${log.endpoint || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">HTTP Method</div>
+                        <div class="detail-value">${log.httpMethod || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Risk Level</div>
+                        <div class="detail-value">${log.riskLevel}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Session ID</div>
+                        <div class="detail-value">${log.sessionId || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Event Details</div>
+                        <div class="detail-value">${JSON.stringify(details, null, 2)}</div>
+                    </div>
+                `;
+                
+                document.getElementById('detailsContent').innerHTML = detailsHtml;
+                document.getElementById('detailsModal').style.display = 'block';
+            } catch (error) {
+                showError('Failed to load log details: ' + error.message);
+            }
+        }
+        
+        // Close details modal
+        function closeDetailsModal() {
+            document.getElementById('detailsModal').style.display = 'none';
+        }
+        
+        // Filter logs
+        function filterLogs() {
+            currentFilters = {
+                search: document.getElementById('searchInput').value,
+                eventType: document.getElementById('eventTypeFilter').value,
+                riskLevel: document.getElementById('riskLevelFilter').value,
+                userId: document.getElementById('userFilter').value,
+                ipAddress: document.getElementById('ipFilter').value,
+                startDate: document.getElementById('startDate').value,
+                endDate: document.getElementById('endDate').value
+            };
+            
+            // Remove empty filters
+            Object.keys(currentFilters).forEach(key => {
+                if (!currentFilters[key]) {
+                    delete currentFilters[key];
+                }
+            });
+            
+            loadAuditLogs(1);
+        }
+        
+        // Debounced filter for text inputs
+        function debounceFilter() {
+            clearTimeout(filterTimeout);
+            filterTimeout = setTimeout(filterLogs, 500);
+        }
+        
+        // Export logs
+        async function exportLogs(format) {
+            try {
+                const params = new URLSearchParams({
+                    format,
+                    ...currentFilters
+                });
+                
+                const response = await AuthManager.authenticatedFetch(`/api/admin/audit-logs/export?${params}`);
+                const blob = await response.blob();
+                
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `audit-logs-${Date.now()}.${format}`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+                showSuccess('Audit logs exported successfully');
+            } catch (error) {
+                showError('Failed to export logs: ' + error.message);
+            }
+        }
+        
+        // Toggle real-time updates
+        function toggleRealtime() {
+            realtimeEnabled = document.getElementById('realtimeToggle').checked;
+            const indicator = document.getElementById('realtimeIndicator');
+            
+            if (realtimeEnabled) {
+                indicator.classList.add('active');
+                realtimeInterval = setInterval(() => {
+                    loadAuditLogs(currentPage);
+                    loadAuditStats();
+                }, 10000); // Update every 10 seconds
+            } else {
+                indicator.classList.remove('active');
+                if (realtimeInterval) {
+                    clearInterval(realtimeInterval);
+                    realtimeInterval = null;
+                }
+            }
+        }
+        
+        // Utility functions
+        function showLoading(show) {
+            document.getElementById('loadingState').style.display = show ? 'block' : 'none';
+        }
+        
+        function showError(message) {
+            alert('Error: ' + message);
+        }
+        
+        function showSuccess(message) {
+            alert('Success: ' + message);
+        }
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (realtimeInterval) {
+                clearInterval(realtimeInterval);
+            }
+        });
+    </script>
+</body>
+</html>

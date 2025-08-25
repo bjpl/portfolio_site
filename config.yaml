@@ -46,10 +46,90 @@ enableRobotsTXT: true
 sitemap:
   changefreq: "weekly"
   priority: 0.5
+  filename: "sitemap.xml"
 
-# Performance
+# Asset optimization
+imageProcessing:
+  cover:
+    resampleFilter: "CatmullRom"
+    quality: 85
+    anchor: "smart"
+  fill:
+    resampleFilter: "CatmullRom"
+    quality: 85
+    anchor: "smart"
+
+# Resource hints
+services:
+  preload:
+    enable: true
+  prefetch:
+    enable: true
+  dns-prefetch:
+    enable: true
+
+# Performance Optimization
 minify:
   minifyOutput: true
+  # Advanced minification settings
+  disableHTML: false
+  disableCSS: false
+  disableJS: false
+  disableJSON: false
+  disableSVG: false
+  disableXML: false
+  tdewolff:
+    html:
+      keepDocumentTags: false
+      keepEndTags: false
+      keepQuotes: false
+      keepWhitespace: false
+    css:
+      precision: 0
+    js:
+      version: 2022
+    json:
+      precision: 0
+    svg:
+      precision: 1
+    xml:
+      keepWhitespace: false
+
+# Build Performance
+build:
+  noJSConfigInAssets: true
+  useResourceCacheWhen: "fallback"
+  writeStats: true
+
+# Caching Configuration
+caches:
+  assets:
+    dir: ":cacheDir/:project"
+    maxAge: "10000h"
+  getcsv:
+    maxAge: "10s"
+  getjson:
+    maxAge: "10s"
+  getresource:
+    maxAge: "10s"
+  images:
+    dir: ":cacheDir/:project"
+    maxAge: "10000h"
+  modules:
+    dir: ":cacheDir/modules"
+    maxAge: "10000h"
+
+# Processing optimization
+processing:
+  images:
+    quality: 85
+    resampleFilter: "Lanczos"
+    anchor: "Smart"
+  css:
+    postcss:
+      enable: true
+  js:
+    target: "es2018"
 
 # Markdown rendering
 markup:
