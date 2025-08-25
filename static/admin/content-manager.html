@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Manager - Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/admin/css/admin-style.css">
+    <style>
+        .content-manager-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .content-header h1 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 28px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .content-filters {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #7f8c8d;
+            text-transform: uppercase;
+        }
+
+        .filter-input, .filter-select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            min-width: 150px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .content-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .content-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0 0 5px 0;
+            line-height: 1.3;
+        }
+
+        .content-type {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #3498db;
+            color: white;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .content-type.blog { background: #e74c3c; }
+        .content-type.project { background: #2ecc71; }
+        .content-type.page { background: #9b59b6; }
+
+        .content-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        .content-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .content-excerpt {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .content-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .status-published {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-draft {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-archived {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .content-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-edit {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+        }
+
+        .btn-view {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: #7f8c8d;
+            transform: translateY(-1px);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+
+        .pagination button {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button:hover {
+            background: #f8f9fa;
+        }
+
+        .pagination button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-spinner i {
+            font-size: 32px;
+            color: #667eea;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .content-filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .content-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content-manager-container">
+        <!-- Navigation will be inserted here by admin-nav.js -->
+        
+        <div class="content-header">
+            <h1><i class="fas fa-file-alt"></i> Content Manager</h1>
+            <a href="#" id="create-new-btn" class="btn-primary">
+                <i class="fas fa-plus"></i>
+                Create New Content
+            </a>
+        </div>
+
+        <div class="content-filters">
+            <div class="filter-group">
+                <label>Search</label>
+                <input type="text" id="search-input" class="filter-input" placeholder="Search content...">
+            </div>
+            <div class="filter-group">
+                <label>Type</label>
+                <select id="type-filter" class="filter-select">
+                    <option value="">All Types</option>
+                    <option value="blog">Blog Posts</option>
+                    <option value="project">Projects</option>
+                    <option value="page">Pages</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Status</label>
+                <select id="status-filter" class="filter-select">
+                    <option value="">All Status</option>
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                    <option value="archived">Archived</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Sort By</label>
+                <select id="sort-filter" class="filter-select">
+                    <option value="date-desc">Latest First</option>
+                    <option value="date-asc">Oldest First</option>
+                    <option value="title-asc">Title A-Z</option>
+                    <option value="title-desc">Title Z-A</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="loading-spinner" id="loading-spinner">
+            <i class="fas fa-spinner"></i>
+            <p>Loading content...</p>
+        </div>
+
+        <div id="content-grid" class="content-grid">
+            <!-- Content will be loaded here -->
+        </div>
+
+        <div class="pagination" id="pagination">
+            <!-- Pagination will be generated here -->
+        </div>
+    </div>
+
+    <script src="/admin/js/admin-nav.js"></script>
+    <script>
+        class ContentManager {
+            constructor() {
+                this.currentPage = 1;
+                this.itemsPerPage = 12;
+                this.totalItems = 0;
+                this.currentFilters = {
+                    search: '',
+                    type: '',
+                    status: '',
+                    sort: 'date-desc'
+                };
+                this.sampleContent = this.generateSampleContent();
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.loadContent();
+            }
+
+            generateSampleContent() {
+                const types = ['blog', 'project', 'page'];
+                const statuses = ['published', 'draft', 'archived'];
+                const titles = [
+                    'Getting Started with Web Development',
+                    'Advanced JavaScript Techniques',
+                    'Building Responsive Layouts',
+                    'Database Design Principles',
+                    'Modern CSS Grid Systems',
+                    'React Performance Optimization',
+                    'API Security Best Practices',
+                    'Mobile-First Development',
+                    'Version Control with Git',
+                    'Testing Strategies for Web Apps',
+                    'Cloud Deployment Guide',
+                    'User Experience Design',
+                    'Performance Monitoring',
+                    'Accessibility Standards',
+                    'Progressive Web Apps'
+                ];
+
+                return titles.map((title, index) => ({
+                    id: index + 1,
+                    title: title,
+                    type: types[Math.floor(Math.random() * types.length)],
+                    status: statuses[Math.floor(Math.random() * statuses.length)],
+                    excerpt: `This is a sample excerpt for "${title}". It provides a brief overview of the content and what readers can expect to learn from this piece.`,
+                    author: 'Admin User',
+                    date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                    views: Math.floor(Math.random() * 1000) + 50,
+                    comments: Math.floor(Math.random() * 25)
+                }));
+            }
+
+            bindEvents() {
+                document.getElementById('search-input').addEventListener('input', this.handleFilterChange.bind(this));
+                document.getElementById('type-filter').addEventListener('change', this.handleFilterChange.bind(this));
+                document.getElementById('status-filter').addEventListener('change', this.handleFilterChange.bind(this));
+                document.getElementById('sort-filter').addEventListener('change', this.handleFilterChange.bind(this));
+                document.getElementById('create-new-btn').addEventListener('click', this.handleCreateNew.bind(this));
+            }
+
+            handleFilterChange() {
+                this.currentFilters = {
+                    search: document.getElementById('search-input').value,
+                    type: document.getElementById('type-filter').value,
+                    status: document.getElementById('status-filter').value,
+                    sort: document.getElementById('sort-filter').value
+                };
+                this.currentPage = 1;
+                this.loadContent();
+            }
+
+            filterContent(content) {
+                let filtered = [...content];
+
+                // Search filter
+                if (this.currentFilters.search) {
+                    const searchTerm = this.currentFilters.search.toLowerCase();
+                    filtered = filtered.filter(item => 
+                        item.title.toLowerCase().includes(searchTerm) ||
+                        item.excerpt.toLowerCase().includes(searchTerm)
+                    );
+                }
+
+                // Type filter
+                if (this.currentFilters.type) {
+                    filtered = filtered.filter(item => item.type === this.currentFilters.type);
+                }
+
+                // Status filter
+                if (this.currentFilters.status) {
+                    filtered = filtered.filter(item => item.status === this.currentFilters.status);
+                }
+
+                return filtered;
+            }
+
+            sortContent(content) {
+                const sorted = [...content];
+                const [field, direction] = this.currentFilters.sort.split('-');
+
+                sorted.sort((a, b) => {
+                    let aValue = a[field];
+                    let bValue = b[field];
+
+                    if (field === 'date') {
+                        aValue = new Date(aValue);
+                        bValue = new Date(bValue);
+                    }
+
+                    if (direction === 'asc') {
+                        return aValue > bValue ? 1 : -1;
+                    } else {
+                        return aValue < bValue ? 1 : -1;
+                    }
+                });
+
+                return sorted;
+            }
+
+            loadContent() {
+                this.showLoading(true);
+
+                // Simulate API call delay
+                setTimeout(() => {
+                    let filtered = this.filterContent(this.sampleContent);
+                    filtered = this.sortContent(filtered);
+                    
+                    this.totalItems = filtered.length;
+                    
+                    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+                    const endIndex = startIndex + this.itemsPerPage;
+                    const paginatedContent = filtered.slice(startIndex, endIndex);
+
+                    this.renderContent(paginatedContent);
+                    this.renderPagination();
+                    this.showLoading(false);
+                }, 500);
+            }
+
+            renderContent(content) {
+                const grid = document.getElementById('content-grid');
+
+                if (content.length === 0) {
+                    grid.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <i class="fas fa-file-alt"></i>
+                            <h3>No content found</h3>
+                            <p>Try adjusting your filters or create new content.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                grid.innerHTML = content.map(item => `
+                    <div class="content-card">
+                        <div class="content-card-header">
+                            <span class="content-type ${item.type}">${item.type}</span>
+                        </div>
+                        <h3 class="content-title">${item.title}</h3>
+                        <div class="content-status status-${item.status}">${item.status}</div>
+                        <div class="content-meta">
+                            <span><i class="fas fa-user"></i> ${item.author}</span>
+                            <span><i class="fas fa-calendar"></i> ${item.date}</span>
+                            <span><i class="fas fa-eye"></i> ${item.views}</span>
+                        </div>
+                        <p class="content-excerpt">${item.excerpt}</p>
+                        <div class="content-actions">
+                            <button class="btn-sm btn-view" onclick="contentManager.viewContent(${item.id})">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn-sm btn-edit" onclick="contentManager.editContent(${item.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn-sm btn-delete" onclick="contentManager.deleteContent(${item.id})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderPagination() {
+                const pagination = document.getElementById('pagination');
+                const totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+
+                if (totalPages <= 1) {
+                    pagination.innerHTML = '';
+                    return;
+                }
+
+                let paginationHTML = '';
+
+                // Previous button
+                if (this.currentPage > 1) {
+                    paginationHTML += `<button onclick="contentManager.goToPage(${this.currentPage - 1})">Previous</button>`;
+                }
+
+                // Page numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === this.currentPage) {
+                        paginationHTML += `<button class="active">${i}</button>`;
+                    } else {
+                        paginationHTML += `<button onclick="contentManager.goToPage(${i})">${i}</button>`;
+                    }
+                }
+
+                // Next button
+                if (this.currentPage < totalPages) {
+                    paginationHTML += `<button onclick="contentManager.goToPage(${this.currentPage + 1})">Next</button>`;
+                }
+
+                pagination.innerHTML = paginationHTML;
+            }
+
+            goToPage(page) {
+                this.currentPage = page;
+                this.loadContent();
+            }
+
+            showLoading(show) {
+                const spinner = document.getElementById('loading-spinner');
+                const grid = document.getElementById('content-grid');
+                
+                if (show) {
+                    spinner.style.display = 'block';
+                    grid.style.display = 'none';
+                } else {
+                    spinner.style.display = 'none';
+                    grid.style.display = 'grid';
+                }
+            }
+
+            handleCreateNew() {
+                alert('Create new content functionality would open an editor here.');
+            }
+
+            viewContent(id) {
+                const content = this.sampleContent.find(item => item.id === id);
+                if (content) {
+                    alert(`Viewing: ${content.title}\nThis would open the content in a new tab or modal.`);
+                }
+            }
+
+            editContent(id) {
+                const content = this.sampleContent.find(item => item.id === id);
+                if (content) {
+                    alert(`Editing: ${content.title}\nThis would open the content editor.`);
+                }
+            }
+
+            deleteContent(id) {
+                const content = this.sampleContent.find(item => item.id === id);
+                if (content && confirm(`Are you sure you want to delete "${content.title}"?`)) {
+                    this.sampleContent = this.sampleContent.filter(item => item.id !== id);
+                    this.loadContent();
+                    window.adminNav?.showMessage('Content deleted successfully', 'success');
+                }
+            }
+        }
+
+        // Initialize content manager when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            window.contentManager = new ContentManager();
+        });
+    </script>
+</body>
+</html>

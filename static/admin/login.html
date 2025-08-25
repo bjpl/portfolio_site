@@ -366,7 +366,7 @@
                     
                     // Redirect after delay
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
+                        window.location.href = '/admin/dashboard.html';
                     }, 1000);
                 } else {
                     throw new Error('Invalid credentials');
@@ -406,7 +406,7 @@
                     showAlert('Fallback login successful! Redirecting...', 'success');
                     localStorage.setItem('auth_fallback', 'true');
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
+                        window.location.href = '/admin/dashboard.html';
                     }, 1000);
                 } else {
                     throw new Error('Fallback auth failed');

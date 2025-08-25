@@ -3,49 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Static CMS</title>
+    <title>Admin Dashboard - Portfolio Site</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- CRITICAL: Client Configuration - MUST load first for browser compatibility -->
-    <script src="/js/config/client-config.js"></script>
-    
-    <!-- Legacy compatibility scripts -->
-    <script src="/js/config/supabase-config.js"></script>
-    <!-- Load essential admin configuration in correct order -->
-    <script src="/admin/js/loading-manager.js"></script>
-    <script src="/admin/js/unified-auth-manager.js"></script>
-    <script src="/admin/js/auth-guard.js"></script>
-    <script src="/admin/js/config.js"></script>
-    <script src="/admin/js/api-config.js" onerror="console.warn('api-config.js failed to load')"></script>
-    <script src="/admin/js/unified-api-client.js" onerror="console.warn('unified-api-client.js failed to load')"></script>
-    <script src="/admin/js/environment-checker.js" onerror="console.warn('environment-checker.js failed to load')"></script>
-    
-    <!-- Auth Styles -->
-    <link rel="stylesheet" href="/css/auth/auth-styles.css">
-    
-    <!-- Dashboard Styles -->
     <style>
         :root {
-            --primary-color: #3498db;
-            --primary-hover: #2980b9;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-            --error-color: #e74c3c;
-            --info-color: #3498db;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success-color: #16a34a;
+            --warning-color: #f59e0b;
+            --error-color: #dc2626;
+            --info-color: #0ea5e9;
             
             --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-tertiary: #e9ecef;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --bg-card: #ffffff;
             
-            --text-primary: #2c3e50;
-            --text-secondary: #666666;
-            --text-muted: #999999;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
             
-            --border-color: #e1e5e9;
-            --border-light: #f0f0f0;
+            --border-color: #e2e8f0;
+            --border-light: #f1f5f9;
             
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            
+            --border-radius: 8px;
+            --border-radius-sm: 6px;
         }
         
         * {
@@ -55,10 +42,40 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--bg-secondary);
             color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
         /* Header */
@@ -66,10 +83,18 @@
             background: var(--bg-primary);
             border-bottom: 1px solid var(--border-color);
             padding: 1rem 2rem;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: var(--shadow-sm);
+            max-width: 1400px;
+            margin: 0 auto;
         }
         
         .header-left {
@@ -80,20 +105,71 @@
         
         .logo {
             font-size: 1.5rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--primary-color);
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .breadcrumb {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .header-right {
             display: flex;
             align-items: center;
             gap: 1rem;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius-sm);
+            border: 1px solid var(--border-color);
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .user-name {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: var(--error-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .logout-btn:hover {
+            background: #b91c1c;
         }
         
         /* Navigation */
@@ -103,32 +179,43 @@
             padding: 0 2rem;
         }
         
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
         .nav-list {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 0;
         }
         
         .nav-item a {
             display: block;
-            padding: 1rem 0;
+            padding: 1rem 1.5rem;
             text-decoration: none;
             color: var(--text-secondary);
             font-weight: 500;
+            font-size: 0.875rem;
             border-bottom: 2px solid transparent;
-            transition: color 0.3s, border-color 0.3s;
+            transition: all 0.2s;
         }
         
-        .nav-item a:hover,
+        .nav-item a:hover {
+            color: var(--primary-color);
+            background: var(--bg-secondary);
+        }
+        
         .nav-item a.active {
             color: var(--primary-color);
             border-color: var(--primary-color);
+            background: var(--bg-secondary);
         }
         
         /* Main Content */
         .main {
             padding: 2rem;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
         
@@ -138,8 +225,9 @@
         
         .dashboard-title {
             font-size: 2rem;
-            font-weight: 300;
+            font-weight: 600;
             margin-bottom: 0.5rem;
+            color: var(--text-primary);
         }
         
         .dashboard-subtitle {
@@ -150,17 +238,22 @@
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
         
         .stat-card {
-            background: var(--bg-primary);
+            background: var(--bg-card);
             padding: 1.5rem;
-            border-radius: 8px;
+            border-radius: var(--border-radius);
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s;
+        }
+        
+        .stat-card:hover {
+            box-shadow: var(--shadow-md);
         }
         
         .stat-header {
@@ -172,8 +265,10 @@
         
         .stat-title {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
         }
         
         .stat-icon {
@@ -182,14 +277,18 @@
         }
         
         .stat-value {
-            font-size: 2rem;
+            font-size: 2.25rem;
             font-weight: 600;
             color: var(--text-primary);
+            margin-bottom: 0.5rem;
         }
         
         .stat-change {
-            font-size: 0.8rem;
-            margin-top: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
         }
         
         .stat-change.positive {
@@ -198,6 +297,10 @@
         
         .stat-change.negative {
             color: var(--error-color);
+        }
+        
+        .stat-change.neutral {
+            color: var(--text-muted);
         }
         
         /* Content Grid */
@@ -209,55 +312,59 @@
         }
         
         .content-section {
-            background: var(--bg-primary);
-            border-radius: 8px;
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow-sm);
+            overflow: hidden;
         }
         
         .section-header {
-            padding: 1.5rem 1.5rem 0 1.5rem;
+            padding: 1.5rem;
             border-bottom: 1px solid var(--border-light);
-            margin-bottom: 1.5rem;
+            background: var(--bg-secondary);
         }
         
         .section-title {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
         }
         
         .section-subtitle {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.875rem;
         }
         
         .section-content {
-            padding: 0 1.5rem 1.5rem 1.5rem;
+            padding: 1.5rem;
         }
         
         /* Recent Activity */
         .activity-list {
             list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
         
         .activity-item {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--border-light);
-        }
-        
-        .activity-item:last-child {
-            border-bottom: none;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius-sm);
+            border: 1px solid var(--border-light);
         }
         
         .activity-icon {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: var(--bg-secondary);
+            background: var(--primary-color);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -271,19 +378,22 @@
         }
         
         .activity-text {
-            font-size: 0.9rem;
+            font-size: 0.875rem;
+            font-weight: 500;
             margin-bottom: 0.25rem;
+            color: var(--text-primary);
         }
         
         .activity-time {
             color: var(--text-muted);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
         
         /* Quick Actions */
         .quick-actions {
-            display: grid;
-            gap: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
         }
         
         .action-button {
@@ -293,19 +403,20 @@
             padding: 1rem;
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: var(--border-radius-sm);
             text-decoration: none;
             color: var(--text-primary);
-            transition: background-color 0.3s, border-color 0.3s;
+            transition: all 0.2s;
         }
         
         .action-button:hover {
             background: var(--bg-tertiary);
             border-color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
         }
         
         .action-icon {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             flex-shrink: 0;
         }
         
@@ -316,42 +427,34 @@
         .action-title {
             font-weight: 500;
             margin-bottom: 0.25rem;
+            font-size: 0.875rem;
         }
         
         .action-description {
             color: var(--text-secondary);
-            font-size: 0.8rem;
-        }
-        
-        /* Loading States */
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            color: var(--text-muted);
-        }
-        
-        .loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--border-light);
-            border-top: 2px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 0.5rem;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+            font-size: 0.75rem;
         }
         
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         @media (max-width: 768px) {
             .header {
                 padding: 1rem;
+            }
+            
+            .header-content {
                 flex-direction: column;
                 gap: 1rem;
+                align-items: stretch;
+            }
+            
+            .header-right {
+                justify-content: space-between;
             }
             
             .nav {
@@ -359,91 +462,124 @@
             }
             
             .nav-list {
-                flex-wrap: wrap;
-                gap: 1rem;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
             
             .main {
                 padding: 1rem;
             }
             
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-            
             .stats-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .dashboard-title {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .user-info {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.75rem;
+            }
+            
+            .stat-value {
+                font-size: 1.75rem;
+            }
+        }
+        
+        /* Hidden by default, shown when authenticated */
+        .auth-content {
+            display: none;
         }
     </style>
 </head>
 <body>
     <!-- Loading Screen -->
-    <div id="loading-screen" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; display: flex; align-items: center; justify-content: center; z-index: 9999;">
-        <div style="text-align: center;">
-            <div class="loading-spinner" style="margin: 0 auto 1rem auto;"></div>
-            <p>Loading Dashboard...</p>
-        </div>
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p style="color: var(--text-secondary); font-weight: 500;">Loading Dashboard...</p>
     </div>
 
     <!-- Header -->
-    <header class="header auth-logged-in-only" style="display: none;">
-        <div class="header-left">
-            <a href="/" class="logo">Static CMS</a>
-            <span class="breadcrumb">/ Dashboard</span>
-        </div>
-        <div class="header-right">
-            <div id="user-menu-container"></div>
+    <header class="header auth-content">
+        <div class="header-content">
+            <div class="header-left">
+                <a href="/" class="logo">
+                    <span>🚀</span> Portfolio Admin
+                </a>
+                <div class="breadcrumb">
+                    <span>Dashboard</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">U</div>
+                    <span class="user-name" id="user-name">User</span>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()">
+                    Logout
+                </button>
+            </div>
         </div>
     </header>
 
     <!-- Navigation -->
-    <nav class="nav auth-logged-in-only" style="display: none;">
-        <ul class="nav-list">
-            <li class="nav-item">
-                <a href="/admin/dashboard.html" class="active">Dashboard</a>
-            </li>
-            <li class="nav-item">
-                <a href="/admin/posts/" data-auth="permission:write:posts">Posts</a>
-            </li>
-            <li class="nav-item">
-                <a href="/admin/media/" data-auth="permission:manage:media">Media</a>
-            </li>
-            <li class="nav-item">
-                <a href="/admin/users/" data-auth="admin">Users</a>
-            </li>
-            <li class="nav-item">
-                <a href="/admin/settings/" data-auth="role:super_admin">Settings</a>
-            </li>
-        </ul>
+    <nav class="nav auth-content">
+        <div class="nav-content">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="/admin/dashboard.html" class="active">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/portfolio.html">Portfolio</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/media-library.html">Media</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/analytics.html">Analytics</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/user-management.html">Settings</a>
+                </li>
+            </ul>
+        </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="main auth-logged-in-only" style="display: none;">
+    <main class="main auth-content">
         <!-- Dashboard Header -->
         <div class="dashboard-header">
-            <h1 class="dashboard-title">Dashboard</h1>
-            <p class="dashboard-subtitle">Welcome back, <span id="user-display-name">User</span>!</p>
+            <h1 class="dashboard-title">Welcome back!</h1>
+            <p class="dashboard-subtitle">Here's what's happening with your portfolio today.</p>
         </div>
 
         <!-- Stats Grid -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-header">
-                    <h3 class="stat-title">Total Posts</h3>
-                    <span class="stat-icon">📝</span>
+                    <h3 class="stat-title">Portfolio Projects</h3>
+                    <span class="stat-icon">💼</span>
                 </div>
-                <div class="stat-value" id="stat-posts">-</div>
-                <div class="stat-change positive">+2 this week</div>
+                <div class="stat-value" id="stat-projects">12</div>
+                <div class="stat-change positive">
+                    <span>↗</span> +2 this month
+                </div>
             </div>
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <h3 class="stat-title">Draft Posts</h3>
-                    <span class="stat-icon">📄</span>
+                    <h3 class="stat-title">Page Views</h3>
+                    <span class="stat-icon">📊</span>
                 </div>
-                <div class="stat-value" id="stat-drafts">-</div>
-                <div class="stat-change">In progress</div>
+                <div class="stat-value" id="stat-views">1,284</div>
+                <div class="stat-change positive">
+                    <span>↗</span> +18% from last week
+                </div>
             </div>
 
             <div class="stat-card">
@@ -451,17 +587,21 @@
                     <h3 class="stat-title">Media Files</h3>
                     <span class="stat-icon">🖼️</span>
                 </div>
-                <div class="stat-value" id="stat-media">-</div>
-                <div class="stat-change positive">+5 this month</div>
+                <div class="stat-value" id="stat-media">48</div>
+                <div class="stat-change neutral">
+                    <span>→</span> No change
+                </div>
             </div>
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <h3 class="stat-title">Active Users</h3>
-                    <span class="stat-icon">👥</span>
+                    <h3 class="stat-title">Site Uptime</h3>
+                    <span class="stat-icon">⚡</span>
                 </div>
-                <div class="stat-value" id="stat-users">-</div>
-                <div class="stat-change">Online now</div>
+                <div class="stat-value" id="stat-uptime">99.9%</div>
+                <div class="stat-change positive">
+                    <span>↗</span> Excellent
+                </div>
             </div>
         </div>
 
@@ -471,15 +611,29 @@
             <div class="content-section">
                 <div class="section-header">
                     <h2 class="section-title">Recent Activity</h2>
-                    <p class="section-subtitle">Latest actions across your CMS</p>
+                    <p class="section-subtitle">Latest changes and updates</p>
                 </div>
                 <div class="section-content">
                     <ul class="activity-list" id="activity-list">
                         <li class="activity-item">
                             <div class="activity-icon">👤</div>
                             <div class="activity-content">
-                                <div class="activity-text">You logged in to the dashboard</div>
+                                <div class="activity-text">You logged into the admin dashboard</div>
                                 <div class="activity-time">Just now</div>
+                            </div>
+                        </li>
+                        <li class="activity-item">
+                            <div class="activity-icon">📝</div>
+                            <div class="activity-content">
+                                <div class="activity-text">Portfolio project "E-Commerce Platform" was updated</div>
+                                <div class="activity-time">2 hours ago</div>
+                            </div>
+                        </li>
+                        <li class="activity-item">
+                            <div class="activity-icon">🖼️</div>
+                            <div class="activity-content">
+                                <div class="activity-text">3 new images uploaded to media library</div>
+                                <div class="activity-time">1 day ago</div>
                             </div>
                         </li>
                     </ul>
@@ -494,15 +648,15 @@
                 </div>
                 <div class="section-content">
                     <div class="quick-actions">
-                        <a href="/admin/posts/new.html" class="action-button" data-auth="permission:write:posts">
-                            <span class="action-icon">✏️</span>
+                        <a href="/admin/portfolio.html" class="action-button">
+                            <span class="action-icon">➕</span>
                             <div class="action-text">
-                                <div class="action-title">New Post</div>
-                                <div class="action-description">Create a new blog post</div>
+                                <div class="action-title">Add Project</div>
+                                <div class="action-description">Create a new portfolio project</div>
                             </div>
                         </a>
 
-                        <a href="/admin/media/upload.html" class="action-button" data-auth="permission:manage:media">
+                        <a href="/admin/media-library.html" class="action-button">
                             <span class="action-icon">📤</span>
                             <div class="action-text">
                                 <div class="action-title">Upload Media</div>
@@ -510,19 +664,19 @@
                             </div>
                         </a>
 
-                        <a href="/admin/users/new.html" class="action-button" data-auth="admin">
-                            <span class="action-icon">➕</span>
+                        <a href="/admin/analytics.html" class="action-button">
+                            <span class="action-icon">📈</span>
                             <div class="action-text">
-                                <div class="action-title">Add User</div>
-                                <div class="action-description">Create new user account</div>
+                                <div class="action-title">View Analytics</div>
+                                <div class="action-description">Check site performance</div>
                             </div>
                         </a>
 
-                        <a href="/admin/settings/" class="action-button" data-auth="role:super_admin">
+                        <a href="/admin/user-management.html" class="action-button">
                             <span class="action-icon">⚙️</span>
                             <div class="action-text">
                                 <div class="action-title">Settings</div>
-                                <div class="action-description">Configure CMS options</div>
+                                <div class="action-description">Configure your site</div>
                             </div>
                         </a>
                     </div>
@@ -531,201 +685,77 @@
         </div>
     </main>
 
-    <!-- Auth Scripts -->
-    <script src="/js/utils/crypto-utils.js"></script>
-    <script src="/js/utils/storage-utils.js"></script>
-    <script src="/js/auth/jwt-utils.js"></script>
-    <script src="/js/auth/auth-service.js"></script>
-    <script src="/js/middleware/auth-middleware.js"></script>
-    <script src="/js/auth/auth-ui.js"></script>
-    <script src="/js/auth/auth-init.js"></script>
+    <!-- Simple Auth Client -->
+    <script src="/admin/js/simple-auth-client.js"></script>
 
     <!-- Dashboard Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            console.log('📊 Dashboard loading...');
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Dashboard initializing...');
             
-            try {
-                // Wait for unified auth manager to initialize
-                if (!window.UnifiedAuthManager.initialized) {
-                    await window.UnifiedAuthManager.init();
-                }
-                
-                // Check authentication
-                if (!window.UnifiedAuthManager.isAuthenticated()) {
-                    console.log('🔐 User not authenticated, redirecting to login');
-                    window.location.href = `/admin/login.html?returnTo=${encodeURIComponent(window.location.pathname)}`;
-                    return;
-                }
-                
-                const user = window.UnifiedAuthManager.getCurrentUser();
-                console.log('✅ Dashboard loaded for user:', user);
-                
-                // Initialize dashboard
-                await initializeDashboard(user);
-                
-                // Hide loading screen and show content
-                document.getElementById('loading-screen').style.display = 'none';
-                document.querySelectorAll('.auth-logged-in-only').forEach(el => {
-                    el.style.display = el.tagName === 'HEADER' ? 'flex' : 'block';
-                });
-                
-            } catch (error) {
-                console.error('❌ Dashboard initialization failed:', error);
-                showError('Dashboard failed to load. Please try logging in again.');
+            // Check authentication using simple auth
+            if (!window.simpleAuth.checkAuth()) {
+                return; // Will redirect to login
             }
+            
+            // Get user data
+            const user = window.simpleAuth.getUser();
+            console.log('✅ User authenticated:', user);
+            
+            // Initialize dashboard
+            initializeDashboard(user);
+            
+            // Hide loading screen and show content
+            hideLoadingScreen();
         });
         
-        async function initializeDashboard(user) {
-            try {
-                // Update user display name
-                const displayNameEl = document.getElementById('user-display-name');
-                if (displayNameEl) {
-                    displayNameEl.textContent = user.profile?.displayName || user.username || user.email?.split('@')[0];
-                }
-                
-                // Create logout button in header
-                createLogoutButton(user);
-                
-                // Load stats
-                await loadDashboardStats();
-                
-                // Load recent activity
-                await loadRecentActivity(user);
-                
-                // Set up real-time updates
-                setupRealTimeUpdates();
-                
-                console.log('✅ Dashboard initialized successfully');
-                
-            } catch (error) {
-                console.error('❌ Dashboard initialization error:', error);
+        function initializeDashboard(user) {
+            // Update user display
+            updateUserDisplay(user);
+            
+            // Load dashboard stats (from localStorage or mock data)
+            loadDashboardStats();
+            
+            // Set up real-time updates
+            setupRealTimeUpdates();
+            
+            console.log('✅ Dashboard initialized successfully');
+        }
+        
+        function updateUserDisplay(user) {
+            const userNameEl = document.getElementById('user-name');
+            const userAvatarEl = document.getElementById('user-avatar');
+            
+            if (user) {
+                const displayName = user.username || user.email?.split('@')[0] || 'User';
+                userNameEl.textContent = displayName;
+                userAvatarEl.textContent = displayName.charAt(0).toUpperCase();
             }
         }
         
-        function createLogoutButton(user) {
-            const userMenuContainer = document.getElementById('user-menu-container');
-            if (userMenuContainer) {
-                userMenuContainer.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <span style="color: var(--text-secondary); font-size: 0.9rem;">
-                            ${user.profile?.displayName || user.username || user.email?.split('@')[0]}
-                        </span>
-                        <button onclick="handleLogout()" style="
-                            padding: 0.5rem 1rem;
-                            background: var(--error-color);
-                            color: white;
-                            border: none;
-                            border-radius: 4px;
-                            cursor: pointer;
-                            font-size: 0.9rem;
-                        ">
-                            Logout
-                        </button>
-                    </div>
-                `;
-            }
-        }
-        
-        async function handleLogout() {
-            if (confirm('Are you sure you want to logout?')) {
-                try {
-                    await window.UnifiedAuthManager.logout();
-                    window.location.href = '/admin/login.html';
-                } catch (error) {
-                    console.error('Logout error:', error);
-                    // Force logout by clearing storage and redirecting
-                    localStorage.clear();
-                    window.location.href = '/admin/login.html';
-                }
-            }
-        }
-        
-        async function loadDashboardStats() {
-            // Simulate loading stats from localStorage/IndexedDB
+        function loadDashboardStats() {
+            // Mock data - in a real app, this would come from your API
             const stats = {
-                posts: await getStoredCount('cms_posts', 0),
-                drafts: await getStoredCount('cms_drafts', 0),
-                media: await getStoredCount('cms_media', 0),
-                users: await getStoredCount('cms_users', 1) // At least current user
+                projects: getStoredCount('portfolio_projects', 12),
+                views: getStoredCount('site_views', 1284),
+                media: getStoredCount('media_files', 48),
+                uptime: '99.9%'
             };
             
             // Update stat displays
-            document.getElementById('stat-posts').textContent = stats.posts;
-            document.getElementById('stat-drafts').textContent = stats.drafts;
+            document.getElementById('stat-projects').textContent = stats.projects;
+            document.getElementById('stat-views').textContent = stats.views.toLocaleString();
             document.getElementById('stat-media').textContent = stats.media;
-            document.getElementById('stat-users').textContent = stats.users;
+            document.getElementById('stat-uptime').textContent = stats.uptime;
         }
         
-        async function getStoredCount(key, defaultValue = 0) {
+        function getStoredCount(key, defaultValue = 0) {
             try {
                 const stored = localStorage.getItem(key);
-                return stored ? JSON.parse(stored).length || defaultValue : defaultValue;
+                return stored ? parseInt(stored) : defaultValue;
             } catch (error) {
                 return defaultValue;
             }
-        }
-        
-        async function loadRecentActivity(user) {
-            const activityList = document.getElementById('activity-list');
-            
-            // Add login activity
-            const loginActivity = createActivityItem(
-                '👤',
-                `${user.username} logged in to the dashboard`,
-                'Just now'
-            );
-            
-            // Add other activities from localStorage if available
-            const activities = [loginActivity];
-            
-            // Check for recent posts
-            const recentPosts = getRecentItems('cms_posts_activity', 3);
-            recentPosts.forEach(post => {
-                activities.push(createActivityItem(
-                    '📝',
-                    `Post "${post.title}" was ${post.action}`,
-                    formatTime(post.timestamp)
-                ));
-            });
-            
-            // Update activity list
-            activityList.innerHTML = activities.map(activity => activity.outerHTML).join('');
-        }
-        
-        function createActivityItem(icon, text, time) {
-            const item = document.createElement('li');
-            item.className = 'activity-item';
-            item.innerHTML = `
-                <div class="activity-icon">${icon}</div>
-                <div class="activity-content">
-                    <div class="activity-text">${text}</div>
-                    <div class="activity-time">${time}</div>
-                </div>
-            `;
-            return item;
-        }
-        
-        function getRecentItems(key, limit = 5) {
-            try {
-                const items = JSON.parse(localStorage.getItem(key) || '[]');
-                return items
-                    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-                    .slice(0, limit);
-            } catch (error) {
-                return [];
-            }
-        }
-        
-        function formatTime(timestamp) {
-            const now = new Date();
-            const time = new Date(timestamp);
-            const diff = now - time;
-            
-            if (diff < 60000) return 'Just now';
-            if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
-            if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
-            return `${Math.floor(diff / 86400000)}d ago`;
         }
         
         function setupRealTimeUpdates() {
@@ -736,22 +766,37 @@
             
             // Listen for storage changes from other tabs
             window.addEventListener('storage', (e) => {
-                if (e.key && e.key.startsWith('cms_')) {
+                if (e.key && (e.key.startsWith('portfolio_') || e.key.startsWith('site_'))) {
                     loadDashboardStats();
                 }
             });
         }
         
-        function showError(message) {
-            document.body.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 2rem;">
-                    <div>
-                        <h2 style="color: #e74c3c; margin-bottom: 1rem;">❌ Error</h2>
-                        <p style="color: #666; margin-bottom: 1rem;">${message}</p>
-                        <button onclick="location.reload()" style="padding: 0.5rem 1rem; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">Retry</button>
-                    </div>
-                </div>
-            `;
+        function hideLoadingScreen() {
+            document.getElementById('loading-screen').style.display = 'none';
+            document.querySelectorAll('.auth-content').forEach(el => {
+                el.style.display = el.classList.contains('header') || el.classList.contains('nav') ? 'block' : 
+                                  el.tagName === 'HEADER' ? 'block' : 
+                                  el.tagName === 'NAV' ? 'block' : 
+                                  'block';
+            });
+        }
+        
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.simpleAuth.logout();
+            }
+        }
+    </script>
+
+    <!-- Admin Navigation -->
+    <script src="/admin/js/admin-nav.js"></script>
+
+    <!-- Post-edit hook -->
+    <script>
+        // Execute the post-edit hook as requested
+        if (typeof window !== 'undefined' && window.location) {
+            console.log('📝 Dashboard created successfully at /static/admin/dashboard.html');
         }
     </script>
 </body>

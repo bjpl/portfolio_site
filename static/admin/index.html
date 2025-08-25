@@ -45,27 +45,81 @@
     <script>
         async function checkAuthAndRedirect() {
             try {
-                // Wait for auth manager to initialize
-                if (!window.UnifiedAuthManager.initialized) {
-                    await window.UnifiedAuthManager.init();
+                console.log('🔄 Admin index: Starting authentication check...');
+                
+                // Ensure auth manager is available and initialized
+                let authManager = null;
+                let maxWaitTime = 5000; // 5 seconds timeout
+                let startTime = Date.now();
+                
+                while (!authManager && (Date.now() - startTime) < maxWaitTime) {
+                    if (window.UnifiedAuthManager) {
+                        authManager = window.UnifiedAuthManager;
+                        
+                        // Wait for initialization if needed
+                        if (!authManager.initialized) {
+                            console.log('🔄 Waiting for auth manager initialization...');
+                            await authManager.init();
+                        }
+                        break;
+                    }
+                    
+                    // Wait 100ms before checking again
+                    await new Promise(resolve => setTimeout(resolve, 100));
                 }
                 
-                // Check if authenticated
-                if (window.UnifiedAuthManager.isAuthenticated()) {
-                    window.location.replace('dashboard.html');
+                if (!authManager) {
+                    console.warn('⚠️ Auth manager not available, redirecting to login');
+                    window.location.replace('/admin/login.html');
+                    return;
+                }
+                
+                console.log('🔍 Checking authentication status...');
+                
+                // Check authentication status
+                const isAuthenticated = authManager.isAuthenticated();
+                console.log(`🔐 Authentication status: ${isAuthenticated}`);
+                
+                if (isAuthenticated) {
+                    console.log('✅ User is authenticated, redirecting to dashboard');
+                    // Use full path to avoid any routing issues
+                    window.location.replace('/admin/dashboard.html');
                 } else {
-                    window.location.replace('login.html');
+                    console.log('❌ User not authenticated, redirecting to login');
+                    // Use full path to avoid any routing issues
+                    window.location.replace('/admin/login.html');
                 }
                 
             } catch (error) {
-                console.error('Auth check failed:', error);
-                // Default to login page
-                window.location.replace('login.html');
+                console.error('❌ Auth check failed:', error);
+                console.log('🔄 Falling back to login page...');
+                
+                // Default to login page with full path
+                window.location.replace('/admin/login.html');
             }
         }
         
-        // Run check
-        checkAuthAndRedirect();
+        // Prevent page from staying visible during redirect
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('📄 DOM loaded, starting auth check...');
+            checkAuthAndRedirect();
+        });
+        
+        // Also run immediately in case DOM is already loaded
+        if (document.readyState === 'loading') {
+            // DOM is still loading
+            console.log('⏳ DOM still loading, waiting...');
+        } else {
+            // DOM is ready
+            console.log('✅ DOM ready, starting auth check...');
+            checkAuthAndRedirect();
+        }
+        
+        // Failsafe timeout - if nothing happens in 10 seconds, go to login
+        setTimeout(() => {
+            console.warn('⏰ Failsafe timeout reached, redirecting to login');
+            window.location.replace('/admin/login.html');
+        }, 10000);
     </script>
 </body>
 </html>

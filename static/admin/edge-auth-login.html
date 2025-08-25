@@ -1,1 +1,355 @@
-<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Edge Authentication Login - Portfolio Admin</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n            min-height: 100vh;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            padding: 20px;\n        }\n\n        .login-container {\n            background: white;\n            border-radius: 12px;\n            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);\n            padding: 40px;\n            width: 100%;\n            max-width: 400px;\n        }\n\n        .login-header {\n            text-align: center;\n            margin-bottom: 30px;\n        }\n\n        .login-header h1 {\n            color: #333;\n            font-size: 28px;\n            margin-bottom: 8px;\n        }\n\n        .login-header p {\n            color: #666;\n            font-size: 14px;\n        }\n\n        .edge-badge {\n            display: inline-block;\n            background: linear-gradient(45deg, #00d4ff, #0099cc);\n            color: white;\n            padding: 4px 12px;\n            border-radius: 20px;\n            font-size: 12px;\n            font-weight: bold;\n            margin-bottom: 20px;\n        }\n\n        .form-group {\n            margin-bottom: 20px;\n        }\n\n        .form-group label {\n            display: block;\n            color: #333;\n            font-size: 14px;\n            font-weight: 500;\n            margin-bottom: 8px;\n        }\n\n        .form-group input {\n            width: 100%;\n            padding: 12px 16px;\n            border: 2px solid #e1e5e9;\n            border-radius: 8px;\n            font-size: 16px;\n            transition: border-color 0.3s ease;\n        }\n\n        .form-group input:focus {\n            outline: none;\n            border-color: #667eea;\n        }\n\n        .login-button {\n            width: 100%;\n            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n            color: white;\n            border: none;\n            padding: 14px;\n            border-radius: 8px;\n            font-size: 16px;\n            font-weight: 600;\n            cursor: pointer;\n            transition: opacity 0.3s ease;\n        }\n\n        .login-button:hover {\n            opacity: 0.9;\n        }\n\n        .login-button:disabled {\n            opacity: 0.6;\n            cursor: not-allowed;\n        }\n\n        .error-message {\n            background: #fee;\n            border: 1px solid #fcc;\n            color: #c66;\n            padding: 12px;\n            border-radius: 6px;\n            margin-bottom: 20px;\n            font-size: 14px;\n            display: none;\n        }\n\n        .success-message {\n            background: #efe;\n            border: 1px solid #cfc;\n            color: #6c6;\n            padding: 12px;\n            border-radius: 6px;\n            margin-bottom: 20px;\n            font-size: 14px;\n            display: none;\n        }\n\n        .loading {\n            display: inline-block;\n            width: 16px;\n            height: 16px;\n            border: 2px solid rgba(255, 255, 255, 0.3);\n            border-top: 2px solid white;\n            border-radius: 50%;\n            animation: spin 1s linear infinite;\n            margin-right: 8px;\n        }\n\n        @keyframes spin {\n            0% { transform: rotate(0deg); }\n            100% { transform: rotate(360deg); }\n        }\n\n        .demo-credentials {\n            background: #f8f9fa;\n            border: 1px solid #dee2e6;\n            border-radius: 6px;\n            padding: 16px;\n            margin-bottom: 20px;\n            font-size: 14px;\n        }\n\n        .demo-credentials h4 {\n            color: #495057;\n            margin-bottom: 8px;\n        }\n\n        .demo-credentials code {\n            background: #e9ecef;\n            padding: 2px 6px;\n            border-radius: 4px;\n            font-family: 'Courier New', monospace;\n        }\n\n        .edge-features {\n            text-align: center;\n            margin-top: 20px;\n            padding-top: 20px;\n            border-top: 1px solid #eee;\n        }\n\n        .edge-features h4 {\n            color: #333;\n            font-size: 14px;\n            margin-bottom: 8px;\n        }\n\n        .edge-features ul {\n            list-style: none;\n            font-size: 12px;\n            color: #666;\n        }\n\n        .edge-features li {\n            margin-bottom: 4px;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"login-container\">\n        <div class=\"login-header\">\n            <div class=\"edge-badge\">🚀 Netlify Edge Functions</div>\n            <h1>Admin Login</h1>\n            <p>Serverless JWT Authentication</p>\n        </div>\n\n        <div class=\"demo-credentials\">\n            <h4>Demo Credentials:</h4>\n            <p>Username: <code>admin</code> | Password: <code>admin123</code></p>\n            <p>Username: <code>editor</code> | Password: <code>editor123</code></p>\n        </div>\n\n        <div id=\"error-message\" class=\"error-message\"></div>\n        <div id=\"success-message\" class=\"success-message\"></div>\n\n        <form id=\"login-form\">\n            <div class=\"form-group\">\n                <label for=\"username\">Username</label>\n                <input type=\"text\" id=\"username\" name=\"username\" required autocomplete=\"username\">\n            </div>\n\n            <div class=\"form-group\">\n                <label for=\"password\">Password</label>\n                <input type=\"password\" id=\"password\" name=\"password\" required autocomplete=\"current-password\">\n            </div>\n\n            <button type=\"submit\" class=\"login-button\" id=\"login-button\">\n                <span id=\"button-text\">Sign In</span>\n            </button>\n        </form>\n\n        <div class=\"edge-features\">\n            <h4>Edge Authentication Features:</h4>\n            <ul>\n                <li>✓ JWT tokens with Web Crypto API</li>\n                <li>✓ Global edge distribution</li>\n                <li>✓ Deno runtime security</li>\n                <li>✓ No backend server required</li>\n            </ul>\n        </div>\n    </div>\n\n    <!-- Load Edge Auth Client -->\n    <script src=\"/js/edge-auth-client.js\"></script>\n    \n    <script>\n        document.addEventListener('DOMContentLoaded', function() {\n            const form = document.getElementById('login-form');\n            const errorMessage = document.getElementById('error-message');\n            const successMessage = document.getElementById('success-message');\n            const loginButton = document.getElementById('login-button');\n            const buttonText = document.getElementById('button-text');\n            const usernameInput = document.getElementById('username');\n            const passwordInput = document.getElementById('password');\n\n            // Check if already authenticated\n            if (window.EdgeAuth.isAuthenticated()) {\n                const urlParams = new URLSearchParams(window.location.search);\n                const redirect = urlParams.get('redirect') || '/admin/';\n                window.location.href = redirect;\n                return;\n            }\n\n            // Show error message\n            function showError(message) {\n                errorMessage.textContent = message;\n                errorMessage.style.display = 'block';\n                successMessage.style.display = 'none';\n            }\n\n            // Show success message\n            function showSuccess(message) {\n                successMessage.textContent = message;\n                successMessage.style.display = 'block';\n                errorMessage.style.display = 'none';\n            }\n\n            // Hide messages\n            function hideMessages() {\n                errorMessage.style.display = 'none';\n                successMessage.style.display = 'none';\n            }\n\n            // Set loading state\n            function setLoading(loading) {\n                loginButton.disabled = loading;\n                if (loading) {\n                    buttonText.innerHTML = '<span class=\"loading\"></span>Signing in...';\n                } else {\n                    buttonText.textContent = 'Sign In';\n                }\n            }\n\n            // Handle form submission\n            form.addEventListener('submit', async function(e) {\n                e.preventDefault();\n                hideMessages();\n\n                const username = usernameInput.value.trim();\n                const password = passwordInput.value;\n\n                if (!username || !password) {\n                    showError('Please enter both username and password.');\n                    return;\n                }\n\n                setLoading(true);\n\n                try {\n                    const result = await window.EdgeAuth.login(username, password);\n                    \n                    if (result.success) {\n                        showSuccess(`Welcome back, ${result.user.username}! Redirecting...`);\n                        \n                        // Redirect after success\n                        setTimeout(() => {\n                            const urlParams = new URLSearchParams(window.location.search);\n                            const redirect = urlParams.get('redirect') || '/admin/';\n                            window.location.href = redirect;\n                        }, 1500);\n                    }\n                } catch (error) {\n                    showError(error.message || 'Login failed. Please try again.');\n                } finally {\n                    setLoading(false);\n                }\n            });\n\n            // Quick fill demo credentials\n            document.addEventListener('keydown', function(e) {\n                if (e.ctrlKey && e.key === 'd') {\n                    e.preventDefault();\n                    usernameInput.value = 'admin';\n                    passwordInput.value = 'admin123';\n                    usernameInput.focus();\n                }\n            });\n\n            // Focus username input\n            usernameInput.focus();\n\n            // Test edge function availability\n            setTimeout(async () => {\n                try {\n                    const response = await fetch('/api/auth/verify', {\n                        method: 'GET',\n                        headers: {\n                            'Authorization': 'Bearer test-token'\n                        }\n                    });\n                    \n                    if (response.status === 401) {\n                        console.log('✅ Edge functions are working correctly');\n                    }\n                } catch (error) {\n                    console.warn('⚠️ Edge functions may not be available:', error);\n                    showError('Edge functions are not available. Please check the deployment.');\n                }\n            }, 1000);\n        });\n    </script>\n</body>\n</html>"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edge Authentication Login - Portfolio Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .edge-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .login-button:hover {
+            opacity: 0.9;
+        }
+
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c66;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-message {
+            background: #efe;
+            border: 1px solid #cfc;
+            color: #6c6;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .demo-credentials {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .demo-credentials h4 {
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .demo-credentials code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .edge-features {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .edge-features h4 {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .edge-features ul {
+            list-style: none;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .edge-features li {
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="edge-badge">🚀 Netlify Edge Functions</div>
+            <h1>Admin Login</h1>
+            <p>Serverless JWT Authentication</p>
+        </div>
+
+        <div class="demo-credentials">
+            <h4>Demo Credentials:</h4>
+            <p>Username: <code>admin</code> | Password: <code>admin123</code></p>
+            <p>Username: <code>editor</code> | Password: <code>editor123</code></p>
+        </div>
+
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="login-button" id="login-button">
+                <span id="button-text">Sign In</span>
+            </button>
+        </form>
+
+        <div class="edge-features">
+            <h4>Edge Authentication Features:</h4>
+            <ul>
+                <li>✓ JWT tokens with Web Crypto API</li>
+                <li>✓ Global edge distribution</li>
+                <li>✓ Deno runtime security</li>
+                <li>✓ No backend server required</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Load Edge Auth Client -->
+    <script src="/js/edge-auth-client.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('login-form');
+            const errorMessage = document.getElementById('error-message');
+            const successMessage = document.getElementById('success-message');
+            const loginButton = document.getElementById('login-button');
+            const buttonText = document.getElementById('button-text');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+
+            // Check if already authenticated
+            if (window.EdgeAuth && window.EdgeAuth.isAuthenticated()) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const redirect = urlParams.get('redirect') || '/admin/dashboard.html';
+                window.location.href = redirect;
+                return;
+            }
+
+            // Show error message
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+            }
+
+            // Show success message
+            function showSuccess(message) {
+                successMessage.textContent = message;
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+            }
+
+            // Hide messages
+            function hideMessages() {
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+            }
+
+            // Set loading state
+            function setLoading(loading) {
+                loginButton.disabled = loading;
+                if (loading) {
+                    buttonText.innerHTML = '<span class="loading"></span>Signing in...';
+                } else {
+                    buttonText.textContent = 'Sign In';
+                }
+            }
+
+            // Handle form submission
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                hideMessages();
+
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value;
+
+                if (!username || !password) {
+                    showError('Please enter both username and password.');
+                    return;
+                }
+
+                setLoading(true);
+
+                try {
+                    const result = await window.EdgeAuth.login(username, password);
+                    
+                    if (result.success) {
+                        showSuccess(`Welcome back, ${result.user.username}! Redirecting...`);
+                        
+                        // Redirect after success
+                        setTimeout(() => {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const redirect = urlParams.get('redirect') || '/admin/dashboard.html';
+                            window.location.href = redirect;
+                        }, 1500);
+                    }
+                } catch (error) {
+                    showError(error.message || 'Login failed. Please try again.');
+                } finally {
+                    setLoading(false);
+                }
+            });
+
+            // Quick fill demo credentials
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'd') {
+                    e.preventDefault();
+                    usernameInput.value = 'admin';
+                    passwordInput.value = 'admin123';
+                    usernameInput.focus();
+                }
+            });
+
+            // Focus username input
+            usernameInput.focus();
+
+            // Test edge function availability
+            setTimeout(async () => {
+                try {
+                    const response = await fetch('/api/auth/verify', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer test-token'
+                        }
+                    });
+                    
+                    if (response.status === 401) {
+                        console.log('✅ Edge functions are working correctly');
+                    }
+                } catch (error) {
+                    console.warn('⚠️ Edge functions may not be available:', error);
+                    showError('Edge functions are not available. Please check the deployment.');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
