@@ -148,7 +148,7 @@
     "prettier": "^3.0.0",
     "puppeteer": "^24.16.1",
     "sass": "^1.90.0",
-    "supertest": "^6.3.3",
+    "supertest": "^7.1.4",
     "typescript": "^5.2.0",
     "uuid": "^11.0.3",
     "vite": "^5.0.0",
