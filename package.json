@@ -134,7 +134,7 @@
     "jest-sonar-reporter": "^2.0.0",
     "jest-watch-typeahead": "^2.2.2",
     "jsdom": "^25.0.1",
-    "lint-staged": "^15.0.0",
+    "lint-staged": "^16.1.5",
     "mini-css-extract-plugin": "^2.9.4",
     "netlify-plugin-hugo-cache-resources": "^0.2.1",
     "netlify-plugin-submit-sitemap": "^0.4.0",
