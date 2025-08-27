@@ -301,3 +301,6 @@ claude-flow
 claude-flow.bat
 claude-flow.ps1
 hive-mind-prompt-*.txt
+nextjs-poc/.next/
+.claude/.credentials.json
+.claude/projects/

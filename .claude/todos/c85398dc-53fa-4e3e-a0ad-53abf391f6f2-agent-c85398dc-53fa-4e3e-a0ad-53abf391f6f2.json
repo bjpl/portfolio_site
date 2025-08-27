@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Systematically analyze the current admin route problem",
+    "status": "in_progress",
+    "activeForm": "Systematically analyzing the current admin route problem"
+  },
+  {
+    "content": "Identify the exact source of the broken HTML",
+    "status": "pending",
+    "activeForm": "Identifying the exact source of the broken HTML"
+  },
+  {
+    "content": "Create targeted solution to replace the source",
+    "status": "pending",
+    "activeForm": "Creating targeted solution to replace the source"
+  },
+  {
+    "content": "Deploy and verify the systematic fix",
+    "status": "pending",
+    "activeForm": "Deploying and verifying the systematic fix"
+  }
+]

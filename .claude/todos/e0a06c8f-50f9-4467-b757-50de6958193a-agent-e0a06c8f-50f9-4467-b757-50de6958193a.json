@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Diagnose Vercel deployment issue",
+    "status": "completed",
+    "activeForm": "Diagnosing Vercel deployment issue"
+  },
+  {
+    "content": "Check Vercel dashboard settings",
+    "status": "completed",
+    "activeForm": "Checking Vercel dashboard settings"
+  },
+  {
+    "content": "Fix git submodule issues",
+    "status": "completed",
+    "activeForm": "Fixing git submodule issues"
+  },
+  {
+    "content": "Deploy to Netlify",
+    "status": "in_progress",
+    "activeForm": "Deploying to Netlify"
+  },
+  {
+    "content": "Test deployed application",
+    "status": "pending",
+    "activeForm": "Testing deployed application"
+  }
+]

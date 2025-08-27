@@ -1,0 +1,627 @@
+/**
+ * Custom utility classes for the portfolio site
+ * Extends Tailwind CSS with site-specific utilities
+ */
+
+/* ===== SPACING UTILITIES ===== */
+
+.space-fluid-sm {
+  @apply space-y-4 sm:space-y-6;
+}
+
+.space-fluid-md {
+  @apply space-y-6 sm:space-y-8 lg:space-y-12;
+}
+
+.space-fluid-lg {
+  @apply space-y-8 sm:space-y-12 lg:space-y-16;
+}
+
+/* Padding utilities with fluid scaling */
+.p-fluid-sm {
+  @apply p-4 sm:p-6 lg:p-8;
+}
+
+.p-fluid-md {
+  @apply p-6 sm:p-8 lg:p-12;
+}
+
+.p-fluid-lg {
+  @apply p-8 sm:p-12 lg:p-16;
+}
+
+/* Margin utilities with fluid scaling */
+.m-fluid-sm {
+  @apply m-4 sm:m-6 lg:m-8;
+}
+
+.m-fluid-md {
+  @apply m-6 sm:m-8 lg:m-12;
+}
+
+.m-fluid-lg {
+  @apply m-8 sm:m-12 lg:m-16;
+}
+
+/* ===== TYPOGRAPHY UTILITIES ===== */
+
+/* Fluid typography scaling */
+.text-fluid-sm {
+  @apply text-sm sm:text-base lg:text-lg;
+}
+
+.text-fluid-md {
+  @apply text-base sm:text-lg lg:text-xl;
+}
+
+.text-fluid-lg {
+  @apply text-lg sm:text-xl lg:text-2xl;
+}
+
+.text-fluid-xl {
+  @apply text-xl sm:text-2xl lg:text-3xl;
+}
+
+.text-fluid-2xl {
+  @apply text-2xl sm:text-3xl lg:text-4xl;
+}
+
+.text-fluid-3xl {
+  @apply text-3xl sm:text-4xl lg:text-5xl;
+}
+
+/* Font family utilities */
+.font-display {
+  font-family: var(--font-serif);
+}
+
+.font-body {
+  font-family: var(--font-sans);
+}
+
+.font-code {
+  font-family: var(--font-mono);
+}
+
+/* Line height utilities */
+.leading-comfortable {
+  line-height: var(--leading-relaxed);
+}
+
+.leading-cozy {
+  line-height: var(--leading-snug);
+}
+
+/* Letter spacing utilities */
+.tracking-comfortable {
+  letter-spacing: var(--tracking-normal);
+}
+
+.tracking-headline {
+  letter-spacing: var(--tracking-tight);
+}
+
+.tracking-caps {
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+/* Text overflow utilities */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ===== LAYOUT UTILITIES ===== */
+
+/* Container variations */
+.container-narrow {
+  @apply max-w-3xl mx-auto px-4;
+}
+
+.container-reading {
+  @apply max-w-2xl mx-auto px-4;
+}
+
+.container-content {
+  @apply max-w-4xl mx-auto px-4;
+}
+
+.container-full {
+  @apply max-w-7xl mx-auto px-4;
+}
+
+/* Flex utilities with gap */
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+.flex-between {
+  @apply flex items-center justify-between;
+}
+
+.flex-start {
+  @apply flex items-center justify-start;
+}
+
+.flex-end {
+  @apply flex items-center justify-end;
+}
+
+.flex-column-center {
+  @apply flex flex-col items-center justify-center;
+}
+
+/* Grid utilities */
+.grid-auto-sm {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.grid-auto-md {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.grid-auto-lg {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+/* Aspect ratio utilities */
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-photo {
+  aspect-ratio: 4 / 3;
+}
+
+.aspect-portrait {
+  aspect-ratio: 3 / 4;
+}
+
+/* ===== VISUAL UTILITIES ===== */
+
+/* Shadow utilities with CSS variables */
+.shadow-soft {
+  box-shadow: var(--shadow-sm);
+}
+
+.shadow-medium {
+  box-shadow: var(--shadow-md);
+}
+
+.shadow-strong {
+  box-shadow: var(--shadow-lg);
+}
+
+.shadow-dramatic {
+  box-shadow: var(--shadow-xl);
+}
+
+.shadow-inner-soft {
+  box-shadow: var(--shadow-inner);
+}
+
+/* Border utilities */
+.border-subtle {
+  border: 1px solid var(--color-border-light);
+}
+
+.border-normal {
+  border: 1px solid var(--color-border);
+}
+
+.border-accent {
+  border: 2px solid var(--color-primary);
+}
+
+.border-top-accent {
+  border-top: 3px solid var(--color-primary);
+}
+
+.border-left-accent {
+  border-left: 4px solid var(--color-primary);
+}
+
+/* Background utilities with CSS variables */
+.bg-surface {
+  background-color: var(--color-surface);
+}
+
+.bg-surface-alt {
+  background-color: var(--color-surface-alt);
+}
+
+.bg-primary-soft {
+  background-color: var(--color-primary-light);
+}
+
+.bg-accent-soft {
+  background-color: var(--color-accent-light);
+}
+
+/* Gradient utilities */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+}
+
+.bg-gradient-accent {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
+}
+
+.bg-gradient-subtle {
+  background: linear-gradient(135deg, var(--color-surface), var(--color-surface-alt));
+}
+
+.text-gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== COLOR UTILITIES ===== */
+
+/* Text color utilities with CSS variables */
+.text-primary {
+  color: var(--color-text-primary);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.text-accent {
+  color: var(--color-text-accent);
+}
+
+.text-brand-primary {
+  color: var(--color-primary);
+}
+
+.text-brand-accent {
+  color: var(--color-accent);
+}
+
+/* ===== INTERACTION UTILITIES ===== */
+
+/* Hover effects */
+.hover-lift {
+  @apply transition-transform duration-200;
+}
+
+.hover-lift:hover {
+  @apply transform -translate-y-1;
+}
+
+.hover-lift-sm:hover {
+  @apply transform -translate-y-0.5;
+}
+
+.hover-lift-lg:hover {
+  @apply transform -translate-y-2;
+}
+
+/* Hover glow effects */
+.hover-glow {
+  @apply transition-all duration-300;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+}
+
+[data-theme="dark"] .hover-glow:hover {
+  box-shadow: 0 0 20px rgba(129, 140, 248, 0.3);
+}
+
+/* Focus effects */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+  focus-ring-color: var(--color-primary);
+}
+
+.focus-ring-inset {
+  @apply focus:outline-none focus:ring-2 focus:ring-inset;
+  focus-ring-color: var(--color-primary);
+}
+
+/* ===== ANIMATION UTILITIES ===== */
+
+/* Entrance animations */
+.animate-fade-in {
+  animation: fadeIn var(--transition-base) ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp var(--transition-base) ease-out;
+}
+
+.animate-slide-down {
+  animation: slideDown var(--transition-base) ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--transition-fast) ease-out;
+}
+
+/* Staggered animations */
+.stagger-1 {
+  animation-delay: 0.1s;
+}
+
+.stagger-2 {
+  animation-delay: 0.2s;
+}
+
+.stagger-3 {
+  animation-delay: 0.3s;
+}
+
+.stagger-4 {
+  animation-delay: 0.4s;
+}
+
+.stagger-5 {
+  animation-delay: 0.5s;
+}
+
+/* Loading animations */
+.animate-pulse-slow {
+  animation: pulse 2s infinite;
+}
+
+.animate-bounce-gentle {
+  animation: bounce 2s infinite;
+  animation-timing-function: ease-in-out;
+}
+
+/* ===== STATE UTILITIES ===== */
+
+/* Loading states */
+.loading {
+  @apply opacity-50 pointer-events-none animate-pulse;
+}
+
+.loading-spinner {
+  @apply animate-spin;
+}
+
+/* Error states */
+.error {
+  @apply border-red-300 bg-red-50 text-red-900;
+}
+
+[data-theme="dark"] .error {
+  @apply border-red-500/30 bg-red-900/20 text-red-400;
+}
+
+/* Success states */
+.success {
+  @apply border-green-300 bg-green-50 text-green-900;
+}
+
+[data-theme="dark"] .success {
+  @apply border-green-500/30 bg-green-900/20 text-green-400;
+}
+
+/* Warning states */
+.warning {
+  @apply border-yellow-300 bg-yellow-50 text-yellow-900;
+}
+
+[data-theme="dark"] .warning {
+  @apply border-yellow-500/30 bg-yellow-900/20 text-yellow-400;
+}
+
+/* ===== RESPONSIVE UTILITIES ===== */
+
+/* Show/hide on specific breakpoints */
+.mobile-only {
+  @apply block sm:hidden;
+}
+
+.tablet-up {
+  @apply hidden sm:block;
+}
+
+.desktop-up {
+  @apply hidden lg:block;
+}
+
+.mobile-landscape-up {
+  @apply hidden landscape:block;
+}
+
+/* Responsive flex direction */
+.flex-col-mobile {
+  @apply flex-col sm:flex-row;
+}
+
+.flex-col-tablet {
+  @apply flex-col lg:flex-row;
+}
+
+/* Responsive text alignment */
+.text-center-mobile {
+  @apply text-center sm:text-left;
+}
+
+.text-left-mobile {
+  @apply text-left sm:text-center;
+}
+
+/* ===== ACCESSIBILITY UTILITIES ===== */
+
+/* Screen reader utilities */
+.sr-only {
+  @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+  clip: rect(0, 0, 0, 0);
+}
+
+.sr-only:focus {
+  @apply static w-auto h-auto p-1 m-0 overflow-visible whitespace-normal;
+  clip: auto;
+}
+
+/* Focus visible utilities */
+.focus-visible-only {
+  @apply outline-none;
+}
+
+.focus-visible-only:focus-visible {
+  @apply ring-2 ring-offset-2;
+  ring-color: var(--color-primary);
+}
+
+/* Skip link utility */
+.skip-link {
+  @apply absolute -top-10 left-4 z-50 px-4 py-2 rounded transition-all duration-200;
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.skip-link:focus {
+  @apply top-4;
+}
+
+/* ===== PRINT UTILITIES ===== */
+
+@media print {
+  .print-hidden {
+    @apply hidden;
+  }
+  
+  .print-visible {
+    @apply block;
+  }
+  
+  .print-break-before {
+    page-break-before: always;
+  }
+  
+  .print-break-after {
+    page-break-after: always;
+  }
+  
+  .print-no-break {
+    page-break-inside: avoid;
+  }
+}
+
+/* ===== DARK MODE SPECIFIC UTILITIES ===== */
+
+[data-theme="dark"] .dark-glow {
+  box-shadow: 0 0 20px rgba(129, 140, 248, 0.2);
+}
+
+[data-theme="dark"] .dark-border-glow {
+  border-color: rgba(129, 140, 248, 0.3);
+  box-shadow: 0 0 10px rgba(129, 140, 248, 0.1);
+}
+
+[data-theme="dark"] .dark-text-glow {
+  text-shadow: 0 0 10px rgba(129, 140, 248, 0.3);
+}
+
+/* ===== CUSTOM SCROLLBAR UTILITIES ===== */
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== BACKDROP UTILITIES ===== */
+
+.backdrop-blur-soft {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.backdrop-blur-medium {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.backdrop-blur-strong {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ===== PERFORMANCE UTILITIES ===== */
+
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-scroll {
+  will-change: scroll-position;
+}
+
+.gpu-acceleration {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* ===== CUSTOM PROPERTIES UTILITIES ===== */
+
+.color-primary {
+  color: var(--color-primary);
+}
+
+.color-primary-hover {
+  color: var(--color-primary-hover);
+}
+
+.color-accent {
+  color: var(--color-accent);
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-primary-hover {
+  background-color: var(--color-primary-hover);
+}
+
+.bg-accent {
+  background-color: var(--color-accent);
+}

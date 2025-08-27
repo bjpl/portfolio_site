@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Fix small UI/UX issues for polish",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Add keyboard shortcuts for common actions",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Improve session status workflow",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Add simple review/summary view",
+    "status": "completed",
+    "id": "4"
+  }
+]

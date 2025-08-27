@@ -1,0 +1,17 @@
+[
+  {
+    "content": "Analyze current text in working directory",
+    "status": "pending",
+    "id": "1"
+  },
+  {
+    "content": "Extract and number paragraphs",
+    "status": "pending",
+    "id": "2"
+  },
+  {
+    "content": "Write to txt file and provide summary",
+    "status": "pending",
+    "id": "3"
+  }
+]

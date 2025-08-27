@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Added 108 verified website URLs total",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Continue adding government and institutional URLs",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Added 26 more verified URLs (total: 134)",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Search for remaining food/beverage brand URLs",
+    "status": "in_progress",
+    "id": "4"
+  },
+  {
+    "content": "Research and add YouTube channels for high-priority accounts",
+    "status": "in_progress",
+    "id": "5"
+  },
+  {
+    "content": "Continue adding verified URLs from missing list",
+    "status": "in_progress",
+    "id": "6"
+  }
+]

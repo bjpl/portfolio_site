@@ -1,0 +1,37 @@
+[
+  {
+    "content": "Add image comparison side-by-side view",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Add quick preview popup on hover",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Add recent folders quick access",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Add custom color themes",
+    "status": "completed",
+    "id": "4"
+  },
+  {
+    "content": "Add image rotation and basic edits",
+    "status": "completed",
+    "id": "5"
+  },
+  {
+    "content": "Add smart collections based on criteria",
+    "status": "completed",
+    "id": "6"
+  },
+  {
+    "content": "Perform QA testing and bug fixes",
+    "status": "completed",
+    "id": "7"
+  }
+]

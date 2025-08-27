@@ -1,0 +1,37 @@
+[
+  {
+    "content": "Remove all submodule references from Git",
+    "status": "in_progress",
+    "activeForm": "Removing all submodule references from Git"
+  },
+  {
+    "content": "Clean Git modules directory",
+    "status": "pending",
+    "activeForm": "Cleaning Git modules directory"
+  },
+  {
+    "content": "Update netlify.toml to skip submodules",
+    "status": "pending",
+    "activeForm": "Updating netlify.toml to skip submodules"
+  },
+  {
+    "content": "Create .netlifyignore file",
+    "status": "pending",
+    "activeForm": "Creating .netlifyignore file"
+  },
+  {
+    "content": "Verify no submodule traces remain",
+    "status": "pending",
+    "activeForm": "Verifying no submodule traces remain"
+  },
+  {
+    "content": "Commit all changes",
+    "status": "pending",
+    "activeForm": "Committing all changes"
+  },
+  {
+    "content": "Push to remote",
+    "status": "pending",
+    "activeForm": "Pushing to remote"
+  }
+]

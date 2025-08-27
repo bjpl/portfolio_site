@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Test admin dashboard API endpoint: GET http://localhost:3333/api/dashboard/stats",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Test content endpoint: GET http://localhost:3333/api/content/learn",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Test portfolio projects endpoint: GET http://localhost:3333/api/portfolio/projects",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Test portfolio skills endpoint: GET http://localhost:3333/api/portfolio/skills",
+    "status": "completed",
+    "id": "4"
+  },
+  {
+    "content": "Check Hugo site serving on port 60216",
+    "status": "completed",
+    "id": "5"
+  },
+  {
+    "content": "Analyze and report results",
+    "status": "completed",
+    "id": "6"
+  }
+]

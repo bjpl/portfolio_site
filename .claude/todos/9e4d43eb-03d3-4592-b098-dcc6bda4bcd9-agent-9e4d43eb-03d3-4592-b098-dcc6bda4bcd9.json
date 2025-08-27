@@ -1,0 +1,17 @@
+[
+  {
+    "content": "Fix layout type in links page",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Add layout template to correct location",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Verify template loading",
+    "status": "completed",
+    "id": "3"
+  }
+]

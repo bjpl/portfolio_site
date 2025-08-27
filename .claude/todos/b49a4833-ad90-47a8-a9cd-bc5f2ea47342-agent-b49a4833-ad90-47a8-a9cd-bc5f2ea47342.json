@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Improve number input validation and feedback",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Add number pad interface for touch devices",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Implement auto-focus and smart input handling",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Add number range validation and constraints",
+    "status": "completed",
+    "id": "4"
+  },
+  {
+    "content": "Create visual number entry with drag-and-drop",
+    "status": "completed",
+    "id": "5"
+  },
+  {
+    "content": "Add number formatting and display improvements",
+    "status": "completed",
+    "id": "6"
+  }
+]

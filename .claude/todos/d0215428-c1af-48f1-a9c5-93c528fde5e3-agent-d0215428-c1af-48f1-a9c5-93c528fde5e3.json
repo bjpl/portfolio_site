@@ -1,0 +1,17 @@
+[
+  {
+    "content": "Kill all running servers",
+    "status": "in_progress",
+    "id": "1"
+  },
+  {
+    "content": "Start backend server",
+    "status": "pending",
+    "id": "2"
+  },
+  {
+    "content": "Test login functionality",
+    "status": "pending",
+    "id": "3"
+  }
+]

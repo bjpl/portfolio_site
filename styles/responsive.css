@@ -1,0 +1,796 @@
+/**
+ * Responsive Design System
+ * Mobile-first approach with comprehensive breakpoint coverage
+ */
+
+/* ===== BREAKPOINT DEFINITIONS ===== */
+/* Following Tailwind CSS breakpoints for consistency */
+/* sm: 640px, md: 768px, lg: 1024px, xl: 1280px, 2xl: 1536px */
+
+/* ===== BASE MOBILE STYLES (320px+) ===== */
+
+/* Mobile-first container */
+.container {
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Mobile typography */
+.text-responsive-sm {
+  font-size: 0.875rem;
+  line-height: 1.25;
+}
+
+.text-responsive-base {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.text-responsive-lg {
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.text-responsive-xl {
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+.text-responsive-2xl {
+  font-size: 1.5rem;
+  line-height: 1.3;
+}
+
+.text-responsive-3xl {
+  font-size: 1.875rem;
+  line-height: 1.2;
+}
+
+.text-responsive-4xl {
+  font-size: 2.25rem;
+  line-height: 1.1;
+}
+
+/* Mobile spacing */
+.spacing-mobile {
+  margin-bottom: 1rem;
+}
+
+.spacing-mobile-lg {
+  margin-bottom: 1.5rem;
+}
+
+.spacing-mobile-xl {
+  margin-bottom: 2rem;
+}
+
+/* Mobile grid */
+.grid-mobile {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+/* Mobile flex */
+.flex-mobile-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.flex-mobile-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+/* ===== SMALL SCREENS (640px+) ===== */
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  /* Typography scaling */
+  .text-responsive-sm {
+    font-size: 1rem;
+  }
+  
+  .text-responsive-base {
+    font-size: 1.125rem;
+  }
+  
+  .text-responsive-lg {
+    font-size: 1.25rem;
+  }
+  
+  .text-responsive-xl {
+    font-size: 1.5rem;
+  }
+  
+  .text-responsive-2xl {
+    font-size: 1.875rem;
+  }
+  
+  .text-responsive-3xl {
+    font-size: 2.25rem;
+  }
+  
+  .text-responsive-4xl {
+    font-size: 3rem;
+  }
+  
+  /* Grid improvements */
+  .grid-sm-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .grid-sm-auto {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  /* Flex improvements */
+  .flex-sm-row {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .flex-sm-between {
+    justify-content: space-between;
+  }
+  
+  .flex-sm-center {
+    justify-content: center;
+  }
+  
+  /* Spacing adjustments */
+  .spacing-sm {
+    margin-bottom: 1.5rem;
+  }
+  
+  .spacing-sm-lg {
+    margin-bottom: 2rem;
+  }
+  
+  .spacing-sm-xl {
+    margin-bottom: 3rem;
+  }
+  
+  /* Component adjustments */
+  .card-sm {
+    padding: 1.5rem;
+  }
+  
+  .btn-sm-responsive {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .header-sm {
+    padding: 1rem 0;
+  }
+  
+  .hero-sm {
+    padding: 3rem 0;
+  }
+}
+
+/* ===== MEDIUM SCREENS (768px+) ===== */
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    max-width: 768px;
+  }
+  
+  /* Typography scaling */
+  .text-responsive-lg {
+    font-size: 1.375rem;
+  }
+  
+  .text-responsive-xl {
+    font-size: 1.75rem;
+  }
+  
+  .text-responsive-2xl {
+    font-size: 2rem;
+  }
+  
+  .text-responsive-3xl {
+    font-size: 2.5rem;
+  }
+  
+  .text-responsive-4xl {
+    font-size: 3.5rem;
+  }
+  
+  /* Grid improvements */
+  .grid-md-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .grid-md-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .grid-md-auto {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+  
+  /* Complex layouts */
+  .grid-md-sidebar {
+    grid-template-columns: 1fr 3fr;
+    gap: 2rem;
+  }
+  
+  .grid-md-featured {
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+  }
+  
+  /* Spacing adjustments */
+  .spacing-md {
+    margin-bottom: 2rem;
+  }
+  
+  .spacing-md-lg {
+    margin-bottom: 3rem;
+  }
+  
+  .spacing-md-xl {
+    margin-bottom: 4rem;
+  }
+  
+  /* Component adjustments */
+  .card-md {
+    padding: 2rem;
+  }
+  
+  .btn-md-responsive {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+  }
+  
+  .header-md {
+    padding: 1.5rem 0;
+  }
+  
+  .hero-md {
+    padding: 4rem 0;
+  }
+  
+  .section-md {
+    padding: 3rem 0;
+  }
+  
+  /* Navigation improvements */
+  .nav-md-horizontal {
+    flex-direction: row;
+    gap: 2rem;
+  }
+  
+  .nav-md-spaced {
+    justify-content: space-between;
+  }
+}
+
+/* ===== LARGE SCREENS (1024px+) ===== */
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+  
+  /* Typography scaling */
+  .text-responsive-xl {
+    font-size: 2rem;
+  }
+  
+  .text-responsive-2xl {
+    font-size: 2.25rem;
+  }
+  
+  .text-responsive-3xl {
+    font-size: 3rem;
+  }
+  
+  .text-responsive-4xl {
+    font-size: 4rem;
+  }
+  
+  /* Grid improvements */
+  .grid-lg-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .grid-lg-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .grid-lg-auto {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+  }
+  
+  /* Complex layouts */
+  .grid-lg-sidebar {
+    grid-template-columns: 1fr 4fr;
+    gap: 3rem;
+  }
+  
+  .grid-lg-featured {
+    grid-template-columns: 3fr 2fr;
+    gap: 3rem;
+  }
+  
+  .grid-lg-masonry {
+    columns: 3;
+    column-gap: 2rem;
+  }
+  
+  /* Spacing adjustments */
+  .spacing-lg {
+    margin-bottom: 3rem;
+  }
+  
+  .spacing-lg-lg {
+    margin-bottom: 4rem;
+  }
+  
+  .spacing-lg-xl {
+    margin-bottom: 6rem;
+  }
+  
+  /* Component adjustments */
+  .card-lg {
+    padding: 2.5rem;
+  }
+  
+  .btn-lg-responsive {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.25rem;
+  }
+  
+  .header-lg {
+    padding: 2rem 0;
+  }
+  
+  .hero-lg {
+    padding: 6rem 0;
+  }
+  
+  .section-lg {
+    padding: 4rem 0;
+  }
+  
+  /* Advanced layouts */
+  .layout-lg-three-col {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 2rem;
+  }
+  
+  .layout-lg-holy-grail {
+    display: grid;
+    grid-template-areas: 
+      "header header header"
+      "nav main aside"
+      "footer footer footer";
+    grid-template-columns: 200px 1fr 200px;
+    gap: 1rem;
+  }
+}
+
+/* ===== EXTRA LARGE SCREENS (1280px+) ===== */
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+  
+  /* Typography scaling */
+  .text-responsive-3xl {
+    font-size: 3.5rem;
+  }
+  
+  .text-responsive-4xl {
+    font-size: 4.5rem;
+  }
+  
+  /* Grid improvements */
+  .grid-xl-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .grid-xl-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  
+  .grid-xl-auto {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+  }
+  
+  /* Spacing adjustments */
+  .spacing-xl {
+    margin-bottom: 4rem;
+  }
+  
+  .spacing-xl-lg {
+    margin-bottom: 6rem;
+  }
+  
+  .spacing-xl-xl {
+    margin-bottom: 8rem;
+  }
+  
+  /* Component adjustments */
+  .card-xl {
+    padding: 3rem;
+  }
+  
+  .hero-xl {
+    padding: 8rem 0;
+  }
+  
+  .section-xl {
+    padding: 6rem 0;
+  }
+  
+  /* Advanced layouts */
+  .layout-xl-wide {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* ===== 2X LARGE SCREENS (1536px+) ===== */
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+  
+  /* Typography scaling */
+  .text-responsive-4xl {
+    font-size: 5rem;
+  }
+  
+  /* Grid improvements */
+  .grid-2xl-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  
+  .grid-2xl-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  
+  /* Component adjustments */
+  .card-2xl {
+    padding: 4rem;
+  }
+  
+  .hero-2xl {
+    padding: 10rem 0;
+  }
+  
+  .section-2xl {
+    padding: 8rem 0;
+  }
+  
+  /* Max width constraints for readability */
+  .content-2xl-constrain {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* ===== RESPONSIVE UTILITIES ===== */
+
+/* Show/Hide utilities */
+.show-mobile {
+  display: block;
+}
+
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .show-mobile {
+    display: none;
+  }
+  
+  .hide-mobile {
+    display: block;
+  }
+  
+  .show-sm {
+    display: block;
+  }
+  
+  .hide-sm {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .show-sm {
+    display: none;
+  }
+  
+  .hide-sm {
+    display: block;
+  }
+  
+  .show-md {
+    display: block;
+  }
+  
+  .hide-md {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .show-md {
+    display: none;
+  }
+  
+  .hide-md {
+    display: block;
+  }
+  
+  .show-lg {
+    display: block;
+  }
+  
+  .hide-lg {
+    display: none;
+  }
+}
+
+@media (min-width: 1280px) {
+  .show-lg {
+    display: none;
+  }
+  
+  .hide-lg {
+    display: block;
+  }
+  
+  .show-xl {
+    display: block;
+  }
+  
+  .hide-xl {
+    display: none;
+  }
+}
+
+/* ===== RESPONSIVE TEXT ALIGNMENT ===== */
+
+.text-center-mobile {
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .text-left-md {
+    text-align: left;
+  }
+  
+  .text-center-md {
+    text-align: center;
+  }
+  
+  .text-right-md {
+    text-align: right;
+  }
+}
+
+/* ===== RESPONSIVE FLEX UTILITIES ===== */
+
+.flex-col-mobile {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .flex-row-md {
+    flex-direction: row;
+  }
+  
+  .flex-col-md {
+    flex-direction: column;
+  }
+}
+
+/* ===== RESPONSIVE ASPECT RATIOS ===== */
+
+.aspect-mobile-square {
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-mobile-video {
+  aspect-ratio: 16 / 9;
+}
+
+@media (min-width: 768px) {
+  .aspect-md-photo {
+    aspect-ratio: 4 / 3;
+  }
+  
+  .aspect-md-widescreen {
+    aspect-ratio: 21 / 9;
+  }
+}
+
+/* ===== RESPONSIVE SPACING UTILITIES ===== */
+
+.p-responsive {
+  padding: 1rem;
+}
+
+.m-responsive {
+  margin: 1rem;
+}
+
+@media (min-width: 640px) {
+  .p-responsive {
+    padding: 1.5rem;
+  }
+  
+  .m-responsive {
+    margin: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .p-responsive {
+    padding: 2rem;
+  }
+  
+  .m-responsive {
+    margin: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .p-responsive {
+    padding: 3rem;
+  }
+  
+  .m-responsive {
+    margin: 3rem;
+  }
+}
+
+/* ===== RESPONSIVE COMPONENT PATTERNS ===== */
+
+/* Responsive navigation */
+.nav-responsive {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .nav-responsive {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: center;
+  }
+}
+
+/* Responsive card grid */
+.card-grid-responsive {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .card-grid-responsive {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid-responsive {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* Responsive hero section */
+.hero-responsive {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .hero-responsive {
+    padding: 4rem 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-responsive {
+    padding: 6rem 0;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+  .print-hidden {
+    display: none !important;
+  }
+  
+  .print-visible {
+    display: block !important;
+  }
+  
+  .container {
+    max-width: none;
+    padding: 0;
+  }
+  
+  .text-responsive-4xl,
+  .text-responsive-3xl,
+  .text-responsive-2xl {
+    font-size: 1.5rem;
+  }
+  
+  .spacing-responsive {
+    margin: 0.5rem 0;
+  }
+}
+
+/* ===== LANDSCAPE/PORTRAIT ORIENTATION ===== */
+
+@media (orientation: landscape) and (max-height: 768px) {
+  .hero-landscape {
+    padding: 2rem 0;
+  }
+  
+  .section-landscape {
+    padding: 1.5rem 0;
+  }
+}
+
+/* ===== HIGH DPI DISPLAYS ===== */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .text-responsive-4xl,
+  .text-responsive-3xl {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ===== ACCESSIBILITY RESPONSIVE ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  .responsive-no-motion * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .responsive-high-contrast {
+    border-width: 2px;
+    font-weight: 600;
+  }
+}

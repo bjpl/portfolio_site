@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Optimize database connection pool size",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Increase cache TTL for better performance",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Make update checker configurable/disableable",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Document backup format decision",
+    "status": "completed",
+    "id": "4"
+  }
+]

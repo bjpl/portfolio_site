@@ -1,0 +1,52 @@
+[
+  {
+    "content": "Kill all Node.js processes on Windows",
+    "status": "pending",
+    "activeForm": "Killing all Node.js processes"
+  },
+  {
+    "content": "Clean up all .next build folders",
+    "status": "pending",
+    "activeForm": "Cleaning .next build folders"
+  },
+  {
+    "content": "Fix permission issues with folders",
+    "status": "pending",
+    "activeForm": "Fixing permission issues"
+  },
+  {
+    "content": "Create a working minimal Next.js app",
+    "status": "pending",
+    "activeForm": "Creating minimal Next.js app"
+  },
+  {
+    "content": "Configure proper port settings",
+    "status": "pending",
+    "activeForm": "Configuring port settings"
+  },
+  {
+    "content": "Start fresh development server",
+    "status": "pending",
+    "activeForm": "Starting development server"
+  },
+  {
+    "content": "Test all routes are accessible",
+    "status": "pending",
+    "activeForm": "Testing route accessibility"
+  },
+  {
+    "content": "Fix content rendering issues",
+    "status": "pending",
+    "activeForm": "Fixing content rendering"
+  },
+  {
+    "content": "Verify CMS integration",
+    "status": "pending",
+    "activeForm": "Verifying CMS integration"
+  },
+  {
+    "content": "Deploy final working version",
+    "status": "pending",
+    "activeForm": "Deploying final version"
+  }
+]

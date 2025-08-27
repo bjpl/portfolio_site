@@ -1,0 +1,37 @@
+[
+  {
+    "content": "Update ALL admin pages to use admin-layout.js",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Ensure dashboard.html uses the unified layout",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Update content-editor.html with layout integration",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Update image-optimizer.html with layout integration",
+    "status": "completed",
+    "id": "4"
+  },
+  {
+    "content": "Update file-manager.html with layout integration",
+    "status": "completed",
+    "id": "5"
+  },
+  {
+    "content": "Create missing logs.html page",
+    "status": "completed",
+    "id": "6"
+  },
+  {
+    "content": "Test complete integration",
+    "status": "completed",
+    "id": "7"
+  }
+]

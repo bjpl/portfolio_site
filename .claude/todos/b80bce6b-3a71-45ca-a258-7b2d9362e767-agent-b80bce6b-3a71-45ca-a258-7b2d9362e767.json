@@ -1,0 +1,62 @@
+[
+  {
+    "content": "Create content management dashboard",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Implement markdown editor with live preview",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Add media library and upload system",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Create content templates system",
+    "status": "completed",
+    "id": "4"
+  },
+  {
+    "content": "Build SEO metadata editor",
+    "status": "completed",
+    "id": "5"
+  },
+  {
+    "content": "Implement version control for content",
+    "status": "completed",
+    "id": "6"
+  },
+  {
+    "content": "Add content scheduling features",
+    "status": "completed",
+    "id": "7"
+  },
+  {
+    "content": "Create bulk operations tools",
+    "status": "completed",
+    "id": "8"
+  },
+  {
+    "content": "Build content analytics dashboard",
+    "status": "completed",
+    "id": "9"
+  },
+  {
+    "content": "Implement AI content assistant",
+    "status": "completed",
+    "id": "10"
+  },
+  {
+    "content": "Update backend API for content management",
+    "status": "completed",
+    "id": "11"
+  },
+  {
+    "content": "Integrate with existing dashboard",
+    "status": "in_progress",
+    "id": "12"
+  }
+]

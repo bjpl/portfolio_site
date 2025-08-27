@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Update homepage with clear value proposition",
+    "status": "completed",
+    "id": "update_homepage"
+  },
+  {
+    "content": "Create Services page with consulting offerings",
+    "status": "completed",
+    "id": "create_services"
+  },
+  {
+    "content": "Fix navigation labels to be more descriptive",
+    "status": "completed",
+    "id": "fix_navigation"
+  },
+  {
+    "content": "Add professional CTAs to key pages",
+    "status": "completed",
+    "id": "add_ctas"
+  },
+  {
+    "content": "Remove emojis from academic content",
+    "status": "pending",
+    "id": "remove_emojis"
+  }
+]

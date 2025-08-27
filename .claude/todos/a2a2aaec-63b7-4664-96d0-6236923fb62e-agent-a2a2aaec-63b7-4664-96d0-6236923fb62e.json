@@ -1,0 +1,52 @@
+[
+  {
+    "content": "Initialize ruv-swarm coordination topology",
+    "status": "completed",
+    "activeForm": "Initializing ruv-swarm coordination topology"
+  },
+  {
+    "content": "Spawn comprehensive code review agents",
+    "status": "completed",
+    "activeForm": "Spawning comprehensive code review agents"
+  },
+  {
+    "content": "Analyze recent development changes and integration",
+    "status": "completed",
+    "activeForm": "Analyzing recent development changes and integration"
+  },
+  {
+    "content": "Review application architecture and routing",
+    "status": "completed",
+    "activeForm": "Reviewing application architecture and routing"
+  },
+  {
+    "content": "Validate build process and dependencies",
+    "status": "in_progress",
+    "activeForm": "Validating build process and dependencies"
+  },
+  {
+    "content": "Test application functionality end-to-end",
+    "status": "pending",
+    "activeForm": "Testing application functionality end-to-end"
+  },
+  {
+    "content": "Optimize performance and clean up code",
+    "status": "pending",
+    "activeForm": "Optimizing performance and cleaning up code"
+  },
+  {
+    "content": "Ensure proper error handling and accessibility",
+    "status": "pending",
+    "activeForm": "Ensuring proper error handling and accessibility"
+  },
+  {
+    "content": "Validate production readiness",
+    "status": "pending",
+    "activeForm": "Validating production readiness"
+  },
+  {
+    "content": "Generate final recommendations and cleanup",
+    "status": "pending",
+    "activeForm": "Generating final recommendations and cleanup"
+  }
+]

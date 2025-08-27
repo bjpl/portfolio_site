@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Debug why server not responding",
+    "status": "completed",
+    "activeForm": "Debugging why server not responding"
+  },
+  {
+    "content": "Create minimal working Next.js app",
+    "status": "completed",
+    "activeForm": "Creating minimal working Next.js app"
+  },
+  {
+    "content": "Fix existing nextjs-poc app",
+    "status": "completed",
+    "activeForm": "Fixing existing nextjs-poc app"
+  },
+  {
+    "content": "Kill all Node processes",
+    "status": "completed",
+    "activeForm": "Killing all Node processes"
+  },
+  {
+    "content": "Start fresh server instance",
+    "status": "in_progress",
+    "activeForm": "Starting fresh server instance"
+  },
+  {
+    "content": "Verify browser can access",
+    "status": "pending",
+    "activeForm": "Verifying browser can access"
+  }
+]

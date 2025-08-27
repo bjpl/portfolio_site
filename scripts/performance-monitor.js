@@ -1,490 +1,59 @@
 #!/usr/bin/env node
 
 /**
- * Performance Monitor for Hugo Build Process
- * Tracks build metrics, identifies bottlenecks, and generates optimization reports
+ * Performance Monitoring Setup
+ * Comprehensive performance tracking and optimization for Hugo + Supabase deployment
  */
 
-const fs = require('fs');
+const axios = require('axios');
+const fs = require('fs').promises;
 const path = require('path');
-const { execSync } = require('child_process');
 const chalk = require('chalk');
 
 class PerformanceMonitor {
-  constructor() {
-    this.metrics = {
-      buildTime: { start: 0, end: 0, total: 0 },
-      phases: {},
-      assets: { count: 0, totalSize: 0, byType: {} },
-      cache: { hits: 0, misses: 0, efficiency: 0 },
-      memory: { peak: 0, average: 0 },
-      network: { requests: 0, totalTime: 0 },
-      errors: [],
-      warnings: []
-    };
-    
-    this.thresholds = {
-      buildTime: 60000, // 60 seconds
-      assetSize: 1024 * 1024, // 1MB
-      cacheEfficiency: 0.8 // 80%
-    };
-  }
-
-  startMonitoring() {
-    this.metrics.buildTime.start = Date.now();
-    this.log('Performance monitoring started', 'info');
-  }
-
-  stopMonitoring() {
-    this.metrics.buildTime.end = Date.now();
-    this.metrics.buildTime.total = this.metrics.buildTime.end - this.metrics.buildTime.start;
-    this.log(`Build completed in ${this.formatTime(this.metrics.buildTime.total)}`, 'success');
-  }
-
-  trackPhase(phaseName, callback) {
-    const start = Date.now();
-    this.log(`Starting phase: ${phaseName}`, 'info');
-    
-    try {
-      const result = callback();
-      const duration = Date.now() - start;
-      
-      this.metrics.phases[phaseName] = {
-        duration,
-        success: true,
-        timestamp: new Date().toISOString()
-      };
-      
-      this.log(`Phase '${phaseName}' completed in ${this.formatTime(duration)}`, 'success');
-      return result;
-    } catch (error) {
-      const duration = Date.now() - start;
-      
-      this.metrics.phases[phaseName] = {
-        duration,
-        success: false,
-        error: error.message,
-        timestamp: new Date().toISOString()
-      };
-      
-      this.metrics.errors.push({
-        phase: phaseName,
-        error: error.message,
-        timestamp: new Date().toISOString()
-      });
-      
-      this.log(`Phase '${phaseName}' failed after ${this.formatTime(duration)}: ${error.message}`, 'error');
-      throw error;
-    }
-  }
-
-  analyzeAssets() {
-    this.log('Analyzing build assets...', 'info');
-    
-    const publicDir = 'public';
-    if (!fs.existsSync(publicDir)) {
-      this.log('Public directory not found, skipping asset analysis', 'warning');
-      return;
-    }
-
-    const assets = this.walkDirectory(publicDir);
-    
-    this.metrics.assets.count = assets.length;
-    this.metrics.assets.totalSize = assets.reduce((total, asset) => total + asset.size, 0);
-    
-    // Group by file type
-    assets.forEach(asset => {
-      const ext = path.extname(asset.path).toLowerCase();
-      if (!this.metrics.assets.byType[ext]) {
-        this.metrics.assets.byType[ext] = { count: 0, size: 0 };
-      }
-      this.metrics.assets.byType[ext].count++;
-      this.metrics.assets.byType[ext].size += asset.size;
-    });
-
-    this.log(`Analyzed ${this.metrics.assets.count} assets (${this.formatBytes(this.metrics.assets.totalSize)})`, 'info');
-    
-    // Check for oversized assets
-    const oversizedAssets = assets.filter(asset => asset.size > this.thresholds.assetSize);
-    if (oversizedAssets.length > 0) {
-      this.log(`Found ${oversizedAssets.length} oversized assets`, 'warning');
-      oversizedAssets.forEach(asset => {
-        this.log(`  - ${asset.path}: ${this.formatBytes(asset.size)}`, 'warning');
-      });
-    }
-  }
-
-  analyzeCachePerformance() {
-    this.log('Analyzing cache performance...', 'info');
-    
-    const cacheDir = 'resources/_gen';
-    if (!fs.existsSync(cacheDir)) {
-      this.log('Cache directory not found', 'warning');
-      return;
-    }
-
-    const cacheFiles = this.walkDirectory(cacheDir);
-    this.metrics.cache.hits = cacheFiles.length;
-    
-    // Calculate cache efficiency (simplified)
-    const totalAssets = this.metrics.assets.count;
-    if (totalAssets > 0) {
-      this.metrics.cache.efficiency = this.metrics.cache.hits / totalAssets;
-    }
-
-    this.log(`Cache efficiency: ${(this.metrics.cache.efficiency * 100).toFixed(2)}%`, 'info');
-    
-    if (this.metrics.cache.efficiency < this.thresholds.cacheEfficiency) {
-      this.log('Cache efficiency is below threshold', 'warning');
-    }
-  }
-
-  analyzeMemoryUsage() {
-    try {
-      const memUsage = process.memoryUsage();
-      this.metrics.memory.peak = Math.max(this.metrics.memory.peak, memUsage.heapUsed);
-      this.metrics.memory.average = memUsage.heapUsed;
-      
-      this.log(`Memory usage: ${this.formatBytes(memUsage.heapUsed)} (Peak: ${this.formatBytes(this.metrics.memory.peak)})`, 'info');
-    } catch (error) {
-      this.log(`Memory analysis failed: ${error.message}`, 'warning');
-    }
-  }
-
-  identifyBottlenecks() {
-    this.log('Identifying performance bottlenecks...', 'info');
-    
-    const bottlenecks = [];
-    
-    // Build time bottleneck
-    if (this.metrics.buildTime.total > this.thresholds.buildTime) {
-      bottlenecks.push({
-        type: 'build_time',
-        severity: 'high',
-        message: `Build time (${this.formatTime(this.metrics.buildTime.total)}) exceeds threshold`,
-        recommendation: 'Consider optimizing Hugo configuration, enabling caching, or reducing content complexity'
-      });
-    }
-    
-    // Phase bottlenecks
-    const slowestPhases = Object.entries(this.metrics.phases)
-      .sort(([, a], [, b]) => b.duration - a.duration)
-      .slice(0, 3);
-    
-    slowestPhases.forEach(([phase, data]) => {
-      if (data.duration > 10000) { // More than 10 seconds
-        bottlenecks.push({
-          type: 'slow_phase',
-          severity: 'medium',
-          message: `Phase '${phase}' is slow (${this.formatTime(data.duration)})`,
-          recommendation: `Optimize ${phase} process or consider parallelization`
-        });
-      }
-    });
-    
-    // Asset size bottlenecks
-    const largeAssetTypes = Object.entries(this.metrics.assets.byType)
-      .filter(([, data]) => data.size > this.thresholds.assetSize)
-      .sort(([, a], [, b]) => b.size - a.size);
-    
-    largeAssetTypes.forEach(([ext, data]) => {
-      bottlenecks.push({
-        type: 'large_assets',
-        severity: 'medium',
-        message: `${ext} files are large (${this.formatBytes(data.size)})`,
-        recommendation: `Consider optimizing ${ext} files with compression or different formats`
-      });
-    });
-    
-    // Cache efficiency bottleneck
-    if (this.metrics.cache.efficiency < this.thresholds.cacheEfficiency) {
-      bottlenecks.push({
-        type: 'cache_inefficiency',
-        severity: 'medium',
-        message: `Cache efficiency is low (${(this.metrics.cache.efficiency * 100).toFixed(2)}%)`,
-        recommendation: 'Review caching strategy and ensure proper cache configuration'
-      });
-    }
-    
-    this.logBottlenecks(bottlenecks);
-    return bottlenecks;
-  }
-
-  generateOptimizationRecommendations() {
-    const recommendations = [];
-    
-    // Hugo-specific optimizations
-    recommendations.push({
-      category: 'Hugo Configuration',
-      items: [
-        'Enable Hugo\'s built-in caching with proper cache directories',
-        'Use Hugo\'s image processing features for automatic optimization',
-        'Configure minification for HTML, CSS, and JS',
-        'Enable garbage collection during builds (--gc flag)',
-        'Use Hugo modules for better dependency management'
-      ]
-    });
-    
-    // Asset optimization
-    recommendations.push({
-      category: 'Asset Optimization',
-      items: [
-        'Implement WebP format for images with fallbacks',
-        'Use CSS and JS bundling to reduce HTTP requests',
-        'Enable Gzip/Brotli compression on Netlify',
-        'Implement lazy loading for images and heavy content',
-        'Use critical CSS inlining for above-the-fold content'
-      ]
-    });
-    
-    // Build process optimization
-    recommendations.push({
-      category: 'Build Process',
-      items: [
-        'Use parallel processing for asset optimization',
-        'Implement incremental builds where possible',
-        'Cache dependencies between builds',
-        'Use Netlify\'s build cache for faster deployments',
-        'Consider using Hugo\'s development server for local testing'
-      ]
-    });
-    
-    // Netlify-specific optimizations
-    recommendations.push({
-      category: 'Netlify Optimization',
-      items: [
-        'Configure Netlify\'s asset optimization features',
-        'Use Netlify\'s CDN for global content delivery',
-        'Implement proper cache headers for different asset types',
-        'Use Netlify Functions for dynamic content',
-        'Enable Netlify\'s form handling to reduce custom code'
-      ]
-    });
-    
-    return recommendations;
-  }
-
-  generateReport() {
-    const bottlenecks = this.identifyBottlenecks();
-    const recommendations = this.generateOptimizationRecommendations();
-    
-    const report = {
-      timestamp: new Date().toISOString(),
-      summary: {
-        buildTime: this.formatTime(this.metrics.buildTime.total),
-        assetCount: this.metrics.assets.count,
-        totalSize: this.formatBytes(this.metrics.assets.totalSize),
-        cacheEfficiency: `${(this.metrics.cache.efficiency * 100).toFixed(2)}%`,
-        memoryPeak: this.formatBytes(this.metrics.memory.peak),
-        errorsCount: this.metrics.errors.length,
-        warningsCount: this.metrics.warnings.length
+  constructor(options = {}) {
+    this.config = {
+      url: process.env.DEPLOYED_URL || 'https://vocal-pony-24e3de.netlify.app',
+      interval: options.interval || 300000, // 5 minutes
+      metrics: {
+        lighthouse: true,
+        webVitals: true,
+        loadTime: true,
+        resourceTiming: true,
+        apiPerformance: true
       },
-      metrics: this.metrics,
-      bottlenecks,
-      recommendations,
-      scores: {
-        performance: this.calculatePerformanceScore(),
-        optimization: this.calculateOptimizationScore(),
-        overall: this.calculateOverallScore()
-      }
-    };
-    
-    this.saveReport(report);
-    this.logReportSummary(report);
-    
-    return report;
-  }
-
-  calculatePerformanceScore() {
-    let score = 100;
-    
-    // Deduct points for slow build time
-    if (this.metrics.buildTime.total > this.thresholds.buildTime) {
-      score -= 30;
-    }
-    
-    // Deduct points for large assets
-    if (this.metrics.assets.totalSize > this.thresholds.assetSize * 10) {
-      score -= 20;
-    }
-    
-    // Deduct points for low cache efficiency
-    if (this.metrics.cache.efficiency < this.thresholds.cacheEfficiency) {
-      score -= 25;
-    }
-    
-    // Deduct points for errors
-    score -= this.metrics.errors.length * 5;
-    
-    return Math.max(0, score);
-  }
-
-  calculateOptimizationScore() {
-    let score = 100;
-    
-    // Check for optimization indicators
-    const hasMinification = fs.existsSync('public') && this.checkMinification();
-    const hasCaching = fs.existsSync('resources/_gen');
-    const hasCompression = this.checkCompressionHeaders();
-    
-    if (!hasMinification) score -= 30;
-    if (!hasCaching) score -= 20;
-    if (!hasCompression) score -= 15;
-    
-    return Math.max(0, score);
-  }
-
-  calculateOverallScore() {
-    const performanceScore = this.calculatePerformanceScore();
-    const optimizationScore = this.calculateOptimizationScore();
-    
-    return Math.round((performanceScore + optimizationScore) / 2);
-  }
-
-  checkMinification() {
-    // Simple check for minified CSS/JS files
-    try {
-      const cssFiles = this.findFiles('public', '.css');
-      const jsFiles = this.findFiles('public', '.js');
-      
-      return cssFiles.some(file => this.isMinified(file)) || 
-             jsFiles.some(file => this.isMinified(file));
-    } catch (error) {
-      return false;
-    }
-  }
-
-  checkCompressionHeaders() {
-    // Check if netlify.toml has compression settings
-    try {
-      const netlifyConfig = fs.readFileSync('netlify.toml', 'utf8');
-      return netlifyConfig.includes('gzip') || netlifyConfig.includes('compress');
-    } catch (error) {
-      return false;
-    }
-  }
-
-  isMinified(filePath) {
-    try {
-      const content = fs.readFileSync(filePath, 'utf8');
-      const lines = content.split('\n');
-      
-      // Simple heuristic: minified files typically have very long lines
-      return lines.some(line => line.length > 500) || lines.length < 10;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  findFiles(dir, extension) {
-    const files = [];
-    
-    if (!fs.existsSync(dir)) return files;
-    
-    const walk = (currentDir) => {
-      const items = fs.readdirSync(currentDir);
-      
-      items.forEach(item => {
-        const fullPath = path.join(currentDir, item);
-        const stat = fs.statSync(fullPath);
-        
-        if (stat.isDirectory()) {
-          walk(fullPath);
-        } else if (fullPath.endsWith(extension)) {
-          files.push(fullPath);
+      thresholds: {
+        performance: 80,
+        accessibility: 90,
+        bestPractices: 80,
+        seo: 90,
+        loadTime: 2000, // ms
+        fcp: 2000, // First Contentful Paint
+        lcp: 2500, // Largest Contentful Paint
+        fid: 100, // First Input Delay
+        cls: 0.1, // Cumulative Layout Shift
+        ttfb: 500 // Time to First Byte
+      },
+      alerting: {
+        webhook: process.env.PERFORMANCE_WEBHOOK_URL,
+        email: process.env.PERFORMANCE_ALERT_EMAIL
+      },
+      storage: {
+        datadog: {
+          apiKey: process.env.DATADOG_API_KEY,
+          appKey: process.env.DATADOG_APP_KEY,
+          site: process.env.DATADOG_SITE || 'datadoghq.com'
+        },
+        local: {
+          enabled: true,
+          directory: './performance-data'
         }
-      });
+      },
+      ...options
     };
     
-    walk(dir);
-    return files;
-  }
-
-  walkDirectory(dir) {
-    const files = [];
-    
-    if (!fs.existsSync(dir)) return files;
-    
-    const walk = (currentDir) => {
-      const items = fs.readdirSync(currentDir);
-      
-      items.forEach(item => {
-        const fullPath = path.join(currentDir, item);
-        const stat = fs.statSync(fullPath);
-        
-        if (stat.isDirectory()) {
-          walk(fullPath);
-        } else {
-          files.push({
-            path: fullPath,
-            size: stat.size,
-            modified: stat.mtime
-          });
-        }
-      });
-    };
-    
-    walk(dir);
-    return files;
-  }
-
-  saveReport(report) {
-    const reportPath = 'build-performance-report.json';
-    fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-    this.log(`Performance report saved to ${reportPath}`, 'success');
-  }
-
-  logBottlenecks(bottlenecks) {
-    if (bottlenecks.length === 0) {
-      this.log('No significant bottlenecks identified', 'success');
-      return;
-    }
-    
-    this.log(`Identified ${bottlenecks.length} performance bottlenecks:`, 'warning');
-    
-    bottlenecks.forEach((bottleneck, index) => {
-      const color = bottleneck.severity === 'high' ? 'error' : 'warning';
-      this.log(`${index + 1}. [${bottleneck.severity.toUpperCase()}] ${bottleneck.message}`, color);
-      this.log(`   Recommendation: ${bottleneck.recommendation}`, 'info');
-    });
-  }
-
-  logReportSummary(report) {
-    this.log('\n' + '='.repeat(60), 'info');
-    this.log('BUILD PERFORMANCE REPORT SUMMARY', 'info');
-    this.log('='.repeat(60), 'info');
-    
-    this.log(`Build Time: ${report.summary.buildTime}`, 'info');
-    this.log(`Assets: ${report.summary.assetCount} (${report.summary.totalSize})`, 'info');
-    this.log(`Cache Efficiency: ${report.summary.cacheEfficiency}`, 'info');
-    this.log(`Memory Peak: ${report.summary.memoryPeak}`, 'info');
-    this.log(`Errors: ${report.summary.errorsCount}`, 'info');
-    this.log(`Warnings: ${report.summary.warningsCount}`, 'info');
-    
-    this.log('\nSCORES:', 'info');
-    this.log(`Performance: ${report.scores.performance}/100`, 'info');
-    this.log(`Optimization: ${report.scores.optimization}/100`, 'info');
-    this.log(`Overall: ${report.scores.overall}/100`, 'info');
-    
-    const scoreColor = report.scores.overall >= 80 ? 'success' : 
-                      report.scores.overall >= 60 ? 'warning' : 'error';
-    this.log(`\nOverall Score: ${report.scores.overall}/100`, scoreColor);
-    
-    this.log('='.repeat(60), 'info');
-  }
-
-  formatBytes(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  }
-
-  formatTime(ms) {
-    if (ms < 1000) return `${ms}ms`;
-    if (ms < 60000) return `${(ms / 1000).toFixed(2)}s`;
-    return `${(ms / 60000).toFixed(2)}m`;
+    this.isRunning = false;
+    this.intervalId = null;
   }
 
   log(message, type = 'info') {
@@ -492,11 +61,606 @@ class PerformanceMonitor {
       info: chalk.blue,
       success: chalk.green,
       warning: chalk.yellow,
-      error: chalk.red
+      error: chalk.red,
+      metric: chalk.cyan
     };
     
     const timestamp = new Date().toISOString();
-    console.log(`${colors[type](`[${type.toUpperCase()}]`)} ${timestamp}: ${message}`);
+    console.log(`[${timestamp}] ${colors[type]('●')} ${message}`);
+  }
+
+  async measureLoadTime() {
+    const startTime = Date.now();
+    
+    try {
+      const response = await axios.get(this.config.url, {
+        timeout: 30000,
+        headers: {
+          'User-Agent': 'PerformanceMonitor/1.0',
+          'Cache-Control': 'no-cache'
+        }
+      });
+      
+      const endTime = Date.now();
+      const loadTime = endTime - startTime;
+      
+      return {
+        loadTime,
+        status: response.status,
+        responseSize: response.headers['content-length'] || 0,
+        timestamp: new Date().toISOString(),
+        url: this.config.url
+      };
+    } catch (error) {
+      return {
+        loadTime: null,
+        error: error.message,
+        timestamp: new Date().toISOString(),
+        url: this.config.url
+      };
+    }
+  }
+
+  async measureWebVitals() {
+    try {
+      // Use Lighthouse CI to get Web Vitals
+      const { execSync } = require('child_process');
+      
+      const lighthouse = execSync(
+        `npx lighthouse ${this.config.url} --output=json --quiet --chrome-flags="--headless --no-sandbox"`,
+        { encoding: 'utf-8', timeout: 60000 }
+      );
+      
+      const report = JSON.parse(lighthouse);
+      const audits = report.lhr.audits;
+      
+      return {
+        performance: Math.round(report.lhr.categories.performance.score * 100),
+        accessibility: Math.round(report.lhr.categories.accessibility.score * 100),
+        bestPractices: Math.round(report.lhr.categories['best-practices'].score * 100),
+        seo: Math.round(report.lhr.categories.seo.score * 100),
+        fcp: audits['first-contentful-paint']?.numericValue || null,
+        lcp: audits['largest-contentful-paint']?.numericValue || null,
+        fid: audits['max-potential-fid']?.numericValue || null,
+        cls: audits['cumulative-layout-shift']?.numericValue || null,
+        ttfb: audits['server-response-time']?.numericValue || null,
+        timestamp: new Date().toISOString()
+      };
+    } catch (error) {
+      this.log(`Lighthouse measurement failed: ${error.message}`, 'error');
+      return null;
+    }
+  }
+
+  async measureAPIPerformance() {
+    const apiEndpoints = [
+      '/api/health',
+      '/api/auth/me',
+      '/sitemap.xml',
+      '/robots.txt'
+    ];
+    
+    const results = [];
+    
+    for (const endpoint of apiEndpoints) {
+      const startTime = Date.now();
+      
+      try {
+        const response = await axios.get(`${this.config.url}${endpoint}`, {
+          timeout: 10000,
+          validateStatus: status => status < 500
+        });
+        
+        const endTime = Date.now();
+        
+        results.push({
+          endpoint,
+          responseTime: endTime - startTime,
+          status: response.status,
+          success: true,
+          timestamp: new Date().toISOString()
+        });
+      } catch (error) {
+        results.push({
+          endpoint,
+          responseTime: null,
+          status: null,
+          success: false,
+          error: error.message,
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
+    
+    return results;
+  }
+
+  async measureResourceTiming() {
+    try {
+      const puppeteer = require('puppeteer');
+      
+      const browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+      
+      const page = await browser.newPage();
+      
+      // Enable performance timing
+      await page.evaluateOnNewDocument(() => {
+        window.performanceData = {
+          resources: [],
+          navigation: null
+        };
+        
+        // Capture resource timing
+        new PerformanceObserver((list) => {
+          window.performanceData.resources.push(...list.getEntries());
+        }).observe({ entryTypes: ['resource'] });
+        
+        // Capture navigation timing
+        new PerformanceObserver((list) => {
+          window.performanceData.navigation = list.getEntries()[0];
+        }).observe({ entryTypes: ['navigation'] });
+      });
+      
+      await page.goto(this.config.url, { waitUntil: 'networkidle2' });
+      
+      // Wait for performance data collection
+      await page.waitForTimeout(2000);
+      
+      const performanceData = await page.evaluate(() => window.performanceData);
+      
+      await browser.close();
+      
+      return {
+        resourceCount: performanceData.resources.length,
+        totalResourceSize: performanceData.resources.reduce((sum, resource) => 
+          sum + (resource.transferSize || 0), 0),
+        slowestResource: performanceData.resources.reduce((slowest, resource) => 
+          (resource.duration > (slowest?.duration || 0)) ? resource : slowest, null),
+        navigationTiming: performanceData.navigation,
+        timestamp: new Date().toISOString()
+      };
+    } catch (error) {
+      this.log(`Resource timing measurement failed: ${error.message}`, 'error');
+      return null;
+    }
+  }
+
+  async collectMetrics() {
+    const metrics = {
+      timestamp: new Date().toISOString(),
+      url: this.config.url
+    };
+    
+    this.log('Collecting performance metrics...', 'info');
+    
+    // Measure load time
+    if (this.config.metrics.loadTime) {
+      const loadTimeData = await this.measureLoadTime();
+      metrics.loadTime = loadTimeData;
+      
+      if (loadTimeData.loadTime) {
+        this.log(`Load time: ${loadTimeData.loadTime}ms`, 'metric');
+      }
+    }
+    
+    // Measure Web Vitals
+    if (this.config.metrics.webVitals) {
+      const webVitals = await this.measureWebVitals();
+      if (webVitals) {
+        metrics.webVitals = webVitals;
+        this.log(`Performance score: ${webVitals.performance}/100`, 'metric');
+        this.log(`Accessibility score: ${webVitals.accessibility}/100`, 'metric');
+      }
+    }
+    
+    // Measure API performance
+    if (this.config.metrics.apiPerformance) {
+      const apiMetrics = await this.measureAPIPerformance();
+      metrics.apiPerformance = apiMetrics;
+      
+      const avgResponseTime = apiMetrics
+        .filter(m => m.success)
+        .reduce((sum, m) => sum + m.responseTime, 0) / apiMetrics.filter(m => m.success).length;
+      
+      this.log(`Average API response time: ${Math.round(avgResponseTime)}ms`, 'metric');
+    }
+    
+    // Measure resource timing
+    if (this.config.metrics.resourceTiming) {
+      const resourceTiming = await this.measureResourceTiming();
+      if (resourceTiming) {
+        metrics.resourceTiming = resourceTiming;
+        this.log(`Resources loaded: ${resourceTiming.resourceCount}`, 'metric');
+      }
+    }
+    
+    return metrics;
+  }
+
+  analyzeMetrics(metrics) {
+    const issues = [];
+    const warnings = [];
+    const recommendations = [];
+    
+    // Check load time
+    if (metrics.loadTime?.loadTime > this.config.thresholds.loadTime) {
+      issues.push({
+        type: 'load_time',
+        severity: 'high',
+        message: `Load time (${metrics.loadTime.loadTime}ms) exceeds threshold (${this.config.thresholds.loadTime}ms)`,
+        value: metrics.loadTime.loadTime,
+        threshold: this.config.thresholds.loadTime
+      });
+    }
+    
+    // Check Web Vitals
+    if (metrics.webVitals) {
+      const vitals = metrics.webVitals;
+      
+      if (vitals.performance < this.config.thresholds.performance) {
+        issues.push({
+          type: 'performance_score',
+          severity: 'high',
+          message: `Performance score (${vitals.performance}) is below threshold (${this.config.thresholds.performance})`,
+          value: vitals.performance,
+          threshold: this.config.thresholds.performance
+        });
+      }
+      
+      if (vitals.fcp > this.config.thresholds.fcp) {
+        warnings.push({
+          type: 'first_contentful_paint',
+          message: `First Contentful Paint (${vitals.fcp}ms) is slow`,
+          value: vitals.fcp,
+          threshold: this.config.thresholds.fcp
+        });
+        recommendations.push('Consider optimizing critical rendering path and reducing render-blocking resources');
+      }
+      
+      if (vitals.lcp > this.config.thresholds.lcp) {
+        issues.push({
+          type: 'largest_contentful_paint',
+          severity: 'medium',
+          message: `Largest Contentful Paint (${vitals.lcp}ms) is slow`,
+          value: vitals.lcp,
+          threshold: this.config.thresholds.lcp
+        });
+        recommendations.push('Optimize largest content element loading (images, text blocks)');
+      }
+      
+      if (vitals.cls > this.config.thresholds.cls) {
+        issues.push({
+          type: 'cumulative_layout_shift',
+          severity: 'medium',
+          message: `Cumulative Layout Shift (${vitals.cls}) exceeds threshold`,
+          value: vitals.cls,
+          threshold: this.config.thresholds.cls
+        });
+        recommendations.push('Add size attributes to images and reserve space for dynamic content');
+      }
+    }
+    
+    // Check API performance
+    if (metrics.apiPerformance) {
+      const failedAPIs = metrics.apiPerformance.filter(api => !api.success);
+      const slowAPIs = metrics.apiPerformance.filter(api => api.success && api.responseTime > 1000);
+      
+      if (failedAPIs.length > 0) {
+        issues.push({
+          type: 'api_failures',
+          severity: 'high',
+          message: `${failedAPIs.length} API endpoints are failing`,
+          endpoints: failedAPIs.map(api => api.endpoint)
+        });
+      }
+      
+      if (slowAPIs.length > 0) {
+        warnings.push({
+          type: 'slow_apis',
+          message: `${slowAPIs.length} API endpoints are slow (>1s)`,
+          endpoints: slowAPIs.map(api => ({ endpoint: api.endpoint, time: api.responseTime }))
+        });
+      }
+    }
+    
+    return { issues, warnings, recommendations };
+  }
+
+  async storeMetrics(metrics, analysis) {
+    const data = {
+      metrics,
+      analysis,
+      timestamp: metrics.timestamp
+    };
+    
+    // Store locally
+    if (this.config.storage.local.enabled) {
+      try {
+        await fs.mkdir(this.config.storage.local.directory, { recursive: true });
+        
+        const filename = `metrics-${Date.now()}.json`;
+        const filepath = path.join(this.config.storage.local.directory, filename);
+        
+        await fs.writeFile(filepath, JSON.stringify(data, null, 2));
+        this.log(`Metrics stored locally: ${filepath}`, 'success');
+      } catch (error) {
+        this.log(`Failed to store metrics locally: ${error.message}`, 'error');
+      }
+    }
+    
+    // Send to Datadog
+    if (this.config.storage.datadog.apiKey) {
+      await this.sendToDatadog(metrics);
+    }
+    
+    // Store aggregated daily summary
+    await this.updateDailySummary(metrics, analysis);
+  }
+
+  async sendToDatadog(metrics) {
+    try {
+      const datadogMetrics = [];
+      
+      if (metrics.loadTime?.loadTime) {
+        datadogMetrics.push({
+          metric: 'portfolio.load_time',
+          points: [[Math.floor(Date.now() / 1000), metrics.loadTime.loadTime]],
+          tags: [`url:${this.config.url}`, 'environment:production']
+        });
+      }
+      
+      if (metrics.webVitals) {
+        const vitals = metrics.webVitals;
+        ['performance', 'accessibility', 'bestPractices', 'seo'].forEach(metric => {
+          if (vitals[metric] !== null) {
+            datadogMetrics.push({
+              metric: `portfolio.lighthouse.${metric}`,
+              points: [[Math.floor(Date.now() / 1000), vitals[metric]]],
+              tags: [`url:${this.config.url}`, 'environment:production']
+            });
+          }
+        });
+        
+        ['fcp', 'lcp', 'fid', 'cls', 'ttfb'].forEach(metric => {
+          if (vitals[metric] !== null) {
+            datadogMetrics.push({
+              metric: `portfolio.web_vitals.${metric}`,
+              points: [[Math.floor(Date.now() / 1000), vitals[metric]]],
+              tags: [`url:${this.config.url}`, 'environment:production']
+            });
+          }
+        });
+      }
+      
+      if (datadogMetrics.length > 0) {
+        await axios.post(
+          `https://api.${this.config.storage.datadog.site}/api/v1/metrics`,
+          { series: datadogMetrics },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'DD-API-KEY': this.config.storage.datadog.apiKey
+            }
+          }
+        );
+        
+        this.log(`Sent ${datadogMetrics.length} metrics to Datadog`, 'success');
+      }
+    } catch (error) {
+      this.log(`Failed to send metrics to Datadog: ${error.message}`, 'error');
+    }
+  }
+
+  async updateDailySummary(metrics, analysis) {
+    const today = new Date().toISOString().split('T')[0];
+    const summaryPath = path.join(this.config.storage.local.directory, `daily-${today}.json`);
+    
+    try {
+      let summary = {};
+      
+      try {
+        const existingData = await fs.readFile(summaryPath, 'utf8');
+        summary = JSON.parse(existingData);
+      } catch {
+        // File doesn't exist, start fresh
+        summary = {
+          date: today,
+          measurements: 0,
+          loadTimes: [],
+          performanceScores: [],
+          issues: [],
+          warnings: []
+        };
+      }
+      
+      summary.measurements++;
+      summary.lastUpdate = new Date().toISOString();
+      
+      if (metrics.loadTime?.loadTime) {
+        summary.loadTimes.push(metrics.loadTime.loadTime);
+      }
+      
+      if (metrics.webVitals?.performance) {
+        summary.performanceScores.push(metrics.webVitals.performance);
+      }
+      
+      summary.issues.push(...analysis.issues);
+      summary.warnings.push(...analysis.warnings);
+      
+      // Calculate averages
+      summary.avgLoadTime = summary.loadTimes.length > 0 ? 
+        Math.round(summary.loadTimes.reduce((a, b) => a + b, 0) / summary.loadTimes.length) : null;
+      
+      summary.avgPerformanceScore = summary.performanceScores.length > 0 ?
+        Math.round(summary.performanceScores.reduce((a, b) => a + b, 0) / summary.performanceScores.length) : null;
+      
+      await fs.writeFile(summaryPath, JSON.stringify(summary, null, 2));
+    } catch (error) {
+      this.log(`Failed to update daily summary: ${error.message}`, 'error');
+    }
+  }
+
+  async sendAlert(analysis) {
+    const criticalIssues = analysis.issues.filter(issue => issue.severity === 'high');
+    
+    if (criticalIssues.length === 0) {
+      return;
+    }
+    
+    const alertData = {
+      timestamp: new Date().toISOString(),
+      url: this.config.url,
+      criticalIssues,
+      warnings: analysis.warnings,
+      recommendations: analysis.recommendations
+    };
+    
+    // Send webhook alert
+    if (this.config.alerting.webhook) {
+      try {
+        await axios.post(this.config.alerting.webhook, {
+          text: `🚨 Performance Alert: ${criticalIssues.length} critical issues detected on ${this.config.url}`,
+          attachments: [{
+            color: 'danger',
+            fields: criticalIssues.map(issue => ({
+              title: issue.type,
+              value: issue.message,
+              short: false
+            }))
+          }]
+        });
+        
+        this.log('Alert sent via webhook', 'warning');
+      } catch (error) {
+        this.log(`Failed to send webhook alert: ${error.message}`, 'error');
+      }
+    }
+    
+    this.log(`Performance alert: ${criticalIssues.length} critical issues detected`, 'error');
+  }
+
+  async runOnce() {
+    try {
+      this.log('Starting performance measurement...', 'info');
+      
+      const metrics = await this.collectMetrics();
+      const analysis = this.analyzeMetrics(metrics);
+      
+      await this.storeMetrics(metrics, analysis);
+      
+      if (analysis.issues.length > 0) {
+        this.log(`Found ${analysis.issues.length} performance issues`, 'warning');
+        await this.sendAlert(analysis);
+      }
+      
+      if (analysis.warnings.length > 0) {
+        this.log(`Found ${analysis.warnings.length} performance warnings`, 'warning');
+      }
+      
+      this.log('Performance measurement completed', 'success');
+      
+      return { metrics, analysis };
+    } catch (error) {
+      this.log(`Performance measurement failed: ${error.message}`, 'error');
+      throw error;
+    }
+  }
+
+  async start() {
+    if (this.isRunning) {
+      this.log('Performance monitor is already running', 'warning');
+      return;
+    }
+    
+    this.isRunning = true;
+    this.log(`Starting continuous performance monitoring (interval: ${this.config.interval / 1000}s)`, 'info');
+    
+    // Run immediately
+    await this.runOnce();
+    
+    // Set up interval
+    this.intervalId = setInterval(async () => {
+      try {
+        await this.runOnce();
+      } catch (error) {
+        this.log(`Monitoring cycle failed: ${error.message}`, 'error');
+      }
+    }, this.config.interval);
+  }
+
+  stop() {
+    if (!this.isRunning) {
+      this.log('Performance monitor is not running', 'warning');
+      return;
+    }
+    
+    this.isRunning = false;
+    
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+    
+    this.log('Performance monitoring stopped', 'info');
+  }
+
+  async generateReport(days = 7) {
+    this.log(`Generating performance report for the last ${days} days...`, 'info');
+    
+    const reportData = {
+      period: `${days} days`,
+      generatedAt: new Date().toISOString(),
+      url: this.config.url,
+      summary: {},
+      trends: {},
+      recommendations: []
+    };
+    
+    try {
+      const summaryFiles = [];
+      const now = new Date();
+      
+      for (let i = 0; i < days; i++) {
+        const date = new Date(now - i * 24 * 60 * 60 * 1000);
+        const dateStr = date.toISOString().split('T')[0];
+        const summaryPath = path.join(this.config.storage.local.directory, `daily-${dateStr}.json`);
+        
+        try {
+          const data = await fs.readFile(summaryPath, 'utf8');
+          summaryFiles.push(JSON.parse(data));
+        } catch {
+          // File doesn't exist for this date
+        }
+      }
+      
+      if (summaryFiles.length > 0) {
+        // Calculate overall summary
+        const allLoadTimes = summaryFiles.flatMap(s => s.loadTimes || []);
+        const allPerfScores = summaryFiles.flatMap(s => s.performanceScores || []);
+        
+        reportData.summary = {
+          totalMeasurements: summaryFiles.reduce((sum, s) => sum + s.measurements, 0),
+          avgLoadTime: allLoadTimes.length > 0 ? 
+            Math.round(allLoadTimes.reduce((a, b) => a + b, 0) / allLoadTimes.length) : null,
+          avgPerformanceScore: allPerfScores.length > 0 ?
+            Math.round(allPerfScores.reduce((a, b) => a + b, 0) / allPerfScores.length) : null,
+          totalIssues: summaryFiles.reduce((sum, s) => sum + s.issues.length, 0),
+          totalWarnings: summaryFiles.reduce((sum, s) => sum + s.warnings.length, 0)
+        };
+      }
+      
+      const reportPath = path.join(this.config.storage.local.directory, `performance-report-${Date.now()}.json`);
+      await fs.writeFile(reportPath, JSON.stringify(reportData, null, 2));
+      
+      this.log(`Performance report generated: ${reportPath}`, 'success');
+      return reportData;
+    } catch (error) {
+      this.log(`Failed to generate report: ${error.message}`, 'error');
+      throw error;
+    }
   }
 }
 
@@ -504,15 +668,43 @@ class PerformanceMonitor {
 if (require.main === module) {
   const monitor = new PerformanceMonitor();
   
-  monitor.startMonitoring();
+  const command = process.argv[2];
   
-  // Simulate build process monitoring
-  monitor.trackPhase('Asset Analysis', () => monitor.analyzeAssets());
-  monitor.trackPhase('Cache Analysis', () => monitor.analyzeCachePerformance());
-  monitor.trackPhase('Memory Analysis', () => monitor.analyzeMemoryUsage());
-  
-  monitor.stopMonitoring();
-  monitor.generateReport();
+  switch (command) {
+    case 'once':
+      monitor.runOnce()
+        .then(() => process.exit(0))
+        .catch((error) => {
+          console.error(chalk.red('❌ Performance measurement failed:'), error.message);
+          process.exit(1);
+        });
+      break;
+      
+    case 'start':
+      monitor.start()
+        .catch((error) => {
+          console.error(chalk.red('❌ Performance monitoring failed:'), error.message);
+          process.exit(1);
+        });
+      break;
+      
+    case 'report':
+      const days = parseInt(process.argv[3]) || 7;
+      monitor.generateReport(days)
+        .then(() => process.exit(0))
+        .catch((error) => {
+          console.error(chalk.red('❌ Report generation failed:'), error.message);
+          process.exit(1);
+        });
+      break;
+      
+    default:
+      console.log('Usage:');
+      console.log('  node performance-monitor.js once    - Run single measurement');
+      console.log('  node performance-monitor.js start   - Start continuous monitoring');
+      console.log('  node performance-monitor.js report [days] - Generate performance report');
+      break;
+  }
 }
 
 module.exports = PerformanceMonitor;

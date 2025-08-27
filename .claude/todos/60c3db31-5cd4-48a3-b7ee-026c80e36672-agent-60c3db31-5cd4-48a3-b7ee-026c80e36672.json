@@ -1,0 +1,37 @@
+[
+  {
+    "content": "Update README with clear installation instructions",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Create requirements.txt with all dependencies",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Add .gitignore file",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Create setup.py for pip installation",
+    "status": "completed",
+    "id": "4"
+  },
+  {
+    "content": "Add GitHub Actions workflow for releases",
+    "status": "completed",
+    "id": "5"
+  },
+  {
+    "content": "Create INSTALL.md with detailed instructions",
+    "status": "completed",
+    "id": "6"
+  },
+  {
+    "content": "Add .env.example file",
+    "status": "completed",
+    "id": "7"
+  }
+]

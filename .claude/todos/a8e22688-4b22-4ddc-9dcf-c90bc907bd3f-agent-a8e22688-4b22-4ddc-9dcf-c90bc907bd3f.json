@@ -1,0 +1,52 @@
+[
+  {
+    "content": "Examine project structure and main files",
+    "status": "completed",
+    "activeForm": "Examining project structure and main files"
+  },
+  {
+    "content": "Check dependencies and requirements",
+    "status": "completed",
+    "activeForm": "Checking dependencies and requirements"
+  },
+  {
+    "content": "Review main.py for functionality",
+    "status": "completed",
+    "activeForm": "Reviewing main.py for functionality"
+  },
+  {
+    "content": "Identify and fix any issues",
+    "status": "completed",
+    "activeForm": "Identifying and fixing any issues"
+  },
+  {
+    "content": "Create proper image questionnaire implementation",
+    "status": "completed",
+    "activeForm": "Creating proper image questionnaire implementation"
+  },
+  {
+    "content": "Install dependencies",
+    "status": "completed",
+    "activeForm": "Installing dependencies"
+  },
+  {
+    "content": "Create .env file with API keys",
+    "status": "in_progress",
+    "activeForm": "Creating .env file with API keys"
+  },
+  {
+    "content": "Test the current YouTube application",
+    "status": "pending",
+    "activeForm": "Testing the current YouTube application"
+  },
+  {
+    "content": "Test the new image questionnaire",
+    "status": "pending",
+    "activeForm": "Testing the new image questionnaire"
+  },
+  {
+    "content": "Verify both applications work",
+    "status": "pending",
+    "activeForm": "Verifying both applications work"
+  }
+]

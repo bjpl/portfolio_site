@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Create a cleanup script to automate the reorganization",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Generate a .gitignore file for the workspace",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Create a main README.md explaining the project structure",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Identify and list files that can be safely deleted",
+    "status": "completed",
+    "id": "4"
+  },
+  {
+    "content": "Create category-specific README files",
+    "status": "completed",
+    "id": "5"
+  }
+]

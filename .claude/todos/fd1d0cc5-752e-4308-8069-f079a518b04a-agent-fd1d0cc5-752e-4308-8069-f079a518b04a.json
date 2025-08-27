@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Run final QA tests on all features",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Test API error handling scenarios",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Verify export formats work correctly",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Check backward compatibility with old data",
+    "status": "completed",
+    "id": "4"
+  },
+  {
+    "content": "Create comprehensive repo setup guide",
+    "status": "completed",
+    "id": "5"
+  }
+]

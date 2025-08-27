@@ -2,11 +2,207 @@
   "projects": [
     {
       "id": "portfolio-site",
+      "slug": "portfolio-site",
       "title": "Portfolio Website",
-      "description": "Personal portfolio and teaching resources",
-      "technologies": ["Hugo", "TypeScript", "SCSS"],
+      "description": "A modern, responsive portfolio website built with Next.js and Tailwind CSS. Features dark mode, dynamic content management, and optimized performance.",
+      "longDescription": "This portfolio website showcases my work and serves as a platform for sharing knowledge and resources. Built with Next.js 14, it leverages server-side rendering for optimal SEO and performance. The site includes a comprehensive admin panel, dark mode support, and responsive design across all devices.",
+      "technologies": ["Next.js", "React", "TypeScript", "Tailwind CSS", "Supabase"],
+      "type": "Web Development",
+      "status": "In Progress",
       "link": "/",
-      "featured": true
+      "github": "https://github.com/username/portfolio-site",
+      "demo": "https://portfolio-demo.com",
+      "image": "/images/projects/portfolio-hero.jpg",
+      "gallery": [
+        "/images/projects/portfolio-1.jpg",
+        "/images/projects/portfolio-2.jpg",
+        "/images/projects/portfolio-3.jpg"
+      ],
+      "features": [
+        "Responsive design with mobile-first approach",
+        "Dark/light mode toggle with system preference detection",
+        "Dynamic content management system",
+        "SEO optimized with meta tags and structured data",
+        "Performance optimized with Next.js Image component"
+      ],
+      "challenges": [
+        "Implementing seamless dark mode transitions",
+        "Optimizing bundle size for fast loading",
+        "Creating an intuitive admin interface"
+      ],
+      "featured": true,
+      "order": 1
+    },
+    {
+      "id": "ecommerce-platform",
+      "slug": "ecommerce-platform",
+      "title": "E-Commerce Platform",
+      "description": "Full-stack e-commerce solution with payment integration, inventory management, and admin dashboard.",
+      "longDescription": "A comprehensive e-commerce platform built from the ground up, featuring a modern React frontend, Node.js backend, and PostgreSQL database. The platform includes user authentication, product catalog, shopping cart, payment processing, and a powerful admin dashboard for managing orders and inventory.",
+      "technologies": ["React", "Node.js", "Express", "PostgreSQL", "Stripe", "Redis"],
+      "type": "Full Stack",
+      "status": "Completed",
+      "link": "https://ecommerce-demo.com",
+      "github": "https://github.com/username/ecommerce-platform",
+      "demo": "https://ecommerce-demo.com",
+      "image": "/images/projects/ecommerce-hero.jpg",
+      "gallery": [
+        "/images/projects/ecommerce-1.jpg",
+        "/images/projects/ecommerce-2.jpg",
+        "/images/projects/ecommerce-3.jpg",
+        "/images/projects/ecommerce-4.jpg"
+      ],
+      "features": [
+        "User authentication and authorization",
+        "Product catalog with search and filtering",
+        "Shopping cart and checkout process",
+        "Payment integration with Stripe",
+        "Order management system",
+        "Inventory tracking",
+        "Admin dashboard with analytics"
+      ],
+      "challenges": [
+        "Implementing secure payment processing",
+        "Managing complex state across the application",
+        "Optimizing database queries for large product catalogs"
+      ],
+      "featured": true,
+      "order": 2
+    },
+    {
+      "id": "task-management-app",
+      "slug": "task-management-app",
+      "title": "Task Management App",
+      "description": "Collaborative task management application with real-time updates, team collaboration, and project tracking.",
+      "longDescription": "A feature-rich task management application designed for teams and individuals. Built with modern web technologies, it provides real-time collaboration, project organization, and productivity tracking. The app includes drag-and-drop interfaces, customizable workflows, and comprehensive reporting features.",
+      "technologies": ["Vue.js", "Firebase", "Vuetify", "Socket.io"],
+      "type": "Web Application",
+      "status": "Completed",
+      "link": "https://taskapp-demo.com",
+      "github": "https://github.com/username/task-management",
+      "demo": "https://taskapp-demo.com",
+      "image": "/images/projects/taskapp-hero.jpg",
+      "gallery": [
+        "/images/projects/taskapp-1.jpg",
+        "/images/projects/taskapp-2.jpg",
+        "/images/projects/taskapp-3.jpg"
+      ],
+      "features": [
+        "Real-time task updates and collaboration",
+        "Drag-and-drop task organization",
+        "Project and team management",
+        "Time tracking and reporting",
+        "Customizable kanban boards",
+        "File attachments and comments"
+      ],
+      "challenges": [
+        "Implementing real-time synchronization",
+        "Managing complex user permissions",
+        "Optimizing performance for large datasets"
+      ],
+      "featured": true,
+      "order": 3
+    },
+    {
+      "id": "mobile-weather-app",
+      "slug": "mobile-weather-app",
+      "title": "Weather Forecast App",
+      "description": "Cross-platform mobile application providing detailed weather forecasts and alerts.",
+      "longDescription": "A comprehensive weather application built with React Native, providing accurate weather forecasts, severe weather alerts, and location-based services. The app features an intuitive interface, offline capabilities, and integration with multiple weather APIs for reliable data.",
+      "technologies": ["React Native", "Expo", "TypeScript", "AsyncStorage"],
+      "type": "Mobile Development",
+      "status": "Completed",
+      "link": "https://weather-app-store.com",
+      "github": "https://github.com/username/weather-app",
+      "demo": "https://expo.dev/@username/weather-app",
+      "image": "/images/projects/weather-hero.jpg",
+      "gallery": [
+        "/images/projects/weather-1.jpg",
+        "/images/projects/weather-2.jpg",
+        "/images/projects/weather-3.jpg"
+      ],
+      "features": [
+        "7-day weather forecast",
+        "Hourly weather updates",
+        "Severe weather alerts",
+        "Location-based services",
+        "Offline data caching",
+        "Customizable notifications"
+      ],
+      "challenges": [
+        "Handling location permissions across platforms",
+        "Implementing efficient data caching",
+        "Creating responsive layouts for various screen sizes"
+      ],
+      "featured": false,
+      "order": 4
+    },
+    {
+      "id": "ai-chatbot",
+      "slug": "ai-chatbot",
+      "title": "AI Customer Support Chatbot",
+      "description": "Intelligent chatbot powered by machine learning for automated customer support.",
+      "longDescription": "An advanced AI chatbot system designed to handle customer inquiries automatically. Built using natural language processing and machine learning, the bot can understand context, provide relevant responses, and escalate complex issues to human agents when necessary.",
+      "technologies": ["Python", "TensorFlow", "FastAPI", "MongoDB", "Docker"],
+      "type": "Machine Learning",
+      "status": "In Progress",
+      "link": "https://chatbot-demo.com",
+      "github": "https://github.com/username/ai-chatbot",
+      "demo": "https://chatbot-demo.com",
+      "image": "/images/projects/chatbot-hero.jpg",
+      "gallery": [
+        "/images/projects/chatbot-1.jpg",
+        "/images/projects/chatbot-2.jpg"
+      ],
+      "features": [
+        "Natural language understanding",
+        "Context-aware responses",
+        "Multi-language support",
+        "Learning from interactions",
+        "Integration with CRM systems",
+        "Analytics and reporting"
+      ],
+      "challenges": [
+        "Training accurate NLP models",
+        "Handling ambiguous user inputs",
+        "Scaling for high concurrent users"
+      ],
+      "featured": false,
+      "order": 5
+    },
+    {
+      "id": "blockchain-voting",
+      "slug": "blockchain-voting",
+      "title": "Blockchain Voting System",
+      "description": "Secure and transparent voting system built on blockchain technology.",
+      "longDescription": "A decentralized voting system leveraging blockchain technology to ensure transparency, security, and immutability of votes. The system includes voter registration, ballot creation, vote casting, and result tabulation, all recorded on a distributed ledger.",
+      "technologies": ["Solidity", "Web3.js", "Ethereum", "React", "MetaMask"],
+      "type": "Blockchain",
+      "status": "Completed",
+      "link": "https://blockchain-vote.com",
+      "github": "https://github.com/username/blockchain-voting",
+      "demo": "https://blockchain-vote.com",
+      "image": "/images/projects/blockchain-hero.jpg",
+      "gallery": [
+        "/images/projects/blockchain-1.jpg",
+        "/images/projects/blockchain-2.jpg",
+        "/images/projects/blockchain-3.jpg"
+      ],
+      "features": [
+        "Decentralized vote storage",
+        "Transparent vote counting",
+        "Voter identity verification",
+        "Real-time result updates",
+        "Audit trail for all transactions",
+        "Mobile-friendly interface"
+      ],
+      "challenges": [
+        "Ensuring voter privacy while maintaining transparency",
+        "Managing gas costs for transactions",
+        "Creating an intuitive interface for non-technical users"
+      ],
+      "featured": false,
+      "order": 6
     }
   ]
 }

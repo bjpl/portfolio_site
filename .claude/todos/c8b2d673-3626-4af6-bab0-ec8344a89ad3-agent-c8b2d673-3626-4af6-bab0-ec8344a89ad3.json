@@ -1,0 +1,62 @@
+[
+  {
+    "content": "Prepare application for executable distribution",
+    "status": "in_progress",
+    "activeForm": "Preparing application for executable distribution"
+  },
+  {
+    "content": "Create optimized PyInstaller configuration",
+    "status": "pending",
+    "activeForm": "Creating optimized PyInstaller configuration"
+  },
+  {
+    "content": "Build Windows executable with icon and metadata",
+    "status": "pending",
+    "activeForm": "Building Windows executable with icon and metadata"
+  },
+  {
+    "content": "Create installer with Inno Setup or NSIS",
+    "status": "pending",
+    "activeForm": "Creating installer with Inno Setup or NSIS"
+  },
+  {
+    "content": "Add auto-updater functionality",
+    "status": "pending",
+    "activeForm": "Adding auto-updater functionality"
+  },
+  {
+    "content": "Create portable version (no installation required)",
+    "status": "pending",
+    "activeForm": "Creating portable version (no installation required)"
+  },
+  {
+    "content": "Generate application icon and branding assets",
+    "status": "pending",
+    "activeForm": "Generating application icon and branding assets"
+  },
+  {
+    "content": "Add splash screen for professional startup",
+    "status": "pending",
+    "activeForm": "Adding splash screen for professional startup"
+  },
+  {
+    "content": "Implement error reporting and crash handling",
+    "status": "pending",
+    "activeForm": "Implementing error reporting and crash handling"
+  },
+  {
+    "content": "Create user manual and help documentation",
+    "status": "pending",
+    "activeForm": "Creating user manual and help documentation"
+  },
+  {
+    "content": "Package everything into distributable ZIP",
+    "status": "pending",
+    "activeForm": "Packaging everything into distributable ZIP"
+  },
+  {
+    "content": "Test executable on clean Windows system",
+    "status": "pending",
+    "activeForm": "Testing executable on clean Windows system"
+  }
+]

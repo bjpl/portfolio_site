@@ -1,0 +1,17 @@
+[
+  {
+    "content": "Explain core architecture components",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Detail frontend structure",
+    "status": "in_progress",
+    "id": "2"
+  },
+  {
+    "content": "Cover backend services",
+    "status": "pending",
+    "id": "3"
+  }
+]

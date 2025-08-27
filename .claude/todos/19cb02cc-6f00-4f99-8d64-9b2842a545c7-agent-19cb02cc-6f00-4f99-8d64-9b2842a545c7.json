@@ -1,0 +1,42 @@
+[
+  {
+    "content": "Diagnose blank main window issue",
+    "status": "completed",
+    "activeForm": "Diagnosing blank main window issue"
+  },
+  {
+    "content": "Check GUI initialization and error handling",
+    "status": "completed",
+    "activeForm": "Checking GUI initialization and error handling"
+  },
+  {
+    "content": "Fix widget creation and layout problems",
+    "status": "completed",
+    "activeForm": "Fixing widget creation and layout problems"
+  },
+  {
+    "content": "Verify API setup dialog interaction",
+    "status": "completed",
+    "activeForm": "Verifying API setup dialog interaction"
+  },
+  {
+    "content": "Test complete application startup flow",
+    "status": "in_progress",
+    "activeForm": "Testing complete application startup flow"
+  },
+  {
+    "content": "Ensure proper error messages display",
+    "status": "pending",
+    "activeForm": "Ensuring proper error messages display"
+  },
+  {
+    "content": "Fix any exception handling issues",
+    "status": "pending",
+    "activeForm": "Fixing any exception handling issues"
+  },
+  {
+    "content": "Validate all UI components render",
+    "status": "pending",
+    "activeForm": "Validating all UI components render"
+  }
+]

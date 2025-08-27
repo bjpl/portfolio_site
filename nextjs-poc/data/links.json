@@ -1,0 +1,819 @@
+{
+  "sections": [
+    {
+      "id": "government",
+      "title": "Government & Diplomatic",
+      "emoji": "🏛️",
+      "class": "govdip",
+      "categories": [
+        {
+          "title": "Embassies & Consulates - Americas",
+          "links": [
+            {
+              "title": "🇺🇸 Mexican Consulate • Seattle",
+              "url": "https://instagram.com/consulmexsea",
+              "tags": ["mexico", "usa", "seattle", "consulate", "washington"],
+              "description": "Mexican Consulate in Seattle, Washington"
+            },
+            {
+              "title": "🇨🇦 Mexico in Canada • Ottawa",
+              "url": "https://instagram.com/embamexcan",
+              "tags": ["mexico", "canada", "ottawa", "embassy"],
+              "description": "Mexican Embassy in Ottawa, Canada"
+            },
+            {
+              "title": "🇨🇴 Mexico in Colombia • Bogotá",
+              "url": "https://instagram.com/embamexcol",
+              "tags": ["mexico", "colombia", "bogota", "embassy"],
+              "description": "Mexican Embassy in Bogotá, Colombia"
+            },
+            {
+              "title": "🇬🇹 Mexico in Guatemala",
+              "url": "https://instagram.com/embamexgua",
+              "tags": ["mexico", "guatemala", "guatemala-city", "embassy"],
+              "description": "Mexican Embassy in Guatemala"
+            },
+            {
+              "title": "🇵🇪 Mexico in Peru • Lima",
+              "url": "https://instagram.com/embamexperu",
+              "tags": ["mexico", "peru", "lima", "embassy"],
+              "description": "Mexican Embassy in Lima, Peru"
+            },
+            {
+              "title": "🇺🇸 Mexico in USA • Washington DC",
+              "url": "https://instagram.com/embamexeua",
+              "tags": ["mexico", "usa", "washington-dc", "embassy"],
+              "description": "Mexican Embassy in Washington DC, USA"
+            },
+            {
+              "title": "🇺🇸 Colombia Consulate Atlanta",
+              "url": "https://instagram.com/consuladocolombiaatlanta",
+              "tags": ["colombia", "usa", "atlanta", "consulate"],
+              "description": "Colombian Consulate in Atlanta"
+            },
+            {
+              "title": "🇺🇸 Colombia Consulate Boston",
+              "url": "https://instagram.com/consuladocolboston",
+              "tags": ["colombia", "usa", "boston", "consulate"],
+              "description": "Colombian Consulate in Boston"
+            },
+            {
+              "title": "🇺🇸 Colombia Consulate LA",
+              "url": "https://instagram.com/consuladocollosangeles",
+              "tags": ["colombia", "usa", "los-angeles", "consulate"],
+              "description": "Colombian Consulate in Los Angeles"
+            },
+            {
+              "title": "🇲🇽 Colombia Consulate Mexico",
+              "url": "https://instagram.com/consuladocolmex",
+              "tags": ["colombia", "mexico", "consulate"],
+              "description": "Colombian Consulate in Mexico"
+            },
+            {
+              "title": "🌍 Colombia Embassy",
+              "url": "https://instagram.com/embajadadecolombiaen",
+              "tags": ["colombia", "embassy"],
+              "description": "Colombian Embassy official account"
+            },
+            {
+              "title": "🇦🇷 Colombia in Argentina • Buenos Aires",
+              "url": "https://instagram.com/embcolombiaenarg",
+              "tags": ["colombia", "argentina", "buenos-aires", "embassy"],
+              "description": "Colombian Embassy in Buenos Aires, Argentina"
+            },
+            {
+              "title": "🇲🇽 Venezuela in Mexico • Mexico City",
+              "url": "https://instagram.com/embavenmexico",
+              "tags": ["venezuela", "mexico", "mexico-city", "embassy", "diplomatic"],
+              "description": "Venezuelan Embassy in Mexico City"
+            },
+            {
+              "title": "🇨🇴 Venezuela Consulate Medellín",
+              "url": "https://instagram.com/consvemedellin",
+              "tags": ["venezuela", "colombia", "medellin", "consulate"],
+              "description": "Venezuelan Consulate in Medellín"
+            },
+            {
+              "title": "🇨🇴 Venezuela Consulate Riohacha",
+              "url": "https://instagram.com/consulveneriohacha",
+              "tags": ["venezuela", "colombia", "riohacha", "consulate"],
+              "description": "Venezuelan Consulate in Riohacha"
+            }
+          ]
+        },
+        {
+          "title": "Embassies & Consulates - Europe/Asia",
+          "links": [
+            {
+              "title": "🇮🇹 Mexico in Italy • Rome",
+              "url": "https://instagram.com/embamex_italia",
+              "tags": ["mexico", "italy", "rome", "embassy"],
+              "description": "Mexican Embassy in Rome, Italy"
+            },
+            {
+              "title": "🇯🇵 Mexico in Japan • Tokyo",
+              "url": "https://instagram.com/embamexjp",
+              "tags": ["mexico", "japan", "tokyo", "embassy"],
+              "description": "Mexican Embassy in Tokyo, Japan"
+            },
+            {
+              "title": "🇱🇧 Mexico in Lebanon • Beirut",
+              "url": "https://instagram.com/embamexlibano",
+              "tags": ["mexico", "lebanon", "beirut", "embassy"],
+              "description": "Mexican Embassy in Beirut, Lebanon"
+            },
+            {
+              "title": "🇪🇸 Mexico in Spain • Madrid",
+              "url": "https://instagram.com/embamexesp",
+              "tags": ["mexico", "spain", "madrid", "embassy"],
+              "description": "Mexican Embassy in Madrid, Spain"
+            },
+            {
+              "title": "🇫🇷 Colombia Consulate France",
+              "url": "https://instagram.com/consuladocolombiafrance",
+              "tags": ["colombia", "france", "consulate"],
+              "description": "Colombian Consulate in France"
+            },
+            {
+              "title": "🇪🇸 Colombia Consulate Madrid",
+              "url": "https://instagram.com/consuladocolmadrid",
+              "tags": ["colombia", "spain", "madrid", "consulate"],
+              "description": "Colombian Consulate in Madrid"
+            },
+            {
+              "title": "🇫🇷 Colombia Consulate Paris",
+              "url": "https://instagram.com/consuladocolparis",
+              "tags": ["colombia", "france", "paris", "consulate"],
+              "description": "Colombian Consulate in Paris"
+            },
+            {
+              "title": "🇬🇧 Colombia Consulate • London",
+              "url": "https://instagram.com/consuladocollondres",
+              "tags": ["colombia", "uk", "london", "consulate"],
+              "description": "Colombian Consulate in London, UK"
+            },
+            {
+              "title": "🇫🇷 Venezuela in France • Paris",
+              "url": "https://instagram.com/embavefrancia",
+              "tags": ["venezuela", "france", "paris", "embassy", "diplomatic", "europe"],
+              "description": "Venezuelan Embassy in Paris, France"
+            },
+            {
+              "title": "🇮🇹 Venezuela in Italy • Rome",
+              "url": "https://instagram.com/embavenitalia",
+              "tags": ["venezuela", "italy", "rome", "embassy", "diplomatic", "europe"],
+              "description": "Venezuelan Embassy in Rome, Italy"
+            }
+          ]
+        },
+        {
+          "title": "National Government",
+          "links": [
+            {
+              "title": "🇨🇴 Presidencia de Colombia • Casa de Nariño",
+              "url": "https://instagram.com/infopresidencia",
+              "tags": ["colombia", "president", "government", "bogota", "casa-narino", "executive", "politics"],
+              "description": "Official account of the Presidency of Colombia"
+            },
+            {
+              "title": "⚖️ Consejo Superior Judicatura",
+              "url": "https://instagram.com/consejosuperiorjudicatura",
+              "tags": ["colombia", "justice", "judiciary", "courts", "government", "bogota", "legal"],
+              "description": "Superior Council of the Judiciary of Colombia"
+            },
+            {
+              "title": "🌾 MinAgricultura",
+              "url": "https://instagram.com/minagriculturacol",
+              "tags": ["colombia", "agriculture", "farming", "rural-development", "government", "bogota", "ministry"],
+              "description": "Ministry of Agriculture of Colombia"
+            },
+            {
+              "title": "🌳 MinAmbiente Colombia",
+              "url": "https://instagram.com/minambientecol",
+              "tags": ["colombia", "environment", "ministry", "government"],
+              "description": "Ministry of Environment of Colombia"
+            },
+            {
+              "title": "🔬 Minciencias",
+              "url": "https://instagram.com/minciencias_co",
+              "tags": ["colombia", "science", "technology", "research", "innovation", "government", "bogota", "ministry"],
+              "description": "Ministry of Science, Technology and Innovation of Colombia"
+            },
+            {
+              "title": "🎨 MinCultura Colombia",
+              "url": "https://instagram.com/mincultura",
+              "tags": ["colombia", "culture", "ministry", "government"],
+              "description": "Ministry of Culture of Colombia"
+            },
+            {
+              "title": "🎓 MinEducación",
+              "url": "https://instagram.com/mineducacioncol",
+              "tags": ["colombia", "education", "ministry", "government"],
+              "description": "Ministry of Education of Colombia"
+            },
+            {
+              "title": "⚖️ MinIgualdad",
+              "url": "https://instagram.com/minigualdadcol",
+              "tags": ["colombia", "gender-equality", "women", "lgbti", "rights", "government", "bogota", "ministry"],
+              "description": "Ministry of Equality of Colombia"
+            },
+            {
+              "title": "⚖️ MinJusticia",
+              "url": "https://instagram.com/minjusticiaco",
+              "tags": ["colombia", "justice", "law", "legal-system", "government", "bogota", "ministry", "prisons"],
+              "description": "Ministry of Justice of Colombia"
+            }
+          ]
+        },
+        {
+          "title": "Regional & Local Government",
+          "links": [
+            {
+              "title": "🏛️ Alcaldía Mayor de Bogotá",
+              "url": "https://instagram.com/alcaldiabogota",
+              "tags": ["colombia", "bogota", "government", "municipal"],
+              "description": "Mayor's Office of Bogotá"
+            },
+            {
+              "title": "🏛️ Alcaldía de Barranquilla",
+              "url": "https://instagram.com/alcaldiabarranquilla",
+              "tags": ["colombia", "barranquilla", "government", "municipal"],
+              "description": "Mayor's Office of Barranquilla"
+            },
+            {
+              "title": "🏛️ Alcaldía Cartagena",
+              "url": "https://instagram.com/alcaldiacartagena",
+              "tags": ["colombia", "cartagena", "government", "municipal"],
+              "description": "Mayor's Office of Cartagena"
+            },
+            {
+              "title": "🏛️ Alcaldía de Caldas",
+              "url": "https://instagram.com/alcaldiadecaldas",
+              "tags": ["colombia", "caldas", "manizales", "government", "municipal"],
+              "description": "Mayor's Office of Caldas"
+            },
+            {
+              "title": "🏛️ Alcaldía Bucaramanga",
+              "url": "https://instagram.com/alcaldiadebucaramanga",
+              "tags": ["colombia", "bucaramanga", "santander", "government", "municipal"],
+              "description": "Mayor's Office of Bucaramanga"
+            },
+            {
+              "title": "🏛️ Alcaldía de Cúcuta",
+              "url": "https://instagram.com/alcaldiacucuta",
+              "tags": ["colombia", "cucuta", "government", "municipal"],
+              "description": "Mayor's Office of Cúcuta"
+            },
+            {
+              "title": "🏛️ Alcaldía Popayán",
+              "url": "https://instagram.com/alcaldiapopayan",
+              "tags": ["colombia", "popayan", "government", "municipal"],
+              "description": "Mayor's Office of Popayán"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "education",
+      "title": "Education & Research",
+      "emoji": "📚",
+      "class": "education",
+      "categories": [
+        {
+          "title": "Universities & Research Centers",
+          "links": [
+            {
+              "title": "🎓 Universidad de Antioquia",
+              "url": "https://instagram.com/udea",
+              "tags": ["colombia", "antioquia", "medellin", "university"],
+              "description": "University of Antioquia"
+            },
+            {
+              "title": "🎓 Universidad de Barranquilla",
+              "url": "https://instagram.com/unibarranquilla_",
+              "tags": ["colombia", "barranquilla", "university"],
+              "description": "University of Barranquilla"
+            },
+            {
+              "title": "🎓 Universidad de Cartagena",
+              "url": "https://instagram.com/unicartagena",
+              "tags": ["colombia", "cartagena", "university"],
+              "description": "University of Cartagena"
+            },
+            {
+              "title": "🎓 Universidad Del Cauca",
+              "url": "https://instagram.com/universidaddelcauca",
+              "tags": ["colombia", "popayan", "cauca", "university"],
+              "description": "University of Cauca"
+            },
+            {
+              "title": "🎓 Universidad Pedagógica",
+              "url": "https://instagram.com/upedagogicanacional",
+              "tags": ["colombia", "bogota", "university", "education"],
+              "description": "National Pedagogical University"
+            },
+            {
+              "title": "🎓 Universidad Pontificia Bolivariana",
+              "url": "https://instagram.com/upbcolombia",
+              "tags": ["colombia", "university"],
+              "description": "Pontificia Bolivariana University"
+            },
+            {
+              "title": "🌿 Instituto Ciencias Naturales",
+              "url": "https://instagram.com/icnunal",
+              "tags": ["colombia", "science", "research", "natural-sciences"],
+              "description": "Institute of Natural Sciences"
+            },
+            {
+              "title": "🌿 Instituto Humboldt",
+              "url": "https://instagram.com/instituto_humboldt",
+              "tags": ["colombia", "research", "biodiversity", "environment"],
+              "description": "Alexander von Humboldt Biological Resources Research Institute"
+            },
+            {
+              "title": "🏺 Instituto Antropología",
+              "url": "https://instagram.com/icanh_co",
+              "tags": ["colombia", "anthropology", "research"],
+              "description": "Colombian Institute of Anthropology and History"
+            }
+          ]
+        },
+        {
+          "title": "Libraries & Archives",
+          "links": [
+            {
+              "title": "📚 Archivo General • Mexico",
+              "url": "https://instagram.com/agnmex",
+              "tags": ["mexico", "mexico-city", "archive", "national"],
+              "description": "General Archive of Mexico"
+            },
+            {
+              "title": "📚 Archivo de Bogotá",
+              "url": "https://instagram.com/archivodebogota",
+              "tags": ["colombia", "bogota", "archive"],
+              "description": "Archive of Bogotá"
+            },
+            {
+              "title": "📚 Archivo Histórico Barranquilla",
+              "url": "https://instagram.com/archivohistoricobaq",
+              "tags": ["colombia", "barranquilla", "archive", "history"],
+              "description": "Historical Archive of Barranquilla"
+            },
+            {
+              "title": "📚 Biblioteca Luis Ángel Arango",
+              "url": "https://instagram.com/bibliotecaluisangelarango",
+              "tags": ["colombia", "bogota", "library"],
+              "description": "Luis Ángel Arango Library"
+            },
+            {
+              "title": "📚 Biblioteca Nacional",
+              "url": "https://instagram.com/bibliotecanalco",
+              "tags": ["colombia", "bogota", "library", "national"],
+              "description": "National Library of Colombia"
+            },
+            {
+              "title": "📚 Sistema de Bibliotecas Medellín",
+              "url": "https://instagram.com/bibliotecasmed",
+              "tags": ["colombia", "medellin", "library", "system"],
+              "description": "Medellín Library System"
+            }
+          ]
+        },
+        {
+          "title": "Science & Learning Centers",
+          "links": [
+            {
+              "title": "🌿 Jardín Botánico Bogotá",
+              "url": "https://instagram.com/jardinbotanicodebogota",
+              "tags": ["colombia", "bogota", "botany", "garden"],
+              "description": "Botanical Garden of Bogotá"
+            },
+            {
+              "title": "🌿 Jardín Botánico Cartagena",
+              "url": "https://instagram.com/jardinbotanicocartagena",
+              "tags": ["colombia", "cartagena", "botany", "garden"],
+              "description": "Botanical Garden of Cartagena"
+            },
+            {
+              "title": "🌿 Jardín Botánico Medellín",
+              "url": "https://instagram.com/jardinbotanicomedellin",
+              "tags": ["colombia", "medellin", "botany", "garden"],
+              "description": "Botanical Garden of Medellín"
+            },
+            {
+              "title": "🌌 Planetario de Bogotá",
+              "url": "https://instagram.com/planetariobog",
+              "tags": ["colombia", "bogota", "planetarium", "astronomy"],
+              "description": "Planetarium of Bogotá"
+            },
+            {
+              "title": "🌌 Planetario de Medellín",
+              "url": "https://instagram.com/planetariomed",
+              "tags": ["colombia", "medellin", "planetarium", "astronomy"],
+              "description": "Planetarium of Medellín"
+            }
+          ]
+        },
+        {
+          "title": "Educational Content",
+          "links": [
+            {
+              "title": "🇰🇷 Aprende Coreano",
+              "url": "https://instagram.com/coreano_paso_a_paso",
+              "tags": ["korean", "language-learning", "korea", "education", "asia", "k-pop", "culture"],
+              "description": "Learn Korean step by step"
+            },
+            {
+              "title": "🇯🇵 Lily 丽丽",
+              "url": "https://instagram.com/ohayolily",
+              "tags": ["japanese", "chinese", "language-learning", "asia", "education", "polyglot"],
+              "description": "Japanese and Chinese language learning"
+            },
+            {
+              "title": "🤖 Tobias Rees",
+              "url": "https://instagram.com/limn_ai",
+              "tags": ["ai", "artificial-intelligence", "research", "education", "technology", "future"],
+              "description": "AI research and education"
+            },
+            {
+              "title": "👩‍🏫 La Profe Mónica",
+              "url": "https://instagram.com/laprofemonica",
+              "tags": ["spanish", "teacher", "education", "colombia", "language-learning", "pedagogy"],
+              "description": "Spanish language teacher"
+            },
+            {
+              "title": "🗣️ E-Speak English",
+              "url": "https://instagram.com/espeak.english",
+              "tags": ["english", "language-learning", "esl", "education", "teacher", "online"],
+              "description": "English language learning platform"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "culture",
+      "title": "Culture & Arts",
+      "emoji": "🎨",
+      "class": "culture",
+      "categories": [
+        {
+          "title": "Museums & Galleries",
+          "links": [
+            {
+              "title": "🎨 Bogotart",
+              "url": "https://instagram.com/bogotart",
+              "tags": ["colombia", "bogota", "art"],
+              "description": "Art in Bogotá"
+            },
+            {
+              "title": "🎨 MAMM - Museo Arte Moderno",
+              "url": "https://instagram.com/elmamm",
+              "tags": ["colombia", "medellin", "museum", "modern-art"],
+              "description": "Museum of Modern Art of Medellín"
+            },
+            {
+              "title": "🎨 MAM Bogotá",
+              "url": "https://instagram.com/mambogota",
+              "tags": ["colombia", "bogota", "museum", "modern-art"],
+              "description": "Modern Art Museum of Bogotá"
+            },
+            {
+              "title": "👩 Museo de la Mujer",
+              "url": "https://instagram.com/museodelamujercdmx",
+              "tags": ["mexico", "mexico-city", "museum", "women"],
+              "description": "Museum of Women in Mexico City"
+            },
+            {
+              "title": "🏛️ Museo de Antioquia",
+              "url": "https://instagram.com/museodeantioquia",
+              "tags": ["colombia", "antioquia", "medellin", "museum"],
+              "description": "Museum of Antioquia"
+            },
+            {
+              "title": "🏛️ Museo de Bogotá",
+              "url": "https://instagram.com/museodebogota",
+              "tags": ["colombia", "bogota", "museum"],
+              "description": "Museum of Bogotá"
+            },
+            {
+              "title": "🏛️ Museo del Oro",
+              "url": "https://instagram.com/museodeloro",
+              "tags": ["colombia", "bogota", "museum", "gold"],
+              "description": "Gold Museum"
+            },
+            {
+              "title": "🏛️ Museo Nacional",
+              "url": "https://instagram.com/museonacionalco",
+              "tags": ["colombia", "bogota", "museum", "national"],
+              "description": "National Museum of Colombia"
+            }
+          ]
+        },
+        {
+          "title": "Cultural Centers",
+          "links": [
+            {
+              "title": "🇫🇷 Alianza Francesa Barranquilla",
+              "url": "https://instagram.com/afbarranquilla",
+              "tags": ["colombia", "barranquilla", "french", "culture"],
+              "description": "French Alliance Barranquilla"
+            },
+            {
+              "title": "🇫🇷 Alianza Francesa Bogotá",
+              "url": "https://instagram.com/afbogota",
+              "tags": ["colombia", "bogota", "french", "culture"],
+              "description": "French Alliance Bogotá"
+            },
+            {
+              "title": "🇰🇷 Centro Cultural Coreano",
+              "url": "https://instagram.com/coreacolombia",
+              "tags": ["colombia", "bogota", "korean", "culture"],
+              "description": "Korean Cultural Center"
+            },
+            {
+              "title": "🎵 Comhaltas Colombia",
+              "url": "https://instagram.com/comhaltascolombia",
+              "tags": ["colombia", "bogota", "irish", "culture", "music"],
+              "description": "Irish cultural organization in Colombia"
+            },
+            {
+              "title": "🇩🇪 Goethe-Institut",
+              "url": "https://instagram.com/goetheinstitut_kolumbien",
+              "tags": ["colombia", "bogota", "german", "culture"],
+              "description": "Goethe Institute Colombia"
+            },
+            {
+              "title": "🇮🇹 Istituto Italiano Bogotá",
+              "url": "https://instagram.com/iicbogota",
+              "tags": ["colombia", "bogota", "italian", "culture"],
+              "description": "Italian Institute Bogotá"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "title": "Food & Dining",
+      "emoji": "🍽️",
+      "class": "food",
+      "categories": [
+        {
+          "title": "International Cuisine",
+          "links": [
+            {
+              "title": "🍔 Burger King Colombia",
+              "url": "https://instagram.com/burgerkingcol",
+              "tags": ["colombia", "fast-food", "burgers"],
+              "description": "Burger King Colombia"
+            },
+            {
+              "title": "🍕 Domino's Pizza Colombia",
+              "url": "https://instagram.com/dominospizzacol",
+              "tags": ["colombia", "pizza", "fast-food"],
+              "description": "Domino's Pizza Colombia"
+            },
+            {
+              "title": "🍗 KFC Colombia",
+              "url": "https://instagram.com/kfc.colombia",
+              "tags": ["colombia", "chicken", "fast-food"],
+              "description": "KFC Colombia"
+            },
+            {
+              "title": "🍕 Little Caesars Colombia",
+              "url": "https://instagram.com/lccolombia",
+              "tags": ["colombia", "pizza", "fast-food"],
+              "description": "Little Caesars Colombia"
+            },
+            {
+              "title": "🍔 McDonald's Colombia",
+              "url": "https://instagram.com/mcdonaldscol",
+              "tags": ["colombia", "fast-food", "burgers"],
+              "description": "McDonald's Colombia"
+            },
+            {
+              "title": "🍕 Papa John's Colombia",
+              "url": "https://instagram.com/papajohnscolombia",
+              "tags": ["colombia", "pizza", "fast-food"],
+              "description": "Papa John's Colombia"
+            },
+            {
+              "title": "🥖 Subway Colombia",
+              "url": "https://instagram.com/subwaycol",
+              "tags": ["colombia", "sandwiches", "fast-food"],
+              "description": "Subway Colombia"
+            }
+          ]
+        },
+        {
+          "title": "Colombian Food",
+          "links": [
+            {
+              "title": "🍝 Alimentos Doria",
+              "url": "https://instagram.com/alimentosdoria",
+              "tags": ["colombia", "food", "pasta", "local"],
+              "description": "Doria Foods"
+            },
+            {
+              "title": "🥛 Bon Yurt Alpina",
+              "url": "https://instagram.com/bonyurt",
+              "tags": ["colombia", "dairy", "yogurt", "local"],
+              "description": "Alpina Bon Yurt"
+            },
+            {
+              "title": "🍫 Chocolate Corona",
+              "url": "https://instagram.com/chocolatecorona",
+              "tags": ["colombia", "chocolate", "local"],
+              "description": "Corona Chocolate"
+            },
+            {
+              "title": "🍫 Chocolates Jet",
+              "url": "https://instagram.com/chocolatesjet",
+              "tags": ["colombia", "chocolate", "local"],
+              "description": "Jet Chocolates"
+            },
+            {
+              "title": "🍫 Chocoramo",
+              "url": "https://instagram.com/chocoramoficial",
+              "tags": ["colombia", "chocolate", "snacks", "local"],
+              "description": "Chocoramo"
+            },
+            {
+              "title": "☕ Colcafé",
+              "url": "https://instagram.com/colcafe",
+              "tags": ["colombia", "coffee", "local"],
+              "description": "Colcafé"
+            },
+            {
+              "title": "🍔 El Corral",
+              "url": "https://instagram.com/elcorraloficial",
+              "tags": ["colombia", "burgers", "restaurant", "local"],
+              "description": "El Corral"
+            },
+            {
+              "title": "🍗 Frisby",
+              "url": "https://instagram.com/frisbylohace",
+              "tags": ["colombia", "chicken", "fast-food", "local"],
+              "description": "Frisby"
+            }
+          ]
+        },
+        {
+          "title": "Venezuelan Food",
+          "links": [
+            {
+              "title": "🥤 7Up Venezuela",
+              "url": "https://instagram.com/7upve",
+              "tags": ["venezuela", "beverages", "soda", "lemon-lime", "pepsico"],
+              "description": "7Up Venezuela"
+            },
+            {
+              "title": "🥤 Coca-Cola Venezuela",
+              "url": "https://instagram.com/cocacolave",
+              "tags": ["venezuela", "beverages", "soda", "cola", "coca-cola"],
+              "description": "Coca-Cola Venezuela"
+            },
+            {
+              "title": "🌮 Doritos Venezuela",
+              "url": "https://instagram.com/doritosvzla",
+              "tags": ["venezuela", "food", "snacks", "chips", "frito-lay", "pepsico"],
+              "description": "Doritos Venezuela"
+            },
+            {
+              "title": "🥤 Chinotto Venezuela",
+              "url": "https://instagram.com/chinottove",
+              "tags": ["venezuela", "beverages", "soda"],
+              "description": "Chinotto Venezuela"
+            },
+            {
+              "title": "🍕 Papa John's Venezuela",
+              "url": "https://instagram.com/papajohnsve",
+              "tags": ["venezuela", "pizza", "restaurant", "fast-food", "delivery"],
+              "description": "Papa John's Venezuela"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "travel",
+      "title": "Travel & Tourism",
+      "emoji": "✈️",
+      "class": "travel",
+      "categories": [
+        {
+          "title": "Official Tourism",
+          "links": [
+            {
+              "title": "✈️ IDT Bogotá",
+              "url": "https://instagram.com/bogota_turismo",
+              "tags": ["colombia", "bogota", "tourism", "official"],
+              "description": "Institute of Tourism of Bogotá"
+            },
+            {
+              "title": "✈️ Cúcuta Turismo",
+              "url": "https://instagram.com/cucutaturismo",
+              "tags": ["colombia", "cucuta", "norte-santander", "tourism"],
+              "description": "Tourism of Cúcuta"
+            },
+            {
+              "title": "✈️ Visitar Medellín",
+              "url": "https://instagram.com/visitarmedellin",
+              "tags": ["colombia", "medellin", "antioquia", "tourism"],
+              "description": "Visit Medellín"
+            },
+            {
+              "title": "🏙️ Visit Bogotá",
+              "url": "https://instagram.com/visitbogota.co",
+              "tags": ["colombia", "bogota", "tourism", "official"],
+              "description": "Visit Bogotá"
+            }
+          ]
+        },
+        {
+          "title": "Travel Services",
+          "links": [
+            {
+              "title": "🚴 Bicitour Medellín",
+              "url": "https://instagram.com/bicitour_medellin",
+              "tags": ["colombia", "medellin", "antioquia", "bicycle", "tours"],
+              "description": "Bicycle tours in Medellín"
+            },
+            {
+              "title": "🏙️ Medellín Guru",
+              "url": "https://instagram.com/medellin_guru",
+              "tags": ["colombia", "medellin", "antioquia", "travel", "guide"],
+              "description": "Medellín travel guide"
+            },
+            {
+              "title": "🏞️ Parques Nacionales",
+              "url": "https://instagram.com/parquescolombia",
+              "tags": ["colombia", "national-parks", "nature"],
+              "description": "National Parks of Colombia"
+            }
+          ]
+        },
+        {
+          "title": "Local Guides & Tours",
+          "links": [
+            {
+              "title": "🍴 Bogotá Comidas",
+              "url": "https://instagram.com/bogotacomidas",
+              "tags": ["colombia", "bogota", "food", "restaurants"],
+              "description": "Food guide for Bogotá"
+            },
+            {
+              "title": "🎭 Bogotá Plan",
+              "url": "https://instagram.com/bogotaplan",
+              "tags": ["colombia", "bogota", "events", "culture"],
+              "description": "Events and culture in Bogotá"
+            },
+            {
+              "title": "🍴 Food in Bogotá",
+              "url": "https://instagram.com/foodinbogota",
+              "tags": ["colombia", "bogota", "food", "restaurants"],
+              "description": "Food recommendations in Bogotá"
+            },
+            {
+              "title": "🗺️ Medellín en el Mapa",
+              "url": "https://instagram.com/medellinenelmapa_",
+              "tags": ["colombia", "medellin", "antioquia", "maps", "guide"],
+              "description": "Medellín on the map"
+            }
+          ]
+        },
+        {
+          "title": "Travel Content & Resources",
+          "links": [
+            {
+              "title": "🌍 Nómada Frustrada",
+              "url": "https://instagram.com/nomadafrustrada",
+              "tags": ["travel", "digital-nomad", "worldwide"],
+              "description": "Digital nomad travel content"
+            },
+            {
+              "title": "🎒 Viajando Empelota",
+              "url": "https://instagram.com/viajandoempelota",
+              "tags": ["travel", "backpacking", "latin-america"],
+              "description": "Backpacking in Latin America"
+            },
+            {
+              "title": "🇹🇭 Viva Tailandia",
+              "url": "https://instagram.com/vivatailandia",
+              "tags": ["thailand", "bangkok", "travel", "asia"],
+              "description": "Travel to Thailand"
+            },
+            {
+              "title": "👨‍👩‍👧‍👦 Colombian Family",
+              "url": "https://instagram.com/colombianfamily",
+              "tags": ["colombia", "travel", "family", "lifestyle"],
+              "description": "Colombian family travel"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

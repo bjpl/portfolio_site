@@ -1,0 +1,118 @@
+{
+  "migration": {
+    "batch_size": 10,
+    "parallel_processing": true,
+    "backup_enabled": true,
+    "validate_after_migration": true,
+    "retry_failed_items": true,
+    "max_retries": 3,
+    "timeout_ms": 30000
+  },
+  "content": {
+    "preserve_hugo_structure": true,
+    "extract_frontmatter": true,
+    "process_shortcodes": true,
+    "handle_multilingual": true,
+    "content_types": {
+      "blog": {
+        "path_pattern": "./content/blog/*.md",
+        "table": "hugo_posts",
+        "required_fields": ["title", "content", "date"]
+      },
+      "projects": {
+        "path_patterns": [
+          "./content/me/work/*.md",
+          "./content/tools/**/*.md"
+        ],
+        "table": "hugo_projects",
+        "required_fields": ["title", "description"]
+      },
+      "academic": {
+        "path_pattern": "./content/teaching-learning/**/*.md",
+        "table": "hugo_academic_content",
+        "required_fields": ["title", "content"]
+      },
+      "creative": {
+        "path_pattern": "./content/writing/**/*.md",
+        "table": "hugo_creative_works",
+        "required_fields": ["title", "content"]
+      },
+      "spanish": {
+        "path_pattern": "./content/es/**/*.md",
+        "tables": ["hugo_posts", "hugo_projects", "hugo_creative_works", "hugo_academic_content"],
+        "language": "es"
+      }
+    }
+  },
+  "media": {
+    "supported_formats": [
+      ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".ico", ".bmp",
+      ".mp4", ".webm", ".mov", ".avi", ".mkv",
+      ".mp3", ".wav", ".ogg", ".m4a",
+      ".pdf", ".doc", ".docx", ".txt", ".md",
+      ".woff", ".woff2", ".ttf", ".otf",
+      ".json", ".xml", ".csv", ".yaml", ".yml",
+      ".zip", ".tar", ".gz", ".rar"
+    ],
+    "max_file_size_mb": 50,
+    "optimize_images": false,
+    "create_thumbnails": false,
+    "batch_size": 5,
+    "storage": {
+      "bucket_name": "portfolio-media",
+      "public": true,
+      "cache_control": "3600"
+    },
+    "search_paths": [
+      "./static/**/*",
+      "./public/images/**/*",
+      "./public/media/**/*",
+      "./public/uploads/**/*"
+    ]
+  },
+  "urls": {
+    "preserve_seo_urls": true,
+    "redirect_type": 301,
+    "generate_sitemap": true,
+    "url_patterns": {
+      "blog": "/blog/{slug}/",
+      "projects_work": "/me/work/{slug}/",
+      "projects_tools": "/tools/{project_type}/{slug}/",
+      "academic": "/teaching-learning/{theory_category}/{slug}/",
+      "creative": "/writing/{work_type}/{slug}/"
+    }
+  },
+  "validation": {
+    "enabled": true,
+    "strict_mode": false,
+    "check_duplicates": true,
+    "validate_references": true,
+    "required_fields_check": true,
+    "data_integrity_check": true
+  },
+  "reporting": {
+    "generate_html_report": true,
+    "generate_json_report": true,
+    "include_charts": true,
+    "detailed_analysis": true,
+    "performance_metrics": true
+  },
+  "rollback": {
+    "create_snapshots": true,
+    "backup_retention_days": 30,
+    "confirm_destructive_operations": true,
+    "log_all_operations": true
+  },
+  "performance": {
+    "connection_pool_size": 10,
+    "query_timeout_ms": 10000,
+    "retry_delay_ms": 1000,
+    "max_concurrent_operations": 5
+  },
+  "logging": {
+    "level": "info",
+    "log_to_file": true,
+    "log_file_path": "./migration.log",
+    "include_stack_traces": true
+  }
+}

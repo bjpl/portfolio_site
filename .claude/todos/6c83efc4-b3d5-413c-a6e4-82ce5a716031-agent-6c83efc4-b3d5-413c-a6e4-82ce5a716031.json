@@ -1,0 +1,72 @@
+[
+  {
+    "content": "Set up development environment and install dependencies",
+    "status": "in_progress",
+    "activeForm": "Setting up development environment and installing dependencies"
+  },
+  {
+    "content": "Configure database and Prisma migrations",
+    "status": "in_progress",
+    "activeForm": "Configuring database and Prisma migrations"
+  },
+  {
+    "content": "Implement authentication system with JWT",
+    "status": "in_progress",
+    "activeForm": "Implementing authentication system with JWT"
+  },
+  {
+    "content": "Build core API endpoints for lessons and progress",
+    "status": "in_progress",
+    "activeForm": "Building core API endpoints for lessons and progress"
+  },
+  {
+    "content": "Create frontend components and pages",
+    "status": "in_progress",
+    "activeForm": "Creating frontend components and pages"
+  },
+  {
+    "content": "Integrate conjugation module from existing project",
+    "status": "in_progress",
+    "activeForm": "Integrating conjugation module from existing project"
+  },
+  {
+    "content": "Integrate subjunctive practice module",
+    "status": "pending",
+    "activeForm": "Integrating subjunctive practice module"
+  },
+  {
+    "content": "Add visual vocabulary learning with image search",
+    "status": "pending",
+    "activeForm": "Adding visual vocabulary learning with image search"
+  },
+  {
+    "content": "Implement spaced repetition algorithm",
+    "status": "in_progress",
+    "activeForm": "Implementing spaced repetition algorithm"
+  },
+  {
+    "content": "Create progress tracking and analytics dashboard",
+    "status": "pending",
+    "activeForm": "Creating progress tracking and analytics dashboard"
+  },
+  {
+    "content": "Add AI-powered content generation",
+    "status": "in_progress",
+    "activeForm": "Adding AI-powered content generation"
+  },
+  {
+    "content": "Write comprehensive tests",
+    "status": "in_progress",
+    "activeForm": "Writing comprehensive tests"
+  },
+  {
+    "content": "Set up Docker containers",
+    "status": "in_progress",
+    "activeForm": "Setting up Docker containers"
+  },
+  {
+    "content": "Configure CI/CD pipeline",
+    "status": "in_progress",
+    "activeForm": "Configuring CI/CD pipeline"
+  }
+]

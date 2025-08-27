@@ -1,0 +1,17 @@
+[
+  {
+    "content": "Check git history for last working version",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Restore working links layout",
+    "status": "in_progress",
+    "id": "2"
+  },
+  {
+    "content": "Verify shortcode functionality",
+    "status": "pending",
+    "id": "3"
+  }
+]

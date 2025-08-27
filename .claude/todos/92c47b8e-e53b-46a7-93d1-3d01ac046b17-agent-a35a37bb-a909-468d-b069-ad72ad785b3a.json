@@ -1,0 +1,42 @@
+[
+  {
+    "content": "Read pages.html and replace createPage alert with real function",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Read blog-posts.html and replace createPost alert with real function",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Read portfolio-items.html and replace createPortfolioItem alert with real function",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Read site-settings.html and replace saveSettings and resetSettings alerts with real functions",
+    "status": "completed",
+    "id": "4"
+  },
+  {
+    "content": "Read user-management.html and replace createUser alert with real function",
+    "status": "completed",
+    "id": "5"
+  },
+  {
+    "content": "Read analytics.html and replace exportData alert with exportAnalyticsData function",
+    "status": "completed",
+    "id": "6"
+  },
+  {
+    "content": "Read logs.html and replace clearLogs and downloadLogs alerts with real functions",
+    "status": "completed",
+    "id": "7"
+  },
+  {
+    "content": "Read api-explorer.html and replace testAllEndpoints alert with real function",
+    "status": "completed",
+    "id": "8"
+  }
+]

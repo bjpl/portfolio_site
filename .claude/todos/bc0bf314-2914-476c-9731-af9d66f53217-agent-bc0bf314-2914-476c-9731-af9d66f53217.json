@@ -1,0 +1,42 @@
+[
+  {
+    "content": "Implement language selector component",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Review existing accessibility features",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Create accessibility settings panel",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Add translation service integration",
+    "status": "completed",
+    "id": "4"
+  },
+  {
+    "content": "Implement accessibility preferences in store",
+    "status": "completed",
+    "id": "5"
+  },
+  {
+    "content": "Create backend /api/translate endpoint",
+    "status": "completed",
+    "id": "6"
+  },
+  {
+    "content": "Connect backend endpoint to Claude translator tool",
+    "status": "completed",
+    "id": "7"
+  },
+  {
+    "content": "Test translation integration end-to-end",
+    "status": "completed",
+    "id": "8"
+  }
+]

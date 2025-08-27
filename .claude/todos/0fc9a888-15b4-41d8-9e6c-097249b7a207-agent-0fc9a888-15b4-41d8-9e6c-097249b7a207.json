@@ -1,0 +1,37 @@
+[
+  {
+    "content": "Analyze usage patterns and optimize hot paths",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Add intelligent caching for common language learning patterns",
+    "status": "in_progress",
+    "id": "2"
+  },
+  {
+    "content": "Implement smart retry logic with backoff strategies",
+    "status": "pending",
+    "id": "3"
+  },
+  {
+    "content": "Add memory-efficient conversation context management",
+    "status": "pending",
+    "id": "4"
+  },
+  {
+    "content": "Create adaptive UI based on terminal capabilities",
+    "status": "pending",
+    "id": "5"
+  },
+  {
+    "content": "Implement smart flashcard generation from conversations",
+    "status": "pending",
+    "id": "6"
+  },
+  {
+    "content": "Add usage analytics and optimization insights",
+    "status": "pending",
+    "id": "7"
+  }
+]

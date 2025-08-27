@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Verify MCP server configuration",
+    "status": "completed",
+    "activeForm": "Verifying MCP server configuration"
+  },
+  {
+    "content": "Test claude-flow MCP connection",
+    "status": "completed",
+    "activeForm": "Testing claude-flow MCP connection"
+  },
+  {
+    "content": "Fix claude-flow module loading issue",
+    "status": "in_progress",
+    "activeForm": "Fixing claude-flow module loading issue"
+  },
+  {
+    "content": "Configure ruv-swarm MCP server",
+    "status": "pending",
+    "activeForm": "Configuring ruv-swarm MCP server"
+  },
+  {
+    "content": "Initialize first swarm for testing",
+    "status": "pending",
+    "activeForm": "Initializing first swarm for testing"
+  },
+  {
+    "content": "Verify agent system setup",
+    "status": "pending",
+    "activeForm": "Verifying agent system setup"
+  }
+]

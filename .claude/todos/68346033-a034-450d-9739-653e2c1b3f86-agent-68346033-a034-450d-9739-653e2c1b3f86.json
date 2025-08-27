@@ -1,0 +1,17 @@
+[
+  {
+    "content": "Explore directory structure and list all files",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Read and analyze each file's content and purpose",
+    "status": "in_progress",
+    "id": "2"
+  },
+  {
+    "content": "Provide cleanup and organization recommendations",
+    "status": "pending",
+    "id": "3"
+  }
+]

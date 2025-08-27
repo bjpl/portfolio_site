@@ -1,0 +1,71 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ha ocurrido un error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "clear": "Limpiar"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "projects": "Proyectos",
+    "blog": "Blog",
+    "contact": "Contacto",
+    "admin": "Administrador",
+    "dashboard": "Panel",
+    "login": "Iniciar Sesión",
+    "logout": "Cerrar Sesión",
+    "profile": "Perfil"
+  },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "logout": "Cerrar Sesión",
+    "loginWithAuth0": "Iniciar Sesión con Auth0",
+    "welcome": "¡Bienvenido de nuevo!",
+    "pleaseLogin": "Por favor inicia sesión para continuar",
+    "unauthorized": "Acceso no autorizado",
+    "sessionExpired": "Tu sesión ha expirado"
+  },
+  "home": {
+    "title": "Bienvenido a Mi Portafolio",
+    "subtitle": "Desarrollador full-stack especializado en tecnologías web modernas",
+    "description": "Explora mis proyectos y conoce más sobre mi trabajo en desarrollo web, enfocándome en React, Next.js y tecnologías en la nube.",
+    "cta": "Ver Mi Trabajo",
+    "featured": "Proyectos Destacados"
+  },
+  "about": {
+    "title": "Acerca de Mí",
+    "description": "Soy un desarrollador full-stack apasionado con experiencia en tecnologías web modernas.",
+    "skills": "Habilidades",
+    "experience": "Experiencia",
+    "education": "Educación"
+  },
+  "projects": {
+    "title": "Mis Proyectos",
+    "description": "Una colección de proyectos en los que he trabajado",
+    "viewProject": "Ver Proyecto",
+    "sourceCode": "Código Fuente",
+    "liveDemo": "Demo en Vivo",
+    "technologies": "Tecnologías Utilizadas"
+  },
+  "admin": {
+    "title": "Panel de Administración",
+    "overview": "Resumen",
+    "users": "Usuarios",
+    "settings": "Configuración",
+    "analytics": "Análisis",
+    "content": "Gestión de Contenido"
+  },
+  "errors": {
+    "404": "Página no encontrada",
+    "500": "Error interno del servidor",
+    "403": "Acceso prohibido",
+    "networkError": "Error de conexión de red"
+  }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Set up databases (PostgreSQL/Redis) with Docker",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Clean remaining lint issues",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Create proper .env file from .env.example",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Add Swagger documentation to API routes",
+    "status": "completed",
+    "id": "4"
+  },
+  {
+    "content": "Complete frontend JavaScript for admin templates",
+    "status": "completed",
+    "id": "5"
+  },
+  {
+    "content": "Test the complete system end-to-end",
+    "status": "in_progress",
+    "id": "6"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Create admin user in database",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Add Hugo content files for portfolio",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Fix public routes configuration",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Test all functionality",
+    "status": "completed",
+    "id": "4"
+  }
+]
