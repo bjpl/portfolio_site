@@ -2,10 +2,21 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Heart, ArrowUp } from 'lucide-react';
 
-const Footer = () => {
-  const [navigationData, setNavigationData] = useState({ footer: [] });
+// Footer navigation data - matches the navigation.json structure
+const defaultFooterData = {
+  "footer": [
+    { "name": "Contact", "url": "/contact/", "weight": 10 },
+    { "name": "Privacy", "url": "/privacy/", "weight": 20 }
+  ]
+};
+
+export function Footer({ variant = "default" }) { // "default", "enhanced"
+  const [navigationData, setNavigationData] = useState(defaultFooterData);
   const [currentYear] = useState(new Date().getFullYear());
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Load navigation data for footer links
@@ -15,28 +26,20 @@ const Footer = () => {
         if (response.ok) {
           const data = await response.json();
           setNavigationData(data);
-        } else {
-          // Fallback footer data
-          setNavigationData({
-            footer: [
-              { name: "Contact", url: "/contact/", weight: 10 },
-              { name: "Privacy", url: "/privacy/", weight: 20 }
-            ]
-          });
         }
       } catch (error) {
         console.warn('Failed to load footer navigation data:', error);
-        setNavigationData({
-          footer: [
-            { name: "Contact", url: "/contact/", weight: 10 },
-            { name: "Privacy", url: "/privacy/", weight: 20 }
-          ]
-        });
+      } finally {
+        setIsLoading(false);
       }
     };
 
     loadNavigationData();
   }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Sort footer items by weight
   const sortedFooterItems = navigationData.footer?.sort((a, b) => a.weight - b.weight) || [];

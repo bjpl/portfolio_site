@@ -1,1 +1,0 @@
-// Core JavaScript functionality

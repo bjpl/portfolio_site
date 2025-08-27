@@ -1,5 +1,0 @@
-{{ $list := slice }}
-{{ range .Site.RegularPages }}
-    {{ $list = $list | append (dict "title" .Title "url" .RelPermalink "description" .Description "section" .Section) }}
-{{ end }}
-{{ $list | jsonify }}

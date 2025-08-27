@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: portfolio-backend
-  labels:
-    app: portfolio
-    environment: production
-    version: v1.0.0

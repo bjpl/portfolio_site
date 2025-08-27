@@ -1,0 +1,23 @@
+[
+  {
+    "type": "javascript",
+    "severity": "high",
+    "message": "JavaScript bundle size (1.2 MB) exceeds recommended threshold (488.28 KB)",
+    "suggestions": [
+      "Implement code splitting with dynamic imports",
+      "Use tree shaking to remove unused code",
+      "Consider lazy loading non-critical components",
+      "Analyze and optimize large dependencies"
+    ]
+  },
+  {
+    "type": "chunks",
+    "severity": "low",
+    "message": "High number of chunks (23) may impact loading performance",
+    "suggestions": [
+      "Optimize chunk splitting strategy",
+      "Combine small chunks",
+      "Use HTTP/2 push for critical chunks"
+    ]
+  }
+]

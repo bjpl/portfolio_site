@@ -26,18 +26,18 @@ class DeploymentManager {
     this.config = {
       platforms: {
         netlify: {
-          buildCommand: 'npm run build:production',
-          deployCommand: 'netlify deploy --prod --dir=public',
+          buildCommand: 'npm run build',
+          deployCommand: 'netlify deploy --prod --dir=out',
           siteIdEnv: 'NETLIFY_SITE_ID',
           tokenEnv: 'NETLIFY_AUTH_TOKEN'
         },
         vercel: {
-          buildCommand: 'npm run build:production',
+          buildCommand: 'npm run build',
           deployCommand: 'vercel --prod',
           tokenEnv: 'VERCEL_TOKEN'
         },
         manual: {
-          buildCommand: 'npm run build:production',
+          buildCommand: 'npm run build',
           deployCommand: null
         }
       }
@@ -106,22 +106,22 @@ class DeploymentManager {
       validationResults.issues.push('Failed to check Node.js version');
     }
     
-    // Check Hugo version
+    // Check Next.js availability
     try {
-      const hugoResult = await this.executeCommand('hugo version', { silent: true });
-      if (hugoResult.success) {
-        const hugoVersion = hugoResult.output.match(/v([\\d.]+)/)?.[1] || 'unknown';
-        validationResults.checks.hugoVersion = {
-          current: hugoVersion,
+      const nextResult = await this.executeCommand('npx next --version', { silent: true });
+      if (nextResult.success) {
+        const nextVersion = nextResult.output.trim();
+        validationResults.checks.nextVersion = {
+          current: nextVersion,
           valid: true
         };
       } else {
         validationResults.valid = false;
-        validationResults.issues.push('Hugo not found or not accessible');
+        validationResults.issues.push('Next.js not found or not accessible');
       }
     } catch (error) {
       validationResults.valid = false;
-      validationResults.issues.push('Failed to check Hugo version');
+      validationResults.issues.push('Failed to check Next.js version');
     }
     
     // Check required environment variables
@@ -149,10 +149,10 @@ class DeploymentManager {
     // Check project structure
     const requiredPaths = [
       'package.json',
-      'hugo.yaml',
-      'content',
-      'layouts',
-      'static'
+      'next.config.mjs',
+      'app',
+      'components',
+      'public'
     ];
     
     requiredPaths.forEach(reqPath => {
@@ -282,16 +282,16 @@ class DeploymentManager {
       this.log(`Build completed successfully in ${buildDuration}ms`);
       
       // Validate build output
-      const publicDir = path.join(this.projectRoot, 'public');
-      if (fs.existsSync(publicDir)) {
-        const buildSize = this.calculateDirectorySize(publicDir);
+      const buildDir = path.join(this.projectRoot, 'out');
+      if (fs.existsSync(buildDir)) {
+        const buildSize = this.calculateDirectorySize(buildDir);
         this.log(`Build output size: ${this.formatBytes(buildSize)}`);
         
         return {
           success: true,
           duration: buildDuration,
           outputSize: buildSize,
-          outputDir: publicDir
+          outputDir: buildDir
         };
       } else {
         throw new Error('Build output directory not found');
@@ -386,7 +386,7 @@ class DeploymentManager {
       }
       
       // Deploy
-      const deployResult = await this.executeCommand('netlify deploy --prod --dir=public');
+      const deployResult = await this.executeCommand('netlify deploy --prod --dir=out');
       
       if (deployResult.success) {
         // Extract deploy URL from output

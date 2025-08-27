@@ -12,28 +12,30 @@
       "develop": true
     }
   },
-  "buildCommand": "npm run build:production",
-  "outputDirectory": "public",
-  "framework": null,
+  "buildCommand": "npm run build",
+  "outputDirectory": "out",
+  "framework": "nextjs",
   "installCommand": "npm ci",
   "ignoreCommand": "git diff --quiet HEAD^ HEAD",
+  "cleanUrls": true,
+  "trailingSlash": false,
   
   "regions": ["iad1", "sfo1"],
   
   "functions": {
-    "api/translate.js": {
+    "app/api/translate/route.js": {
       "maxDuration": 30,
       "memory": 1024
     },
-    "api/portfolio.js": {
+    "app/api/portfolio/route.js": {
       "maxDuration": 30,
       "memory": 1024
     },
-    "api/auth.js": {
+    "app/api/auth/route.js": {
       "maxDuration": 30,
       "memory": 1024
     },
-    "api/contact.js": {
+    "app/api/contact/route.js": {
       "maxDuration": 15,
       "memory": 512
     }
@@ -64,7 +66,7 @@
   "redirects": [
     {
       "source": "/admin",
-      "destination": "/admin/dashboard.html",
+      "destination": "/admin/dashboard",
       "permanent": false
     },
     {
@@ -135,7 +137,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://portfolio-site-vercel.app"
+          "value": "*"
         },
         {
           "key": "Access-Control-Allow-Methods",
@@ -186,21 +188,27 @@
   ],
   
   "env": {
-    "HUGO_VERSION": "0.121.0",
     "NODE_VERSION": "18",
-    "HUGO_ENV": "production",
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "NEXT_TELEMETRY_DISABLED": "1"
   },
   
   "build": {
     "env": {
-      "HUGO_VERSION": "0.121.0",
       "NODE_VERSION": "18",
-      "HUGO_ENV": "production",
       "NODE_ENV": "production",
+      "NEXT_TELEMETRY_DISABLED": "1",
       "ENABLE_ANALYTICS": "true",
       "COMPRESSION_ENABLED": "true",
       "BUILD_MODE": "production"
     }
-  }
+  },
+  
+  "typescript": {
+    "ignoreBuildErrors": false
+  },
+  
+  "devCommand": "npm run dev",
+  "buildCommand": "npm run build",
+  "outputDirectory": "out"
 }

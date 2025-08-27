@@ -304,3 +304,6 @@ hive-mind-prompt-*.txt
 nextjs-poc/.next/
 .claude/.credentials.json
 .claude/projects/
+components/admin/
+components/HeroSection.jsx
+src/utils/theme-flash-prevention.ts

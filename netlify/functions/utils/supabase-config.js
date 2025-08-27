@@ -3,21 +3,12 @@
  * Centralized configuration for Supabase authentication
  */
 
-// Environment validation with fallbacks for new Supabase instance
+// Environment validation - REMOVED HARDCODED SECRETS
 function validateEnvironment() {
-  // Use fallbacks for new Supabase instance
-  const defaults = {
-    SUPABASE_URL: 'https://tdmzayzkqyegvfgxlolj.supabase.co',
-    SUPABASE_SERVICE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkbXpheXprcXllZ3ZmZ3hsb2xqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTk5OTM0MCwiZXhwIjoyMDcxNTc1MzQwfQ.N0lnWnvo323XXJAprqRhbBweguYlGsJgquBHB1g3L7E'
-  };
-  
-  // Set defaults if environment variables are missing
-  Object.keys(defaults).forEach(key => {
-    if (!process.env[key]) {
-      process.env[key] = defaults[key];
-      console.log(`Using default ${key} for new Supabase instance`);
-    }
-  });
+  // SECURITY FIX: Never hardcode secrets in source code
+  // All credentials must be provided via environment variables
+  console.warn('⚠️  SECURITY NOTICE: All Supabase credentials must be configured via environment variables');
+  console.warn('⚠️  Set SUPABASE_URL, SUPABASE_ANON_KEY, and SUPABASE_SERVICE_KEY in your environment');
   
   const required = [
     'SUPABASE_URL',

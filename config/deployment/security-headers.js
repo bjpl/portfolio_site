@@ -45,7 +45,7 @@ const CSP_DIRECTIVES = {
   'default-src': "'self'",
   'script-src': [
     "'self'",
-    "'unsafe-inline'", // Required for inline scripts in Hugo templates
+    "'unsafe-inline'", // Required for inline scripts in Next.js
     "'unsafe-eval'", // Required for some third-party libraries
     'https:',
     // Add specific domains for analytics, etc.
@@ -56,7 +56,7 @@ const CSP_DIRECTIVES = {
   ].join(' '),
   'style-src': [
     "'self'",
-    "'unsafe-inline'", // Required for inline styles in Hugo
+    "'unsafe-inline'", // Required for inline styles in Next.js
     'https:',
     // Add specific domains for fonts, etc.
     'https://fonts.googleapis.com',

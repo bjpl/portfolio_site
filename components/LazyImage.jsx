@@ -147,7 +147,7 @@ const LazyImage = ({
     // If WebP is supported and source is not already WebP
     if (supportsWebP && !originalSrc.includes('.webp')) {
       // For Next.js image optimization, add format parameter
-      if (originalSrc.startsWith('/') || originalSrc.includes(process.env.NEXT_PUBLIC_DOMAIN || '')) {
+      if (originalSrc.startsWith('/') || originalSrc.includes(process.env.NEXT_PUBLIC_SITE_URL || '')) {
         return originalSrc;
       }
     }

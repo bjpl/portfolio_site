@@ -1,7 +1,7 @@
 {
-  "name": "hugo-backend",
+  "name": "nextjs-portfolio-backend",
   "version": "1.0.0",
-  "description": "Backend for Hugo Management Tools",
+  "description": "Backend for Next.js Portfolio Site",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/simple-cms-server.js",
@@ -122,7 +122,6 @@
     "api",
     "portfolio",
     "cms",
-    "hugo",
     "authentication",
     "testing"
   ],

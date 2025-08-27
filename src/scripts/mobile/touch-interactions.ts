@@ -5,6 +5,32 @@
  * Optimizes the site for touch devices with gestures and mobile-specific interactions
  */
 
+interface TouchTargetOptions {
+  swipeable?: boolean;
+  pinchable?: boolean;
+  longPressable?: boolean;
+  draggable?: boolean;
+  preventScroll?: boolean;
+  hapticFeedback?: boolean;
+  customHandlers?: Map<string, Function>;
+}
+
+interface SwipeEvent {
+  direction: 'left' | 'right' | 'up' | 'down';
+  distance: number;
+  duration: number;
+  velocity: number;
+  startX: number;
+  startY: number;
+  endX: number;
+  endY: number;
+}
+
+interface PinchEvent {
+  scale: number;
+  center: { x: number; y: number };
+}
+
 export class TouchInteractions {
   private touchStartX: number = 0;
   private touchStartY: number = 0;
@@ -23,30 +49,7 @@ export class TouchInteractions {
   private gestureHandlers: Map<string, Function[]> = new Map();
   private touchTargets: WeakMap<Element, TouchTargetOptions> = new WeakMap();
 
-  interface TouchTargetOptions {
-    swipeable?: boolean;
-    pinchable?: boolean;
-    longPressable?: boolean;
-    draggable?: boolean;
-    preventScroll?: boolean;
-    hapticFeedback?: boolean;
-  }
 
-  interface SwipeEvent {
-    direction: 'left' | 'right' | 'up' | 'down';
-    distance: number;
-    duration: number;
-    velocity: number;
-    startX: number;
-    startY: number;
-    endX: number;
-    endY: number;
-  }
-
-  interface PinchEvent {
-    scale: number;
-    center: { x: number; y: number };
-  }
 
   constructor() {
     this.init();

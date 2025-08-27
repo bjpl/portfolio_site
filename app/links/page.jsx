@@ -3,16 +3,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Search, Filter, ExternalLink, Tag, Grid, List, ChevronDown } from 'lucide-react';
 
-export const metadata = {
-  title: 'Links - Brandon JP Lambert',
-  description: 'A curated collection of useful links and resources across government, education, culture, food, and travel in Latin America',
-  keywords: 'links, resources, Latin America, Colombia, Mexico, Venezuela, government, education, culture, travel, food',
-  openGraph: {
-    title: 'Curated Links Collection - Brandon JP Lambert',
-    description: 'Discover useful links and resources across government, education, culture, food, and travel in Latin America',
-    type: 'website',
-  },
-};
+// Metadata cannot be exported from client components
+// Set metadata in layout.js or parent server component instead
 
 // Custom components for better organization
 const SearchBar = ({ searchQuery, onSearchChange, placeholder = "Search links..." }) => (

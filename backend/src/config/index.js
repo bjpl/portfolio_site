@@ -242,18 +242,6 @@ const config = {
     versioning: process.env.FEATURE_VERSIONING === 'true'
   },
 
-  // Hugo configuration
-  hugo: {
-    contentPath: path.join(__dirname, '../../../content'),
-    configPath: path.join(__dirname, '../../../config'),
-    staticPath: path.join(__dirname, '../../../static'),
-    publicPath: path.join(__dirname, '../../../public'),
-    baseURL: process.env.HUGO_BASE_URL || 'http://localhost:1313',
-    buildCommand: process.env.HUGO_BUILD_COMMAND || 'hugo --minify',
-    serveCommand: process.env.HUGO_SERVE_COMMAND || 'hugo server -D',
-    autoBuild: process.env.HUGO_AUTO_BUILD === 'true',
-    autoReload: process.env.HUGO_AUTO_RELOAD !== 'false'
-  },
 
   // Backup configuration
   backup: {

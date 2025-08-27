@@ -1,0 +1,538 @@
+{
+  "timestamp": "2025-08-27T20:58:01.694Z",
+  "buildInfo": {
+    "nextVersion": "^15.5.2",
+    "buildTime": "2025-08-27T20:57:53.846Z",
+    "buildManifest": {
+      "polyfillFiles": [
+        "static/chunks/polyfills-42372ed130431b0a.js"
+      ],
+      "devFiles": [],
+      "ampDevFiles": [],
+      "lowPriorityFiles": [
+        "static/UNhQOWJO5wVrvb08ax6Eo/_buildManifest.js",
+        "static/UNhQOWJO5wVrvb08ax6Eo/_ssgManifest.js"
+      ],
+      "rootMainFiles": [
+        "static/chunks/webpack-614ef5b9d1ffecd6.js",
+        "static/chunks/common-be21a70b76c05801.js",
+        "static/chunks/623-256d757abc8f98ce.js",
+        "static/chunks/main-app-4bbdeeb3b1e4d3de.js"
+      ],
+      "rootMainFilesTree": {},
+      "pages": {
+        "/_app": [
+          "static/chunks/webpack-614ef5b9d1ffecd6.js",
+          "static/chunks/framework-b1e5f14688f9ffe6.js",
+          "static/chunks/common-be21a70b76c05801.js",
+          "static/chunks/main-78b7a46d370fa0c7.js",
+          "static/chunks/pages/_app-5cf172c3f1461c14.js"
+        ],
+        "/_error": [
+          "static/chunks/webpack-614ef5b9d1ffecd6.js",
+          "static/chunks/framework-b1e5f14688f9ffe6.js",
+          "static/chunks/common-be21a70b76c05801.js",
+          "static/chunks/main-78b7a46d370fa0c7.js",
+          "static/chunks/pages/_error-0bcbb9d224985a3c.js"
+        ]
+      },
+      "ampFirstPages": []
+    }
+  },
+  "chunks": [
+    {
+      "name": "623-256d757abc8f98ce.js",
+      "path": "static\\chunks\\623-256d757abc8f98ce.js",
+      "size": 344462,
+      "type": "js",
+      "gzipSize": 120562
+    },
+    {
+      "name": "common-be21a70b76c05801.js",
+      "path": "static\\chunks\\common-be21a70b76c05801.js",
+      "size": 243462,
+      "type": "js",
+      "gzipSize": 85212
+    },
+    {
+      "name": "framework-b1e5f14688f9ffe6.js",
+      "path": "static\\chunks\\framework-b1e5f14688f9ffe6.js",
+      "size": 182716,
+      "type": "js",
+      "gzipSize": 63951
+    },
+    {
+      "name": "lib-24e29cf1503c3915.js",
+      "path": "static\\chunks\\lib-24e29cf1503c3915.js",
+      "size": 131523,
+      "type": "js",
+      "gzipSize": 46033
+    },
+    {
+      "name": "main-78b7a46d370fa0c7.js",
+      "path": "static\\chunks\\main-78b7a46d370fa0c7.js",
+      "size": 121333,
+      "type": "js",
+      "gzipSize": 42467
+    },
+    {
+      "name": "polyfills-42372ed130431b0a.js",
+      "path": "static\\chunks\\polyfills-42372ed130431b0a.js",
+      "size": 112594,
+      "type": "js",
+      "gzipSize": 39408
+    },
+    {
+      "name": "page-3be3998bd28a725f.js",
+      "path": "static\\chunks\\app\\pwa-test\\page-3be3998bd28a725f.js",
+      "size": 25609,
+      "type": "js",
+      "gzipSize": 8963
+    },
+    {
+      "name": "page-74b86767bfaa8ff0.js",
+      "path": "static\\chunks\\app\\page-74b86767bfaa8ff0.js",
+      "size": 16105,
+      "type": "js",
+      "gzipSize": 5637
+    },
+    {
+      "name": "layout-c99a80f672eb6093.js",
+      "path": "static\\chunks\\app\\layout-c99a80f672eb6093.js",
+      "size": 14289,
+      "type": "js",
+      "gzipSize": 5001
+    },
+    {
+      "name": "page-1ef0797fdfcb0ef3.js",
+      "path": "static\\chunks\\app\\projects\\[slug]\\page-1ef0797fdfcb0ef3.js",
+      "size": 9701,
+      "type": "js",
+      "gzipSize": 3395
+    },
+    {
+      "name": "page-8d364156028981ef.js",
+      "path": "static\\chunks\\app\\links\\page-8d364156028981ef.js",
+      "size": 9064,
+      "type": "js",
+      "gzipSize": 3172
+    },
+    {
+      "name": "288.850753fda0b3ff3c.js",
+      "path": "static\\chunks\\288.850753fda0b3ff3c.js",
+      "size": 7823,
+      "type": "js",
+      "gzipSize": 2738
+    },
+    {
+      "name": "page-48c361e1ea6a4ab1.js",
+      "path": "static\\chunks\\app\\blog\\page-48c361e1ea6a4ab1.js",
+      "size": 7648,
+      "type": "js",
+      "gzipSize": 2677
+    },
+    {
+      "name": "page-2eb86dcd712b1cc3.js",
+      "path": "static\\chunks\\app\\blog\\[slug]\\page-2eb86dcd712b1cc3.js",
+      "size": 7063,
+      "type": "js",
+      "gzipSize": 2472
+    },
+    {
+      "name": "page-1e450f90df5ea61f.js",
+      "path": "static\\chunks\\app\\layout-test\\page-1e450f90df5ea61f.js",
+      "size": 5876,
+      "type": "js",
+      "gzipSize": 2057
+    },
+    {
+      "name": "page-2348d03ce35dfb2f.js",
+      "path": "static\\chunks\\app\\projects\\page-2348d03ce35dfb2f.js",
+      "size": 5671,
+      "type": "js",
+      "gzipSize": 1985
+    },
+    {
+      "name": "page-d37a5623d3e09398.js",
+      "path": "static\\chunks\\app\\test-db\\page-d37a5623d3e09398.js",
+      "size": 3917,
+      "type": "js",
+      "gzipSize": 1371
+    },
+    {
+      "name": "webpack-614ef5b9d1ffecd6.js",
+      "path": "static\\chunks\\webpack-614ef5b9d1ffecd6.js",
+      "size": 3458,
+      "type": "js",
+      "gzipSize": 1210
+    },
+    {
+      "name": "page-15f5339f4a510b7d.js",
+      "path": "static\\chunks\\app\\_not-found\\page-15f5339f4a510b7d.js",
+      "size": 2669,
+      "type": "js",
+      "gzipSize": 934
+    },
+    {
+      "name": "page-bb86bba42d681369.js",
+      "path": "static\\chunks\\app\\admin\\page-bb86bba42d681369.js",
+      "size": 1253,
+      "type": "js",
+      "gzipSize": 439
+    },
+    {
+      "name": "main-app-4bbdeeb3b1e4d3de.js",
+      "path": "static\\chunks\\main-app-4bbdeeb3b1e4d3de.js",
+      "size": 544,
+      "type": "js",
+      "gzipSize": 190
+    },
+    {
+      "name": "_app-5cf172c3f1461c14.js",
+      "path": "static\\chunks\\pages\\_app-5cf172c3f1461c14.js",
+      "size": 237,
+      "type": "js",
+      "gzipSize": 83
+    },
+    {
+      "name": "_error-0bcbb9d224985a3c.js",
+      "path": "static\\chunks\\pages\\_error-0bcbb9d224985a3c.js",
+      "size": 221,
+      "type": "js",
+      "gzipSize": 77
+    }
+  ],
+  "assets": {
+    "images": [],
+    "fonts": [],
+    "other": [
+      {
+        "name": "623-256d757abc8f98ce.js",
+        "path": "static\\chunks\\623-256d757abc8f98ce.js",
+        "size": 344462,
+        "extension": ".js"
+      },
+      {
+        "name": "common-be21a70b76c05801.js",
+        "path": "static\\chunks\\common-be21a70b76c05801.js",
+        "size": 243462,
+        "extension": ".js"
+      },
+      {
+        "name": "framework-b1e5f14688f9ffe6.js",
+        "path": "static\\chunks\\framework-b1e5f14688f9ffe6.js",
+        "size": 182716,
+        "extension": ".js"
+      },
+      {
+        "name": "lib-24e29cf1503c3915.js",
+        "path": "static\\chunks\\lib-24e29cf1503c3915.js",
+        "size": 131523,
+        "extension": ".js"
+      },
+      {
+        "name": "main-78b7a46d370fa0c7.js",
+        "path": "static\\chunks\\main-78b7a46d370fa0c7.js",
+        "size": 121333,
+        "extension": ".js"
+      },
+      {
+        "name": "polyfills-42372ed130431b0a.js",
+        "path": "static\\chunks\\polyfills-42372ed130431b0a.js",
+        "size": 112594,
+        "extension": ".js"
+      },
+      {
+        "name": "page-3be3998bd28a725f.js",
+        "path": "static\\chunks\\app\\pwa-test\\page-3be3998bd28a725f.js",
+        "size": 25609,
+        "extension": ".js"
+      },
+      {
+        "name": "page-74b86767bfaa8ff0.js",
+        "path": "static\\chunks\\app\\page-74b86767bfaa8ff0.js",
+        "size": 16105,
+        "extension": ".js"
+      },
+      {
+        "name": "layout-c99a80f672eb6093.js",
+        "path": "static\\chunks\\app\\layout-c99a80f672eb6093.js",
+        "size": 14289,
+        "extension": ".js"
+      },
+      {
+        "name": "page-1ef0797fdfcb0ef3.js",
+        "path": "static\\chunks\\app\\projects\\[slug]\\page-1ef0797fdfcb0ef3.js",
+        "size": 9701,
+        "extension": ".js"
+      },
+      {
+        "name": "page-8d364156028981ef.js",
+        "path": "static\\chunks\\app\\links\\page-8d364156028981ef.js",
+        "size": 9064,
+        "extension": ".js"
+      },
+      {
+        "name": "288.850753fda0b3ff3c.js",
+        "path": "static\\chunks\\288.850753fda0b3ff3c.js",
+        "size": 7823,
+        "extension": ".js"
+      },
+      {
+        "name": "page-48c361e1ea6a4ab1.js",
+        "path": "static\\chunks\\app\\blog\\page-48c361e1ea6a4ab1.js",
+        "size": 7648,
+        "extension": ".js"
+      },
+      {
+        "name": "page-2eb86dcd712b1cc3.js",
+        "path": "static\\chunks\\app\\blog\\[slug]\\page-2eb86dcd712b1cc3.js",
+        "size": 7063,
+        "extension": ".js"
+      },
+      {
+        "name": "4f41a996000507b1.css",
+        "path": "static\\css\\4f41a996000507b1.css",
+        "size": 6535,
+        "extension": ".css"
+      },
+      {
+        "name": "page-1e450f90df5ea61f.js",
+        "path": "static\\chunks\\app\\layout-test\\page-1e450f90df5ea61f.js",
+        "size": 5876,
+        "extension": ".js"
+      },
+      {
+        "name": "page-2348d03ce35dfb2f.js",
+        "path": "static\\chunks\\app\\projects\\page-2348d03ce35dfb2f.js",
+        "size": 5671,
+        "extension": ".js"
+      },
+      {
+        "name": "page-d37a5623d3e09398.js",
+        "path": "static\\chunks\\app\\test-db\\page-d37a5623d3e09398.js",
+        "size": 3917,
+        "extension": ".js"
+      },
+      {
+        "name": "webpack-614ef5b9d1ffecd6.js",
+        "path": "static\\chunks\\webpack-614ef5b9d1ffecd6.js",
+        "size": 3458,
+        "extension": ".js"
+      },
+      {
+        "name": "page-15f5339f4a510b7d.js",
+        "path": "static\\chunks\\app\\_not-found\\page-15f5339f4a510b7d.js",
+        "size": 2669,
+        "extension": ".js"
+      },
+      {
+        "name": "page-bb86bba42d681369.js",
+        "path": "static\\chunks\\app\\admin\\page-bb86bba42d681369.js",
+        "size": 1253,
+        "extension": ".js"
+      },
+      {
+        "name": "_buildManifest.js",
+        "path": "static\\UNhQOWJO5wVrvb08ax6Eo\\_buildManifest.js",
+        "size": 856,
+        "extension": ".js"
+      },
+      {
+        "name": "main-app-4bbdeeb3b1e4d3de.js",
+        "path": "static\\chunks\\main-app-4bbdeeb3b1e4d3de.js",
+        "size": 544,
+        "extension": ".js"
+      },
+      {
+        "name": "_app-5cf172c3f1461c14.js",
+        "path": "static\\chunks\\pages\\_app-5cf172c3f1461c14.js",
+        "size": 237,
+        "extension": ".js"
+      },
+      {
+        "name": "_error-0bcbb9d224985a3c.js",
+        "path": "static\\chunks\\pages\\_error-0bcbb9d224985a3c.js",
+        "size": 221,
+        "extension": ".js"
+      },
+      {
+        "name": "_ssgManifest.js",
+        "path": "static\\UNhQOWJO5wVrvb08ax6Eo\\_ssgManifest.js",
+        "size": 108,
+        "extension": ".js"
+      }
+    ]
+  },
+  "dependencies": {
+    "production": 14,
+    "development": 31,
+    "total": 45,
+    "heaviest": [
+      {
+        "name": "next",
+        "estimatedSize": 137698486,
+        "installSize": 137934425
+      },
+      {
+        "name": "lucide-react",
+        "estimatedSize": 30835667,
+        "installSize": 35203723
+      },
+      {
+        "name": "framer-motion",
+        "estimatedSize": 2307252,
+        "installSize": 2319729
+      },
+      {
+        "name": "tailwind-merge",
+        "estimatedSize": 760105,
+        "installSize": 898277
+      },
+      {
+        "name": "fuse.js",
+        "estimatedSize": 438558,
+        "installSize": 456037
+      },
+      {
+        "name": "sharp",
+        "estimatedSize": 301806,
+        "installSize": 656269
+      },
+      {
+        "name": "@supabase/supabase-js",
+        "estimatedSize": 240063,
+        "installSize": 275038
+      },
+      {
+        "name": "@radix-ui/react-tabs",
+        "estimatedSize": 48834,
+        "installSize": 51895
+      },
+      {
+        "name": "@radix-ui/react-slot",
+        "estimatedSize": 29645,
+        "installSize": 32260
+      },
+      {
+        "name": "class-variance-authority",
+        "estimatedSize": 9483,
+        "installSize": 22073
+      }
+    ],
+    "dependencies": [
+      {
+        "name": "next",
+        "estimatedSize": 137698486,
+        "installSize": 137934425
+      },
+      {
+        "name": "lucide-react",
+        "estimatedSize": 30835667,
+        "installSize": 35203723
+      },
+      {
+        "name": "framer-motion",
+        "estimatedSize": 2307252,
+        "installSize": 2319729
+      },
+      {
+        "name": "tailwind-merge",
+        "estimatedSize": 760105,
+        "installSize": 898277
+      },
+      {
+        "name": "fuse.js",
+        "estimatedSize": 438558,
+        "installSize": 456037
+      },
+      {
+        "name": "sharp",
+        "estimatedSize": 301806,
+        "installSize": 656269
+      },
+      {
+        "name": "@supabase/supabase-js",
+        "estimatedSize": 240063,
+        "installSize": 275038
+      },
+      {
+        "name": "@radix-ui/react-tabs",
+        "estimatedSize": 48834,
+        "installSize": 51895
+      },
+      {
+        "name": "@radix-ui/react-slot",
+        "estimatedSize": 29645,
+        "installSize": 32260
+      },
+      {
+        "name": "class-variance-authority",
+        "estimatedSize": 9483,
+        "installSize": 22073
+      },
+      {
+        "name": "clsx",
+        "estimatedSize": 1641,
+        "installSize": 8555
+      },
+      {
+        "name": "date-fns",
+        "estimatedSize": 0,
+        "installSize": 22601076
+      },
+      {
+        "name": "react",
+        "estimatedSize": 0,
+        "installSize": 166994
+      },
+      {
+        "name": "react-dom",
+        "estimatedSize": 0,
+        "installSize": 6552556
+      }
+    ]
+  },
+  "performance": {
+    "javascript": {
+      "chunkCount": 23,
+      "totalSize": 1257238,
+      "averageSize": 54662.52173913043,
+      "largestChunk": 344462
+    },
+    "css": {
+      "chunkCount": 0,
+      "totalSize": 0,
+      "averageSize": 0,
+      "largestChunk": 0
+    },
+    "overall": {
+      "totalSize": 1257238,
+      "totalGzipSize": 440034,
+      "compressionRatio": 0.35000055677604397
+    }
+  },
+  "recommendations": [
+    {
+      "type": "javascript",
+      "severity": "high",
+      "message": "JavaScript bundle size (1.2 MB) exceeds recommended threshold (488.28 KB)",
+      "suggestions": [
+        "Implement code splitting with dynamic imports",
+        "Use tree shaking to remove unused code",
+        "Consider lazy loading non-critical components",
+        "Analyze and optimize large dependencies"
+      ]
+    },
+    {
+      "type": "chunks",
+      "severity": "low",
+      "message": "High number of chunks (23) may impact loading performance",
+      "suggestions": [
+        "Optimize chunk splitting strategy",
+        "Combine small chunks",
+        "Use HTTP/2 push for critical chunks"
+      ]
+    }
+  ]
+}

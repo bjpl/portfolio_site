@@ -176,7 +176,7 @@ export const useAutoSave = <T>(
   return {
     saveStatus,
     lastSaved,
-    lastSaved: lastSavedString,
+    lastSavedString,
     isDirty,
     isSaving: saveStatus === 'saving',
     manualSave,

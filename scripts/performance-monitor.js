@@ -66,7 +66,7 @@ class PerformanceMonitor {
     };
     
     const timestamp = new Date().toISOString();
-    console.log(`[${timestamp}] ${colors[type]('●')} ${message}`);
+    // Performance monitor logging has been disabled for production
   }
 
   async measureLoadTime() {

@@ -96,19 +96,33 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
-        {/* Preload critical fonts */}
+        {/* Critical CSS inlined */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+            html{font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+            body{font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background-color:#ffffff;color:#0f172a;overflow-x:hidden}
+            .layout{min-height:100vh;display:flex;flex-direction:column}
+            .header{position:sticky;top:0;z-index:50;background-color:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid #e2e8f0}
+            .nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;max-width:1200px;margin:0 auto;width:100%}
+            .hero{display:flex;align-items:center;justify-content:center;min-height:70vh;text-align:center;padding:2rem}
+            .btn{display:inline-flex;align-items:center;justify-content:center;padding:0.75rem 1.5rem;font-weight:600;text-decoration:none;border-radius:0.5rem;transition:all 0.15s ease;border:2px solid transparent;cursor:pointer;font-size:1rem}
+            .btn-primary{background-color:#2563eb;color:white}
+            .btn-primary:hover{background-color:#1d4ed8;transform:translateY(-1px)}
+            @media(max-width:768px){.nav{padding:1rem}.hero{min-height:60vh;padding:1rem}}
+          `
+        }} />
+        
+        {/* Load fonts asynchronously */}
         <link
           rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
           as="style"
           onLoad="this.onload=null;this.rel='stylesheet'"
         />
-        <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
-          as="style"
-          onLoad="this.onload=null;this.rel='stylesheet'"
-        />
+        <noscript>
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        </noscript>
         
         {/* Service Worker Registration */}
         <script
@@ -118,10 +132,10 @@ export default function RootLayout({ children }) {
                 window.addEventListener('load', function() {
                   navigator.serviceWorker.register('/sw.js')
                     .then(function(registration) {
-                      console.log('SW registered: ', registration);
+                      // SW registered successfully
                     })
                     .catch(function(registrationError) {
-                      console.log('SW registration failed: ', registrationError);
+                      // SW registration failed
                     });
                 });
               }
@@ -194,7 +208,7 @@ export default function RootLayout({ children }) {
                 
                 if (isStandalone) {
                   document.body.classList.add('pwa-mode');
-                  console.log('Running as PWA');
+                  // Running as PWA
                 }
                 
                 // Performance observer for PWA metrics
@@ -202,7 +216,7 @@ export default function RootLayout({ children }) {
                   const observer = new PerformanceObserver((list) => {
                     for (const entry of list.getEntries()) {
                       if (entry.name === 'first-contentful-paint') {
-                        console.log('FCP:', entry.startTime);
+                        // FCP: entry.startTime
                       }
                     }
                   });

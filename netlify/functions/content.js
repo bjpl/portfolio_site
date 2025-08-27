@@ -16,16 +16,16 @@ let contentStore = {
     },
     {
       id: 'project-2',
-      title: 'Hugo Portfolio Site',
-      description: 'Multilingual portfolio site built with Hugo and modern JavaScript',
-      tags: ['Hugo', 'JavaScript', 'Multilingual'],
+      title: 'Next.js Portfolio Site',
+      description: 'Modern portfolio site built with Next.js and React',
+      tags: ['Next.js', 'React', 'JavaScript'],
       status: 'published',
       lastModified: new Date().toISOString()
     }
   ],
   posts: [],
   skills: [
-    'JavaScript', 'TypeScript', 'React', 'Hugo', 'Node.js', 'Python',
+    'JavaScript', 'TypeScript', 'React', 'Next.js', 'Node.js', 'Python',
     'Education Technology', 'Language Learning', 'Web Development'
   ]
 };

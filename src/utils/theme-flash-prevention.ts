@@ -319,6 +319,3 @@ if (document.readyState === 'loading') {
 
 // Export for external use
 export default ThemeFlashPrevention;
-    `;
-  }
-}

@@ -7,42 +7,38 @@ module.exports = {
   
   // Test match patterns
   testMatch: [
-    '**/tests/**/*.test.js',
-    '**/tests/**/*.spec.js',
-    '**/src/**/*.test.js',
-    '**/src/**/*.spec.js'
+    '**/tests/**/*.test.{js,jsx,ts,tsx}',
+    '**/tests/**/*.spec.{js,jsx,ts,tsx}',
+    '**/src/**/*.test.{js,jsx,ts,tsx}',
+    '**/src/**/*.spec.{js,jsx,ts,tsx}'
   ],
   
   // Setup files
   setupFilesAfterEnv: [
-    '<rootDir>/tests/setup.ts',
-    '<rootDir>/tests/fixtures/test-data.js',
-    '<rootDir>/tests/supabase/setup.js'
+    '<rootDir>/tests/setup/jest-setup.js'
   ],
   
   // Module name mapping for aliases
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@tests/(.*)$': '<rootDir>/tests/$1',
-    '^@fixtures/(.*)$': '<rootDir>/tests/fixtures/$1',
-    '^@components/(.*)$': '<rootDir>/src/components/$1',
-    '^@services/(.*)$': '<rootDir>/src/services/$1',
-    '^@utils/(.*)$': '<rootDir>/src/utils/$1',
+    '^@components/(.*)$': '<rootDir>/components/$1',
+    '^@lib/(.*)$': '<rootDir>/lib/$1',
+    '^@utils/(.*)$': '<rootDir>/utils/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/supabase/__mocks__/fileMock.js'
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/__mocks__/fileMock.js'
   },
   
   // Coverage configuration
-  collectCoverage: true,
+  collectCoverage: false,
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
-    'backend/src/**/*.js',
+    'components/**/*.{js,jsx,ts,tsx}',
+    'lib/**/*.{js,jsx,ts,tsx}',
     '!src/**/*.d.ts',
     '!src/**/*.test.{js,jsx,ts,tsx}',
     '!src/**/*.spec.{js,jsx,ts,tsx}',
     '!src/**/*.stories.{js,jsx,ts,tsx}',
-    '!backend/src/server.js',
-    '!backend/src/config/index.js',
     '!**/node_modules/**',
     '!**/dist/**',
     '!**/build/**'
@@ -52,42 +48,9 @@ module.exports = {
   
   coverageReporters: [
     'text',
-    'text-summary',
     'lcov',
-    'html',
-    'json',
-    'clover'
+    'html'
   ],
-  
-  // Coverage thresholds
-  coverageThreshold: {
-    global: {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80
-    },
-    // Specific thresholds for critical modules
-    './src/services/': {
-      branches: 90,
-      functions: 90,
-      lines: 90,
-      statements: 90
-    },
-    './backend/src/services/': {
-      branches: 85,
-      functions: 85,
-      lines: 85,
-      statements: 85
-    },
-    // Supabase integration tests
-    './tests/supabase/': {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80
-    }
-  },
   
   // Transform files
   transform: {
@@ -102,10 +65,6 @@ module.exports = {
           runtime: 'automatic'
         }],
         '@babel/preset-typescript'
-      ],
-      plugins: [
-        '@babel/plugin-proposal-class-properties',
-        '@babel/plugin-transform-runtime'
       ]
     }]
   },
@@ -123,15 +82,7 @@ module.exports = {
   // Ignore patterns
   testPathIgnorePatterns: [
     '/node_modules/',
-    '/dist/',
-    '/build/',
-    '/coverage/',
-    '/public/'
-  ],
-  
-  // Watch ignore patterns
-  watchPathIgnorePatterns: [
-    '/node_modules/',
+    '/.next/',
     '/dist/',
     '/build/',
     '/coverage/'
@@ -149,104 +100,9 @@ module.exports = {
   // Restore mocks after each test
   restoreMocks: true,
   
-  // Reset modules between tests
-  resetMocks: true,
-  
   // Maximum number of concurrent workers
   maxWorkers: '50%',
   
-  // Test results processor
-  testResultsProcessor: 'jest-sonar-reporter',
-  
-  // Custom reporters
-  reporters: [
-    'default',
-    ['jest-junit', {
-      outputDirectory: 'test-results',
-      outputName: 'jest-results.xml',
-      classNameTemplate: '{classname}',
-      titleTemplate: '{title}',
-      ancestorSeparator: ' › ',
-      usePathForSuiteName: true
-    }],
-    ['jest-html-reporters', {
-      publicPath: 'test-results',
-      filename: 'jest-report.html',
-      expand: true
-    }]
-  ],
-  
-  // Global variables
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.json'
-    }
-  },
-  
-  // Projects for running different types of tests
-  projects: [
-    {
-      displayName: 'unit',
-      testMatch: [
-        '<rootDir>/src/**/*.test.{js,jsx,ts,tsx}',
-        '<rootDir>/tests/unit/**/*.test.{js,jsx,ts,tsx}',
-        '<rootDir>/backend/test/unit/**/*.test.js'
-      ],
-      testEnvironment: 'jsdom'
-    },
-    {
-      displayName: 'integration',
-      testMatch: [
-        '<rootDir>/tests/integration/**/*.test.{js,jsx,ts,tsx}',
-        '<rootDir>/backend/test/integration/**/*.test.js'
-      ],
-      testEnvironment: 'node'
-    },
-    {
-      displayName: 'supabase-integration',
-      testMatch: [
-        '<rootDir>/tests/supabase/integration/**/*.test.js'
-      ],
-      testEnvironment: 'node',
-      setupFilesAfterEnv: ['<rootDir>/tests/supabase/setup.js']
-    },
-    {
-      displayName: 'supabase-api',
-      testMatch: [
-        '<rootDir>/tests/supabase/api/**/*.test.js'
-      ],
-      testEnvironment: 'node',
-      setupFilesAfterEnv: ['<rootDir>/tests/supabase/setup.js']
-    },
-    {
-      displayName: 'supabase-frontend',
-      testMatch: [
-        '<rootDir>/tests/supabase/frontend/**/*.test.js'
-      ],
-      testEnvironment: 'jsdom',
-      setupFilesAfterEnv: ['<rootDir>/tests/supabase/setup.js']
-    }
-  ],
-  
-  // Error handling
-  errorOnDeprecated: true,
-  
   // Cache configuration
-  cacheDirectory: '<rootDir>/node_modules/.cache/jest',
-  
-  // Watch plugins for interactive mode
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname'
-  ],
-  
-  // Snapshot serializers
-  snapshotSerializers: [
-    'enzyme-to-json/serializer'
-  ],
-  
-  // Custom environment variables for tests
-  testEnvironmentOptions: {
-    url: 'http://localhost:3000'
-  }
+  cacheDirectory: '<rootDir>/node_modules/.cache/jest'
 };

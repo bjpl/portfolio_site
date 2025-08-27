@@ -1,5 +1,0 @@
-{{ $list := slice }}
-{{ range .Pages }}
-    {{ $list = $list | append (dict "title" .Title "url" .RelPermalink "description" .Description "date" .Date) }}
-{{ end }}
-{{ $list | jsonify }}
