@@ -1,7 +1,7 @@
 [build]
-  # Next.js build configuration for static site
-  command = "npm run build"
-  publish = ".next"
+  # Simple static site build
+  command = "npm run build && npm run export"
+  publish = "out"
   base = "."
   
   # Node.js version
@@ -10,22 +10,12 @@
     NPM_FLAGS = "--no-optional"
     NEXT_TELEMETRY_DISABLED = "1"
 
-# Next.js specific configuration
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-
-# Redirects for Next.js App Router
+# Legacy URL redirects
 [[redirects]]
   from = "/admin"
   to = "/admin/dashboard"
   status = 301
-  
-[[redirects]]
-  from = "/admin/"
-  to = "/admin/dashboard"
-  status = 301
 
-# Legacy Hugo URL redirects
 [[redirects]]
   from = "/make/*"
   to = "/writing/:splat"
@@ -41,12 +31,6 @@
   to = "/teaching/:splat"
   status = 301
 
-# SPA fallback for client-side routing
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 # Headers for security and performance
 [[headers]]
   for = "/*"
@@ -55,16 +39,14 @@
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Cache-Control = "public, max-age=3600"
 
 # Static assets caching
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    
 [[headers]]
   for = "/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-
-# HTML caching
-[[headers]]
-  for = "/*.html"
-  [headers.values]
-    Cache-Control = "public, max-age=3600"

@@ -12,6 +12,7 @@
     "dev": "next dev",
     "start": "next start",
     "build": "next build",
+    "export": "next export",
     "build:static": "npm run clean && STATIC_EXPORT=true next build && node -e \"import('./lib/static-generator.js').then(m => m.postBuildOptimization())\"",
     "build:production": "npm run build:static",
     "build:analyze": "ANALYZE=true next build",

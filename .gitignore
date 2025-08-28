@@ -307,3 +307,4 @@ nextjs-poc/.next/
 components/admin/
 components/HeroSection.jsx
 src/utils/theme-flash-prevention.ts
+.netlify

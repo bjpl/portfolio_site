@@ -9,20 +9,14 @@ const isProd = process.env.NODE_ENV === 'production';
 
 const nextConfig = {
   reactStrictMode: true,
+  output: 'export',
   
-  // Optimized for static portfolio - but allow server rendering for better performance
+  // Optimized for static portfolio export
   trailingSlash: false,
   
-  // Images optimization
+  // Images optimization for static export
   images: {
-    domains: ['localhost', 'vocal-pony-24e3de.netlify.app'],
-    formats: ['image/webp', 'image/avif'],
-    minimumCacheTTL: 60,
-    dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256],
-    // Optimized images with Next.js built-in optimization
+    unoptimized: true,
   },
   
   // Security and performance headers
