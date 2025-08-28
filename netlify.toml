@@ -1,6 +1,6 @@
 [build]
-  # Simple static site build
-  command = "npm run build && npm run export"
+  # Simple static site build (Next.js with output: 'export' automatically exports)
+  command = "npm run build"
   publish = "out"
   base = "."
   
