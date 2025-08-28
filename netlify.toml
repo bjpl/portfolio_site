@@ -1,5 +1,5 @@
 [build]
-  # Next.js build configuration
+  # Next.js build configuration for static site
   command = "npm run build"
   publish = ".next"
   base = "."
@@ -41,17 +41,6 @@
   to = "/teaching/:splat"
   status = 301
 
-# API routes - Disabled for static site
-# [[redirects]]
-#   from = "/api/health"
-#   to = "/.netlify/functions/health"
-#   status = 200
-# 
-# [[redirects]]
-#   from = "/api/contact"
-#   to = "/.netlify/functions/contact"
-#   status = 200
-
 # SPA fallback for client-side routing
 [[redirects]]
   from = "/*"
@@ -66,7 +55,7 @@
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=3600"
 
 # Static assets caching
 [[headers]]
@@ -79,9 +68,3 @@
   for = "/*.html"
   [headers.values]
     Cache-Control = "public, max-age=3600"
-
-# Functions configuration - Disabled for static portfolio site
-# Commenting out functions to avoid deployment issues
-# [functions]
-#   directory = "netlify/functions"
-#   node_bundler = "esbuild"
